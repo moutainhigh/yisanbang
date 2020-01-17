@@ -1,0 +1,16 @@
+package com.vtmer.yisanbang.mapper;
+
+import com.vtmer.yisanbang.domain.ColorSize;
+import java.util.List;
+
+public interface ColorSizeMapper {
+    int deleteByPrimaryKey(Integer id);
+
+    int insert(ColorSize record);
+
+    ColorSize selectByPrimaryKey(Integer id);
+
+    List<ColorSize> selectAll();
+
+    int updateByPrimaryKey(ColorSize record);
+}

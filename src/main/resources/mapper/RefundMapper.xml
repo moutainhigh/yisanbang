@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vtmer.yisanbang.mapper.RefundMapper">
+  <resultMap id="BaseResultMap" type="com.vtmer.yisanbang.domain.Refund">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="refund_number" jdbcType="VARCHAR" property="refundNumber" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="order_id" jdbcType="INTEGER" property="orderId" />
+    <result column="reason" jdbcType="VARCHAR" property="reason" />
+    <result column="status" jdbcType="BIT" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from refund
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.vtmer.yisanbang.domain.Refund">
+    insert into refund (id, refund_number, user_id, 
+      order_id, reason, status, 
+      create_time, update_time)
+    values (#{id,jdbcType=INTEGER}, #{refundNumber,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, 
+      #{orderId,jdbcType=INTEGER}, #{reason,jdbcType=VARCHAR}, #{status,jdbcType=BIT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.vtmer.yisanbang.domain.Refund">
+    update refund
+    set refund_number = #{refundNumber,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      order_id = #{orderId,jdbcType=INTEGER},
+      reason = #{reason,jdbcType=VARCHAR},
+      status = #{status,jdbcType=BIT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, refund_number, user_id, order_id, reason, status, create_time, update_time
+    from refund
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, refund_number, user_id, order_id, reason, status, create_time, update_time
+    from refund
+  </select>
+</mapper>
