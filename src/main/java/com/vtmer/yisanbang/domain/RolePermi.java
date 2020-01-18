@@ -7,7 +7,7 @@ public class RolePermi {
 
     private Integer roleId;
 
-    private Integer authId;
+    private Integer permiId;
 
     private Date createTime;
 
@@ -29,12 +29,12 @@ public class RolePermi {
         this.roleId = roleId;
     }
 
-    public Integer getAuthId() {
-        return authId;
+    public Integer getPermiId() {
+        return permiId;
     }
 
-    public void setAuthId(Integer authId) {
-        this.authId = authId;
+    public void setPermiId(Integer permiId) {
+        this.permiId = permiId;
     }
 
     public Date getCreateTime() {

@@ -52,4 +52,13 @@ public class Admin {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+    public Admin() {
+
+    }
+
+    public Admin(String name, String password) {
+        this.name = name;
+        this.password = password;
+    }
 }

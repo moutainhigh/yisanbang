@@ -1,4 +1,4 @@
-package com.eeatem.rbactest.common;
+package com.vtmer.yisanbang.common;
 
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.util.ByteSource;

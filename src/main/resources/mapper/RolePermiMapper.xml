@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.vtmer.yisanbang.domain.RolePermi">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="role_id" jdbcType="INTEGER" property="roleId" />
-    <result column="auth_id" jdbcType="INTEGER" property="authId" />
+    <result column="permi_id" jdbcType="INTEGER" property="permiId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
@@ -13,26 +13,31 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.vtmer.yisanbang.domain.RolePermi">
-    insert into role_permi (id, role_id, auth_id, 
+    insert into role_permi (id, role_id, permi_id, 
       create_time, update_time)
-    values (#{id,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER}, #{authId,jdbcType=INTEGER}, 
+    values (#{id,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER}, #{permiId,jdbcType=INTEGER}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.vtmer.yisanbang.domain.RolePermi">
     update role_permi
     set role_id = #{roleId,jdbcType=INTEGER},
-      auth_id = #{authId,jdbcType=INTEGER},
+      permi_id = #{permiId,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select id, role_id, auth_id, create_time, update_time
+    select id, role_id, permi_id, create_time, update_time
     from role_permi
     where id = #{id,jdbcType=INTEGER}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select id, role_id, auth_id, create_time, update_time
+    select id, role_id, permi_id, create_time, update_time
     from role_permi
+  </select>
+  <select id="selectPermiIdByRoleId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select permi_id
+    from role_permi
+    where role_id = #{roleId}
   </select>
 </mapper>

@@ -1,4 +1,34 @@
 package com.vtmer.yisanbang.service.impl;
 
-public class AdminServiceImpl {
+import com.vtmer.yisanbang.common.EncryptUtils;
+import com.vtmer.yisanbang.domain.Admin;
+import com.vtmer.yisanbang.mapper.AdminMapper;
+import com.vtmer.yisanbang.service.AdminService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class AdminServiceImpl implements AdminService {
+
+
+    @Autowired
+    private AdminMapper adminMapper;
+
+    @Override
+    public boolean addAdmin(Admin admin) {
+        admin.setPassword(EncryptUtils.encrypt(admin.getName(), admin.getPassword()).toString());
+        if (adminMapper.insertAdmin(admin) != 0) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isAdminNameExist(String name) {
+        if (adminMapper.selectAdminIdByName(name) != null) {
+            return true;
+        }
+            return false;
+    }
+
 }

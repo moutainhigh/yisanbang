@@ -35,4 +35,9 @@
     select id, admin_id, role_id, create_time, update_time
     from admin_role
   </select>
+  <select id="selectRoleIdByAdminId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select role_id
+    from admin_role
+    where admin_id = #{adminId}
+  </select>
 </mapper>

@@ -1,10 +1,8 @@
-package com.eeatem.rbactest.common;
-
-import java.util.Date;
+package com.vtmer.yisanbang.common;
 
 public class ResponseMessage {
-    public static final int STATUS_SUCCESS = 200;//成功
-    public static final int STATUS_ERROR = 400;//失败
+    public static final int STATUS_SUCCESS = 200; // 成功
+    public static final int STATUS_ERROR = 400; // 失败
 
     private int status;
     private Object data;
@@ -16,7 +14,7 @@ public class ResponseMessage {
         this.status = status;
         this.data = data;
         this.message = message;
-        this.timestamp = new Date().getTime();
+        this.timestamp = System.currentTimeMillis();
     }
 
     public int getStatus() {
