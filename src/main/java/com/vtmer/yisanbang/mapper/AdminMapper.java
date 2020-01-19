@@ -7,6 +7,7 @@ import java.util.List;
 
 @Repository
 public interface AdminMapper {
+
     int deleteByPrimaryKey(Integer id);
 
     int insert(Admin record);
@@ -25,4 +26,11 @@ public interface AdminMapper {
 
     // 根据管理员名称查找密码
     String selectPasswordByName(String name);
+
+    // 根据管理员id修改密码
+    int updatePasswordByAdminId(Integer adminId, String password);
+
+    // 查找所有普通管理员
+    List<Admin> selectGeneralAdmin();
+
 }

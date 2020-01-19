@@ -49,7 +49,7 @@ public class AdminRealm extends AuthorizingRealm {
         for (Object roleId : adminRoleService.selectRoleIdByName(adminName)) {
             permUrls.addAll(permissionService.selectUrlByRoleId((Integer) roleId));
         }
-        System.out.println(permUrls.size());
+        // System.out.println(permUrls.size());
         authorizationInfo.addStringPermissions(permUrls);
         return authorizationInfo;
     }

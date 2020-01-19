@@ -1,5 +1,6 @@
 package com.vtmer.yisanbang.service.impl;
 
+import com.vtmer.yisanbang.domain.AdminRole;
 import com.vtmer.yisanbang.mapper.AdminMapper;
 import com.vtmer.yisanbang.mapper.AdminRoleMapper;
 import com.vtmer.yisanbang.service.AdminRoleService;
@@ -16,6 +17,14 @@ public class AdminRoleServiceImpl implements AdminRoleService {
 
     @Autowired
     private AdminRoleMapper adminRoleMapper;
+
+    @Override
+    public boolean setGeneralAdmin(Integer adminId) {
+        if (adminRoleMapper.insert(new AdminRole(adminId, 1)) != 0) {
+            return true;
+        }
+        return false;
+    }
 
     @Override
     public List<Integer> selectRoleIdByName(String name) {

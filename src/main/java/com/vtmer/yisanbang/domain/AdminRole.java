@@ -52,4 +52,14 @@ public class AdminRole {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+    public AdminRole() {
+
+    }
+
+    public AdminRole(Integer adminId, Integer roleId) {
+        this.adminId = adminId;
+        this.roleId = roleId;
+    }
+
 }

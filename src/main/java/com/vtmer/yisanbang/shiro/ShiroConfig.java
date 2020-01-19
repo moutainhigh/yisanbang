@@ -33,7 +33,7 @@ public class ShiroConfig {
      * 创建DefaultWebSecurityManager
      */
     @Bean("securityManager")
-    public DefaultWebSecurityManager getDefaultWebSecurityManager(@Qualifier("userRealm") AdminRealm adminRealm) {
+    public DefaultWebSecurityManager getDefaultWebSecurityManager(@Qualifier("adminRealm") AdminRealm adminRealm) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         // 关联Realm
         securityManager.setRealm(adminRealm);
@@ -43,7 +43,7 @@ public class ShiroConfig {
     /**
      * 创建Realm
      */
-    @Bean("userRealm")
+    @Bean("adminRealm")
     public AdminRealm getRealm() {
         return new AdminRealm();
     }

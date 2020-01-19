@@ -35,7 +35,8 @@
     select id, name, password, create_time, update_time
     from admin
   </select>
-    <insert id="insertAdmin" parameterType="com.vtmer.yisanbang.domain.Admin">
+    <insert id="insertAdmin" parameterType="com.vtmer.yisanbang.domain.Admin"
+            useGeneratedKeys="true" keyProperty="id">
     insert into admin (name, password)
     values
     (#{name}, #{password})
@@ -49,5 +50,15 @@
         select password
         from admin
         where name = #{name}
+    </select>
+    <update id="updatePasswordByAdminId">
+        update admin
+        set password = #{password}
+        where id = #{adminId}
+    </update>
+    <select id="selectGeneralAdmin" resultMap="BaseResultMap">
+        select id, name, create_time, update_time
+        from admin
+        where id not in (select admin_id from admin_role where role_id = 2)
     </select>
 </mapper>

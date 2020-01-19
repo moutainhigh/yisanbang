@@ -1,9 +1,11 @@
 package com.vtmer.yisanbang.mapper;
 
 import com.vtmer.yisanbang.domain.AdminRole;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface AdminRoleMapper {
     int deleteByPrimaryKey(Integer id);
 
