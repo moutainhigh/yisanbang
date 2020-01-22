@@ -9,6 +9,14 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
+  <resultMap id="ColorSizeGoods" type="com.vtmer.yisanbang.dto.ColorSizeDto">
+    <result column="color" jdbcType="VARCHAR" property="color" />
+    <result column="size" jdbcType="INTEGER" property="size" />
+    <result column="goods_id" jdbcType="INTEGER" property="goodsId"/>
+    <association property="goodsDto"
+                 select="com.vtmer.yisanbang.mapper.GoodsMapper.selectGoodsDtoById"
+                 column="goods_id"/>
+  </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from color_size
     where id = #{id,jdbcType=INTEGER}
@@ -38,5 +46,9 @@
   <select id="selectAll" resultMap="BaseResultMap">
     select id, goods_id, color, size, create_time, update_time
     from color_size
+  </select>
+
+  <select id="selectColorSizeDtoById" parameterType="java.lang.Integer" resultMap="ColorSizeGoods">
+    select color,size,goods_id from color_size where id = #{id}
   </select>
 </mapper>

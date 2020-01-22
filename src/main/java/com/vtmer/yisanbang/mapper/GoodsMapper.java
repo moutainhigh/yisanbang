@@ -1,6 +1,8 @@
 package com.vtmer.yisanbang.mapper;
 
 import com.vtmer.yisanbang.domain.Goods;
+import com.vtmer.yisanbang.dto.GoodsDto;
+
 import java.util.List;
 
 public interface GoodsMapper {
@@ -13,4 +15,6 @@ public interface GoodsMapper {
     List<Goods> selectAll();
 
     int updateByPrimaryKey(Goods record);
+
+    GoodsDto selectGoodsDtoById(Integer id);
 }

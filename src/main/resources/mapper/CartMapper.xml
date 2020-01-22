@@ -35,4 +35,7 @@
     select id, user_id, total_price, create_time, update_time
     from cart
   </select>
+  <select id="selectCartIdByUserId" resultType="java.lang.Integer">
+    select id from cart where user_id = #{id}
+  </select>
 </mapper>
