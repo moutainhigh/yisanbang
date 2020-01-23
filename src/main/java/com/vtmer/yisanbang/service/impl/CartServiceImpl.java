@@ -16,8 +16,6 @@ import java.util.List;
 @Service
 public class CartServiceImpl implements CartService {
 
-    private static final Logger logger = LoggerFactory.getLogger(CartServiceImpl.class);
-
     @Autowired
     private CartGoodsService cartGoodsService;
 
@@ -32,7 +30,6 @@ public class CartServiceImpl implements CartService {
         if (cartId!=null) {
             return cartMapper.selectCartDtosByUserId(userId);
         } else {
-            logger.warn("userId有误");
             return null;
         }
     }
