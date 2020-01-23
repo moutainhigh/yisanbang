@@ -1,6 +1,8 @@
 package com.vtmer.yisanbang.mapper;
 
 import com.vtmer.yisanbang.domain.Suit;
+import com.vtmer.yisanbang.dto.SuitDto;
+
 import java.util.List;
 
 public interface SuitMapper {
@@ -13,4 +15,5 @@ public interface SuitMapper {
     List<Suit> selectAll();
 
     int updateByPrimaryKey(Suit record);
+
 }

@@ -10,6 +10,13 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
+  <resultMap id="SuitDtoMap" type="com.vtmer.yisanbang.dto.SuitDto">
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="part" jdbcType="VARCHAR" property="part" />
+    <result column="size" jdbcType="INTEGER" property="size" />
+    <result column="picture" property="picture"/>
+    <result column="name" property="name"/>
+  </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from part_size
     where id = #{id,jdbcType=INTEGER}
@@ -40,5 +47,10 @@
   <select id="selectAll" resultMap="BaseResultMap">
     select id, suit_id, price, part, size, create_time, update_time
     from part_size
+  </select>
+  <select id="selectSuitDtoByPartSizeId" resultMap="SuitDtoMap">
+    select ps.price,ps.part, ps.size,s.picture,s.name from part_size ps,suit s
+    where ps.suit_id = s.id
+    and ps.id = #{id}
   </select>
 </mapper>

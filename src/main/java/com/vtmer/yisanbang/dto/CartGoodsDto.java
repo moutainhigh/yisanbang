@@ -2,6 +2,7 @@ package com.vtmer.yisanbang.dto;
 
 import com.vtmer.yisanbang.domain.ColorSize;
 import com.vtmer.yisanbang.domain.Goods;
+import com.vtmer.yisanbang.domain.Suit;
 
 import java.util.Date;
 /*
@@ -16,6 +17,16 @@ public class CartGoodsDto {
     private Byte isChosen;
 
     private ColorSizeDto colorSizeDto;
+
+    private SuitDto suitDto;
+
+    public SuitDto getSuitDto() {
+        return suitDto;
+    }
+
+    public void setSuitDto(SuitDto suitDto) {
+        this.suitDto = suitDto;
+    }
 
     public Integer getColorSizeId() {
         return colorSizeId;
@@ -52,10 +63,11 @@ public class CartGoodsDto {
     @Override
     public String toString() {
         return "CartGoodsDto{" +
-                " colorSizeId=" + colorSizeId +
+                "colorSizeId=" + colorSizeId +
                 ", amount=" + amount +
                 ", isChosen=" + isChosen +
                 ", colorSizeDto=" + colorSizeDto +
+                ", suitDto=" + suitDto +
                 '}';
     }
 }

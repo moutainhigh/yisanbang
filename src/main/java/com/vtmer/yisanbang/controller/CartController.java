@@ -20,17 +20,6 @@ public class CartController {
 
     @Autowired
     private CartService cartService;
-    /*
-    @PutMapping("/updateTotalPrice")
-    public ResponseMessage updateTotalPrice()
-
-     */
-
-    /*
-    @PutMapping("/updateAmount")
-    public ResponseMessage updateAmount()
-
-     */
 
     /*
         购物车商品列表
