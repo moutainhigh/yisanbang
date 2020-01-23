@@ -8,6 +8,14 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
+  <resultMap id="cartDtoMap" type="com.vtmer.yisanbang.dto.CartDto">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="total_price" jdbcType="VARCHAR" property="totalPrice" />
+    <collection property="cartGoodsDtos"
+                select="com.vtmer.yisanbang.mapper.CartGoodsMapper.selectCartGoodsByCartId"
+                column="id">
+    </collection>
+  </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from cart
     where id = #{id,jdbcType=INTEGER}
@@ -37,5 +45,8 @@
   </select>
   <select id="selectCartIdByUserId" resultType="java.lang.Integer">
     select id from cart where user_id = #{id}
+  </select>
+  <select id="selectCartDtosByUserId" resultMap="cartDtoMap">
+    select id,total_price from cart where user_id = #{id}
   </select>
 </mapper>
