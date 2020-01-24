@@ -14,9 +14,25 @@
     <result column="color_size_id" jdbcType="INTEGER" property="colorSizeId" />
     <result column="amount" jdbcType="INTEGER" property="amount" />
     <result column="is_chosen" jdbcType="TINYINT" property="isChosen" />
-    <association property="colorSizeDto"
-                 select="com.vtmer.yisanbang.mapper.ColorSizeMapper.selectColorSizeDtoById"
-                 column="color_size_id"/>
+    <result column="is_goods" jdbcType="TINYINT" property="isGoods" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="picture" jdbcType="VARCHAR" property="picture" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="part" jdbcType="VARCHAR" property="partOrColor" />
+    <result column="size" jdbcType="INTEGER" property="size" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <resultMap id="cartGoodsList1" type="com.vtmer.yisanbang.dto.CartGoodsDto">
+    <result column="color_size_id" jdbcType="INTEGER" property="colorSizeId" />
+    <result column="amount" jdbcType="INTEGER" property="amount" />
+    <result column="is_chosen" jdbcType="TINYINT" property="isChosen" />
+    <result column="is_goods" jdbcType="TINYINT" property="isGoods" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="picture" jdbcType="VARCHAR" property="picture" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="color" jdbcType="VARCHAR" property="partOrColor" />
+    <result column="size" jdbcType="INTEGER" property="size" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from cart_goods
@@ -50,6 +66,23 @@
     from cart_goods
   </select>
   <select id="selectCartGoodsByCartId" parameterType="java.lang.Integer" resultMap="cartGoodsList">
-    select color_size_id, amount, is_chosen from cart_goods where cart_id = #{id}
+    select cg.color_size_id, cg.amount, cg.`is_goods`,cg.is_chosen,cg.`update_time`,
+    ps.price,ps.part, ps.size,s.picture,s.name
+    from cart_goods cg,part_size ps,suit s
+    where
+    is_goods = 0
+    and ps.suit_id = s.id
+    and cg.`color_size_id` = ps.`id`
+    and cg.cart_id = #{id}
   </select>
+    <select id="selectCartGoodsByCartId1" parameterType="java.lang.Integer" resultMap="cartGoodsList1">
+      select cg.color_size_id, cg.amount, cg.`is_goods`,cg.is_chosen,cg.`update_time`,
+      cs.color,cs.size,g.name,g.price,g.picture
+      from cart_goods cg,color_size cs,goods g
+      where
+      is_goods = 1
+      and cs.goods_id = g.id
+      and cg.`color_size_id` = cs.`id`
+      and cg.cart_id = #{id}
+    </select>
 </mapper>

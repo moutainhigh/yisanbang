@@ -1,7 +1,6 @@
 package com.vtmer.yisanbang.mapper;
 
 import com.vtmer.yisanbang.domain.PartSize;
-import com.vtmer.yisanbang.dto.SuitDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -20,5 +19,4 @@ public interface PartSizeMapper {
 
     int updateByPrimaryKey(PartSize record);
 
-    SuitDto selectSuitDtoByPartSizeId(Integer partSizeId);
 }

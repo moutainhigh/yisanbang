@@ -48,9 +48,4 @@
     from goods
   </select>
 
-  <select id="selectGoodsDtoById" resultType="com.vtmer.yisanbang.dto.GoodsDto">
-    select name, introduce, picture, price
-    from goods
-    where id = #{id}
-  </select>
 </mapper>

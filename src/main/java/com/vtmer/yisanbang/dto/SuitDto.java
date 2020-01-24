@@ -2,10 +2,8 @@ package com.vtmer.yisanbang.dto;
 
 public class SuitDto {
 
-    // 套装名称
     private String name;
 
-    // 套装图片
     private String picture;
 
     private double price;

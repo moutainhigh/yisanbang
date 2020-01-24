@@ -21,5 +21,9 @@ public interface CartGoodsMapper {
 
     int updateByPrimaryKey(CartGoods record);
 
+    // 根据购物车id查询购物车中套装散件信息
     List<CartGoodsDto> selectCartGoodsByCartId(Integer cartId);
+
+    // 根据购物车id查询购物车中普通商品信息
+    List<CartGoodsDto> selectCartGoodsByCartId1(Integer cartId);
 }

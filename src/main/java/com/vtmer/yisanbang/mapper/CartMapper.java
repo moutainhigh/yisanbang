@@ -23,5 +23,5 @@ public interface CartMapper {
 
     Integer selectCartIdByUserId(Integer userId);
 
-    CartDto selectCartDtosByUserId(Integer userId);
+    CartDto selectCartDtoByUserId(Integer userId);
 }

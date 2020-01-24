@@ -5,9 +5,7 @@ import com.vtmer.yisanbang.domain.Goods;
 import com.vtmer.yisanbang.domain.Suit;
 
 import java.util.Date;
-/*
-    添加goods屬性方便传输
- */
+
 public class CartGoodsDto {
 
     private Integer colorSizeId;
@@ -16,16 +14,26 @@ public class CartGoodsDto {
 
     private Byte isChosen;
 
-    private ColorSizeDto colorSizeDto;
+    private String name;
 
-    private SuitDto suitDto;
+    private String picture;
 
-    public SuitDto getSuitDto() {
-        return suitDto;
+    private double price;
+
+    private String partOrColor;
+
+    private Integer size;
+
+    private Integer isGoods;
+
+    private Date updateTime;
+
+    public Date getUpdateTime() {
+        return updateTime;
     }
 
-    public void setSuitDto(SuitDto suitDto) {
-        this.suitDto = suitDto;
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 
     public Integer getColorSizeId() {
@@ -52,12 +60,52 @@ public class CartGoodsDto {
         this.isChosen = isChosen;
     }
 
-    public ColorSizeDto getColorSizeDto() {
-        return colorSizeDto;
+    public String getName() {
+        return name;
     }
 
-    public void setColorSizeDto(ColorSizeDto colorSizeDto) {
-        this.colorSizeDto = colorSizeDto;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public String getPartOrColor() {
+        return partOrColor;
+    }
+
+    public void setPartOrColor(String partOrColor) {
+        this.partOrColor = partOrColor;
+    }
+
+    public Integer getSize() {
+        return size;
+    }
+
+    public void setSize(Integer size) {
+        this.size = size;
+    }
+
+    public Integer getIsGoods() {
+        return isGoods;
+    }
+
+    public void setIsGoods(Integer isGoods) {
+        this.isGoods = isGoods;
     }
 
     @Override
@@ -66,8 +114,13 @@ public class CartGoodsDto {
                 "colorSizeId=" + colorSizeId +
                 ", amount=" + amount +
                 ", isChosen=" + isChosen +
-                ", colorSizeDto=" + colorSizeDto +
-                ", suitDto=" + suitDto +
+                ", name='" + name + '\'' +
+                ", picture='" + picture + '\'' +
+                ", price=" + price +
+                ", partOrColor='" + partOrColor + '\'' +
+                ", size=" + size +
+                ", isGoods=" + isGoods +
+                ", updateTime=" + updateTime +
                 '}';
     }
 }

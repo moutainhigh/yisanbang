@@ -4,7 +4,7 @@ import java.util.List;
 
 public class CartDto {
 
-    private Integer id;
+    private Integer cartId;
 
     private String totalPrice;
 
@@ -26,18 +26,18 @@ public class CartDto {
         this.cartGoodsDtos = cartGoodsDtos;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getCartId() {
+        return cartId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setCartId(Integer cartId) {
+        this.cartId = cartId;
     }
 
     @Override
     public String toString() {
         return "CartDto{" +
-                "id=" + id +
+                "cartId=" + cartId +
                 ", totalPrice='" + totalPrice + '\'' +
                 ", cartGoodsDtos=" + cartGoodsDtos +
                 '}';
