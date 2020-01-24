@@ -3,6 +3,7 @@ package com.vtmer.yisanbang.service.impl;
 import com.sun.org.apache.bcel.internal.generic.DDIV;
 import com.vtmer.yisanbang.common.ListSort;
 import com.vtmer.yisanbang.domain.CartGoods;
+import com.vtmer.yisanbang.dto.AddGoodsDto;
 import com.vtmer.yisanbang.dto.CartDto;
 import com.vtmer.yisanbang.dto.CartGoodsDto;
 import com.vtmer.yisanbang.mapper.CartGoodsMapper;
@@ -14,13 +15,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
 public class CartServiceImpl implements CartService {
-
-    @Autowired
-    private CartGoodsService cartGoodsService;
 
     @Autowired
     private CartMapper cartMapper;
@@ -47,6 +46,26 @@ public class CartServiceImpl implements CartService {
             return cartDto;
         } else {
             return null;
+        }
+    }
+
+
+    @Override
+    public boolean addCartGoods(AddGoodsDto addGoodsDto) {
+        // 根据userId获取cartId
+        Integer cartId = cartMapper.selectCartIdByUserId(addGoodsDto.getUserId());
+        if (cartId!=null) {
+            boolean isGoodsExist = cartGoodsMapper.checkGoodsExist(addGoodsDto);
+            // 如果该商品已经存在，则增加其amount,否则插入新数据
+            if (isGoodsExist) {
+                cartGoodsMapper.updateAmount(addGoodsDto,cartId);
+                return true;
+            } else {
+                cartGoodsMapper.insertCartGoods(addGoodsDto,cartId);
+                return true;
+            }
+        } else {
+            return false;
         }
     }
 }

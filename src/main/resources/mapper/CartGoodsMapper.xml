@@ -46,6 +46,11 @@
       #{cartId,jdbcType=INTEGER}, #{isChosen,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP})
   </insert>
+  <insert id="insertCartGoods">
+    insert into cart_goods (color_size_id, amount, cart_id,is_goods)
+    values (#{addGoodsDto.colorSizeId,jdbcType=INTEGER}, #{addGoodsDto.amount,jdbcType=INTEGER},
+      #{cartId,jdbcType=INTEGER},#{addGoodsDto.isGoods,jdbcType=TINYINT} )
+  </insert>
   <update id="updateByPrimaryKey" parameterType="com.vtmer.yisanbang.domain.CartGoods">
     update cart_goods
     set color_size_id = #{colorSizeId,jdbcType=INTEGER},
@@ -55,6 +60,13 @@
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateAmount">
+    update cart_goods
+    set amount = amount + #{addGoodsDto.amount,jdbcType=INTEGER}
+    where cart_id = #{cartId}
+    and is_goods = #{addGoodsDto.isGoods,jdbcType=TINYINT}
+    and color_size_id = #{addGoodsDto.colorSizeId,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select id, color_size_id, amount, cart_id, is_chosen, create_time, update_time
@@ -75,7 +87,7 @@
     and cg.`color_size_id` = ps.`id`
     and cg.cart_id = #{id}
   </select>
-    <select id="selectCartGoodsByCartId1" parameterType="java.lang.Integer" resultMap="cartGoodsList1">
+  <select id="selectCartGoodsByCartId1" parameterType="java.lang.Integer" resultMap="cartGoodsList1">
       select cg.color_size_id, cg.amount, cg.`is_goods`,cg.is_chosen,cg.`update_time`,
       cs.color,cs.size,g.name,g.price,g.picture
       from cart_goods cg,color_size cs,goods g
@@ -85,4 +97,8 @@
       and cg.`color_size_id` = cs.`id`
       and cg.cart_id = #{id}
     </select>
+  <select id="checkGoodsExist" resultType="java.lang.Boolean">
+    select count(DISTINCT id) from cart_goods
+    where color_size_id = #{colorSizeId} and is_goods = #{isGoods}
+  </select>
 </mapper>

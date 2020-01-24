@@ -1,8 +1,10 @@
 package com.vtmer.yisanbang.mapper;
 
 import com.vtmer.yisanbang.domain.CartGoods;
+import com.vtmer.yisanbang.dto.AddGoodsDto;
 import com.vtmer.yisanbang.dto.CartGoodsDto;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -26,4 +28,10 @@ public interface CartGoodsMapper {
 
     // 根据购物车id查询购物车中普通商品信息
     List<CartGoodsDto> selectCartGoodsByCartId1(Integer cartId);
+
+    boolean checkGoodsExist(AddGoodsDto addGoodsDto);
+
+    boolean updateAmount(@Param("addGoodsDto") AddGoodsDto addGoodsDto, @Param("cartId") Integer cartId);
+
+    boolean insertCartGoods(@Param("addGoodsDto")AddGoodsDto addGoodsDto,@Param("cartId") Integer cartId);
 }
