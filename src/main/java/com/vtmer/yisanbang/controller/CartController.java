@@ -49,4 +49,14 @@ public class CartController {
             return ResponseMessage.newErrorInstance("加入购物车失败，请检查传入的参数");
         }
     }
+
+    @PutMapping("/updateChosen")
+    public ResponseMessage updateChosen(@RequestBody AddGoodsDto addGoodsDto) {
+        double totalPrice = cartService.updateChosen(addGoodsDto);
+        if (totalPrice!=-1) return ResponseMessage.newSuccessInstance(totalPrice,"修改勾选成功");
+        else {
+            logger.warn("传入的userId有误");
+            return ResponseMessage.newErrorInstance("修改勾选失败，请检查传入的参数");
+        }
+    }
 }

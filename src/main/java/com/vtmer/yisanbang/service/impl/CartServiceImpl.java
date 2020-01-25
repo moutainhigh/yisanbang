@@ -62,31 +62,51 @@ public class CartServiceImpl implements CartService {
         // 根据userId获取cartId
         Integer cartId = cartMapper.selectCartIdByUserId(addGoodsDto.getUserId());
         if (cartId!=null) {
+            addGoodsDto.setCartId(cartId);
             boolean isGoodsExist = cartGoodsMapper.checkGoodsExist(addGoodsDto);
             // 如果该商品已经存在，则增加其amount,否则插入新数据
             if (isGoodsExist) {
-                cartGoodsMapper.updateAmount(addGoodsDto,cartId);
+                cartGoodsMapper.updateAmount(addGoodsDto);
             } else {
-                cartGoodsMapper.insertCartGoods(addGoodsDto,cartId);
+                cartGoodsMapper.insertCartGoods(addGoodsDto);
             }
         } else {
             return -1;
         }
         // 更新价格
         CartDto cartDto = selectCartDtosByUserId(addGoodsDto.getUserId());
-        return calculateTotalPrice(cartDto,cartId);
+        return calculateTotalPrice(cartDto);
+    }
+
+    public double updateChosen(AddGoodsDto addGoodsDto) {
+        // 根据userId获取cartId
+        Integer cartId = cartMapper.selectCartIdByUserId(addGoodsDto.getUserId());
+        if (cartId!=null) {
+            addGoodsDto.setCartId(cartId);
+            Integer isChosen = cartGoodsMapper.selectChosen(addGoodsDto);
+            cartGoodsMapper.updateChosen(addGoodsDto,isChosen);
+            // 更新价格
+            CartDto cartDto = selectCartDtosByUserId(addGoodsDto.getUserId());
+            return calculateTotalPrice(cartDto);
+        } else {
+            return -1;
+        }
     }
 
     /*
         根据购物车所有商品信息计算总价，并更新
      */
-    private double calculateTotalPrice(CartDto cartDto,Integer cartId) {
+    private double calculateTotalPrice(CartDto cartDto) {
         double totalPrice = 0;
         List<CartGoodsDto> cartGoodsDtos = cartDto.getCartGoodsDtos();
         for (CartGoodsDto cartGoodsDto : cartGoodsDtos) {
-            totalPrice += cartGoodsDto.getPrice() * cartGoodsDto.getAmount();
+            // 如果勾选了，计算总价
+            if (cartGoodsDto.getIsChosen() == 1) {
+                totalPrice += cartGoodsDto.getPrice() * cartGoodsDto.getAmount();
+            }
         }
-        cartMapper.updateTotalPrice(totalPrice,cartId);
+        // 更新总价
+        cartMapper.updateTotalPrice(totalPrice,cartDto.getCartId());
         return totalPrice;
     }
 }

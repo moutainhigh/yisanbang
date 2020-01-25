@@ -10,6 +10,8 @@ public class AddGoodsDto {
 
     private Integer amount;
 
+    private Integer cartId;
+
     public Integer getUserId() {
         return userId;
     }
@@ -42,6 +44,14 @@ public class AddGoodsDto {
         this.amount = amount;
     }
 
+    public Integer getCartId() {
+        return cartId;
+    }
+
+    public void setCartId(Integer cartId) {
+        this.cartId = cartId;
+    }
+
     @Override
     public String toString() {
         return "AddGoodsDto{" +
@@ -49,6 +59,7 @@ public class AddGoodsDto {
                 ", colorSizeId=" + colorSizeId +
                 ", isGoods=" + isGoods +
                 ", amount=" + amount +
+                ", cartId=" + cartId +
                 '}';
     }
 }

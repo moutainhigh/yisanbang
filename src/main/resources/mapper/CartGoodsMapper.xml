@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.vtmer.yisanbang.mapper.CartGoodsMapper">
+  <sql id="baseCondition">
+    <if test="cartId!=null">
+      and cart_id = #{cartId}
+    </if>
+    <if test="isGoods!=null" >
+      and is_goods = #{isGoods}
+    </if>
+    <if test="colorSizeId!=null">
+      and color_size_id = #{colorSizeId}
+    </if>
+  </sql>
   <resultMap id="BaseResultMap" type="com.vtmer.yisanbang.domain.CartGoods">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="color_size_id" jdbcType="INTEGER" property="colorSizeId" />
@@ -48,8 +59,8 @@
   </insert>
   <insert id="insertCartGoods">
     insert into cart_goods (color_size_id, amount, cart_id,is_goods)
-    values (#{addGoodsDto.colorSizeId,jdbcType=INTEGER}, #{addGoodsDto.amount,jdbcType=INTEGER},
-      #{cartId,jdbcType=INTEGER},#{addGoodsDto.isGoods,jdbcType=TINYINT} )
+    values (#{colorSizeId,jdbcType=INTEGER}, #{amount,jdbcType=INTEGER},
+      #{cartId,jdbcType=INTEGER},#{isGoods,jdbcType=TINYINT} )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.vtmer.yisanbang.domain.CartGoods">
     update cart_goods
@@ -63,10 +74,21 @@
   </update>
   <update id="updateAmount">
     update cart_goods
-    set amount = amount + #{addGoodsDto.amount,jdbcType=INTEGER}
-    where cart_id = #{cartId}
-    and is_goods = #{addGoodsDto.isGoods,jdbcType=TINYINT}
-    and color_size_id = #{addGoodsDto.colorSizeId,jdbcType=INTEGER}
+    set amount = amount + #{amount,jdbcType=INTEGER}
+    where 1=1
+    <include refid="baseCondition"/>
+  </update>
+  <update id="updateChosen">
+    update cart_goods
+    <if test="isChosen == 1">
+      set is_chosen = 0
+    </if>
+    <if test="isChosen == 0">
+      set is_chosen = 1
+    </if>
+    where cart_id = #{addGoodsDto.cartId}
+    and is_goods = #{addGoodsDto.isGoods}
+    and color_size_id = #{addGoodsDto.colorSizeId}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select id, color_size_id, amount, cart_id, is_chosen, create_time, update_time
@@ -99,6 +121,12 @@
     </select>
   <select id="checkGoodsExist" resultType="java.lang.Boolean">
     select count(DISTINCT id) from cart_goods
-    where color_size_id = #{colorSizeId} and is_goods = #{isGoods}
+    where 1=1
+    <include refid="baseCondition"/>
+  </select>
+  <select id="selectChosen" resultType="java.lang.Integer">
+    select is_chosen from cart_goods
+    where 1=1
+    <include refid="baseCondition"/>
   </select>
 </mapper>

@@ -12,4 +12,5 @@ public interface CartService {
 
     public double addCartGoods(AddGoodsDto addGoodsDto);
 
+    public double updateChosen(AddGoodsDto addGoodsDto);
 }

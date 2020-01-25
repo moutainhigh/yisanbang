@@ -31,7 +31,11 @@ public interface CartGoodsMapper {
 
     boolean checkGoodsExist(AddGoodsDto addGoodsDto);
 
-    boolean updateAmount(@Param("addGoodsDto") AddGoodsDto addGoodsDto, @Param("cartId") Integer cartId);
+    boolean updateAmount(AddGoodsDto addGoodsDto);
 
-    boolean insertCartGoods(@Param("addGoodsDto")AddGoodsDto addGoodsDto,@Param("cartId") Integer cartId);
+    boolean insertCartGoods(AddGoodsDto addGoodsDto);
+
+    Integer selectChosen(AddGoodsDto addGoodsDto);
+
+    Boolean updateChosen(@Param("addGoodsDto") AddGoodsDto addGoodsDto,@Param("isChosen") Integer isChosen);
 }
