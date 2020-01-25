@@ -49,6 +49,11 @@
     delete from cart_goods
     where id = #{id,jdbcType=INTEGER}
   </delete>
+  <delete id="deleteCartGoods">
+      delete from cart_goods
+      where 1=1
+    <include refid="baseCondition"/>
+  </delete>
   <insert id="insert" parameterType="com.vtmer.yisanbang.domain.CartGoods">
     insert into cart_goods (id, color_size_id, amount, 
       cart_id, is_chosen, create_time, 
@@ -72,9 +77,15 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateAmount">
+  <update id="addOrSubtractAmount">
     update cart_goods
     set amount = amount + #{amount,jdbcType=INTEGER}
+    where 1=1
+    <include refid="baseCondition"/>
+  </update>
+  <update id="updateAmount">
+    update cart_goods
+    set amount = #{amount,jdbcType=INTEGER}
     where 1=1
     <include refid="baseCondition"/>
   </update>

@@ -12,6 +12,16 @@ public class AddGoodsDto {
 
     private Integer cartId;
 
+    public AddGoodsDto() {
+
+    }
+
+    public AddGoodsDto(Integer colorSizeId,Integer isGoods,Integer cartId) {
+        this.colorSizeId = colorSizeId;
+        this.isGoods = isGoods;
+        this.cartId = cartId;
+    }
+
     public Integer getUserId() {
         return userId;
     }

@@ -3,6 +3,8 @@ package com.vtmer.yisanbang.mapper;
 import com.vtmer.yisanbang.domain.CartGoods;
 import com.vtmer.yisanbang.dto.AddGoodsDto;
 import com.vtmer.yisanbang.dto.CartGoodsDto;
+import com.vtmer.yisanbang.dto.DeleteCartGoodsDto;
+import com.vtmer.yisanbang.dto.GoodsDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -31,11 +33,15 @@ public interface CartGoodsMapper {
 
     boolean checkGoodsExist(AddGoodsDto addGoodsDto);
 
-    boolean updateAmount(AddGoodsDto addGoodsDto);
+    boolean addOrSubtractAmount(AddGoodsDto addGoodsDto);
 
     boolean insertCartGoods(AddGoodsDto addGoodsDto);
+
+    boolean updateAmount(AddGoodsDto addGoodsDto);
 
     Integer selectChosen(AddGoodsDto addGoodsDto);
 
     Boolean updateChosen(@Param("addGoodsDto") AddGoodsDto addGoodsDto,@Param("isChosen") Integer isChosen);
+
+    Boolean deleteCartGoods(AddGoodsDto addGoodsDto);
 }
