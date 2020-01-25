@@ -10,6 +10,6 @@ public interface CartService {
 
     public CartDto selectCartDtosByUserId(Integer userId);
 
-    public boolean addCartGoods(AddGoodsDto addGoodsDto);
+    public double addCartGoods(AddGoodsDto addGoodsDto);
 
 }

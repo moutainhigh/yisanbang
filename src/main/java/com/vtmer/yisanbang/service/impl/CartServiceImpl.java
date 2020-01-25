@@ -8,6 +8,8 @@ import com.vtmer.yisanbang.dto.CartDto;
 import com.vtmer.yisanbang.dto.CartGoodsDto;
 import com.vtmer.yisanbang.mapper.CartGoodsMapper;
 import com.vtmer.yisanbang.mapper.CartMapper;
+import com.vtmer.yisanbang.mapper.ColorSizeMapper;
+import com.vtmer.yisanbang.mapper.PartSizeMapper;
 import com.vtmer.yisanbang.service.CartGoodsService;
 import com.vtmer.yisanbang.service.CartService;
 import org.slf4j.Logger;
@@ -27,9 +29,14 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private CartGoodsMapper cartGoodsMapper;
 
+    @Autowired
+    private PartSizeMapper partSizeMapper;
+
+    @Autowired
+    private ColorSizeMapper colorSizeMapper;
+
     @Override
     public CartDto selectCartDtosByUserId(Integer userId) {
-
         // 根据userId查cartId
         Integer cartId = cartMapper.selectCartIdByUserId(userId);
         if (cartId!=null) {
@@ -51,7 +58,7 @@ public class CartServiceImpl implements CartService {
 
 
     @Override
-    public boolean addCartGoods(AddGoodsDto addGoodsDto) {
+    public double addCartGoods(AddGoodsDto addGoodsDto) {
         // 根据userId获取cartId
         Integer cartId = cartMapper.selectCartIdByUserId(addGoodsDto.getUserId());
         if (cartId!=null) {
@@ -59,13 +66,27 @@ public class CartServiceImpl implements CartService {
             // 如果该商品已经存在，则增加其amount,否则插入新数据
             if (isGoodsExist) {
                 cartGoodsMapper.updateAmount(addGoodsDto,cartId);
-                return true;
             } else {
                 cartGoodsMapper.insertCartGoods(addGoodsDto,cartId);
-                return true;
             }
         } else {
-            return false;
+            return -1;
         }
+        // 更新价格
+        CartDto cartDto = selectCartDtosByUserId(addGoodsDto.getUserId());
+        return calculateTotalPrice(cartDto,cartId);
+    }
+
+    /*
+        根据购物车所有商品信息计算总价，并更新
+     */
+    private double calculateTotalPrice(CartDto cartDto,Integer cartId) {
+        double totalPrice = 0;
+        List<CartGoodsDto> cartGoodsDtos = cartDto.getCartGoodsDtos();
+        for (CartGoodsDto cartGoodsDto : cartGoodsDtos) {
+            totalPrice += cartGoodsDto.getPrice() * cartGoodsDto.getAmount();
+        }
+        cartMapper.updateTotalPrice(totalPrice,cartId);
+        return totalPrice;
     }
 }

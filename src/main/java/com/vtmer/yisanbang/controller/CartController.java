@@ -42,8 +42,8 @@ public class CartController {
 
     @PostMapping("/addCartGoods")
     public ResponseMessage addCartGoods(@RequestBody AddGoodsDto addGoodsDto) {
-        boolean b = cartService.addCartGoods(addGoodsDto);
-        if (b) return ResponseMessage.newSuccessInstance("加入购物车成功");
+        double totalPrice = cartService.addCartGoods(addGoodsDto);
+        if (totalPrice!=-1) return ResponseMessage.newSuccessInstance(totalPrice,"加入购物车成功");
         else {
             logger.warn("传入的userId有误");
             return ResponseMessage.newErrorInstance("加入购物车失败，请检查传入的参数");

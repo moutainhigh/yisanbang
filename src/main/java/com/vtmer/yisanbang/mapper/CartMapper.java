@@ -24,4 +24,6 @@ public interface CartMapper {
     Integer selectCartIdByUserId(Integer userId);
 
     CartDto selectCartDtoByUserId(Integer userId);
+
+    boolean updateTotalPrice(double totalPrice,Integer cartId);
 }
