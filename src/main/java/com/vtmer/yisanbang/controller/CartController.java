@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -36,20 +37,30 @@ public class CartController {
         }
     }
 
+    /*
+        添加商品到购物车
+     */
     @PostMapping("/addCartGoods")
     public ResponseMessage addCartGoods(@RequestBody AddGoodsDto addGoodsDto) {
         double totalPrice = cartService.addCartGoods(addGoodsDto);
-        if (totalPrice!=-1) return ResponseMessage.newSuccessInstance(totalPrice,"加入购物车成功");
+        HashMap<String,Object> map = new HashMap<String,Object>();
+        map.put("totalPrice",totalPrice);
+        if (totalPrice!=-1) return ResponseMessage.newSuccessInstance(map,"加入购物车成功");
         else {
             logger.warn("传入的userId有误");
             return ResponseMessage.newErrorInstance("加入购物车失败，请检查传入的参数");
         }
     }
 
+    /*
+        更新购物车勾选商品
+     */
     @PutMapping("/updateChosen")
     public ResponseMessage updateChosen(@RequestBody AddGoodsDto addGoodsDto) {
         double totalPrice = cartService.updateChosen(addGoodsDto);
-        if (totalPrice!=-1) return ResponseMessage.newSuccessInstance(totalPrice,"修改勾选成功");
+        HashMap<String,Object> map = new HashMap<String,Object>();
+        map.put("totalPrice",totalPrice);
+        if (totalPrice!=-1) return ResponseMessage.newSuccessInstance(map,"修改勾选成功");
         else {
             logger.warn("传入的userId有误");
             return ResponseMessage.newErrorInstance("修改勾选失败，请检查传入的参数");
@@ -59,21 +70,25 @@ public class CartController {
     @PutMapping("/addOrSubtractAmount")
     public ResponseMessage addOrSubtractAmount(@RequestBody AddGoodsDto addGoodsDto) {
         double totalPrice = cartService.addOrSubtractAmount(addGoodsDto);
+        HashMap<String,Object> map = new HashMap<String,Object>();
+        map.put("totalPrice",totalPrice);
         if (totalPrice == -1) {
             return ResponseMessage.newErrorInstance("更新购物车商品数量失败，请检查传入的参数");
         } else if (totalPrice == 0) {
             return ResponseMessage.newSuccessInstance(null,"更新购物车商品数量成功，价格不变");
-        } else return ResponseMessage.newSuccessInstance(totalPrice,"更新购物车数量成功");
+        } else return ResponseMessage.newSuccessInstance(map,"更新购物车数量成功");
     }
 
     @PutMapping("/updateAmount")
     public ResponseMessage updateAmount(@RequestBody AddGoodsDto addGoodsDto) {
         double totalPrice = cartService.updateAmount(addGoodsDto);
+        HashMap<String,Object> map = new HashMap<String,Object>();
+        map.put("totalPrice",totalPrice);
         if (totalPrice == -1) {
             return ResponseMessage.newErrorInstance("更新购物车商品数量失败，请检查传入的参数");
         } else if (totalPrice == 0) {
             return ResponseMessage.newSuccessInstance(null,"更新购物车商品数量成功，价格不变");
-        } else return ResponseMessage.newSuccessInstance(totalPrice,"更新购物车数量成功");
+        } else return ResponseMessage.newSuccessInstance(map,"更新购物车数量成功");
     }
 
     @DeleteMapping("/deleteCartGoods")
