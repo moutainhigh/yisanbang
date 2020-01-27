@@ -37,7 +37,15 @@ spring:
     poolPreparedStatements: false
     # 要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true
     maxOpenPreparedStatements: -1
+  redis:
+    host: 127.0.0.1
+    port: 6379
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
+
+wx:
+  applet:
+    appid:
+    appsecret:
     

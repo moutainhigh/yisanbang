@@ -5,7 +5,9 @@ import java.util.Date;
 public class Collection {
     private Integer id;
 
-    private Integer goodId;
+    private Integer userId;
+
+    private Integer goodsId;
 
     private Date createTime;
 
@@ -19,12 +21,20 @@ public class Collection {
         this.id = id;
     }
 
-    public Integer getGoodId() {
-        return goodId;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setGoodId(Integer goodId) {
-        this.goodId = goodId;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public Integer getGoodsId() {
+        return goodsId;
+    }
+
+    public void setGoodsId(Integer goodsId) {
+        this.goodsId = goodsId;
     }
 
     public Date getCreateTime() {

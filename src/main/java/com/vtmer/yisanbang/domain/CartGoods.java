@@ -5,11 +5,13 @@ import java.util.Date;
 public class CartGoods {
     private Integer id;
 
+    private Integer cartId;
+
     private Integer colorSizeId;
 
     private Integer amount;
 
-    private Integer cartId;
+    private Byte isGoods;
 
     private Byte isChosen;
 
@@ -23,6 +25,14 @@ public class CartGoods {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getCartId() {
+        return cartId;
+    }
+
+    public void setCartId(Integer cartId) {
+        this.cartId = cartId;
     }
 
     public Integer getColorSizeId() {
@@ -41,12 +51,12 @@ public class CartGoods {
         this.amount = amount;
     }
 
-    public Integer getCartId() {
-        return cartId;
+    public Byte getIsGoods() {
+        return isGoods;
     }
 
-    public void setCartId(Integer cartId) {
-        this.cartId = cartId;
+    public void setIsGoods(Byte isGoods) {
+        this.isGoods = isGoods;
     }
 
     public Byte getIsChosen() {
