@@ -39,7 +39,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select id, sort_id, name, introduce, picture, price, is_show, create_time, update_time
+    select id, sort_id, name, introduce, picture, price, is_show
     from goods
     where id = #{id,jdbcType=INTEGER}
   </select>
@@ -47,4 +47,5 @@
     select id, sort_id, name, introduce, picture, price, is_show, create_time, update_time
     from goods
   </select>
+
 </mapper>

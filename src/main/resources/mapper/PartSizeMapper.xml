@@ -10,6 +10,7 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from part_size
     where id = #{id,jdbcType=INTEGER}
@@ -41,4 +42,5 @@
     select id, suit_id, price, part, size, create_time, update_time
     from part_size
   </select>
+
 </mapper>

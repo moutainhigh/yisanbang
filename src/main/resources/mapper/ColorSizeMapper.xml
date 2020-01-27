@@ -39,4 +39,5 @@
     select id, goods_id, color, size, create_time, update_time
     from color_size
   </select>
+
 </mapper>

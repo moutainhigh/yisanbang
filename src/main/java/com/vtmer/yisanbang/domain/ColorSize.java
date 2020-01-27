@@ -62,4 +62,16 @@ public class ColorSize {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+    @Override
+    public String toString() {
+        return "ColorSize{" +
+                "id=" + id +
+                ", goodsId=" + goodsId +
+                ", color='" + color + '\'' +
+                ", size=" + size +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
+    }
 }
