@@ -3,7 +3,8 @@
 <mapper namespace="com.vtmer.yisanbang.mapper.CollectionMapper">
   <resultMap id="BaseResultMap" type="com.vtmer.yisanbang.domain.Collection">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="good_id" jdbcType="INTEGER" property="goodId" />
+    <result column="goods_id" jdbcType="INTEGER" property="goodsId" />
+    <result column="is_goods" jdbcType="TINYINT" property="isGoods" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
@@ -12,25 +13,26 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.vtmer.yisanbang.domain.Collection">
-    insert into collection (id, good_id, create_time, 
-      update_time)
-    values (#{id,jdbcType=INTEGER}, #{goodId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+    insert into collection (id, goods_id, is_goods, 
+      create_time, update_time)
+    values (#{id,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, #{isGoods,jdbcType=TINYINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.vtmer.yisanbang.domain.Collection">
     update collection
-    set good_id = #{goodId,jdbcType=INTEGER},
+    set goods_id = #{goodsId,jdbcType=INTEGER},
+      is_goods = #{isGoods,jdbcType=TINYINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select id, good_id, create_time, update_time
+    select id, goods_id, is_goods, create_time, update_time
     from collection
     where id = #{id,jdbcType=INTEGER}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select id, good_id, create_time, update_time
+    select id, goods_id, is_goods, create_time, update_time
     from collection
   </select>
 </mapper>
