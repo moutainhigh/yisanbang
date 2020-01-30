@@ -8,6 +8,8 @@ public class CartDto {
 
     private String totalPrice;
 
+    private String afterTotalPrice;
+
     private List<CartGoodsDto> cartGoodsDtos;
 
     public String getTotalPrice() {

@@ -1,9 +1,5 @@
 package com.vtmer.yisanbang.dto;
 
-import com.vtmer.yisanbang.domain.ColorSize;
-import com.vtmer.yisanbang.domain.Goods;
-import com.vtmer.yisanbang.domain.Suit;
-
 import java.util.Date;
 
 public class CartGoodsDto {
@@ -23,6 +19,10 @@ public class CartGoodsDto {
     private String partOrColor;
 
     private Integer size;
+
+    private double totalPrice;
+
+    private double afterTotalPrice;
 
     private Integer isGoods;
 
@@ -106,6 +106,23 @@ public class CartGoodsDto {
 
     public void setIsGoods(Integer isGoods) {
         this.isGoods = isGoods;
+    }
+
+
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public double getAfterTotalPrice() {
+        return afterTotalPrice;
+    }
+
+    public void setAfterTotalPrice(double afterTotalPrice) {
+        this.afterTotalPrice = afterTotalPrice;
     }
 
     @Override
