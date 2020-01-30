@@ -26,7 +26,7 @@ public class CartController {
         购物车商品列表
      */
     @GetMapping("/listCartGoods/{id}")
-    public ResponseMessage listCart(@PathVariable("id") Integer userId) {
+    public ResponseMessage listCartGoods(@PathVariable("id") Integer userId) {
         CartDto cartDto = cartService.selectCartDtosByUserId(userId);
         if (cartDto!=null) {
             if (!cartDto.getCartGoodsDtos().isEmpty())  // 购物车不为空
