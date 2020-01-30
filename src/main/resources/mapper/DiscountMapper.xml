@@ -12,18 +12,17 @@
     delete from discount
     where id = #{id,jdbcType=INTEGER}
   </delete>
+  <delete id="delete">
+    delete from discount
+  </delete>
   <insert id="insert" parameterType="com.vtmer.yisanbang.domain.Discount">
-    insert into discount (id, amount, discount_rate, 
-      create_time, update_time)
-    values (#{id,jdbcType=INTEGER}, #{amount,jdbcType=INTEGER}, #{discountRate,jdbcType=DOUBLE}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+    insert into discount (amount, discount_rate)
+    values (#{amount,jdbcType=INTEGER}, #{discountRate,jdbcType=DOUBLE})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.vtmer.yisanbang.domain.Discount">
     update discount
     set amount = #{amount,jdbcType=INTEGER},
-      discount_rate = #{discountRate,jdbcType=DOUBLE},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
+      discount_rate = #{discountRate,jdbcType=DOUBLE}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
@@ -34,5 +33,11 @@
   <select id="selectAll" resultMap="BaseResultMap">
     select id, amount, discount_rate, create_time, update_time
     from discount
+  </select>
+  <select id="select" resultType="com.vtmer.yisanbang.domain.Discount">
+    select amount, discount_rate from discount
+  </select>
+  <select id="checkExist" resultType="java.lang.Boolean">
+    select count(*) from discount
   </select>
 </mapper>
