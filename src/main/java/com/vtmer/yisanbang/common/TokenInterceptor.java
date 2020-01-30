@@ -1,15 +1,17 @@
 package com.vtmer.yisanbang.common;
 
 import com.alibaba.fastjson.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@Component
 public class TokenInterceptor implements HandlerInterceptor {
 
-    @Resource
+    @Autowired
     private JwtUtil jwtUtil;
 
     @Override
@@ -19,6 +21,7 @@ public class TokenInterceptor implements HandlerInterceptor {
         if(null != token) {
             // 验证token是否正确
             boolean flag = jwtUtil.verifyToken(token);
+            System.out.println(flag);
             if (flag) {
                 return true;
             }
