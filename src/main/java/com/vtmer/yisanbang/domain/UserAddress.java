@@ -9,6 +9,8 @@ public class UserAddress {
 
     private String addressName;
 
+    private String phoneNumber;
+
     private Boolean isDefault;
 
     private Date createTime;
@@ -37,6 +39,14 @@ public class UserAddress {
 
     public void setAddressName(String addressName) {
         this.addressName = addressName == null ? null : addressName.trim();
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber == null ? null : phoneNumber.trim();
     }
 
     public Boolean getIsDefault() {

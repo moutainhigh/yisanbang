@@ -4,8 +4,6 @@
   <resultMap id="BaseResultMap" type="com.vtmer.yisanbang.domain.User">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="open_id" jdbcType="VARCHAR" property="openId" />
-    <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
-    <result column="address" jdbcType="VARCHAR" property="address" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
@@ -14,29 +12,35 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.vtmer.yisanbang.domain.User">
-    insert into user (id, open_id, phone_number, 
-      address, create_time, update_time
-      )
-    values (#{id,jdbcType=INTEGER}, #{openId,jdbcType=VARCHAR}, #{phoneNumber,jdbcType=VARCHAR}, 
-      #{address,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
-      )
+    insert into user (id, open_id, create_time, 
+      update_time)
+    values (#{id,jdbcType=INTEGER}, #{openId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.vtmer.yisanbang.domain.User">
     update user
     set open_id = #{openId,jdbcType=VARCHAR},
-      phone_number = #{phoneNumber,jdbcType=VARCHAR},
-      address = #{address,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select id, open_id, phone_number, address, create_time, update_time
+    select id, open_id, create_time, update_time
     from user
     where id = #{id,jdbcType=INTEGER}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select id, open_id, phone_number, address, create_time, update_time
+    select id, open_id, create_time, update_time
     from user
+  </select>
+  <insert id="addUser" parameterType="java.lang.String">
+    insert into user
+    open_id
+    values #{openId}
+  </insert>
+  <select id="selectUserByOpenId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select id, open_id, create_time, update_time
+    from user
+    where open_id = #{openId}
   </select>
 </mapper>

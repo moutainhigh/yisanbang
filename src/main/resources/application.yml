@@ -41,7 +41,6 @@ spring:
     host: 127.0.0.1
     port: 6379
 
-
 mybatis:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
@@ -55,3 +54,8 @@ logging:
 
   file:
     name: target/mylog.log
+
+wx:
+  applet:
+    appid: wx447bdd8f7d850c06
+    appsecret: 1f8dc966cc30761d60394178a5d58301

@@ -1,4 +1,4 @@
-package com.vtmer.yisanbang.entity;
+package com.vtmer.yisanbang.vo;
 
 public class WxAccount {
 
