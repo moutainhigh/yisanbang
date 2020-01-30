@@ -62,10 +62,9 @@ public class CollectionServiceImpl implements CollectionService {
         // 查询出goodsId、isGoods 集合
         List<Collection> collectionList = collectionMapper.selectAllByUserId(userId);
 
-        List<CollectionDto> collectionDtoList = new ArrayList<>();
-
         // 如果查询出来不为空
         if (collectionList!=null && collectionList.size()!=0) {
+            List<CollectionDto> collectionDtoList = new ArrayList<>();
             for (Collection collection : collectionList) {
                 int goodsId = collection.getGoodsId();
                 int isGoods = collection.getIsGoods();
