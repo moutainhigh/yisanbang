@@ -1,6 +1,7 @@
 package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
+import com.vtmer.yisanbang.dto.AddCartGoodsDto;
 import com.vtmer.yisanbang.dto.AddGoodsDto;
 import com.vtmer.yisanbang.dto.CartDto;
 import com.vtmer.yisanbang.dto.DeleteCartGoodsDto;
@@ -42,11 +43,9 @@ public class CartController {
         添加商品到购物车
      */
     @PostMapping("/addCartGoods")
-    public ResponseMessage addCartGoods(@RequestBody AddGoodsDto addGoodsDto) {
-        double totalPrice = cartService.addCartGoods(addGoodsDto);
-        HashMap<String,Object> map = new HashMap<String,Object>();
-        map.put("totalPrice",totalPrice);
-        if (totalPrice!=-1) return ResponseMessage.newSuccessInstance(map,"加入购物车成功");
+    public ResponseMessage addCartGoods(@RequestBody AddCartGoodsDto AddCartGoodsDto) {
+        int res = cartService.addCartGoods(AddCartGoodsDto);
+        if (res == 1) return ResponseMessage.newSuccessInstance("加入购物车成功");
         else {
             logger.warn("传入的userId有误");
             return ResponseMessage.newErrorInstance("加入购物车失败，请检查传入的参数");

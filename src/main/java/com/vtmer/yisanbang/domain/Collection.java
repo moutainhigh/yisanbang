@@ -9,6 +9,8 @@ public class Collection {
 
     private Integer goodsId;
 
+    private Byte isGoods;
+
     private Date createTime;
 
     private Date updateTime;
@@ -37,6 +39,14 @@ public class Collection {
         this.goodsId = goodsId;
     }
 
+    public Byte getIsGoods() {
+        return isGoods;
+    }
+
+    public void setIsGoods(Byte isGoods) {
+        this.isGoods = isGoods;
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -51,5 +61,17 @@ public class Collection {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    @Override
+    public String toString() {
+        return "Collection{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", goodsId=" + goodsId +
+                ", isGoods=" + isGoods +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
     }
 }
