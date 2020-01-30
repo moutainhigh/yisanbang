@@ -4,10 +4,7 @@ import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.dto.Token;
 import com.vtmer.yisanbang.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -25,6 +22,15 @@ public class UserController {
         }
         Token token = userService.wxUserLogin(request.get("code"));
         return ResponseMessage.newSuccessInstance(token,"获取token用户成功");
+    }
+
+    @GetMapping("/userId")
+    public ResponseMessage getUserIdByToken(@RequestBody Map<String, String> token) {
+        Integer userId = userService.getUserIdByToken(token.get("token"));
+        if (null == userId || userId.equals("")) {
+            return ResponseMessage.newErrorInstance("获取用户Id失败");
+        }
+        return ResponseMessage.newSuccessInstance(userId, "获取用户Id成功");
     }
 
 }

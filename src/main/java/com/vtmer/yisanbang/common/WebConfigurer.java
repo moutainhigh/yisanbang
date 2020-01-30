@@ -1,5 +1,6 @@
 package com.vtmer.yisanbang.common;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -10,11 +11,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfigurer implements WebMvcConfigurer {
 
+    @Autowired
+    private TokenInterceptor tokenInterceptor;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new TokenInterceptor())
+        registry.addInterceptor(tokenInterceptor)
                 .excludePathPatterns("/admin/**")
                 .excludePathPatterns("/user/login")
+                .excludePathPatterns("/user/userId")
+                // .excludePathPatterns("/cart/**")
                 .addPathPatterns("/**");
     }
 
