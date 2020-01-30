@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.vtmer.yisanbang.mapper.CollectionMapper">
+  <sql id="BaseCondition">
+    <if test="userId!=null">
+      and user_id = #{userId}
+    </if>
+    <if test="goodsId!=null">
+      and goods_id = #{goodsId}
+    </if>
+    <if test="isGoods!=null">
+      and is_goods = #{isGoods}
+    </if>
+  </sql>
   <resultMap id="BaseResultMap" type="com.vtmer.yisanbang.domain.Collection">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
@@ -13,13 +24,14 @@
     delete from collection
     where id = #{id,jdbcType=INTEGER}
   </delete>
+  <delete id="deleteOne" parameterType="com.vtmer.yisanbang.domain.Collection">
+    delete from collection
+    where 1=1
+    <include refid="BaseCondition"></include>
+  </delete>
   <insert id="insert" parameterType="com.vtmer.yisanbang.domain.Collection">
-    insert into collection (id, user_id, goods_id, 
-      is_goods, create_time, update_time
-      )
-    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, 
-      #{isGoods,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
-      )
+    insert into collection ( user_id, goods_id, is_goods )
+    values (#{userId,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, #{isGoods,jdbcType=TINYINT} } )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.vtmer.yisanbang.domain.Collection">
     update collection
@@ -38,5 +50,15 @@
   <select id="selectAll" resultMap="BaseResultMap">
     select id, user_id, goods_id, is_goods, create_time, update_time
     from collection
+  </select>
+  <select id="checkExist" resultType="java.lang.Boolean">
+    select count(id) from collection
+    where 1=1
+    <include refid="BaseCondition"/>
+  </select>
+  <select id="selectAllByUserId" resultType="com.vtmer.yisanbang.domain.Collection">
+    select goods_id,is_goods from collection
+    where user_id = #{userId}
+    order by create_time DESC
   </select>
 </mapper>

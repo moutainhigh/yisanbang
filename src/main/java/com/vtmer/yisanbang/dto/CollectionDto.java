@@ -6,6 +6,12 @@ public class CollectionDto {
 
     private Integer isGoods;
 
+    private String name;
+
+    private String picture;
+
+    private double price;
+
     public Integer getGoodsId() {
         return goodsId;
     }
@@ -14,19 +20,46 @@ public class CollectionDto {
         this.goodsId = goodsId;
     }
 
-    @Override
-    public String toString() {
-        return "CollectionDto{" +
-                "goodsId=" + goodsId +
-                ", isGoods=" + isGoods +
-                '}';
-    }
-
     public Integer getIsGoods() {
         return isGoods;
     }
 
     public void setIsGoods(Integer isGoods) {
         this.isGoods = isGoods;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return "CollectionDto{" +
+                "goodsId=" + goodsId +
+                ", isGoods=" + isGoods +
+                ", name='" + name + '\'' +
+                ", picture='" + picture + '\'' +
+                ", price=" + price +
+                '}';
     }
 }

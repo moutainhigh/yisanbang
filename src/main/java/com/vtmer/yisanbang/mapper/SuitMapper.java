@@ -1,10 +1,13 @@
 package com.vtmer.yisanbang.mapper;
 
 import com.vtmer.yisanbang.domain.Suit;
-import com.vtmer.yisanbang.dto.SuitDto;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
+@Mapper
 public interface SuitMapper {
     int deleteByPrimaryKey(Integer id);
 
