@@ -14,9 +14,10 @@
   </sql>
   <resultMap id="BaseResultMap" type="com.vtmer.yisanbang.domain.CartGoods">
     <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="cart_id" jdbcType="INTEGER" property="cartId" />
     <result column="color_size_id" jdbcType="INTEGER" property="colorSizeId" />
     <result column="amount" jdbcType="INTEGER" property="amount" />
-    <result column="cart_id" jdbcType="INTEGER" property="cartId" />
+    <result column="is_goods" jdbcType="TINYINT" property="isGoods" />
     <result column="is_chosen" jdbcType="TINYINT" property="isChosen" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -55,12 +56,12 @@
     <include refid="baseCondition"/>
   </delete>
   <insert id="insert" parameterType="com.vtmer.yisanbang.domain.CartGoods">
-    insert into cart_goods (id, color_size_id, amount, 
-      cart_id, is_chosen, create_time, 
-      update_time)
-    values (#{id,jdbcType=INTEGER}, #{colorSizeId,jdbcType=INTEGER}, #{amount,jdbcType=INTEGER}, 
-      #{cartId,jdbcType=INTEGER}, #{isChosen,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+    insert into cart_goods (id, cart_id, color_size_id, 
+      amount, is_goods, is_chosen, 
+      create_time, update_time)
+    values (#{id,jdbcType=INTEGER}, #{cartId,jdbcType=INTEGER}, #{colorSizeId,jdbcType=INTEGER}, 
+      #{amount,jdbcType=INTEGER}, #{isGoods,jdbcType=TINYINT}, #{isChosen,jdbcType=TINYINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertCartGoods">
     insert into cart_goods (color_size_id, amount, cart_id,is_goods)
@@ -69,9 +70,10 @@
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.vtmer.yisanbang.domain.CartGoods">
     update cart_goods
-    set color_size_id = #{colorSizeId,jdbcType=INTEGER},
+    set cart_id = #{cartId,jdbcType=INTEGER},
+      color_size_id = #{colorSizeId,jdbcType=INTEGER},
       amount = #{amount,jdbcType=INTEGER},
-      cart_id = #{cartId,jdbcType=INTEGER},
+      is_goods = #{isGoods,jdbcType=TINYINT},
       is_chosen = #{isChosen,jdbcType=TINYINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
@@ -102,12 +104,12 @@
     and color_size_id = #{addGoodsDto.colorSizeId}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select id, color_size_id, amount, cart_id, is_chosen, create_time, update_time
+    select id, cart_id, color_size_id, amount, is_goods, is_chosen, create_time, update_time
     from cart_goods
     where id = #{id,jdbcType=INTEGER}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select id, color_size_id, amount, cart_id, is_chosen, create_time, update_time
+    select id, cart_id, color_size_id, amount, is_goods, is_chosen, create_time, update_time
     from cart_goods
   </select>
   <select id="selectCartGoodsByCartId" parameterType="java.lang.Integer" resultMap="cartGoodsList">

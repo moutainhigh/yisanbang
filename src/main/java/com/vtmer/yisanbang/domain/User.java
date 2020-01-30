@@ -5,11 +5,9 @@ import java.util.Date;
 public class User {
     private Integer id;
 
+    private String openId;
+
     private String phoneNumber;
-
-    private String name;
-
-    private String headProtrait;
 
     private String address;
 
@@ -25,28 +23,20 @@ public class User {
         this.id = id;
     }
 
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId == null ? null : openId.trim();
+    }
+
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber == null ? null : phoneNumber.trim();
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
-    }
-
-    public String getHeadProtrait() {
-        return headProtrait;
-    }
-
-    public void setHeadProtrait(String headProtrait) {
-        this.headProtrait = headProtrait == null ? null : headProtrait.trim();
     }
 
     public String getAddress() {

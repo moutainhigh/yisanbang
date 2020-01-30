@@ -3,7 +3,7 @@ spring:
     # 如果存在多个数据源，监控的时候可以通过名字来区分开来
     name: mysql
     # 连接数据库的url
-    url: jdbc:mysql://localhost:3306/yisanbang?characterEncoding=utf-8&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/yi_san_bang?characterEncoding=utf-8&serverTimezone=UTC
     # 连接数据库的账号
     username: root
     # 连接数据库的密码
@@ -37,6 +37,9 @@ spring:
     poolPreparedStatements: false
     # 要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true
     maxOpenPreparedStatements: -1
+  redis:
+    host: 127.0.0.1
+    port: 6379
 
 
 mybatis:
