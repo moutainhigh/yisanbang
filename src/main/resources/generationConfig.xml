@@ -54,8 +54,8 @@
 <!--        <table tableName="admin_role" domainObjectName="AdminRole"/>-->
 <!--        <table tableName="carousel" domainObjectName="Carousel"/>-->
 <!--        <table tableName="cart" domainObjectName="Cart"/>-->
-        <table tableName="cart_goods" domainObjectName="CartGoods"/>
-        <table tableName="collection" domainObjectName="Collection"/>
+<!--        <table tableName="cart_goods" domainObjectName="CartGoods"/>-->
+<!--        <table tableName="collection" domainObjectName="Collection"/>-->
 <!--        <table tableName="color_size" domainObjectName="ColorSize"/>-->
 <!--        <table tableName="discount" domainObjectName="Discount"/>-->
 <!--        <table tableName="goods" domainObjectName="Goods"/>-->
@@ -75,7 +75,7 @@
 <!--        <table tableName="suit_first_sort" domainObjectName="SuitFirstSort"/>-->
 <!--        <table tableName="suit_second_sort" domainObjectName="SuitSecondSort"/>-->
 <!--        <table tableName="uniform_sort" domainObjectName="UniformSort"/>-->
-        <table tableName="user" domainObjectName="User"/>
+<!--        <table tableName="user" domainObjectName="User"/>-->
 <!--        <table tableName="user_address" domainObjectName="UserAddress"/>-->
     </context>
 
