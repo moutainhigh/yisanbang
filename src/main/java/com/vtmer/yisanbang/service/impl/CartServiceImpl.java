@@ -1,21 +1,13 @@
 package com.vtmer.yisanbang.service.impl;
 
-import com.sun.org.apache.bcel.internal.generic.DDIV;
 import com.vtmer.yisanbang.common.ListSort;
-import com.vtmer.yisanbang.domain.CartGoods;
 import com.vtmer.yisanbang.dto.*;
 import com.vtmer.yisanbang.mapper.CartGoodsMapper;
 import com.vtmer.yisanbang.mapper.CartMapper;
-import com.vtmer.yisanbang.mapper.ColorSizeMapper;
-import com.vtmer.yisanbang.mapper.PartSizeMapper;
-import com.vtmer.yisanbang.service.CartGoodsService;
 import com.vtmer.yisanbang.service.CartService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -26,12 +18,6 @@ public class CartServiceImpl implements CartService {
 
     @Autowired
     private CartGoodsMapper cartGoodsMapper;
-
-    @Autowired
-    private PartSizeMapper partSizeMapper;
-
-    @Autowired
-    private ColorSizeMapper colorSizeMapper;
 
     @Override
     public CartDto selectCartDtosByUserId(Integer userId) {
@@ -56,23 +42,28 @@ public class CartServiceImpl implements CartService {
 
 
     @Override
-    public double addCartGoods(AddGoodsDto addGoodsDto) {
+    public int addCartGoods(AddCartGoodsDto addCartGoodsDto) {
         // 根据userId获取cartId
-        Integer cartId = cartMapper.selectCartIdByUserId(addGoodsDto.getUserId());
+        Integer cartId = cartMapper.selectCartIdByUserId(addCartGoodsDto.getUserId());
         if (cartId!=null) {
-            addGoodsDto.setCartId(cartId);
-            boolean isGoodsExist = cartGoodsMapper.checkGoodsExist(addGoodsDto);
-            // 如果该商品已经存在，则增加其amount,否则插入新数据
-            if (isGoodsExist) {
-                cartGoodsMapper.addOrSubtractAmount(addGoodsDto);
-            } else {
-                cartGoodsMapper.insertCartGoods(addGoodsDto);
-            }
+            List<AddGoodsDto> addGoodsDtoList = addCartGoodsDto.getAddGoodsDtoList();
+            for (AddGoodsDto addGoodsDto : addGoodsDtoList) {
+                addGoodsDto.setCartId(cartId);
+                addGoodsDto.setIsGoods(addCartGoodsDto.getIsGoods());
+                boolean isGoodsExist = cartGoodsMapper.checkGoodsExist(addGoodsDto);
+                // 如果该商品已经存在，则增加其amount,否则插入新数据
+                if (isGoodsExist) {
+                    cartGoodsMapper.addOrSubtractAmount(addGoodsDto);
+                } else {
+                    cartGoodsMapper.insertCartGoods(addGoodsDto);
+                }
+            } // end for
         } else {
             return -1;
         }
         // 更新价格
-        return calculateTotalPrice(addGoodsDto.getUserId());
+        calculateTotalPrice(addCartGoodsDto.getUserId());
+        return 1;
     }
 
     public double updateChosen(AddGoodsDto addGoodsDto) {
