@@ -2,7 +2,10 @@ package com.vtmer.yisanbang.service.impl;
 
 import com.vtmer.yisanbang.common.ListSort;
 import com.vtmer.yisanbang.domain.Discount;
-import com.vtmer.yisanbang.dto.*;
+import com.vtmer.yisanbang.dto.AddGoodsDto;
+import com.vtmer.yisanbang.dto.CartGoodsDto;
+import com.vtmer.yisanbang.dto.DeleteCartGoodsDto;
+import com.vtmer.yisanbang.dto.GoodsDto;
 import com.vtmer.yisanbang.mapper.CartGoodsMapper;
 import com.vtmer.yisanbang.mapper.CartMapper;
 import com.vtmer.yisanbang.mapper.DiscountMapper;
@@ -11,6 +14,7 @@ import com.vtmer.yisanbang.vo.AddCartGoodsVo;
 import com.vtmer.yisanbang.vo.CartVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -84,6 +88,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    @Transactional
     public int addCartGoods(AddCartGoodsVo addCartGoodsVo) {
         // 根据userId获取cartId
         Integer cartId = cartMapper.selectCartIdByUserId(addCartGoodsVo.getUserId());
@@ -108,6 +113,7 @@ public class CartServiceImpl implements CartService {
         return 1;
     }
 
+    @Transactional
     public double updateChosen(AddGoodsDto addGoodsDto) {
         // 根据userId获取cartId
         Integer cartId = cartMapper.selectCartIdByUserId(addGoodsDto.getUserId());
@@ -123,6 +129,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    @Transactional
     public double addOrSubtractAmount(AddGoodsDto addGoodsDto) {
         // 更新数量
         boolean b = cartGoodsMapper.addOrSubtractAmount(addGoodsDto);
@@ -134,6 +141,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    @Transactional
     public double updateAmount(AddGoodsDto addGoodsDto) {
         boolean b = cartGoodsMapper.updateAmount(addGoodsDto);
         if (b) {
@@ -144,6 +152,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    @Transactional
     public Boolean deleteCartGoods(DeleteCartGoodsDto deleteCartGoodsDto) {
         // 删除商品
         Integer cartId = deleteCartGoodsDto.getCartId();
