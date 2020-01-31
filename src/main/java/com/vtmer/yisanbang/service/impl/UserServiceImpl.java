@@ -94,4 +94,9 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    @Override
+    public User selectByPrimaryKey(Integer userId) {
+        return userMapper.selectByPrimaryKey(userId);
+    }
+
 }
