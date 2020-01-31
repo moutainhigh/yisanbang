@@ -7,6 +7,8 @@ public class UserAddress {
 
     private Integer userId;
 
+    private String userName;
+
     private String addressName;
 
     private String phoneNumber;
@@ -31,6 +33,14 @@ public class UserAddress {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName == null ? null : userName.trim();
     }
 
     public String getAddressName() {

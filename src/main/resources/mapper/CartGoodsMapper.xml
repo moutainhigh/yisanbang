@@ -31,7 +31,7 @@
     <result column="picture" jdbcType="VARCHAR" property="picture" />
     <result column="price" jdbcType="DOUBLE" property="price" />
     <result column="part" jdbcType="VARCHAR" property="partOrColor" />
-    <result column="size" jdbcType="INTEGER" property="size" />
+    <result column="size" jdbcType="VARCHAR" property="size" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <resultMap id="cartGoodsList1" type="com.vtmer.yisanbang.dto.CartGoodsDto">
@@ -43,7 +43,7 @@
     <result column="picture" jdbcType="VARCHAR" property="picture" />
     <result column="price" jdbcType="DOUBLE" property="price" />
     <result column="color" jdbcType="VARCHAR" property="partOrColor" />
-    <result column="size" jdbcType="INTEGER" property="size" />
+    <result column="size" jdbcType="VARCHAR" property="size" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">

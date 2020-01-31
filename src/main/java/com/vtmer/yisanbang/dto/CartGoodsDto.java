@@ -18,7 +18,7 @@ public class CartGoodsDto {
 
     private String partOrColor;
 
-    private Integer size;
+    private String size;
 
     private double totalPrice;
 
@@ -92,11 +92,11 @@ public class CartGoodsDto {
         this.partOrColor = partOrColor;
     }
 
-    public Integer getSize() {
+    public String getSize() {
         return size;
     }
 
-    public void setSize(Integer size) {
+    public void setSize(String size) {
         this.size = size;
     }
 

@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.vtmer.yisanbang.domain.UserAddress">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
     <result column="address_name" jdbcType="VARCHAR" property="addressName" />
     <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
     <result column="is_default" jdbcType="BIT" property="isDefault" />
@@ -15,16 +16,17 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.vtmer.yisanbang.domain.UserAddress">
-    insert into user_address (id, user_id, address_name, 
-      phone_number, is_default, create_time, 
-      update_time)
-    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{addressName,jdbcType=VARCHAR}, 
-      #{phoneNumber,jdbcType=VARCHAR}, #{isDefault,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+    insert into user_address (id, user_id, user_name, 
+      address_name, phone_number, is_default, 
+      create_time, update_time)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, 
+      #{addressName,jdbcType=VARCHAR}, #{phoneNumber,jdbcType=VARCHAR}, #{isDefault,jdbcType=BIT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.vtmer.yisanbang.domain.UserAddress">
     update user_address
     set user_id = #{userId,jdbcType=INTEGER},
+      user_name = #{userName,jdbcType=VARCHAR},
       address_name = #{addressName,jdbcType=VARCHAR},
       phone_number = #{phoneNumber,jdbcType=VARCHAR},
       is_default = #{isDefault,jdbcType=BIT},
@@ -33,12 +35,19 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select id, user_id, address_name, phone_number, is_default, create_time, update_time
+    select id, user_id, user_name, address_name, phone_number, is_default, create_time, 
+    update_time
     from user_address
     where id = #{id,jdbcType=INTEGER}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select id, user_id, address_name, phone_number, is_default, create_time, update_time
+    select id, user_id, user_name, address_name, phone_number, is_default, create_time, 
+    update_time
     from user_address
+  </select>
+  <select id="selectByUserId" resultType="com.vtmer.yisanbang.domain.UserAddress">
+    select id, user_name, address_name, phone_number, is_default from user_address
+    where user_id = #{userId}
+    order by update_time DESC
   </select>
 </mapper>

@@ -49,7 +49,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public CartVo selectCartDtosByUserId(Integer userId) {
+    public CartVo selectCartVoByUserId(Integer userId) {
         setDiscount();
         double beforeCartTotalPrice = 0;
         // 根据userId查cartId
@@ -79,7 +79,7 @@ public class CartServiceImpl implements CartService {
                     cartGoodsDto.setAfterTotalPrice(totalPrice);
                 }
             } // end for
-            cartVo.setCartGoodsDtos(CartGoodsList);
+            cartVo.setCartGoodsList(CartGoodsList);
             cartVo.setBeforeTotalPrice(beforeCartTotalPrice);
             return cartVo;
         } else {
@@ -175,9 +175,9 @@ public class CartServiceImpl implements CartService {
     */
     private double calculateTotalPrice(Integer userId) {
         setDiscount();
-        CartVo cartVo = selectCartDtosByUserId(userId);
+        CartVo cartVo = selectCartVoByUserId(userId);
         double totalPrice = 0;
-        List<CartGoodsDto> cartGoodsDtos = cartVo.getCartGoodsDtos();
+        List<CartGoodsDto> cartGoodsDtos = cartVo.getCartGoodsList();
         for (CartGoodsDto cartGoodsDto : cartGoodsDtos) {
             // 如果勾选了，计算总价
             if (cartGoodsDto.getIsChosen() == 1) {

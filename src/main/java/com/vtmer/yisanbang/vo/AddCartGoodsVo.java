@@ -20,8 +20,6 @@ public class AddCartGoodsVo {
         this.userId = userId;
     }
 
-
-
     public List<AddGoodsDto> getAddGoodsDtoList() {
         return addGoodsDtoList;
     }

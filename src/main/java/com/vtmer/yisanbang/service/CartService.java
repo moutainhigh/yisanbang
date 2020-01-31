@@ -7,7 +7,7 @@ import com.vtmer.yisanbang.vo.CartVo;
 
 public interface CartService {
 
-    public CartVo selectCartDtosByUserId(Integer userId);
+    public CartVo selectCartVoByUserId(Integer userId);
 
     public int addCartGoods(AddCartGoodsVo AddCartGoodsVo);
 

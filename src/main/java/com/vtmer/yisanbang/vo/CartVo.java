@@ -12,14 +12,14 @@ public class CartVo {
 
     private double beforeTotalPrice;
 
-    private List<CartGoodsDto> cartGoodsDtos;
+    private List<CartGoodsDto> cartGoodsList;
 
-    public List<CartGoodsDto> getCartGoodsDtos() {
-        return cartGoodsDtos;
+    public List<CartGoodsDto> getCartGoodsList() {
+        return cartGoodsList;
     }
 
-    public void setCartGoodsDtos(List<CartGoodsDto> cartGoodsDtos) {
-        this.cartGoodsDtos = cartGoodsDtos;
+    public void setCartGoodsList(List<CartGoodsDto> cartGoodsList) {
+        this.cartGoodsList = cartGoodsList;
     }
 
     public Integer getCartId() {
@@ -52,7 +52,7 @@ public class CartVo {
                 "cartId=" + cartId +
                 ", totalPrice=" + totalPrice +
                 ", beforeTotalPrice=" + beforeTotalPrice +
-                ", cartGoodsDtos=" + cartGoodsDtos +
+                ", cartGoodsList=" + cartGoodsList +
                 '}';
     }
 }

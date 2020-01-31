@@ -1,8 +1,13 @@
 package com.vtmer.yisanbang.mapper;
 
 import com.vtmer.yisanbang.domain.UserAddress;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
+@Repository
+@Mapper
 public interface UserAddressMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -13,4 +18,6 @@ public interface UserAddressMapper {
     List<UserAddress> selectAll();
 
     int updateByPrimaryKey(UserAddress record);
+
+    List<UserAddress> selectByUserId(Integer id);
 }
