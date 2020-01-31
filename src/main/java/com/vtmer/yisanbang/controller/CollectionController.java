@@ -2,7 +2,7 @@ package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.domain.Collection;
-import com.vtmer.yisanbang.dto.CollectionDto;
+import com.vtmer.yisanbang.vo.CollectionVo;
 import com.vtmer.yisanbang.service.CollectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -45,11 +45,11 @@ public class CollectionController {
     @GetMapping("/get/{id}")
     public ResponseMessage collectionList(@PathVariable("id") Integer userId) {
         if (userId!=null && userId>0) {
-            List<CollectionDto> collectionDtoList = collectionService.selectAllByUserId(userId);
-            if (collectionDtoList == null) {
+            List<CollectionVo> collectionVoList = collectionService.selectAllByUserId(userId);
+            if (collectionVoList == null) {
                 return ResponseMessage.newSuccessInstance("收藏夹为空");
             } else {
-                return ResponseMessage.newSuccessInstance(collectionDtoList,"获取收藏夹成功");
+                return ResponseMessage.newSuccessInstance(collectionVoList,"获取收藏夹成功");
             }
         } else {
             return ResponseMessage.newErrorInstance("传入参数有误");

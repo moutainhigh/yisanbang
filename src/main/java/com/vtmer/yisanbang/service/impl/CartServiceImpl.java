@@ -7,6 +7,7 @@ import com.vtmer.yisanbang.mapper.CartGoodsMapper;
 import com.vtmer.yisanbang.mapper.CartMapper;
 import com.vtmer.yisanbang.mapper.DiscountMapper;
 import com.vtmer.yisanbang.service.CartService;
+import com.vtmer.yisanbang.vo.AddCartGoodsVo;
 import com.vtmer.yisanbang.vo.CartVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -83,14 +84,14 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public int addCartGoods(AddCartGoodsDto addCartGoodsDto) {
+    public int addCartGoods(AddCartGoodsVo addCartGoodsVo) {
         // 根据userId获取cartId
-        Integer cartId = cartMapper.selectCartIdByUserId(addCartGoodsDto.getUserId());
+        Integer cartId = cartMapper.selectCartIdByUserId(addCartGoodsVo.getUserId());
         if (cartId!=null) {
-            List<AddGoodsDto> addGoodsDtoList = addCartGoodsDto.getAddGoodsDtoList();
+            List<AddGoodsDto> addGoodsDtoList = addCartGoodsVo.getAddGoodsDtoList();
             for (AddGoodsDto addGoodsDto : addGoodsDtoList) {
                 addGoodsDto.setCartId(cartId);
-                addGoodsDto.setIsGoods(addCartGoodsDto.getIsGoods());
+                addGoodsDto.setIsGoods(addCartGoodsVo.getIsGoods());
                 boolean isGoodsExist = cartGoodsMapper.checkGoodsExist(addGoodsDto);
                 // 如果该商品已经存在，则增加其amount,否则插入新数据
                 if (isGoodsExist) {
@@ -103,7 +104,7 @@ public class CartServiceImpl implements CartService {
             return -1;
         }
         // 更新价格
-        calculateTotalPrice(addCartGoodsDto.getUserId());
+        calculateTotalPrice(addCartGoodsVo.getUserId());
         return 1;
     }
 

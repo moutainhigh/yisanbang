@@ -3,7 +3,7 @@ package com.vtmer.yisanbang.service.impl;
 import com.vtmer.yisanbang.domain.Collection;
 import com.vtmer.yisanbang.domain.Goods;
 import com.vtmer.yisanbang.domain.Suit;
-import com.vtmer.yisanbang.dto.CollectionDto;
+import com.vtmer.yisanbang.vo.CollectionVo;
 import com.vtmer.yisanbang.mapper.CollectionMapper;
 import com.vtmer.yisanbang.mapper.GoodsMapper;
 import com.vtmer.yisanbang.mapper.SuitMapper;
@@ -57,35 +57,35 @@ public class CollectionServiceImpl implements CollectionService {
     }
 
     @Override
-    public List<CollectionDto> selectAllByUserId(Integer userId) {
+    public List<CollectionVo> selectAllByUserId(Integer userId) {
 
         // 查询出goodsId、isGoods 集合
         List<Collection> collectionList = collectionMapper.selectAllByUserId(userId);
 
         // 如果查询出来不为空
         if (collectionList!=null && collectionList.size()!=0) {
-            List<CollectionDto> collectionDtoList = new ArrayList<>();
+            List<CollectionVo> collectionVoList = new ArrayList<>();
             for (Collection collection : collectionList) {
                 int goodsId = collection.getGoodsId();
                 int isGoods = collection.getIsGoods();
-                CollectionDto collectionDto = new CollectionDto();
-                collectionDto.setGoodsId(goodsId);
-                collectionDto.setIsGoods(isGoods);
+                CollectionVo collectionVo = new CollectionVo();
+                collectionVo.setGoodsId(goodsId);
+                collectionVo.setIsGoods(isGoods);
                 // 如果是普通商品
                 if (isGoods == 1) {
                     Goods goods = goodsMapper.selectByPrimaryKey(goodsId);
-                    collectionDto.setName(goods.getName());
-                    collectionDto.setPicture(goods.getPicture());
-                    collectionDto.setPrice(goods.getPrice());
+                    collectionVo.setName(goods.getName());
+                    collectionVo.setPicture(goods.getPicture());
+                    collectionVo.setPrice(goods.getPrice());
                 } else if (isGoods == 0) { // 如果是套装散件
                     Suit suit = suitMapper.selectByPrimaryKey(goodsId);
-                    collectionDto.setName(suit.getName());
-                    collectionDto.setPicture(suit.getPicture());
-                    collectionDto.setPrice(suit.getLowestPrice());
+                    collectionVo.setName(suit.getName());
+                    collectionVo.setPicture(suit.getPicture());
+                    collectionVo.setPrice(suit.getLowestPrice());
                 }
-                collectionDtoList.add(collectionDto);
+                collectionVoList.add(collectionVo);
             } //end for
-            return collectionDtoList;
+            return collectionVoList;
         } else {  // 收藏夹为空，返回null
             return null;
         }

@@ -1,6 +1,6 @@
-package com.vtmer.yisanbang.dto;
+package com.vtmer.yisanbang.vo;
 
-public class CollectionDto {
+public class CollectionVo {
 
     private Integer goodsId;
 
