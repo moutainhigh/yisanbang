@@ -34,9 +34,9 @@
     from user
   </select>
   <insert id="addUser" parameterType="java.lang.String">
-    insert into user
-    open_id
-    values #{openId}
+    insert into user (
+    open_id)
+    values (#{openId})
   </insert>
   <select id="selectUserByOpenId" parameterType="java.lang.String" resultMap="BaseResultMap">
     select id, open_id, create_time, update_time

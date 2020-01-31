@@ -84,4 +84,14 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public Integer getUserIdByToken(String token) {
+        String openId = jwtUtil.getOpenIdByToken(token);
+        User user = userMapper.selectUserByOpenId(openId);
+        if (null != user) {
+            return user.getId();
+        }
+        return null;
+    }
+
 }
