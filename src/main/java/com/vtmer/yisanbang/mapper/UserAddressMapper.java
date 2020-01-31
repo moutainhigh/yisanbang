@@ -20,4 +20,6 @@ public interface UserAddressMapper {
     int updateByPrimaryKey(UserAddress record);
 
     List<UserAddress> selectByUserId(Integer id);
+
+    UserAddress selectDefaultByUserId(Integer id);
 }

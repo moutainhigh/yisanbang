@@ -6,8 +6,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
 @Mapper
+@Repository
 public interface OrderMapper {
     int deleteByPrimaryKey(Integer id);
 

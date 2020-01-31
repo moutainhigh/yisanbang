@@ -7,6 +7,12 @@ public class Order {
 
     private String orderNumber;
 
+    private Integer userId;
+
+    private String userName;
+
+    private String phoneNumber;
+
     private Integer totalPrice;
 
     private String address;
@@ -15,11 +21,11 @@ public class Order {
 
     private String courierNumber;
 
+    private String message;
+
     private Date createTime;
 
     private Date updateTime;
-
-    private byte[] userId;
 
     public Integer getId() {
         return id;
@@ -35,6 +41,30 @@ public class Order {
 
     public void setOrderNumber(String orderNumber) {
         this.orderNumber = orderNumber == null ? null : orderNumber.trim();
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName == null ? null : userName.trim();
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber == null ? null : phoneNumber.trim();
     }
 
     public Integer getTotalPrice() {
@@ -69,6 +99,14 @@ public class Order {
         this.courierNumber = courierNumber == null ? null : courierNumber.trim();
     }
 
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message == null ? null : message.trim();
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -83,13 +121,5 @@ public class Order {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
-    }
-
-    public byte[] getUserId() {
-        return userId;
-    }
-
-    public void setUserId(byte[] userId) {
-        this.userId = userId;
     }
 }
