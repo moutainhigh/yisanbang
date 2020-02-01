@@ -17,9 +17,9 @@ import java.util.concurrent.TimeUnit;
 public class JwtUtil {
 
     /**
-     * 设置token过期时间：15分钟
+     * 设置token过期时间：30分钟
      */
-    private static final long EXPIRE_TIME = 15000 * 60 * 1000;
+    private static final long EXPIRE_TIME = 30 * 60 * 1000;
     /**
      * token私钥
      */
