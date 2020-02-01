@@ -2,7 +2,7 @@ package com.vtmer.yisanbang.domain;
 
 import java.util.Date;
 
-public class Goods_detail {
+public class GoodsDetail {
     private Integer id;
 
     private Integer goodsId;

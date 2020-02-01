@@ -10,6 +10,13 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
+  <resultMap id="UserAddressDtoMap" type="com.vtmer.yisanbang.dto.UserAddressDto">
+    <id column="id" jdbcType="INTEGER" property="id"/>
+    <result column="user_id" jdbcType="INTEGER" property="userId"/>
+    <result column="address_name" jdbcType="VARCHAR" property="addressName"/>
+    <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
+    <result column="is_default" jdbcType="BIT" property="isDefault"/>
+  </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from user_address
     where id = #{id,jdbcType=INTEGER}
@@ -40,5 +47,31 @@
   <select id="selectAll" resultMap="BaseResultMap">
     select id, user_id, address_name, phone_number, is_default, create_time, update_time
     from user_address
+  </select>
+  <insert id="insertDto" parameterType="com.vtmer.yisanbang.dto.UserAddressDto">
+    insert into user_address (id, user_id, address_name,
+      phone_number, is_default
+      )
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{addressName,jdbcType=VARCHAR},
+      #{phoneNumber,jdbcType=VARCHAR}, #{isDefault,jdbcType=BIT}
+      )
+  </insert>
+  <update id="updateDtoByPrimaryKey" parameterType="com.vtmer.yisanbang.dto.UserAddressDto">
+    update user_address
+    set user_id = #{userId,jdbcType=INTEGER},
+      address_name = #{addressName,jdbcType=VARCHAR},
+      phone_number = #{phoneNumber,jdbcType=VARCHAR},
+      is_default = #{isDefault,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectDtoByPrimaryKey" parameterType="java.lang.Integer" resultMap="UserAddressDtoMap">
+    select id, user_id, address_name, phone_number, is_default
+    from user_address
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAllByUserId" parameterType="java.lang.Integer" resultMap="UserAddressDtoMap">
+    select id, user_id, address_name, phone_number, is_default
+    from user_address
+    where user_id = #{id,jdbcType=INTEGER}
   </select>
 </mapper>

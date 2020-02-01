@@ -4,8 +4,10 @@
   <resultMap id="BaseResultMap" type="com.vtmer.yisanbang.domain.Order">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="order_number" jdbcType="VARCHAR" property="orderNumber" />
-    <result column="total_price" jdbcType="INTEGER" property="totalPrice" />
-    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="total_price" jdbcType="DOUBLE" property="totalPrice" />
+    <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="address_name" jdbcType="VARCHAR" property="addressName" />
     <result column="status" jdbcType="BIT" property="status" />
     <result column="courier_number" jdbcType="VARCHAR" property="courierNumber" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -17,20 +19,22 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.vtmer.yisanbang.domain.Order">
-    insert into order (id, order_number, total_price, 
-      address, status, courier_number, 
-      create_time, update_time, user_id
-      )
-    values (#{id,jdbcType=INTEGER}, #{orderNumber,jdbcType=VARCHAR}, #{totalPrice,jdbcType=INTEGER}, 
-      #{address,jdbcType=VARCHAR}, #{status,jdbcType=BIT}, #{courierNumber,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{userId,jdbcType=LONGVARBINARY}
-      )
+    insert into order (id, order_number, total_price,
+      phone_number, user_name, address_name,
+      status, courier_number, create_time,
+      update_time, user_id)
+    values (#{id,jdbcType=INTEGER}, #{orderNumber,jdbcType=VARCHAR}, #{totalPrice,jdbcType=DOUBLE},
+      #{phoneNumber,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{addressName,jdbcType=VARCHAR},
+      #{status,jdbcType=BIT}, #{courierNumber,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+      #{updateTime,jdbcType=TIMESTAMP}, #{userId,jdbcType=LONGVARBINARY})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.vtmer.yisanbang.domain.Order">
     update order
     set order_number = #{orderNumber,jdbcType=VARCHAR},
-      total_price = #{totalPrice,jdbcType=INTEGER},
-      address = #{address,jdbcType=VARCHAR},
+      total_price = #{totalPrice,jdbcType=DOUBLE},
+      phone_number = #{phoneNumber,jdbcType=VARCHAR},
+      user_name = #{userName,jdbcType=VARCHAR},
+      address_name = #{addressName,jdbcType=VARCHAR},
       status = #{status,jdbcType=BIT},
       courier_number = #{courierNumber,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -39,14 +43,14 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select id, order_number, total_price, address, status, courier_number, create_time, 
-    update_time, user_id
+    select id, order_number, total_price, phone_number, user_name, address_name, status,
+    courier_number, create_time, update_time, user_id
     from order
     where id = #{id,jdbcType=INTEGER}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select id, order_number, total_price, address, status, courier_number, create_time, 
-    update_time, user_id
+    select id, order_number, total_price, phone_number, user_name, address_name, status,
+    courier_number, create_time, update_time, user_id
     from order
   </select>
 </mapper>

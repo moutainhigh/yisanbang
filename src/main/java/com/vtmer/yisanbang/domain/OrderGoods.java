@@ -7,7 +7,7 @@ public class OrderGoods {
 
     private Integer sizeId;
 
-    private Byte isSuit;
+    private Byte isGoods;
 
     private Integer goodsNum;
 
@@ -31,12 +31,12 @@ public class OrderGoods {
         this.sizeId = sizeId;
     }
 
-    public Byte getIsSuit() {
-        return isSuit;
+    public Byte getIsGoods() {
+        return isGoods;
     }
 
-    public void setIsSuit(Byte isSuit) {
-        this.isSuit = isSuit;
+    public void setIsGoods(Byte isGoods) {
+        this.isGoods = isGoods;
     }
 
     public Integer getGoodsNum() {

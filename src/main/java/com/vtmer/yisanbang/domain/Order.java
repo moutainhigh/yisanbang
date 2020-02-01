@@ -7,9 +7,13 @@ public class Order {
 
     private String orderNumber;
 
-    private Integer totalPrice;
+    private Double totalPrice;
 
-    private String address;
+    private String phoneNumber;
+
+    private String userName;
+
+    private String addressName;
 
     private Boolean status;
 
@@ -37,20 +41,36 @@ public class Order {
         this.orderNumber = orderNumber == null ? null : orderNumber.trim();
     }
 
-    public Integer getTotalPrice() {
+    public Double getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(Integer totalPrice) {
+    public void setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
     }
 
-    public String getAddress() {
-        return address;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setAddress(String address) {
-        this.address = address == null ? null : address.trim();
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber == null ? null : phoneNumber.trim();
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName == null ? null : userName.trim();
+    }
+
+    public String getAddressName() {
+        return addressName;
+    }
+
+    public void setAddressName(String addressName) {
+        this.addressName = addressName == null ? null : addressName.trim();
     }
 
     public Boolean getStatus() {
