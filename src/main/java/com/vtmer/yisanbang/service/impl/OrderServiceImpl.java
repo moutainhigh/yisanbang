@@ -114,23 +114,22 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--申请退款 5--交易关闭 6--所有订单
-     * @param orderMap
+     * @param orderMap —— userId、status
+     *                 userId为null时查询商城内的订单
      * @return
      */
     @Transactional
     public List<OrderVo> listOrder(Map<String,Integer> orderMap) {
 
-        // 初始化
-        ArrayList<OrderVo> orderVoList = new ArrayList<>();
         List<Order> orderList;
-
+        ArrayList<OrderVo> orderVoList = new ArrayList<>();
         // 获取订单集合
+        Integer userId = orderMap.get("userId");
         if (orderMap.get("status")!=6) {
             orderList = orderMapper.selectAllByUserIdAndStatus(orderMap);
-        } else {  // 查询所有订单
-            orderList = orderMapper.selectAllByUserId(orderMap.get("userId"));
+        } else {  // 查询用户所有订单
+            orderList = orderMapper.selectAllByUserId(userId);
         }
-
         for (Order order : orderList) {
 
             CartVo cartVo = new CartVo();
@@ -139,7 +138,6 @@ public class OrderServiceImpl implements OrderService {
             List<CartGoodsDto> cartGoodsList = new ArrayList<>();
 
             // 用户地址封装
-            userAddress.setUserId(orderMap.get("userId"));
             userAddress.setUserName(order.getUserName());
             userAddress.setPhoneNumber(order.getPhoneNumber());
             userAddress.setAddressName(order.getAddressName());
@@ -192,7 +190,12 @@ public class OrderServiceImpl implements OrderService {
         return orderVoList;
     }
 
-    @Override
+    /**
+     * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--申请退款 5--交易关闭 6--所有订单
+     * 0--待付款 1--待发货 2--待收货 类型订单 更新订单状态
+     * @param orderId
+     * @return
+     */
     public int updateOrderStatus(Integer orderId) {
         Order order = orderMapper.selectByPrimaryKey(orderId);
         if (order!=null) { // 如果该订单存在
@@ -204,6 +207,42 @@ public class OrderServiceImpl implements OrderService {
             } else { // 订单状态不能自增修改
                 return 0;
             }
+        } else {
+            return -1;
+        }
+    }
+
+    /**
+     * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--申请退款 5--交易关闭 6--所有订单
+     * 非 0--待付款 1--待发货 2--待收货 状态订单 设置订单状态
+     * @param orderMap—— orderId、status
+     * @return
+     */
+    public int setOrderStatus(Map<String, Integer> orderMap) {
+        Integer orderId = orderMap.get("orderId");
+        Integer status = orderMap.get("status");
+        Order order = orderMapper.selectByPrimaryKey(orderId);
+        if (order != null) {
+            if (status == order.getStatus()) {  // 如果将要修改的订单状态与现状态相同
+                return -1;
+            } else { // 更新订单状态
+                int res = orderMapper.setOrderStatus(orderMap);
+                return res;
+            }
+        } else {
+            return -2;
+        }
+    }
+
+    /**
+     * 删除订单
+     * @param orderId
+     * @return
+     */
+    public int deleteOrder(Integer orderId) {
+        Order order = orderMapper.selectByPrimaryKey(orderId);
+        if (order!=null) {
+            return orderMapper.deleteByPrimaryKey(orderId);
         } else {
             return -1;
         }

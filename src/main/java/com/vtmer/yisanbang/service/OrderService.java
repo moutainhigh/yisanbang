@@ -14,4 +14,9 @@ public interface OrderService {
     List<OrderVo> listOrder(Map<String,Integer> orderMap);
 
     int updateOrderStatus(Integer orderId);
+
+    int setOrderStatus(Map<String,Integer> orderMap);
+
+    int deleteOrder(Integer orderId);
+
 }

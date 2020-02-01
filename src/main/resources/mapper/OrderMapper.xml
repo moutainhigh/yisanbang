@@ -5,6 +5,14 @@
     id, order_number, user_id, user_name, phone_number, total_price, address_name,
     status, courier_number, message
   </sql>
+  <sql id="OrderCondition">
+    <if test="userId!=null">
+      and user_id = #{userId}
+    </if>
+    <if test="status!=null">
+      and status = #{status}
+    </if>
+  </sql>
   <resultMap id="BaseResultMap" type="com.vtmer.yisanbang.domain.Order">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="order_number" jdbcType="VARCHAR" property="orderNumber" />
@@ -55,6 +63,11 @@
     set status = status + 1
     where id = #{orderId}
   </update>
+  <update id="setOrderStatus">
+    update `order`
+    set status = #{status}
+    where id = #{orderId}
+  </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select id, order_number, user_id, user_name, phone_number, total_price, address_name, 
     status, courier_number, message, create_time, update_time
@@ -70,15 +83,17 @@
     select
     <include refid="BaseColumnList"></include>
     from `order`
-    where user_id = #{userId}
-    and status = #{status}
+    where 1 = 1
+    <include refid="OrderCondition"></include>
     order by update_time DESC
   </select>
   <select id="selectAllByUserId" resultType="com.vtmer.yisanbang.domain.Order">
     select
     <include refid="BaseColumnList"></include>
     from `order`
-    where user_id = #{userId}
+    <if test="userId!=null">
+      where user_id = #{userId}
+    </if>
     order by update_time DESC
   </select>
 </mapper>

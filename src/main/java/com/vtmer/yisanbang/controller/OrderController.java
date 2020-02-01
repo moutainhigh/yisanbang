@@ -18,7 +18,11 @@ public class OrderController {
     private OrderService orderService;
 
 
-    // 点击去结算，显示确认订单页面
+    /**
+     * 点击去结算，显示确认订单页面
+     * @param userId
+     * @return
+     */
     @GetMapping("confirmOrder/{userId}")
     public ResponseMessage confirmOrder(@PathVariable("userId") Integer userId) {
         OrderVo orderVo = orderService.confirmCartOrder(userId);
@@ -26,6 +30,11 @@ public class OrderController {
     }
 
 
+    /**
+     * 创建订单
+     * @param orderVo
+     * @return
+     */
     @PostMapping("/insert")
     public ResponseMessage insert(@RequestBody OrderVo orderVo) {
         if (orderVo.getUserAddress() == null) {
@@ -41,18 +50,21 @@ public class OrderController {
     }
 
     /**
-     *
+     * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--申请退款 5--交易关闭 6--所有订单
+     * 列出用户相关状态所有订单
      * @param orderMap —— userId、status
+     *                 userId传null可以列出商城相关状态的所有订单
      * @return
      */
     @GetMapping("/get")
     public ResponseMessage listOrder(@RequestBody Map<String,Integer> orderMap) {
+        System.out.println(orderMap.get("userId"));
         if (orderMap.get("status")>6 || orderMap.get("status")<0) {
             return ResponseMessage.newErrorInstance("订单状态参数有误");
         } else {
             List<OrderVo> orderList = orderService.listOrder(orderMap);
             if (orderList!=null && orderList.size()!=0) {
-                return ResponseMessage.newSuccessInstance(orderList,"获取用户订单列表成功");
+                return ResponseMessage.newSuccessInstance(orderList,"获取订单列表成功");
             } else {
                 return ResponseMessage.newSuccessInstance("无该类型订单");
             }
@@ -60,7 +72,8 @@ public class OrderController {
     }
 
     /**
-     *
+     * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--申请退款 5--交易关闭 6--所有订单
+     * 0--待付款 1--待发货 2--待收货 状态订单 更新订单状态
      * @param orderIdMap —— orderId
      * @return
      */
@@ -76,4 +89,48 @@ public class OrderController {
         }
         return ResponseMessage.newErrorInstance("异常错误");
     }
+
+    /**
+     * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--申请退款 5--交易关闭 6--所有订单
+     * 非 0--待付款 1--待发货 2--待收货 状态订单 设置订单状态
+     * @param orderMap
+     * @return
+     */
+    @PutMapping("/setOrderStatus")
+    public ResponseMessage setOrderStatus(@RequestBody Map<String,Integer> orderMap) {
+        Integer status = orderMap.get("status");
+        if (status<3 || status>6) {  // 如果订单状态超出范围
+            return ResponseMessage.newErrorInstance("订单状态status值超出范围");
+        } else {
+            int res = orderService.setOrderStatus(orderMap);
+            if (res == 1) {
+                return ResponseMessage.newSuccessInstance("更新订单状态成功");
+            } else if (res == -2) {
+                return ResponseMessage.newErrorInstance("订单id有误");
+            } else if (res == -1) {
+                return ResponseMessage.newErrorInstance("该订单目前已经是该状态");
+            } else {
+                return ResponseMessage.newErrorInstance("更新订单状态出错");
+            }
+        }
+    }
+
+    /**
+     * 删除订单
+     * @param orderIdMap
+     * @return
+     */
+    @DeleteMapping("/delete")
+    public ResponseMessage delete(@RequestBody Map<String,Integer> orderIdMap) {
+        Integer orderId = orderIdMap.get("orderId");
+        int res = orderService.deleteOrder(orderId);
+        if (res == 1) {
+            return ResponseMessage.newSuccessInstance("删除订单成功");
+        } else if (res == -1) {
+            return ResponseMessage.newErrorInstance("订单id有误");
+        } else {
+            return ResponseMessage.newErrorInstance("删除订单失败");
+        }
+    }
+
 }
