@@ -50,6 +50,11 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <update id="updateOrderStatus">
+    update `order`
+    set status = status + 1
+    where id = #{orderId}
+  </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select id, order_number, user_id, user_name, phone_number, total_price, address_name, 
     status, courier_number, message, create_time, update_time

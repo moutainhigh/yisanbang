@@ -40,9 +40,13 @@ public class OrderController {
         }
     }
 
+    /**
+     *
+     * @param orderMap —— userId、status
+     * @return
+     */
     @GetMapping("/get")
     public ResponseMessage listOrder(@RequestBody Map<String,Integer> orderMap) {
-        System.out.println(orderMap);
         if (orderMap.get("status")>6 || orderMap.get("status")<0) {
             return ResponseMessage.newErrorInstance("订单状态参数有误");
         } else {
@@ -53,5 +57,23 @@ public class OrderController {
                 return ResponseMessage.newSuccessInstance("无该类型订单");
             }
         }
+    }
+
+    /**
+     *
+     * @param orderIdMap —— orderId
+     * @return
+     */
+    @PutMapping("updateOrderStatus")
+    public ResponseMessage updateOrderStatus(@RequestBody Map<String,Integer> orderIdMap) {
+        int res = orderService.updateOrderStatus(orderIdMap.get("orderId"));
+        if (res == -1) {
+            return ResponseMessage.newErrorInstance("订单id有误");
+        } else if (res == 0) {
+            return ResponseMessage.newErrorInstance("该订单状态不适合该接口");
+        } else if (res == 1) {
+            return ResponseMessage.newSuccessInstance("更新订单状态成功");
+        }
+        return ResponseMessage.newErrorInstance("异常错误");
     }
 }

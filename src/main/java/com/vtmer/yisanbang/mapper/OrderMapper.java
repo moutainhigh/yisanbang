@@ -23,4 +23,6 @@ public interface OrderMapper {
     List<Order> selectAllByUserIdAndStatus(Map<String,Integer> orderMap);
 
     List<Order> selectAllByUserId(Integer userId);
+
+    int updateOrderStatus(Integer orderId);
 }

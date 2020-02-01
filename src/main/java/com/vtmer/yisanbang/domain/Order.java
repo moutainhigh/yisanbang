@@ -17,7 +17,7 @@ public class Order {
 
     private String addressName;
 
-    private Boolean status;
+    private Integer status;
 
     private String courierNumber;
 
@@ -83,11 +83,11 @@ public class Order {
         this.addressName = addressName == null ? null : addressName.trim();
     }
 
-    public Boolean getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Boolean status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 

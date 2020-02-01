@@ -12,4 +12,6 @@ public interface OrderService {
     String createCartOrder(OrderVo orderVo);
 
     List<OrderVo> listOrder(Map<String,Integer> orderMap);
+
+    int updateOrderStatus(Integer orderId);
 }

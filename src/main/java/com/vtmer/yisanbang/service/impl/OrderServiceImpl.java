@@ -112,8 +112,10 @@ public class OrderServiceImpl implements OrderService {
         return orderNumber;
     }
 
-    /*
-        status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--申请退款 5--交易关闭 6--所有订单
+    /**
+     * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--申请退款 5--交易关闭 6--所有订单
+     * @param orderMap
+     * @return
      */
     @Transactional
     public List<OrderVo> listOrder(Map<String,Integer> orderMap) {
@@ -188,5 +190,22 @@ public class OrderServiceImpl implements OrderService {
             orderVoList.add(orderVo);
         }
         return orderVoList;
+    }
+
+    @Override
+    public int updateOrderStatus(Integer orderId) {
+        Order order = orderMapper.selectByPrimaryKey(orderId);
+        if (order!=null) { // 如果该订单存在
+            Integer status = order.getStatus();
+            if (status != 3 && status != 4 && status != 5) { // 如果订单状态不是已完成、申请退款、交易关闭
+                // 更新订单状态
+                int res = orderMapper.updateOrderStatus(orderId);
+                return res;
+            } else { // 订单状态不能自增修改
+                return 0;
+            }
+        } else {
+            return -1;
+        }
     }
 }
