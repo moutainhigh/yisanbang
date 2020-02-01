@@ -69,4 +69,11 @@
     and status = #{status}
     order by update_time DESC
   </select>
+  <select id="selectAllByUserId" resultType="com.vtmer.yisanbang.domain.Order">
+    select
+    <include refid="BaseColumnList"></include>
+    from `order`
+    where user_id = #{userId}
+    order by update_time DESC
+  </select>
 </mapper>

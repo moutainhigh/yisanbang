@@ -120,8 +120,14 @@ public class OrderServiceImpl implements OrderService {
 
         // 初始化
         ArrayList<OrderVo> orderVoList = new ArrayList<>();
+        List<Order> orderList;
 
-        List<Order> orderList = orderMapper.selectAllByUserIdAndStatus(orderMap);
+        // 获取订单集合
+        if (orderMap.get("status")!=6) {
+            orderList = orderMapper.selectAllByUserIdAndStatus(orderMap);
+        } else {  // 查询所有订单
+            orderList = orderMapper.selectAllByUserId(orderMap.get("userId"));
+        }
 
         for (Order order : orderList) {
 

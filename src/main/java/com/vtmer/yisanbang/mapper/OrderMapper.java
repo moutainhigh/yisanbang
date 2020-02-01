@@ -21,4 +21,6 @@ public interface OrderMapper {
     int updateByPrimaryKey(Order record);
 
     List<Order> selectAllByUserIdAndStatus(Map<String,Integer> orderMap);
+
+    List<Order> selectAllByUserId(Integer userId);
 }
