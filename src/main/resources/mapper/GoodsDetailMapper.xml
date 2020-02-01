@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.vtmer.yisanbang.mapper.Goods_detailMapper">
-  <resultMap id="BaseResultMap" type="com.vtmer.yisanbang.domain.Goods_detail">
+<mapper namespace="com.vtmer.yisanbang.mapper.GoodsDetailMapper">
+  <resultMap id="BaseResultMap" type="com.vtmer.yisanbang.domain.GoodsDetail">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="goods_id" jdbcType="INTEGER" property="goodsId" />
     <result column="pirtuce_path" jdbcType="VARCHAR" property="pirtucePath" />
@@ -13,7 +13,7 @@
     delete from goods_detail
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.vtmer.yisanbang.domain.Goods_detail">
+  <insert id="insert" parameterType="com.vtmer.yisanbang.domain.GoodsDetail">
     insert into goods_detail (id, goods_id, pirtuce_path, 
       show_order, create_time, update_time
       )
@@ -21,7 +21,7 @@
       #{showOrder,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
       )
   </insert>
-  <update id="updateByPrimaryKey" parameterType="com.vtmer.yisanbang.domain.Goods_detail">
+  <update id="updateByPrimaryKey" parameterType="com.vtmer.yisanbang.domain.GoodsDetail">
     update goods_detail
     set goods_id = #{goodsId,jdbcType=INTEGER},
       pirtuce_path = #{pirtucePath,jdbcType=VARCHAR},

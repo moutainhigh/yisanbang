@@ -1,11 +1,11 @@
 package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
-import com.vtmer.yisanbang.dto.AddCartGoodsDto;
+import com.vtmer.yisanbang.vo.AddCartGoodsVo;
 import com.vtmer.yisanbang.dto.AddGoodsDto;
-import com.vtmer.yisanbang.dto.CartDto;
 import com.vtmer.yisanbang.dto.DeleteCartGoodsDto;
 import com.vtmer.yisanbang.service.CartService;
+import com.vtmer.yisanbang.vo.CartVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +27,10 @@ public class CartController {
      */
     @GetMapping("/listCartGoods/{id}")
     public ResponseMessage listCartGoods(@PathVariable("id") Integer userId) {
-        CartDto cartDto = cartService.selectCartDtosByUserId(userId);
-        if (cartDto!=null) {
-            if (!cartDto.getCartGoodsDtos().isEmpty())  // 购物车不为空
-                return ResponseMessage.newSuccessInstance(cartDto,"获取购物车商品列表成功");
+        CartVo cartVo = cartService.selectCartDtosByUserId(userId);
+        if (cartVo !=null) {
+            if (!cartVo.getCartGoodsDtos().isEmpty())  // 购物车不为空
+                return ResponseMessage.newSuccessInstance(cartVo,"获取购物车商品列表成功");
             else
                 return ResponseMessage.newSuccessInstance("购物车为空");
         } else {
@@ -43,8 +43,8 @@ public class CartController {
         添加商品到购物车
      */
     @PostMapping("/addCartGoods")
-    public ResponseMessage addCartGoods(@RequestBody AddCartGoodsDto AddCartGoodsDto) {
-        int res = cartService.addCartGoods(AddCartGoodsDto);
+    public ResponseMessage addCartGoods(@RequestBody AddCartGoodsVo AddCartGoodsVo) {
+        int res = cartService.addCartGoods(AddCartGoodsVo);
         if (res == 1) return ResponseMessage.newSuccessInstance("加入购物车成功");
         else {
             logger.warn("传入的userId有误");

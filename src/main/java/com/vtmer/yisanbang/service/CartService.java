@@ -1,15 +1,15 @@
 package com.vtmer.yisanbang.service;
 
-import com.vtmer.yisanbang.dto.AddCartGoodsDto;
+import com.vtmer.yisanbang.vo.AddCartGoodsVo;
 import com.vtmer.yisanbang.dto.AddGoodsDto;
-import com.vtmer.yisanbang.dto.CartDto;
 import com.vtmer.yisanbang.dto.DeleteCartGoodsDto;
+import com.vtmer.yisanbang.vo.CartVo;
 
 public interface CartService {
 
-    public CartDto selectCartDtosByUserId(Integer userId);
+    public CartVo selectCartDtosByUserId(Integer userId);
 
-    public int addCartGoods(AddCartGoodsDto AddCartGoodsDto);
+    public int addCartGoods(AddCartGoodsVo AddCartGoodsVo);
 
     public double updateChosen(AddGoodsDto addGoodsDto);
 

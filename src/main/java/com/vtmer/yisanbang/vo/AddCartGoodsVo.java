@@ -1,8 +1,10 @@
-package com.vtmer.yisanbang.dto;
+package com.vtmer.yisanbang.vo;
+
+import com.vtmer.yisanbang.dto.AddGoodsDto;
 
 import java.util.List;
 
-public class AddCartGoodsDto {
+public class AddCartGoodsVo {
 
     private Integer userId;
 

@@ -1,8 +1,7 @@
 package com.vtmer.yisanbang.mapper;
 
 import com.vtmer.yisanbang.domain.Cart;
-import com.vtmer.yisanbang.dto.CartDto;
-import com.vtmer.yisanbang.dto.CartGoodsDto;
+import com.vtmer.yisanbang.vo.CartVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -23,7 +22,7 @@ public interface CartMapper {
 
     Integer selectCartIdByUserId(Integer userId);
 
-    CartDto selectCartDtoByUserId(Integer userId);
+    CartVo selectCartDtoByUserId(Integer userId);
 
     boolean updateTotalPrice(double totalPrice,Integer cartId);
 }
