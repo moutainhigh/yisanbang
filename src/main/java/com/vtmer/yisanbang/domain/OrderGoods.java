@@ -43,12 +43,29 @@ public class OrderGoods {
         this.sizeId = sizeId;
     }
 
-    public Boolean getIsGoods() {
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public Boolean getGoods() {
         return isGoods;
     }
 
-    public void setIsGoods(Boolean isGoods) {
-        this.isGoods = isGoods;
+    public void setGoods(Boolean goods) {
+        isGoods = goods;
     }
 
     public Integer getAmount() {
@@ -65,21 +82,5 @@ public class OrderGoods {
 
     public void setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
     }
 }
