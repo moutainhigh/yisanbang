@@ -53,7 +53,7 @@
     from user_address
   </select>
   <select id="selectDefaultByUserId" resultType="com.vtmer.yisanbang.domain.UserAddress">
-    select id, user_name, address_name, phone_number,is_default from user_address
+    select id,user_id, user_name, address_name, phone_number,is_default from user_address
     where user_id = #{userId}
     and is_default = 1
   </select>

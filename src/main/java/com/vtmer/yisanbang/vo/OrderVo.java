@@ -6,7 +6,13 @@ public class OrderVo {
 
     private UserAddress userAddress;
 
-    private CartVo cartVo;
+    private CartVo orderGoodsList;
+
+    // 留言
+    private String message;
+
+    // 订单编号
+    private String orderNumber;
 
     public UserAddress getUserAddress() {
         return userAddress;
@@ -16,11 +22,27 @@ public class OrderVo {
         this.userAddress = userAddress;
     }
 
-    public CartVo getCartVo() {
-        return cartVo;
+    public CartVo getOrderGoodsList() {
+        return orderGoodsList;
     }
 
-    public void setCartVo(CartVo cartVo) {
-        this.cartVo = cartVo;
+    public void setOrderGoodsList(CartVo orderGoodsList) {
+        this.orderGoodsList = orderGoodsList;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(String orderNumber) {
+        this.orderNumber = orderNumber;
     }
 }

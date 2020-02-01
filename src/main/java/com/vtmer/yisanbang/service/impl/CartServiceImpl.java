@@ -173,14 +173,14 @@ public class CartServiceImpl implements CartService {
     /*
         根据购物车所有商品信息计算总价，并更新
     */
-    private double calculateTotalPrice(Integer userId) {
+    public double calculateTotalPrice(Integer userId) {
         setDiscount();
         CartVo cartVo = selectCartVoByUserId(userId);
         double totalPrice = 0;
         List<CartGoodsDto> cartGoodsDtos = cartVo.getCartGoodsList();
         for (CartGoodsDto cartGoodsDto : cartGoodsDtos) {
             // 如果勾选了，计算总价
-            if (cartGoodsDto.getIsChosen() == 1) {
+            if (cartGoodsDto.getIsChosen() == Boolean.TRUE) {
                 // 如果符合优惠
                 if (cartGoodsDto.getAmount() >= discountAmount) {
                     totalPrice += cartGoodsDto.getPrice() * cartGoodsDto.getAmount() * discountRate;
@@ -205,5 +205,6 @@ public class CartServiceImpl implements CartService {
             return calculateTotalPrice(addGoodsDto.getUserId());
         } else return 0;
     }
+
 
 }

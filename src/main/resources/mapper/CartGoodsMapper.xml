@@ -55,6 +55,11 @@
       where 1=1
     <include refid="baseCondition"/>
   </delete>
+  <delete id="deleteCartGoodsByIsChosen">
+    delete from cart_goods
+    where cart_id = #{cartId}
+    and is_chosen = 1
+  </delete>
   <insert id="insert" parameterType="com.vtmer.yisanbang.domain.CartGoods">
     insert into cart_goods (id, cart_id, color_size_id, 
       amount, is_goods, is_chosen, 

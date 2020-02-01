@@ -7,15 +7,18 @@ import com.vtmer.yisanbang.vo.CartVo;
 
 public interface CartService {
 
-    public CartVo selectCartVoByUserId(Integer userId);
+    CartVo selectCartVoByUserId(Integer userId);
 
-    public int addCartGoods(AddCartGoodsVo AddCartGoodsVo);
+    int addCartGoods(AddCartGoodsVo AddCartGoodsVo);
 
-    public double updateChosen(AddGoodsDto addGoodsDto);
+    double updateChosen(AddGoodsDto addGoodsDto);
 
-    public double addOrSubtractAmount(AddGoodsDto addGoodsDto);
+    double addOrSubtractAmount(AddGoodsDto addGoodsDto);
 
-    public double updateAmount(AddGoodsDto addGoodsDto);
+    double updateAmount(AddGoodsDto addGoodsDto);
 
-    public Boolean deleteCartGoods(DeleteCartGoodsDto deleteCartGoodsDto);
+    Boolean deleteCartGoods(DeleteCartGoodsDto deleteCartGoodsDto);
+
+    // 计算购物车总价并更新
+    double calculateTotalPrice(Integer userId);
 }

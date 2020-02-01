@@ -13,9 +13,9 @@ public class Order {
 
     private String phoneNumber;
 
-    private Integer totalPrice;
+    private Double totalPrice;
 
-    private String address;
+    private String addressName;
 
     private Boolean status;
 
@@ -67,20 +67,20 @@ public class Order {
         this.phoneNumber = phoneNumber == null ? null : phoneNumber.trim();
     }
 
-    public Integer getTotalPrice() {
+    public Double getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(Integer totalPrice) {
+    public void setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
     }
 
-    public String getAddress() {
-        return address;
+    public String getAddressName() {
+        return addressName;
     }
 
-    public void setAddress(String address) {
-        this.address = address == null ? null : address.trim();
+    public void setAddressName(String addressName) {
+        this.addressName = addressName == null ? null : addressName.trim();
     }
 
     public Boolean getStatus() {
@@ -121,5 +121,23 @@ public class Order {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", orderNumber='" + orderNumber + '\'' +
+                ", userId=" + userId +
+                ", userName='" + userName + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", totalPrice=" + totalPrice +
+                ", addressName='" + addressName + '\'' +
+                ", status=" + status +
+                ", courierNumber='" + courierNumber + '\'' +
+                ", message='" + message + '\'' +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
     }
 }

@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 @Repository
@@ -18,4 +19,6 @@ public interface OrderMapper {
     List<Order> selectAll();
 
     int updateByPrimaryKey(Order record);
+
+    List<Order> selectAllByUserIdAndStatus(Map<String,Integer> orderMap);
 }

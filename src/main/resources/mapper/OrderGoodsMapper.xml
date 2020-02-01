@@ -3,9 +3,11 @@
 <mapper namespace="com.vtmer.yisanbang.mapper.OrderGoodsMapper">
   <resultMap id="BaseResultMap" type="com.vtmer.yisanbang.domain.OrderGoods">
     <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="order_id" jdbcType="INTEGER" property="orderId" />
     <result column="size_id" jdbcType="INTEGER" property="sizeId" />
-    <result column="is_suit" jdbcType="TINYINT" property="isSuit" />
-    <result column="goods_num" jdbcType="INTEGER" property="goodsNum" />
+    <result column="is_goods" jdbcType="BIT" property="isGoods" />
+    <result column="amount" jdbcType="INTEGER" property="amount" />
+    <result column="total_price" jdbcType="DOUBLE" property="totalPrice" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
@@ -14,29 +16,37 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.vtmer.yisanbang.domain.OrderGoods">
-    insert into order_goods (id, size_id, is_suit, 
-      goods_num, create_time, update_time
-      )
-    values (#{id,jdbcType=INTEGER}, #{sizeId,jdbcType=INTEGER}, #{isSuit,jdbcType=TINYINT}, 
-      #{goodsNum,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
-      )
+    insert into order_goods (id, order_id, size_id, 
+      is_goods, amount, total_price, 
+      create_time, update_time)
+    values (#{id,jdbcType=INTEGER}, #{orderId,jdbcType=INTEGER}, #{sizeId,jdbcType=INTEGER}, 
+      #{isGoods,jdbcType=BIT}, #{amount,jdbcType=INTEGER}, #{totalPrice,jdbcType=DOUBLE}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.vtmer.yisanbang.domain.OrderGoods">
     update order_goods
-    set size_id = #{sizeId,jdbcType=INTEGER},
-      is_suit = #{isSuit,jdbcType=TINYINT},
-      goods_num = #{goodsNum,jdbcType=INTEGER},
+    set order_id = #{orderId,jdbcType=INTEGER},
+      size_id = #{sizeId,jdbcType=INTEGER},
+      is_goods = #{isGoods,jdbcType=BIT},
+      amount = #{amount,jdbcType=INTEGER},
+      total_price = #{totalPrice,jdbcType=DOUBLE},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select id, size_id, is_suit, goods_num, create_time, update_time
+    select id, order_id, size_id, is_goods, amount, total_price, create_time, update_time
     from order_goods
     where id = #{id,jdbcType=INTEGER}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select id, size_id, is_suit, goods_num, create_time, update_time
+    select id, order_id, size_id, is_goods, amount, total_price, create_time, update_time
     from order_goods
+  </select>
+  <select id="selectByOrderId" resultType="com.vtmer.yisanbang.domain.OrderGoods">
+    select size_id, is_goods, amount, total_price
+    from order_goods
+    where order_id = #{orderId}
+    order by update_time desc
   </select>
 </mapper>
