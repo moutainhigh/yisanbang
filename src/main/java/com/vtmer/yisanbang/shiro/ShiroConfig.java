@@ -25,6 +25,7 @@ public class ShiroConfig {
         filterMap.put("/admin/**", "anon");
         filterMap.put("/user/**", "anon");
         filterMap.put("/cart/**", "anon");
+        filterMap.put("/goods/**", "anon");
         filterMap.put("/**","authc");
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterMap);
