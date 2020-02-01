@@ -15,6 +15,26 @@ public class GoodsDto {
 
     private Boolean isShow;
 
+    private Integer colorSizeId;
+
+    private Integer isGoods;
+
+    public Integer getColorSizeId() {
+        return colorSizeId;
+    }
+
+    public void setColorSizeId(Integer colorSizeId) {
+        this.colorSizeId = colorSizeId;
+    }
+
+    public Integer getIsGoods() {
+        return isGoods;
+    }
+
+    public void setIsGoods(Integer isGoods) {
+        this.isGoods = isGoods;
+    }
+
     public Integer getId() {
         return id;
     }

@@ -60,11 +60,11 @@ public class OrderGoods {
         this.updateTime = updateTime;
     }
 
-    public Boolean getGoods() {
+    public Boolean getIsGoods() {
         return isGoods;
     }
 
-    public void setGoods(Boolean goods) {
+    public void setIsGoods(Boolean goods) {
         isGoods = goods;
     }
 
