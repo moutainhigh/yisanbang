@@ -94,6 +94,10 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    public String getOpenIdByUserId(Integer userId) {
+        return userMapper.selectOpenIdByUserId(userId);
+    }
+
     @Override
     public User selectByPrimaryKey(Integer userId) {
         return userMapper.selectByPrimaryKey(userId);

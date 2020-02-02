@@ -22,21 +22,23 @@ public class GoodsDetailController {
     @GetMapping("selectAllGoodsDetail")
     public ResponseMessage selectAllGoodsDetail() {
         List<GoodsDetailDto> goodsDetailDtos = goodsDetailService.selectAllDto();
-        if (goodsDetailDtos != null) return ResponseMessage.newSuccessInstance(goodsDetailDtos, "查找成功");
+        if (goodsDetailDtos != null && !goodsDetailDtos.isEmpty())
+            return ResponseMessage.newSuccessInstance(goodsDetailDtos, "查找成功");
         else return ResponseMessage.newErrorInstance("查找失败");
     }
 
     @GetMapping("selectAllGoodsDetailByGoodsId")
     public ResponseMessage selectAllGoodsDetailByGoodsId(Integer goodsId) {
         List<GoodsDetailDto> goodsDetailDtos = goodsDetailService.selectAllDtoByGoodsId(goodsId);
-        if (goodsDetailDtos != null) return ResponseMessage.newSuccessInstance(goodsDetailDtos, "查找成功");
+        if (goodsDetailDtos != null && !goodsDetailDtos.isEmpty())
+            return ResponseMessage.newSuccessInstance(goodsDetailDtos, "查找成功");
         else return ResponseMessage.newErrorInstance("查找失败");
     }
 
     @PostMapping("addGoodsDetail")
     public ResponseMessage addGoodsDetail(GoodsDetailDto goodsDetail) {
         List<GoodsDetailDto> goodsDetailDtos = goodsDetailService.selectAllDtoByGoodsId(goodsDetail.getGoodsId());
-        if (goodsDetailDtos != null) {
+        if (goodsDetailDtos != null && !goodsDetailDtos.isEmpty())  {
             boolean judgeFlag = goodsDetailService.judgeGoodsDetail(goodsDetail, goodsDetailDtos);
             if (judgeFlag) return ResponseMessage.newErrorInstance("该商品详细信息内容已经存在");
         }

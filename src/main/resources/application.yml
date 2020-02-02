@@ -63,6 +63,12 @@ logging:
     name: target/mylog.log
 
 wx:
+  pay:
+    appid: wx447bdd8f7d850c06
+    mchId:
+    mchKey:
+    notifyURL: 微信支付成功后的回调接口
+    tradeType: JSAPI
   applet:
     appid: wx447bdd8f7d850c06
     appsecret: 1f8dc966cc30761d60394178a5d58301

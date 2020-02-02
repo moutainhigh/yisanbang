@@ -13,11 +13,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Service
 public class OrderServiceImpl implements OrderService {
+
+    @Autowired
+    private UserMapper userMapper;
 
     @Autowired
     private PostageMapper postageMapper;
@@ -105,46 +109,57 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     @Transactional
-    public String createCartOrder(OrderVo orderVo) {
+    public Map<String,String> createCartOrder(OrderVo orderVo) {
 
-        // 用户地址
-        UserAddress userAddress = orderVo.getUserAddress();
-        // 用户购物车订单列表
-        CartVo cartVo = orderVo.getOrderGoodsList();
-        List<CartGoodsDto> cartGoodsList = cartVo.getCartGoodsList();
+        HashMap<String, String> orderMap = new HashMap<>();
+        // 根据用户Id拿到openId
+        String openId = userMapper.selectOpenIdByUserId(orderVo.getUserAddress().getUserId());
+        if (openId == null) {
+            return null;
+        } else {
+            orderMap.put("openId",openId);
+            // 生成订单编号
+            String orderNumber = OrderNumberUtil.getOrderNumber();
+            orderMap.put("orderNumber",orderNumber);
+            // 用户地址
+            UserAddress userAddress = orderVo.getUserAddress();
+            // 用户购物车订单列表
+            CartVo cartVo = orderVo.getOrderGoodsList();
+            List<CartGoodsDto> cartGoodsList = cartVo.getCartGoodsList();
 
-        // 生成订单编号
-        String orderNumber = OrderNumberUtil.getOrderNumber();
 
-        // 生成order
-        Order order = new Order();
-        order.setUserId(userAddress.getUserId());
-        order.setAddressName(userAddress.getAddressName());
-        order.setUserName(userAddress.getUserName());
-        order.setPhoneNumber(userAddress.getPhoneNumber());
-        order.setOrderNumber(orderNumber);
-        order.setTotalPrice(cartVo.getTotalPrice());
-        order.setPostage(orderVo.getPostage());
-        order.setMessage(orderVo.getMessage());
-        orderMapper.insert(order);
+            // 生成order
+            Order order = new Order();
+            order.setUserId(userAddress.getUserId());
+            order.setAddressName(userAddress.getAddressName());
+            order.setUserName(userAddress.getUserName());
+            order.setPhoneNumber(userAddress.getPhoneNumber());
+            order.setOrderNumber(orderNumber);
+            order.setTotalPrice(cartVo.getTotalPrice());
+            order.setPostage(orderVo.getPostage());
+            order.setMessage(orderVo.getMessage());
+            orderMapper.insert(order);
 
-        // 生成orderGoods
-        OrderGoods orderGoods = new OrderGoods();
-        for (CartGoodsDto cartGoodsDto : cartGoodsList) {
-            orderGoods.setOrderId(order.getId());
-            orderGoods.setIsGoods(cartGoodsDto.getIsGoods());
-            orderGoods.setAmount(cartGoodsDto.getAmount());
-            orderGoods.setTotalPrice(cartGoodsDto.getAfterTotalPrice());
-            orderGoods.setSizeId(cartGoodsDto.getColorSizeId());
-            orderGoodsMapper.insert(orderGoods);
+            // 生成orderGoods
+            OrderGoods orderGoods = new OrderGoods();
+            for (CartGoodsDto cartGoodsDto : cartGoodsList) {
+                orderGoods.setOrderId(order.getId());
+                orderGoods.setIsGoods(cartGoodsDto.getIsGoods());
+                orderGoods.setAmount(cartGoodsDto.getAmount());
+                orderGoods.setTotalPrice(cartGoodsDto.getAfterTotalPrice());
+                orderGoods.setSizeId(cartGoodsDto.getColorSizeId());
+                orderGoodsMapper.insert(orderGoods);
+            }
+
+            // 删除购物车勾选项
+            cartGoodsMapper.deleteCartGoodsByIsChosen(cartVo.getCartId());
+            // 购物车总价清零
+            cartMapper.updateTotalPrice(0,cartVo.getCartId());
+            // 返回订单编号
+
+            return orderMap;
         }
 
-        // 删除购物车勾选项
-        cartGoodsMapper.deleteCartGoodsByIsChosen(cartVo.getCartId());
-        // 购物车总价清零
-        cartMapper.updateTotalPrice(0,cartVo.getCartId());
-        // 返回订单编号
-        return orderNumber;
     }
 
     /**
@@ -166,63 +181,7 @@ public class OrderServiceImpl implements OrderService {
             orderList = orderMapper.selectAllByUserId(userId);
         }
         for (Order order : orderList) {
-
-            CartVo cartVo = new CartVo();
-            OrderVo orderVo = new OrderVo();
-            UserAddress userAddress = new UserAddress();
-            List<CartGoodsDto> cartGoodsList = new ArrayList<>();
-
-            // 用户地址封装
-            userAddress.setUserName(order.getUserName());
-            userAddress.setPhoneNumber(order.getPhoneNumber());
-            userAddress.setAddressName(order.getAddressName());
-            orderVo.setUserAddress(userAddress);
-
-            // 订单留言
-            orderVo.setMessage(order.getMessage());
-
-            // 订单邮费
-            orderVo.setPostage(order.getPostage());
-
-            // 订单编号
-            orderVo.setOrderNumber(order.getOrderNumber());
-
-            // 订单商品信息封装
-            cartVo.setTotalPrice(order.getTotalPrice());
-
-            // 根据订单id查询该订单的所有商品
-            List<OrderGoods> orderGoodsList = orderGoodsMapper.selectByOrderId(order.getId());
-
-            for (OrderGoods orderGoods : orderGoodsList) {
-                CartGoodsDto cartGoodsDto = new CartGoodsDto();
-                // 商品单价
-                double price = orderGoods.getTotalPrice()/orderGoods.getAmount();
-                cartGoodsDto.setPrice(price);
-                cartGoodsDto.setAmount(orderGoods.getAmount());
-                cartGoodsDto.setAfterTotalPrice(orderGoods.getTotalPrice());
-                Integer sizeId = orderGoods.getSizeId();
-                cartGoodsDto.setColorSizeId(sizeId);
-                Boolean isGoods = orderGoods.getIsGoods();
-                // 如果是普通商品
-                if (isGoods == Boolean.TRUE) {
-                    ColorSize colorSize = colorSizeMapper.selectByPrimaryKey(sizeId);
-                    cartGoodsDto.setSize(colorSize.getSize());
-                    cartGoodsDto.setPartOrColor(colorSize.getColor());
-                    Goods goods = goodsMapper.selectByPrimaryKey(colorSize.getGoodsId());
-                    cartGoodsDto.setName(goods.getName());
-                    cartGoodsDto.setPicture(goods.getPicture());
-                } else { // 如果是套装散件
-                    PartSize partSize = partSizeMapper.selectByPrimaryKey(sizeId);
-                    cartGoodsDto.setSize(partSize.getSize());
-                    cartGoodsDto.setPartOrColor(partSize.getPart());
-                    Suit suit = suitMapper.selectByPrimaryKey(partSize.getSuitId());
-                    cartGoodsDto.setName(suit.getName());
-                    cartGoodsDto.setPicture(suit.getPicture());
-                }
-                cartGoodsList.add(cartGoodsDto);
-            }
-            cartVo.setCartGoodsList(cartGoodsList);
-            orderVo.setOrderGoodsList(cartVo);
+            OrderVo orderVo = getOrderVoByOrder(order);
             orderVoList.add(orderVo);
         }
         return orderVoList;
@@ -243,7 +202,7 @@ public class OrderServiceImpl implements OrderService {
                 int res = orderMapper.updateOrderStatus(orderId);
                 return res;
             } else { // 订单状态不能自增修改
-                return 0;
+                return -2;
             }
         } else {
             return -1;
@@ -284,5 +243,90 @@ public class OrderServiceImpl implements OrderService {
         } else {
             return -1;
         }
+    }
+
+    /**
+     * 通过订单号查询订单详情信息
+     * @return 订单详情信息OrderVo
+     */
+    public OrderVo selectOrderVoByOrderNumber(String orderNumber) {
+        Order order = orderMapper.selectByOrderNumber(orderNumber);
+        return getOrderVoByOrder(order);
+    }
+
+    /**
+     * 通过订单号查询订单基础信息
+     * @param orderNumber：订单号
+     * @return order：订单基础信息
+     */
+    public Order selectOrderByOrderNumber(String orderNumber) {
+        return orderMapper.selectByOrderNumber(orderNumber);
+    }
+
+    /**
+     * 通过订单表实体类获取订单详情VO对象
+     * @param order:订单表实体类
+     * @return OrderVo
+     */
+    private OrderVo getOrderVoByOrder(Order order) {
+
+        CartVo cartVo = new CartVo();
+        OrderVo orderVo = new OrderVo();
+        UserAddress userAddress = new UserAddress();
+        List<CartGoodsDto> cartGoodsList = new ArrayList<>();
+
+        // 用户地址封装
+        userAddress.setUserId(order.getUserId());
+        userAddress.setUserName(order.getUserName());
+        userAddress.setPhoneNumber(order.getPhoneNumber());
+        userAddress.setAddressName(order.getAddressName());
+        orderVo.setUserAddress(userAddress);
+
+        // 订单留言
+        orderVo.setMessage(order.getMessage());
+
+        // 订单邮费
+        orderVo.setPostage(order.getPostage());
+
+        // 订单编号
+        orderVo.setOrderNumber(order.getOrderNumber());
+
+        // 订单商品信息封装
+        cartVo.setTotalPrice(order.getTotalPrice());
+
+        // 根据订单id查询该订单的所有商品
+        List<OrderGoods> orderGoodsList = orderGoodsMapper.selectByOrderId(order.getId());
+
+        for (OrderGoods orderGoods : orderGoodsList) {
+            CartGoodsDto cartGoodsDto = new CartGoodsDto();
+            // 商品单价
+            double price = orderGoods.getTotalPrice()/orderGoods.getAmount();
+            cartGoodsDto.setPrice(price);
+            cartGoodsDto.setAmount(orderGoods.getAmount());
+            cartGoodsDto.setAfterTotalPrice(orderGoods.getTotalPrice());
+            Integer sizeId = orderGoods.getSizeId();
+            cartGoodsDto.setColorSizeId(sizeId);
+            Boolean isGoods = orderGoods.getIsGoods();
+            // 如果是普通商品
+            if (isGoods == Boolean.TRUE) {
+                ColorSize colorSize = colorSizeMapper.selectByPrimaryKey(sizeId);
+                cartGoodsDto.setSize(colorSize.getSize());
+                cartGoodsDto.setPartOrColor(colorSize.getColor());
+                Goods goods = goodsMapper.selectByPrimaryKey(colorSize.getGoodsId());
+                cartGoodsDto.setName(goods.getName());
+                cartGoodsDto.setPicture(goods.getPicture());
+            } else { // 如果是套装散件
+                PartSize partSize = partSizeMapper.selectByPrimaryKey(sizeId);
+                cartGoodsDto.setSize(partSize.getSize());
+                cartGoodsDto.setPartOrColor(partSize.getPart());
+                Suit suit = suitMapper.selectByPrimaryKey(partSize.getSuitId());
+                cartGoodsDto.setName(suit.getName());
+                cartGoodsDto.setPicture(suit.getPicture());
+            }
+            cartGoodsList.add(cartGoodsDto);
+        }
+        cartVo.setCartGoodsList(cartGoodsList);
+        orderVo.setOrderGoodsList(cartVo);
+        return orderVo;
     }
 }

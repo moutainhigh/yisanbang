@@ -28,4 +28,13 @@ public interface GoodsService {
 
     // 隐藏商品，不展示
     public boolean hideGoods(GoodsDto goods);
+
+    // 根据分类id显示商品
+    public List<GoodsDto> selectAllDtoBySort(Integer sortId);
+
+    // 根据分类以及商品价格排序显示商品
+    public List<GoodsDto> selectAllDtoBySortOrderByPrice(Integer sortId);
+
+    // 根据分类商品更新时间排序显示商品
+    public List<GoodsDto> selectAllDtoBySortOrderByTime(Integer sortId);
 }

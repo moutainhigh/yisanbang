@@ -1,5 +1,7 @@
 package com.vtmer.yisanbang.dto;
 
+import java.util.Date;
+
 public class GoodsDto {
     private Integer id;
 
@@ -18,6 +20,8 @@ public class GoodsDto {
     private Integer colorSizeId;
 
     private Integer isGoods;
+
+    private Date updateTime;
 
     public Integer getColorSizeId() {
         return colorSizeId;
@@ -91,7 +95,15 @@ public class GoodsDto {
         this.isShow = isShow;
     }
 
-    public GoodsDto(Integer id, Integer sortId, String name, String introduce, String picture, Double price, Boolean isShow) {
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public GoodsDto(Integer id, Integer sortId, String name, String introduce, String picture, Double price, Boolean isShow, Integer colorSizeId, Integer isGoods, Date updateTime) {
         this.id = id;
         this.sortId = sortId;
         this.name = name;
@@ -99,6 +111,9 @@ public class GoodsDto {
         this.picture = picture;
         this.price = price;
         this.isShow = isShow;
+        this.colorSizeId = colorSizeId;
+        this.isGoods = isGoods;
+        this.updateTime = updateTime;
     }
 
     @Override
@@ -111,6 +126,9 @@ public class GoodsDto {
                 ", picture='" + picture + '\'' +
                 ", price=" + price +
                 ", isShow=" + isShow +
+                ", colorSizeId=" + colorSizeId +
+                ", isGoods=" + isGoods +
+                ", updateTime=" + updateTime +
                 '}';
     }
 }
