@@ -59,6 +59,11 @@ logging:
     name: target/mylog.log
 
 wx:
+  pay:
+    appid: wx447bdd8f7d850c06
+    mchId:
+    mchKey:
+    keyPath:
   applet:
     appid: wx447bdd8f7d850c06
     appsecret: 1f8dc966cc30761d60394178a5d58301
