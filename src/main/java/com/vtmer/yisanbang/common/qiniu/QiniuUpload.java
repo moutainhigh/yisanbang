@@ -15,21 +15,21 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
 public class QiniuUpload {
-    //设置好账号的ACCESS_KEY和SECRET_KEY
+    // 设置好账号的ACCESS_KEY和SECRET_KEY
     private static String ACCESS_KEY = VariableName.accessKey; // 这两个登录七牛 账号里面可以找到
     private static String SECRET_KEY = VariableName.secretKey;
 
-    //要上传的空间
-    private static String bucketName = VariableName.bucket; //对应要上传到七牛上 你的那个路径（自己建文件夹 注意设置公开）
+    // 要上传的空间
+    private static String bucketName = VariableName.bucket; // 对应要上传到七牛上 你的那个路径（自己建文件夹 注意设置公开）
 
-    //密钥配置
+    // 密钥配置
     private static Auth auth = Auth.create(ACCESS_KEY, SECRET_KEY);
     private static Configuration cfg = new Configuration(Zone.huanan());
 
-    //创建上传对象
+    // 创建上传对象
     private static UploadManager uploadManager = new UploadManager(cfg);
 
-    //简单上传，使用默认策略，只需要设置上传的空间名就可以了
+    // 简单上传，使用默认策略，只需要设置上传的空间名就可以了
     public static String getUpToken(){
         return auth.uploadToken(bucketName);
     }

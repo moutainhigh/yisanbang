@@ -1,7 +1,7 @@
 package com.vtmer.yisanbang.service;
 
 import com.vtmer.yisanbang.domain.User;
-import com.vtmer.yisanbang.dto.Token;
+import com.vtmer.yisanbang.vo.Token;
 
 public interface UserService {
     // 根据用户id查找用户

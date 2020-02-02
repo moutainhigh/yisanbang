@@ -4,7 +4,7 @@ import com.vtmer.yisanbang.common.HttpUtil;
 import com.vtmer.yisanbang.common.JSONUtil;
 import com.vtmer.yisanbang.common.JwtUtil;
 import com.vtmer.yisanbang.domain.User;
-import com.vtmer.yisanbang.dto.Token;
+import com.vtmer.yisanbang.vo.Token;
 import com.vtmer.yisanbang.mapper.UserMapper;
 import com.vtmer.yisanbang.service.UserService;
 import com.vtmer.yisanbang.vo.Code2SessionResponse;

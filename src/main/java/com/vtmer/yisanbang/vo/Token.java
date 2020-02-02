@@ -1,4 +1,4 @@
-package com.vtmer.yisanbang.dto;
+package com.vtmer.yisanbang.vo;
 
 public class Token {
 
