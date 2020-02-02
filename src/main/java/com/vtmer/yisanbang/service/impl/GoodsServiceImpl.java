@@ -83,23 +83,39 @@ public class GoodsServiceImpl implements GoodsService {
     // 根据商品分类显示商品
     public List<GoodsDto> selectAllDtoBySort(Integer sortId) {
         List<GoodsDto> goodsDtos = goodsMapper.selectAllDtoBySort(sortId);
-        if (goodsDtos != null) return goodsDtos;
+        if (goodsDtos != null && !goodsDtos.isEmpty()) return goodsDtos;
+        return null;
+    }
+
+    @Override
+    // 根据分类以及商品价格排序显示商品
+    public List<GoodsDto> selectAllDtoBySortOrderByPrice(Integer sortId) {
+        List<GoodsDto> goodsDtos = goodsMapper.selectAllDtoBySortOrderByPrice(sortId);
+        if (goodsDtos != null && !goodsDtos.isEmpty()) return goodsDtos;
+        return null;
+    }
+
+    @Override
+    // 根据分类以及商品更新时间排序显示商品
+    public List<GoodsDto> selectAllDtoBySortOrderByTime(Integer sortId) {
+        List<GoodsDto> goodsDtos = goodsMapper.selectAllDtoBySortOrderByTime(sortId);
+        if (goodsDtos != null && !goodsDtos.isEmpty()) return goodsDtos;
         return null;
     }
 
     @Override
     // 根据商品价格排序显示商品
-    public List<GoodsDto> selectAllDtoBySortOrderByPrice(Integer sortId) {
-        List<GoodsDto> goodsDtos = goodsMapper.selectAllDtoBySortOrderByPrice(sortId);
-        if (goodsDtos != null) return goodsDtos;
+    public List<GoodsDto> selectAllDtoOrderByPrice() {
+        List<GoodsDto> goodsDtos = goodsMapper.selectAllDtoOrderByPrice();
+        if (goodsDtos != null && !goodsDtos.isEmpty()) return goodsDtos;
         return null;
     }
 
     @Override
     // 根据商品更新时间排序显示商品
-    public List<GoodsDto> selectAllDtoBySortOrderByTime(Integer sortId) {
-        List<GoodsDto> goodsDtos = goodsMapper.selectAllDtoBySortOrderByTime(sortId);
-        if (goodsDtos != null) return goodsDtos;
+    public List<GoodsDto> selectAllDtoOrderByTime() {
+        List<GoodsDto> goodsDtos = goodsMapper.selectAllDtoOrderByTime();
+        if (goodsDtos != null && !goodsDtos.isEmpty()) return goodsDtos;
         return null;
     }
 }

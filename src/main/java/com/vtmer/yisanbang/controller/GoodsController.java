@@ -23,6 +23,27 @@ public class GoodsController {
         else
             return ResponseMessage.newErrorInstance("无商品信息，查找失败");
     }
+
+    @GetMapping("/selectAllGoodsOrderByTime")
+    // 根据商品分类以及更新时间顺序显示商品
+    public ResponseMessage selectAllGoodsOrderByTime() {
+        List<GoodsDto> goodsDtos = goodsService.selectAllDtoOrderByTime();
+        if (goodsDtos != null && !goodsDtos.isEmpty())
+            return ResponseMessage.newSuccessInstance(goodsDtos, "查找成功");
+        else
+            return ResponseMessage.newErrorInstance("无商品信息，查找失败");
+    }
+
+    @GetMapping("/selectAllGoodsOrderByPrice")
+    // 根据商品分类以及更新时间顺序显示商品
+    public ResponseMessage selectAllGoodsOrderByPrice() {
+        List<GoodsDto> goodsDtos = goodsService.selectAllDtoOrderByPrice();
+        if (goodsDtos != null && !goodsDtos.isEmpty())
+            return ResponseMessage.newSuccessInstance(goodsDtos, "查找成功");
+        else
+            return ResponseMessage.newErrorInstance("无商品信息，查找失败");
+    }
+
     @GetMapping("/selectAllGoodsBySortId/{id}")
     // 根据商品分类查找商品
     public ResponseMessage selectAllGoodsBySortId(@PathVariable("id") Integer sortId) {

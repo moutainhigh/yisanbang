@@ -107,4 +107,16 @@
     where sort_id = id = #{id,jdbcType=INTEGER} and is_show = 1
     order by update_time
   </select>
+    <select id="selectAllDtoOrderByPrice" resultMap="GoodsDtoMap">
+    select id, sort_id, name, introduce, picture, price, is_show, update_time
+    from goods
+    where is_show = 1
+    order by price
+  </select>
+    <select id="selectAllDtoOrderByTime" resultMap="GoodsDtoMap">
+    select id, sort_id, name, introduce, picture, price, is_show
+    from goods
+    where is_show = 1
+    order by update_time
+  </select>
 </mapper>
