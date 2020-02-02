@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.vtmer.yisanbang.mapper.GoodsMapper">
-  <resultMap id="BaseResultMap" type="com.vtmer.yisanbang.domain.Goods">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="sort_id" jdbcType="INTEGER" property="sortId" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="introduce" jdbcType="VARCHAR" property="introduce" />
-    <result column="picture" jdbcType="VARCHAR" property="picture" />
-    <result column="price" jdbcType="DOUBLE" property="price" />
-    <result column="is_show" jdbcType="BIT" property="isShow" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-  </resultMap>
-  <resultMap id="GoodsDtoMap" type="com.vtmer.yisanbang.dto.GoodsDto">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="sort_id" jdbcType="INTEGER" property="sortId" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="introduce" jdbcType="VARCHAR" property="introduce" />
-    <result column="picture" jdbcType="VARCHAR" property="picture" />
-    <result column="price" jdbcType="DOUBLE" property="price" />
-    <result column="is_show" jdbcType="BIT" property="isShow" />
-  </resultMap>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <resultMap id="BaseResultMap" type="com.vtmer.yisanbang.domain.Goods">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="sort_id" jdbcType="INTEGER" property="sortId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="introduce" jdbcType="VARCHAR" property="introduce"/>
+        <result column="picture" jdbcType="VARCHAR" property="picture"/>
+        <result column="price" jdbcType="DOUBLE" property="price"/>
+        <result column="is_show" jdbcType="BIT" property="isShow"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <resultMap id="GoodsDtoMap" type="com.vtmer.yisanbang.dto.GoodsDto">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="sort_id" jdbcType="INTEGER" property="sortId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="introduce" jdbcType="VARCHAR" property="introduce"/>
+        <result column="picture" jdbcType="VARCHAR" property="picture"/>
+        <result column="price" jdbcType="DOUBLE" property="price"/>
+        <result column="is_show" jdbcType="BIT" property="isShow"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from goods
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.vtmer.yisanbang.domain.Goods">
+    <insert id="insert" parameterType="com.vtmer.yisanbang.domain.Goods">
     insert into goods (id, sort_id, name,
       introduce, picture, price,
       is_show, create_time, update_time
@@ -35,7 +35,7 @@
       #{isShow,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
       )
   </insert>
-  <update id="updateByPrimaryKey" parameterType="com.vtmer.yisanbang.domain.Goods">
+    <update id="updateByPrimaryKey" parameterType="com.vtmer.yisanbang.domain.Goods">
     update goods
     set sort_id = #{sortId,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
@@ -47,16 +47,16 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select id, sort_id, name, introduce, picture, price, is_show, create_time, update_time
     from goods
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <select id="selectAll" resultMap="BaseResultMap">
+    <select id="selectAll" resultMap="BaseResultMap">
     select id, sort_id, name, introduce, picture, price, is_show, create_time, update_time
     from goods
   </select>
-  <insert id="insertDto" parameterType="com.vtmer.yisanbang.dto.GoodsDto">
+    <insert id="insertDto" parameterType="com.vtmer.yisanbang.dto.GoodsDto">
     insert into goods (id, sort_id, name,
       introduce, picture, price,
       is_show
@@ -66,7 +66,7 @@
       #{isShow,jdbcType=BIT}
       )
   </insert>
-  <update id="updateDtoByPrimaryKey" parameterType="com.vtmer.yisanbang.dto.GoodsDto">
+    <update id="updateDtoByPrimaryKey" parameterType="com.vtmer.yisanbang.dto.GoodsDto">
     update goods
     set sort_id = #{sortId,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
@@ -76,18 +76,35 @@
       is_show = #{isShow,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="selectDtoByPrimaryKey" parameterType="java.lang.Integer" resultMap="GoodsDtoMap">
+    <select id="selectDtoByPrimaryKey" parameterType="java.lang.Integer" resultMap="GoodsDtoMap">
     select id, sort_id, name, introduce, picture, price, is_show
     from goods
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER} and is_show = 1
   </select>
-  <select id="selectDtoByGoodsName" parameterType="java.lang.String" resultMap="GoodsDtoMap">
+    <select id="selectDtoByGoodsName" parameterType="java.lang.String" resultMap="GoodsDtoMap">
     select id, sort_id, name, introduce, picture, price, is_show
     from goods
-    where name = #{name,jdbcType=VARCHAR}
+    where name = #{name,jdbcType=VARCHAR} and is_show = 1
   </select>
-  <select id="selectAllDto" resultMap="GoodsDtoMap">
+    <select id="selectAllDto" resultMap="GoodsDtoMap">
+    select id, sort_id, name, introduce, picture, price, is_show
+    from goods and is_show = 1
+  </select>
+    <select id="selectAllDtoBySort" parameterType="java.lang.Integer" resultMap="GoodsDtoMap">
     select id, sort_id, name, introduce, picture, price, is_show
     from goods
+    where sort_id = id = #{id,jdbcType=INTEGER} and is_show = 1
+  </select>
+    <select id="selectAllDtoBySortOrderByPrice" parameterType="java.lang.Integer" resultMap="GoodsDtoMap">
+    select id, sort_id, name, introduce, picture, price, is_show, update_time
+    from goods
+    where sort_id = id = #{id,jdbcType=INTEGER} and is_show = 1
+    order by price
+  </select>
+    <select id="selectAllDtoBySortOrderByTime" parameterType="java.lang.Integer" resultMap="GoodsDtoMap">
+    select id, sort_id, name, introduce, picture, price, is_show
+    from goods
+    where sort_id = id = #{id,jdbcType=INTEGER} and is_show = 1
+    order by update_time
   </select>
 </mapper>

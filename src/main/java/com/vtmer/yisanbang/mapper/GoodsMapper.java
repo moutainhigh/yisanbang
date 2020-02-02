@@ -34,4 +34,13 @@ public interface GoodsMapper {
 
     // Dto
     int updateDtoByPrimaryKey(GoodsDto record);
+
+    // Dto
+    List<GoodsDto> selectAllDtoBySort(Integer sortId);
+
+    // Dto
+    List<GoodsDto> selectAllDtoBySortOrderByPrice(Integer sortId);
+
+    // Dto
+    List<GoodsDto> selectAllDtoBySortOrderByTime(Integer sortId);
 }

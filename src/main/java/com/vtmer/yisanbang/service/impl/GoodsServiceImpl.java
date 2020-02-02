@@ -78,4 +78,28 @@ public class GoodsServiceImpl implements GoodsService {
         if (updateFlag > 0) return true;
         return false;
     }
+
+    @Override
+    // 根据商品分类显示商品
+    public List<GoodsDto> selectAllDtoBySort(Integer sortId) {
+        List<GoodsDto> goodsDtos = goodsMapper.selectAllDtoBySort(sortId);
+        if (goodsDtos != null) return goodsDtos;
+        return null;
+    }
+
+    @Override
+    // 根据商品价格排序显示商品
+    public List<GoodsDto> selectAllDtoBySortOrderByPrice(Integer sortId) {
+        List<GoodsDto> goodsDtos = goodsMapper.selectAllDtoBySortOrderByPrice(sortId);
+        if (goodsDtos != null) return goodsDtos;
+        return null;
+    }
+
+    @Override
+    // 根据商品更新时间排序显示商品
+    public List<GoodsDto> selectAllDtoBySortOrderByTime(Integer sortId) {
+        List<GoodsDto> goodsDtos = goodsMapper.selectAllDtoBySortOrderByTime(sortId);
+        if (goodsDtos != null) return goodsDtos;
+        return null;
+    }
 }
