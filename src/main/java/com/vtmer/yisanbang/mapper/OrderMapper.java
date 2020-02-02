@@ -27,4 +27,6 @@ public interface OrderMapper {
     int updateOrderStatus(Integer orderId);
 
     int setOrderStatus(Map<String,Integer> orderMap);
+
+    Order selectByOrderNumber(String orderNumber);
 }

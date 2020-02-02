@@ -22,4 +22,6 @@ public interface UserMapper {
 
     // 根据微信用户OpenId查找用户信息
     User selectUserByOpenId(String openId);
+
+    String selectOpenIdByUserId(Integer userId);
 }
