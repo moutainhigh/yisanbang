@@ -1,4 +1,7 @@
 spring:
+  devtools:
+    restart:
+      enabled: true  #设置开启热部署
   datasource:
     # 如果存在多个数据源，监控的时候可以通过名字来区分开来
     name: mysql
@@ -7,7 +10,7 @@ spring:
     # 连接数据库的账号
     username: root
     # 连接数据库的密码
-    password: a570911275
+    password: 123456
     # 使用druid数据源
     type: com.alibaba.druid.pool.DruidDataSource
     # 扩展插件

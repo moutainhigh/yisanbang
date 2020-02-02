@@ -7,8 +7,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Mapper
+
 @Repository
+@Mapper
 public interface UserAddressMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -20,6 +21,8 @@ public interface UserAddressMapper {
 
     int updateByPrimaryKey(UserAddress record);
 
+
+    UserAddress selectDefaultByUserId(Integer id);
     // Dto
     List<UserAddressDto> selectAllByUserId(Integer id);
 
@@ -31,4 +34,5 @@ public interface UserAddressMapper {
 
     // Dto
     UserAddressDto selectDtoByPrimaryKey(Integer id);
+
 }

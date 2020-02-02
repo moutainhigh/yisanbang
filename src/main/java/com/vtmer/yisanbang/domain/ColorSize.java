@@ -9,7 +9,11 @@ public class ColorSize {
 
     private String color;
 
-    private Integer size;
+    private String size;
+
+    private Integer inventory;
+
+    private String model;
 
     private Date createTime;
 
@@ -39,12 +43,28 @@ public class ColorSize {
         this.color = color == null ? null : color.trim();
     }
 
-    public Integer getSize() {
+    public String getSize() {
         return size;
     }
 
-    public void setSize(Integer size) {
-        this.size = size;
+    public void setSize(String size) {
+        this.size = size == null ? null : size.trim();
+    }
+
+    public Integer getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(Integer inventory) {
+        this.inventory = inventory;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model == null ? null : model.trim();
     }
 
     public Date getCreateTime() {
@@ -61,17 +81,5 @@ public class ColorSize {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
-    }
-
-    @Override
-    public String toString() {
-        return "ColorSize{" +
-                "id=" + id +
-                ", goodsId=" + goodsId +
-                ", color='" + color + '\'' +
-                ", size=" + size +
-                ", createTime=" + createTime +
-                ", updateTime=" + updateTime +
-                '}';
     }
 }

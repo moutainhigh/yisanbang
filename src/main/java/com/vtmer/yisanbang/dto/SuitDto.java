@@ -10,7 +10,7 @@ public class SuitDto {
 
     private String part;
 
-    private Integer size;
+    private String size;
 
     public String getName() {
         return name;
@@ -44,11 +44,11 @@ public class SuitDto {
         this.part = part;
     }
 
-    public Integer getSize() {
+    public String getSize() {
         return size;
     }
 
-    public void setSize(Integer size) {
+    public void setSize(String size) {
         this.size = size;
     }
 

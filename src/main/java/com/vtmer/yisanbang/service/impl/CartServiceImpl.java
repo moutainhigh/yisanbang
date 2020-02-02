@@ -2,7 +2,10 @@ package com.vtmer.yisanbang.service.impl;
 
 import com.vtmer.yisanbang.common.ListSort;
 import com.vtmer.yisanbang.domain.Discount;
-import com.vtmer.yisanbang.dto.*;
+import com.vtmer.yisanbang.dto.AddGoodsDto;
+import com.vtmer.yisanbang.dto.CartGoodsDto;
+import com.vtmer.yisanbang.dto.DeleteCartGoodsDto;
+import com.vtmer.yisanbang.dto.GoodsDto;
 import com.vtmer.yisanbang.mapper.CartGoodsMapper;
 import com.vtmer.yisanbang.mapper.CartMapper;
 import com.vtmer.yisanbang.mapper.DiscountMapper;
@@ -11,6 +14,7 @@ import com.vtmer.yisanbang.vo.AddCartGoodsVo;
 import com.vtmer.yisanbang.vo.CartVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -45,7 +49,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public CartVo selectCartDtosByUserId(Integer userId) {
+    public CartVo selectCartVoByUserId(Integer userId) {
         setDiscount();
         double beforeCartTotalPrice = 0;
         // 根据userId查cartId
@@ -75,7 +79,7 @@ public class CartServiceImpl implements CartService {
                     cartGoodsDto.setAfterTotalPrice(totalPrice);
                 }
             } // end for
-            cartVo.setCartGoodsDtos(CartGoodsList);
+            cartVo.setCartGoodsList(CartGoodsList);
             cartVo.setBeforeTotalPrice(beforeCartTotalPrice);
             return cartVo;
         } else {
@@ -84,6 +88,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    @Transactional
     public int addCartGoods(AddCartGoodsVo addCartGoodsVo) {
         // 根据userId获取cartId
         Integer cartId = cartMapper.selectCartIdByUserId(addCartGoodsVo.getUserId());
@@ -108,6 +113,7 @@ public class CartServiceImpl implements CartService {
         return 1;
     }
 
+    @Transactional
     public double updateChosen(AddGoodsDto addGoodsDto) {
         // 根据userId获取cartId
         Integer cartId = cartMapper.selectCartIdByUserId(addGoodsDto.getUserId());
@@ -123,6 +129,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    @Transactional
     public double addOrSubtractAmount(AddGoodsDto addGoodsDto) {
         // 更新数量
         boolean b = cartGoodsMapper.addOrSubtractAmount(addGoodsDto);
@@ -134,6 +141,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    @Transactional
     public double updateAmount(AddGoodsDto addGoodsDto) {
         boolean b = cartGoodsMapper.updateAmount(addGoodsDto);
         if (b) {
@@ -144,6 +152,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    @Transactional
     public Boolean deleteCartGoods(DeleteCartGoodsDto deleteCartGoodsDto) {
         // 删除商品
         Integer cartId = deleteCartGoodsDto.getCartId();
@@ -164,14 +173,14 @@ public class CartServiceImpl implements CartService {
     /*
         根据购物车所有商品信息计算总价，并更新
     */
-    private double calculateTotalPrice(Integer userId) {
+    public double calculateTotalPrice(Integer userId) {
         setDiscount();
-        CartVo cartVo = selectCartDtosByUserId(userId);
+        CartVo cartVo = selectCartVoByUserId(userId);
         double totalPrice = 0;
-        List<CartGoodsDto> cartGoodsDtos = cartVo.getCartGoodsDtos();
+        List<CartGoodsDto> cartGoodsDtos = cartVo.getCartGoodsList();
         for (CartGoodsDto cartGoodsDto : cartGoodsDtos) {
             // 如果勾选了，计算总价
-            if (cartGoodsDto.getIsChosen() == 1) {
+            if (cartGoodsDto.getIsChosen() == Boolean.TRUE) {
                 // 如果符合优惠
                 if (cartGoodsDto.getAmount() >= discountAmount) {
                     totalPrice += cartGoodsDto.getPrice() * cartGoodsDto.getAmount() * discountRate;
@@ -196,5 +205,6 @@ public class CartServiceImpl implements CartService {
             return calculateTotalPrice(addGoodsDto.getUserId());
         } else return 0;
     }
+
 
 }

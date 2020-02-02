@@ -9,21 +9,25 @@ public class Order {
 
     private Double totalPrice;
 
-    private String phoneNumber;
-
-    private String userName;
-
     private String addressName;
 
-    private Boolean status;
+    private Integer status;
 
     private String courierNumber;
+
+    private String message;
 
     private Date createTime;
 
     private Date updateTime;
 
-    private byte[] userId;
+    private Integer userId;
+
+    private String userName;
+
+    private String phoneNumber;
+
+    private double postage;
 
     public Integer getId() {
         return id;
@@ -41,43 +45,15 @@ public class Order {
         this.orderNumber = orderNumber == null ? null : orderNumber.trim();
     }
 
-    public Double getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(Double totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber == null ? null : phoneNumber.trim();
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName == null ? null : userName.trim();
-    }
-
-    public String getAddressName() {
-        return addressName;
-    }
-
     public void setAddressName(String addressName) {
         this.addressName = addressName == null ? null : addressName.trim();
     }
 
-    public Boolean getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Boolean status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
@@ -105,11 +81,55 @@ public class Order {
         this.updateTime = updateTime;
     }
 
-    public byte[] getUserId() {
+    public Double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(Double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public String getAddressName() {
+        return addressName;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(byte[] userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public double getPostage() {
+        return postage;
+    }
+
+    public void setPostage(double postage) {
+        this.postage = postage;
     }
 }

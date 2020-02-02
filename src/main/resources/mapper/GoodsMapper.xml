@@ -30,8 +30,8 @@
       introduce, picture, price,
       is_show, create_time, update_time
       )
-    values (#{id,jdbcType=INTEGER}, #{sortId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
-      #{introduce,jdbcType=VARCHAR}, #{picture,jdbcType=VARCHAR}, #{price,jdbcType=DOUBLE},
+    values (#{id,jdbcType=INTEGER}, #{sortId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{introduce,jdbcType=VARCHAR}, #{picture,jdbcType=VARCHAR}, #{price,jdbcType=DOUBLE}, 
       #{isShow,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
       )
   </insert>

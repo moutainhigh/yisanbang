@@ -18,5 +18,4 @@ public interface PartSizeMapper {
     List<PartSize> selectAll();
 
     int updateByPrimaryKey(PartSize record);
-
 }

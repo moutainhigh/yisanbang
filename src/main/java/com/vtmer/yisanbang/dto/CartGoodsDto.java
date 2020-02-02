@@ -8,7 +8,7 @@ public class CartGoodsDto {
 
     private Integer amount;
 
-    private Byte isChosen;
+    private Boolean isChosen;
 
     private String name;
 
@@ -18,13 +18,13 @@ public class CartGoodsDto {
 
     private String partOrColor;
 
-    private Integer size;
+    private String size;
 
     private double totalPrice;
 
     private double afterTotalPrice;
 
-    private Integer isGoods;
+    private Boolean isGoods;
 
     private Date updateTime;
 
@@ -50,14 +50,6 @@ public class CartGoodsDto {
 
     public void setAmount(Integer amount) {
         this.amount = amount;
-    }
-
-    public Byte getIsChosen() {
-        return isChosen;
-    }
-
-    public void setIsChosen(Byte isChosen) {
-        this.isChosen = isChosen;
     }
 
     public String getName() {
@@ -92,22 +84,29 @@ public class CartGoodsDto {
         this.partOrColor = partOrColor;
     }
 
-    public Integer getSize() {
+    public String getSize() {
         return size;
     }
 
-    public void setSize(Integer size) {
+    public void setSize(String size) {
         this.size = size;
     }
 
-    public Integer getIsGoods() {
+    public Boolean getIsChosen() {
+        return isChosen;
+    }
+
+    public void setIsChosen(Boolean chosen) {
+        isChosen = chosen;
+    }
+
+    public Boolean getIsGoods() {
         return isGoods;
     }
 
-    public void setIsGoods(Integer isGoods) {
-        this.isGoods = isGoods;
+    public void setIsGoods(Boolean goods) {
+        isGoods = goods;
     }
-
 
     public double getTotalPrice() {
         return totalPrice;

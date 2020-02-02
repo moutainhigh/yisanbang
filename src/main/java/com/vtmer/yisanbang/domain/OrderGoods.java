@@ -5,11 +5,15 @@ import java.util.Date;
 public class OrderGoods {
     private Integer id;
 
+    private Integer orderId;
+
     private Integer sizeId;
 
-    private Byte isGoods;
+    private Boolean isGoods;
 
-    private Integer goodsNum;
+    private Integer amount;
+
+    private Double totalPrice;
 
     private Date createTime;
 
@@ -23,6 +27,14 @@ public class OrderGoods {
         this.id = id;
     }
 
+    public Integer getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
+    }
+
     public Integer getSizeId() {
         return sizeId;
     }
@@ -31,21 +43,6 @@ public class OrderGoods {
         this.sizeId = sizeId;
     }
 
-    public Byte getIsGoods() {
-        return isGoods;
-    }
-
-    public void setIsGoods(Byte isGoods) {
-        this.isGoods = isGoods;
-    }
-
-    public Integer getGoodsNum() {
-        return goodsNum;
-    }
-
-    public void setGoodsNum(Integer goodsNum) {
-        this.goodsNum = goodsNum;
-    }
 
     public Date getCreateTime() {
         return createTime;
@@ -61,5 +58,29 @@ public class OrderGoods {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Boolean getIsGoods() {
+        return isGoods;
+    }
+
+    public void setIsGoods(Boolean goods) {
+        isGoods = goods;
+    }
+
+    public Integer getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
+    }
+
+    public Double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(Double totalPrice) {
+        this.totalPrice = totalPrice;
     }
 }

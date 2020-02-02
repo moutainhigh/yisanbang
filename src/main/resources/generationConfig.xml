@@ -15,9 +15,9 @@
 
         <!-- jdbcConnection:指定如何连接到目标数据库 -->
         <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
-                        connectionURL="jdbc:mysql://localhost:3306/yisanbang?serverTimezone=UTC&amp;allowMultiQueries=true"
+                        connectionURL="jdbc:mysql://localhost:3306/yi_san_bang?serverTimezone=UTC&amp;allowMultiQueries=true"
                         userId="root"
-                        password="a570911275">
+                        password="123456">
             <!-- 防止生成错误  -->
             <property name="nullCatalogMeansCurrent" value="true"/>
         </jdbcConnection>
@@ -61,8 +61,8 @@
 <!--        <table tableName="goods" domainObjectName="Goods"/>-->
 <!--        <table tableName="goods_detail" domainObjectName="Goods_detail"/>-->
 <!--        <table tableName="income" domainObjectName="Income"/>-->
-        <table tableName="order" domainObjectName="Order"/>
-        <table tableName="order_goods" domainObjectName="OrderGoods"/>
+<!--        <table tableName="order" domainObjectName="Order"/>-->
+<!--        <table tableName="order_goods" domainObjectName="OrderGoods"/>-->
 <!--        <table tableName="part_size" domainObjectName="PartSize"/>-->
 <!--        <table tableName="permission" domainObjectName="PermissionService"/>-->
 <!--        <table tableName="postage" domainObjectName="Postage"/>-->
