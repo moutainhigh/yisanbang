@@ -1,5 +1,6 @@
 package com.vtmer.yisanbang.service;
 
+import com.vtmer.yisanbang.domain.Order;
 import com.vtmer.yisanbang.vo.OrderVo;
 
 import java.util.List;
@@ -9,7 +10,7 @@ public interface OrderService {
 
     OrderVo confirmCartOrder(Integer userId);
 
-    String createCartOrder(OrderVo orderVo);
+    Map<String,String> createCartOrder(OrderVo orderVo);
 
     List<OrderVo> listOrder(Map<String,Integer> orderMap);
 
@@ -19,4 +20,7 @@ public interface OrderService {
 
     int deleteOrder(Integer orderId);
 
+    OrderVo selectOrderVoByOrderNumber(String orderNumber);
+
+    Order selectOrderByOrderNumber(String orderNumber);
 }

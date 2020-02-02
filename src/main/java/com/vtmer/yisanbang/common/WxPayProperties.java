@@ -22,8 +22,12 @@ public class WxPayProperties {
     private String mchKey;
 
     /**
-     * apiclient_cert.p12文件的绝对路径，或者如果放在项目中，请以classpath:开头指定
+     * notifyURL:异步接收微信支付结果通知的回调地址，通知url必须为外网可访问的url，不能携带参数。
      */
-    private String keyPath;
+    private String notifyURL;
 
+    /**
+     * tradeType：交易类型，小程序为JSAPI
+     */
+    private String tradeType;
 }
