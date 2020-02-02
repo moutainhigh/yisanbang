@@ -8,5 +8,5 @@ public class VariableName {
     // 七牛存储空间名
     public static final String bucket = "eeatem";
     // 七牛默认域名
-    public static final String domain = "http://pzvsama9m.bkt.clouddn.com/";
+    public static final String domain = "http://www.eeatem.top";
 }
