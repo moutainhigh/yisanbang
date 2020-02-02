@@ -98,4 +98,10 @@
     </if>
     order by update_time DESC
   </select>
+  <select id="selectByOrderNumber" resultType="com.vtmer.yisanbang.domain.Order">
+    select
+    <include refid="BaseColumnList"></include>
+    from `order`
+    where order_number = #{orderNumber}
+  </select>
 </mapper>
