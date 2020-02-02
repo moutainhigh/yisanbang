@@ -14,6 +14,8 @@ public class OrderVo {
     // 订单编号
     private String orderNumber;
 
+    private double postage;
+
     public UserAddress getUserAddress() {
         return userAddress;
     }
@@ -44,5 +46,13 @@ public class OrderVo {
 
     public void setOrderNumber(String orderNumber) {
         this.orderNumber = orderNumber;
+    }
+
+    public double getPostage() {
+        return postage;
+    }
+
+    public void setPostage(double postage) {
+        this.postage = postage;
     }
 }

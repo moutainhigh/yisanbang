@@ -20,6 +20,9 @@ import java.util.Map;
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
+    private PostageMapper postageMapper;
+
+    @Autowired
     private OrderMapper orderMapper;
 
     @Autowired
@@ -49,10 +52,39 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private SuitMapper suitMapper;
 
-    @Override
+    // Free the postage after standardPrice
+    private double standardPrice;
+
+    // postage
+    private double defaultPostage;
+
+    private void setPostage() {
+        Postage postage = postageMapper.select();
+        if (postage!=null) {
+            standardPrice = postage.getPrice();
+            defaultPostage = postage.getDefaultPostage();
+        } else {  // 达标金额和邮费都默认为0
+            standardPrice = 0;
+            defaultPostage = 0;
+        }
+    }
+
+    /**
+     * The user clicks the settlement button,and then confirm the order
+     * used in cart
+     * @param userId
+     * @return
+     */
     public OrderVo confirmCartOrder(Integer userId) {
+        setPostage();
+        OrderVo orderVo = new OrderVo();
         // 获取用户购物车清单
         CartVo cartVo = cartService.selectCartVoByUserId(userId);
+        if (cartVo.getTotalPrice() >= standardPrice) { // 包邮
+            orderVo.setPostage(0);
+        } else {  // 不包邮
+            orderVo.setPostage(defaultPostage);
+        }
         List<CartGoodsDto> cartGoodsList = cartVo.getCartGoodsList();
         for (int i = 0;i<cartGoodsList.size();i++) {
             if (cartGoodsList.get(i).getIsChosen() == Boolean.FALSE) { // 如果是未勾选的,删除之
@@ -61,16 +93,20 @@ public class OrderServiceImpl implements OrderService {
             }
         }
         cartVo.setCartGoodsList(cartGoodsList);
-        OrderVo orderVo = new OrderVo();
         orderVo.setOrderGoodsList(cartVo);
         UserAddress userAddress = userAddressMapper.selectDefaultByUserId(userId);
         orderVo.setUserAddress(userAddress);
         return orderVo;
     }
 
-    // 开启事务
+    /**
+     * create shopping cart order after users submit order
+     * @param orderVo
+     * @return
+     */
     @Transactional
     public String createCartOrder(OrderVo orderVo) {
+
         // 用户地址
         UserAddress userAddress = orderVo.getUserAddress();
         // 用户购物车订单列表
@@ -88,10 +124,9 @@ public class OrderServiceImpl implements OrderService {
         order.setPhoneNumber(userAddress.getPhoneNumber());
         order.setOrderNumber(orderNumber);
         order.setTotalPrice(cartVo.getTotalPrice());
+        order.setPostage(orderVo.getPostage());
         order.setMessage(orderVo.getMessage());
         orderMapper.insert(order);
-
-        System.out.println(order.getId());
 
         // 生成orderGoods
         OrderGoods orderGoods = new OrderGoods();
@@ -145,6 +180,9 @@ public class OrderServiceImpl implements OrderService {
 
             // 订单留言
             orderVo.setMessage(order.getMessage());
+
+            // 订单邮费
+            orderVo.setPostage(order.getPostage());
 
             // 订单编号
             orderVo.setOrderNumber(order.getOrderNumber());

@@ -3,7 +3,7 @@
 <mapper namespace="com.vtmer.yisanbang.mapper.OrderMapper">
   <sql id="BaseColumnList">
     id, order_number, user_id, user_name, phone_number, total_price, address_name,
-    status, courier_number, message
+    status,postage,  courier_number, message
   </sql>
   <sql id="OrderCondition">
     <if test="userId!=null">
@@ -22,13 +22,14 @@
     <result column="total_price" jdbcType="DOUBLE" property="totalPrice" />
     <result column="address_name" jdbcType="VARCHAR" property="addressName" />
     <result column="status" jdbcType="BIT" property="status" />
+    <result column="postage" jdbcType="DOUBLE" property="postage"/>
     <result column="courier_number" jdbcType="VARCHAR" property="courierNumber" />
     <result column="message" jdbcType="VARCHAR" property="message" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from order
+    delete from `order`
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert"
@@ -37,10 +38,10 @@
           keyProperty="id">
     insert into `order` (order_number, user_id,
       user_name, phone_number, total_price, 
-      address_name, message)
+      address_name, message, postage)
     values ( #{orderNumber,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER},
       #{userName,jdbcType=VARCHAR}, #{phoneNumber,jdbcType=VARCHAR}, #{totalPrice,jdbcType=DOUBLE}, 
-      #{addressName,jdbcType=VARCHAR}, #{message,jdbcType=VARCHAR}
+      #{addressName,jdbcType=VARCHAR}, #{message,jdbcType=VARCHAR}, #{postage,jdbcType=DOUBLE}
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.vtmer.yisanbang.domain.Order">
@@ -52,6 +53,7 @@
       total_price = #{totalPrice,jdbcType=DOUBLE},
       address_name = #{addressName,jdbcType=VARCHAR},
       status = #{status,jdbcType=BIT},
+      postage = #{postage,jdbcType=DOUBLE},
       courier_number = #{courierNumber,jdbcType=VARCHAR},
       message = #{message,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -70,13 +72,13 @@
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select id, order_number, user_id, user_name, phone_number, total_price, address_name, 
-    status, courier_number, message, create_time, update_time
+    status, postage, courier_number, message, create_time, update_time
     from `order`
     where id = #{id,jdbcType=INTEGER}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
     select id, order_number, user_id, user_name, phone_number, total_price, address_name, 
-    status, courier_number, message, create_time, update_time
+    status, postage, courier_number, message, create_time, update_time
     from `order`
   </select>
   <select id="selectAllByUserIdAndStatus" resultType="com.vtmer.yisanbang.domain.Order">

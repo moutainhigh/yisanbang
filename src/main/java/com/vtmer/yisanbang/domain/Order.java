@@ -27,6 +27,8 @@ public class Order {
 
     private String phoneNumber;
 
+    private double postage;
+
     public Integer getId() {
         return id;
     }
@@ -121,5 +123,13 @@ public class Order {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public double getPostage() {
+        return postage;
+    }
+
+    public void setPostage(double postage) {
+        this.postage = postage;
     }
 }
