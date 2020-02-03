@@ -1,5 +1,7 @@
 package com.vtmer.yisanbang.controller;
 
+import com.github.pagehelper.PageHelper;
+import com.vtmer.yisanbang.common.PageResponseMessage;
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.common.qiniu.QiniuUpload;
 import com.vtmer.yisanbang.domain.Ad;
@@ -55,11 +57,13 @@ public class AdController {
         return ResponseMessage.newErrorInstance("广告信息修改失败");
     }
 
-    @GetMapping("/ads")
-    public ResponseMessage getAllAdInfo() {
+    @GetMapping("/list")
+    public ResponseMessage getAllAdInfo(@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                                        @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
         List<Ad> ads = adService.listAllAdInfo();
         if (ads != null) {
-            return ResponseMessage.newSuccessInstance(ads, "获取所有广告信息成功");
+            return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(ads), "获取所有广告信息成功");
         }
         return ResponseMessage.newErrorInstance("获取广告信息失败");
     }

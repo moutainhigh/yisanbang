@@ -74,3 +74,9 @@ wx:
   applet:
     appid: wx447bdd8f7d850c06
     appsecret: 1f8dc966cc30761d60394178a5d58301
+
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql

@@ -40,6 +40,7 @@
   <select id="selectAll" resultMap="BaseResultMap">
     select id, picture_path, url, show_order, is_show, create_time, update_time
     from ad
+    order by show_order asc
   </select>
   <select id="selectShowedAd" resultType="com.vtmer.yisanbang.dto.ShowAdDto">
     select picture_path, url

@@ -34,7 +34,7 @@ public interface AdMapper {
     // 修改广告为不显示状态
     int updateAd2UnShow(Integer adId);
 
-    // 新增广告图片
+    // 新增广告信息
     int insertAdInfo(AdDto adDto);
 
     // 查询已存在的显示排序

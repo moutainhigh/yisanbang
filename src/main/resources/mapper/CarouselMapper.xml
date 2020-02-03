@@ -40,5 +40,42 @@
   <select id="selectAll" resultMap="BaseResultMap">
     select id, picture_path, url, show_order, is_show, create_time, update_time
     from carousel
+    order by show_order asc
   </select>
+  <update id="updateAd2Show" parameterType="java.lang.Integer">
+    update carousel
+    set is_show = 1
+    where id = #{carouselId}
+  </update>
+  <update id="updateAd2UnShow" parameterType="java.lang.Integer">
+    update carousel
+    set is_show = 0
+    where id = #{carouselId}
+  </update>
+  <insert id="insertAdInfo" parameterType="com.vtmer.yisanbang.dto.CarouselDto">
+    insert into carousel (picture_path, url, show_order, is_show)
+    values (#{picturePath}, #{url}, #{showOrder}, #{isShow})
+  </insert>
+  <select id="selectExitedOrder" resultType="java.lang.Integer">
+    select show_order
+    from carousel
+  </select>
+  <update id="updateAdInfoSelective" parameterType="com.vtmer.yisanbang.dto.CarouselDto">
+    update carousel
+    <set>
+      <if test="picturePath != null">
+        picture_path = #{picturePath},
+      </if>
+      <if test="url != null">
+        url = #{url},
+      </if>
+      <if test="showOrder != null">
+        show_order = #{showOrder},
+      </if>
+      <if test="isShow != null">
+        is_show = #{isShow},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
 </mapper>

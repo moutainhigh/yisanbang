@@ -18,11 +18,7 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public List<Ad> listAllAdInfo() {
-        List<Ad> ads = adMapper.selectAll();
-        if (ads != null && !ads.isEmpty()) {
-            return ads;
-        }
-        return null;
+        return adMapper.selectAll();
     }
 
     @Override

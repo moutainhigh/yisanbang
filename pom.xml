@@ -114,11 +114,17 @@
             <version>7.2.11</version>
             <scope>compile</scope>
         </dependency>
-        <!--七牛云上传图片服务-->
+        <!-- 七牛云上传图片服务 -->
         <dependency>
             <groupId>com.qiniu</groupId>
             <artifactId>sdk</artifactId>
             <version>6.1.0</version>
+        </dependency>
+        <!-- pagehelper -->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>1.2.12</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
