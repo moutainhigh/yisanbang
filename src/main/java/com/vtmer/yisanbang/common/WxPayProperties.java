@@ -30,4 +30,9 @@ public class WxPayProperties {
      * tradeType：交易类型，小程序为JSAPI
      */
     private String tradeType;
+
+    /**
+     * apiclient_cert.p12文件的绝对路径，或者如果放在项目中，请以classpath:开头指定
+     */
+    private String keyPath;
 }

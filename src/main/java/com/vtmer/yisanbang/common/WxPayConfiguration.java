@@ -29,6 +29,7 @@ public class WxPayConfiguration {
         payConfig.setMchKey(StringUtils.trimToNull(this.properties.getMchKey()));
         payConfig.setNotifyUrl(StringUtils.trimToNull(this.properties.getNotifyURL()));
         payConfig.setTradeType(StringUtils.trimToNull(this.properties.getTradeType()));
+        payConfig.setKeyPath(StringUtils.trimToNull(this.properties.getKeyPath()));
         // 可以指定是否使用沙箱环境
         payConfig.setUseSandboxEnv(false);
 
