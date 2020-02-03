@@ -1,17 +1,15 @@
 package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
-import com.vtmer.yisanbang.common.qiniu.QiniuDelete;
 import com.vtmer.yisanbang.common.qiniu.QiniuUpload;
 import com.vtmer.yisanbang.domain.Ad;
-import com.vtmer.yisanbang.dto.ShowAdDto;
+import com.vtmer.yisanbang.dto.AdDto;
 import com.vtmer.yisanbang.service.AdService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -34,14 +32,27 @@ public class AdController {
     }
 
     @PostMapping("/add")
-    public ResponseMessage addAdPic(@RequestBody Map<String, String> pic) {
-        if (!pic.containsKey("picPath") || pic.get("picPath") == null || pic.get("picPath").equals("")) {
-            return ResponseMessage.newErrorInstance("图片路径不能为空");
+    public ResponseMessage addAdInfo(@RequestBody AdDto adDto) {
+        if (adService.isShowOrderExisted(adDto.getShowOrder())) {
+            return ResponseMessage.newErrorInstance("显示顺序已存在，广告信息添加失败");
         }
-        if (adService.addAdPic(pic.get("picPath"))) {
-            return ResponseMessage.newSuccessInstance("广告图片插入成功");
+        int count = adService.addAdInfo(adDto);
+        if (count > 0) {
+            return ResponseMessage.newSuccessInstance("广告信息添加成功");
         }
-        return ResponseMessage.newErrorInstance("广告图片插入失败");
+        return ResponseMessage.newErrorInstance("广告信息添加失败");
+    }
+
+    @PutMapping("/{adId}")
+    public ResponseMessage updateAdInfo(@PathVariable("adId") Integer adId, @RequestBody AdDto adDto){
+        if (!adDto.getShowOrder().equals(adService.listAdInfoByAdId(adId).getShowOrder()) && adService.isShowOrderExisted(adDto.getShowOrder())) {
+            return ResponseMessage.newErrorInstance("显示顺序已存在，广告信息修改失败");
+        }
+        int count = adService.updateAdInfo(adId, adDto);
+        if (count > 0) {
+            return ResponseMessage.newSuccessInstance("广告信息修改成功");
+        }
+        return ResponseMessage.newErrorInstance("广告信息修改失败");
     }
 
     @GetMapping("/ads")
@@ -51,15 +62,6 @@ public class AdController {
             return ResponseMessage.newSuccessInstance(ads, "获取所有广告信息成功");
         }
         return ResponseMessage.newErrorInstance("获取广告信息失败");
-    }
-
-    @GetMapping("/showedAds")
-    public ResponseMessage getShowedAd() {
-        List<ShowAdDto> ads = adService.listShowedAd();
-        if (ads != null) {
-            return ResponseMessage.newSuccessInstance(ads, "获取前台展示广告成功");
-        }
-        return ResponseMessage.newErrorInstance("获取前台展示广告失败");
     }
 
     @GetMapping("/{adId}")
@@ -79,6 +81,26 @@ public class AdController {
         return ResponseMessage.newErrorInstance("删除指定广告信息失败");
     }
 
+    @PutMapping("/isShowed/{adId}")
+    public ResponseMessage updateAdIsShowed(@PathVariable("adId") Integer adId) {
+        if (adService.updateAdIsShowed(adId)) {
+            return ResponseMessage.newSuccessInstance("广告显示状态修改成功");
+        }
+        return ResponseMessage.newErrorInstance("广告显示状态修改失败");
+    }
+
+    /*
+    @GetMapping("/showedAds")
+    public ResponseMessage getShowedAd() {
+        List<ShowAdDto> ads = adService.listShowedAd();
+        if (ads != null) {
+            return ResponseMessage.newSuccessInstance(ads, "获取前台展示广告成功");
+        }
+        return ResponseMessage.newErrorInstance("获取前台展示广告失败");
+    }
+     */
+
+    /*
     @PutMapping("/url/{adId}")
     public ResponseMessage updateUrl(@PathVariable("adId") Integer adId, @RequestBody Map<String, String> url) {
         if (!url.containsKey("url") || url.get("url").equals("") || url.get("url") == null) {
@@ -89,7 +111,9 @@ public class AdController {
         }
         return ResponseMessage.newErrorInstance("广告url修改失败");
     }
+     */
 
+    /*
     @PutMapping("/picture/{adId}")
     public ResponseMessage updatePic(@PathVariable("adId") Integer adId, MultipartFile pic) {
         String picName = UUID.randomUUID().toString();
@@ -107,14 +131,8 @@ public class AdController {
         }
         return ResponseMessage.newErrorInstance("广告图片修改失败");
     }
+     */
 
-    @PutMapping("/isShowed/{adId}")
-    public ResponseMessage updateAdIsShowed(@PathVariable("adId") Integer adId) {
-        if (adService.updateAdIsShowed(adId)) {
-            return ResponseMessage.newSuccessInstance("广告显示状态修改成功");
-        }
-        return ResponseMessage.newErrorInstance("广告显示状态修改失败");
-    }
 
 
 }
