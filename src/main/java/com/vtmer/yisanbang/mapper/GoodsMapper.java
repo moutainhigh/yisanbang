@@ -43,4 +43,10 @@ public interface GoodsMapper {
 
     // Dto
     List<GoodsDto> selectAllDtoBySortOrderByTime(Integer sortId);
+
+    // Dto
+    List<GoodsDto> selectAllDtoOrderByPrice();
+
+    // Dto
+    List<GoodsDto> selectAllDtoOrderByTime();
 }

@@ -3,14 +3,19 @@
 <mapper namespace="com.vtmer.yisanbang.mapper.OrderMapper">
   <sql id="BaseColumnList">
     id, order_number, user_id, user_name, phone_number, total_price, address_name,
-    status,postage,  courier_number, message
+    status,postage,  courier_number, message, create_time
   </sql>
   <sql id="OrderCondition">
     <if test="userId!=null">
       and user_id = #{userId}
     </if>
     <if test="status!=null">
-      and status = #{status}
+        <if test="status!=3">
+            and status = #{status}
+        </if>
+        <if test="status==3">
+            and status in (3,6,7)
+        </if>
     </if>
   </sql>
   <resultMap id="BaseResultMap" type="com.vtmer.yisanbang.domain.Order">

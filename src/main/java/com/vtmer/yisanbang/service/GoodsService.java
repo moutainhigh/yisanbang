@@ -37,4 +37,10 @@ public interface GoodsService {
 
     // 根据分类商品更新时间排序显示商品
     public List<GoodsDto> selectAllDtoBySortOrderByTime(Integer sortId);
+
+    // 根据商品价格排序显示商品
+    public List<GoodsDto> selectAllDtoOrderByPrice();
+
+    // 根据商品更新时间排序显示商品
+    public List<GoodsDto> selectAllDtoOrderByTime();
 }

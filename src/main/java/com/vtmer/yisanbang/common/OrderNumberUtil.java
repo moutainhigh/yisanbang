@@ -6,9 +6,55 @@ import java.util.Random;
 
 public class OrderNumberUtil {
 
+    private static final int maxLength = 17;
+
+
+    /**
+     * 更具id进行加密+加随机数组成固定长度编码
+     */
+    private static String toCode(Integer id) {
+        String idStr = id.toString();
+        StringBuilder idsbs = new StringBuilder();
+        for (int i = idStr.length() - 1 ; i >= 0; i--) {
+            idsbs.append(idStr.charAt(i)-'0');
+        }
+        return idsbs.append(getRandom(maxLength - idStr.length())).toString();
+    }
+
+    /**
+     * 生成固定长度随机码
+     * @param n    长度
+     */
+    private static long getRandom(long n) {
+        long min = 1,max = 9;
+        for (int i = 1; i < n; i++) {
+            min *= 10;
+            max *= 10;
+        }
+        long rangeLong = (((long) (new Random().nextDouble() * (max - min)))) + min ;
+        return rangeLong;
+    }
+
+    /**
+     * 生成不带类别标头的编码
+     * @param userId
+     */
+    private static synchronized String getCode(Integer userId){
+        userId = userId == null ? 10000 : userId;
+        return toCode(userId);
+    }
+
+    /**
+     * 生成退货单号编码
+     * @param userId
+     */
+    public static String getRefundNumber(Integer userId){
+        return "2" + getCode(userId);
+    }
+
     private static String getTime() {
-        SimpleDateFormat sdfTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        System.out.println("时间戳："+sdfTime.format(new Date()));
+        SimpleDateFormat sdfTime = new SimpleDateFormat("yyyyMMddHHmmss");
+
         return sdfTime.format(new Date());
     }
 
@@ -18,8 +64,7 @@ public class OrderNumberUtil {
     }
 
     public static String getOrderNumber() {
-        String orderNumber = getTime().replaceAll("[[\\s-:punct:]]", "") + getRandomNum();
-        return orderNumber;
+        return getTime() + getRandomNum();
     }
 
 }
