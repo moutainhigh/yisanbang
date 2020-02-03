@@ -10,7 +10,12 @@
       and user_id = #{userId}
     </if>
     <if test="status!=null">
-      and status = #{status}
+        <if test="status!=3">
+            and status = #{status}
+        </if>
+        <if test="status==3">
+            and status in (3,5,6)
+        </if>
     </if>
   </sql>
   <resultMap id="BaseResultMap" type="com.vtmer.yisanbang.domain.Order">
