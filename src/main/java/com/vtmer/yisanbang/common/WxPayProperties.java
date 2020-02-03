@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "wx.pay")
 public class WxPayProperties {
     /**
-     * 设置小程序的appid
+     * 设置小程序的appId
      */
     private String appId;
 
@@ -17,14 +17,19 @@ public class WxPayProperties {
     private String mchId;
 
     /**
-     * 微信支付商户密钥
+     * 微信支付商户密钥1
      */
     private String mchKey;
 
     /**
-     * notifyURL:异步接收微信支付结果通知的回调地址，通知url必须为外网可访问的url，不能携带参数。
+     * payNotifyURL:异步接收微信支付结果通知的回调地址，通知url必须为外网可访问的url，不能携带参数。
      */
-    private String notifyURL;
+    private String payNotifyURL;
+
+    /**
+     * refundNotifyURL:异步接收微信退款结果通知的回调地址，通知url必须为外网可访问的url，不能携带参数。
+     */
+    private String refundNotifyURL;
 
     /**
      * tradeType：交易类型，小程序为JSAPI

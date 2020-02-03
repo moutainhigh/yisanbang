@@ -14,7 +14,7 @@
             and status = #{status}
         </if>
         <if test="status==3">
-            and status in (3,5,6)
+            and status in (3,6,7)
         </if>
     </if>
   </sql>

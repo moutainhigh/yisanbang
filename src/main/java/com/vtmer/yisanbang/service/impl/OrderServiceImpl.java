@@ -163,9 +163,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--申请退款 5--退款成功 6--退款失败 7--交易关闭 8--所有订单
+     * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--申请退款(待商家处理) 5--退款中(待商家收货) 6--退款成功 7--退款失败 8--交易关闭 9--所有订单
      * @param orderMap —— userId、status
-     *                 userId为null时查询商城内的订单；status传入3时同时获取退款成功、退款失败（5 6）的订单
+     *                 userId为null时查询商城内的订单；status传入3时同时获取退款成功、退款失败（6 7）的订单
      * @return
      */
     @Transactional
@@ -175,7 +175,7 @@ public class OrderServiceImpl implements OrderService {
         ArrayList<OrderVo> orderVoList = new ArrayList<>();
         // 获取订单集合
         Integer userId = orderMap.get("userId");
-        if (orderMap.get("status")!=8) {
+        if (orderMap.get("status")!=9) {
             orderList = orderMapper.selectAllByUserIdAndStatus(orderMap);
         } else {  // 查询用户所有订单
             orderList = orderMapper.selectAllByUserId(userId);
@@ -188,10 +188,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--申请退款 5--退款成功 6--退款失败 7--交易关闭 8--所有订单
+     * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--申请退款(待商家处理) 5--退款中(待商家收货) 6--退款成功 7--退款失败 8--交易关闭 9--所有订单
      * 0--待付款 1--待发货 2--待收货 类型订单 更新订单状态
      * @param orderId
      * @return
+     *
      */
     public int updateOrderStatus(Integer orderId) {
         Order order = orderMapper.selectByPrimaryKey(orderId);
@@ -210,7 +211,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--申请退款 5--退款成功 6--退款失败 7--交易关闭 8--所有订单
+     * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--申请退款(待商家处理) 5--退款中(待商家收货) 6--退款成功 7--退款失败 8--交易关闭 9--所有订单
      * 非 0--待付款 1--待发货 2--待收货 状态订单 设置订单状态
      * @param orderMap—— orderId、status
      * @return
