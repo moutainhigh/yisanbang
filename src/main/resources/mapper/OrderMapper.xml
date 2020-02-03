@@ -3,7 +3,7 @@
 <mapper namespace="com.vtmer.yisanbang.mapper.OrderMapper">
   <sql id="BaseColumnList">
     id, order_number, user_id, user_name, phone_number, total_price, address_name,
-    status,postage,  courier_number, message
+    status,postage,  courier_number, message, create_time
   </sql>
   <sql id="OrderCondition">
     <if test="userId!=null">

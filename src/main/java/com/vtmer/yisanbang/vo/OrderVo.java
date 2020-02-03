@@ -2,6 +2,8 @@ package com.vtmer.yisanbang.vo;
 
 import com.vtmer.yisanbang.domain.UserAddress;
 
+import java.util.Date;
+
 public class OrderVo {
 
     private UserAddress userAddress;
@@ -15,6 +17,8 @@ public class OrderVo {
     private String orderNumber;
 
     private double postage;
+
+    private Date createTime;
 
     public UserAddress getUserAddress() {
         return userAddress;
@@ -54,5 +58,13 @@ public class OrderVo {
 
     public void setPostage(double postage) {
         this.postage = postage;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }

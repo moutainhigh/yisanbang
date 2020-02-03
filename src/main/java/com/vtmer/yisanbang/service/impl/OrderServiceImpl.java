@@ -105,7 +105,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * create shopping cart order after users submit order
-     * @param orderVo
+     * @param orderVo:UserAddress(用户地址、联系人、手机号)、邮费、留言、下单商品详情信息
      * @return
      */
     @Transactional
@@ -163,6 +163,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
+     * 获取用户指定订单状态的订单
      * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--申请退款 5--交易关闭 6--所有订单
      * @param orderMap —— userId、status
      *                 userId为null时查询商城内的订单
@@ -290,6 +291,9 @@ public class OrderServiceImpl implements OrderService {
 
         // 订单编号
         orderVo.setOrderNumber(order.getOrderNumber());
+
+        // 订单创建时间
+        orderVo.setCreateTime(order.getCreateTime());
 
         // 订单商品信息封装
         cartVo.setTotalPrice(order.getTotalPrice());
