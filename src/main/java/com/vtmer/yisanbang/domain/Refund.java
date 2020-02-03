@@ -7,13 +7,15 @@ public class Refund {
 
     private String refundNumber;
 
+    private Double refundPrice;
+
     private Integer userId;
 
     private Integer orderId;
 
     private String reason;
 
-    private Boolean status;
+    private Integer status;
 
     private Date createTime;
 
@@ -59,11 +61,11 @@ public class Refund {
         this.reason = reason == null ? null : reason.trim();
     }
 
-    public Boolean getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Boolean status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
@@ -81,5 +83,13 @@ public class Refund {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Double getRefundPrice() {
+        return refundPrice;
+    }
+
+    public void setRefundPrice(Double refundPrice) {
+        this.refundPrice = refundPrice;
     }
 }
