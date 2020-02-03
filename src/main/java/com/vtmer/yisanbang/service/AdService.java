@@ -1,6 +1,7 @@
 package com.vtmer.yisanbang.service;
 
 import com.vtmer.yisanbang.domain.Ad;
+import com.vtmer.yisanbang.dto.AdDto;
 import com.vtmer.yisanbang.dto.ShowAdDto;
 
 import java.util.List;
@@ -28,7 +29,12 @@ public interface AdService {
     // 修改广告是否显示
     boolean updateAdIsShowed(Integer adId);
 
-    // 新建广告图片
-    boolean addAdPic(String picPath);
+    // 新建广告信息
+    int addAdInfo(AdDto adDto);
 
+    // 判断广告显示顺序是否已经存在
+    boolean isShowOrderExisted(Integer order);
+
+    // 修改广告信息
+    int updateAdInfo(Integer adId, AdDto adDto);
 }

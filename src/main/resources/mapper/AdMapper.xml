@@ -67,8 +67,30 @@
     set is_show = 0
     where id = #{adId}
   </update>
-  <insert id="addAdPic" parameterType="java.lang.String">
-    insert into ad (picture_path)
-    values (#{picPath})
+  <insert id="insertAdInfo" parameterType="com.vtmer.yisanbang.dto.AdDto">
+    insert into ad (picture_path, url, show_order, is_show)
+    values (#{picturePath}, #{url}, #{showOrder}, #{isShow})
   </insert>
+  <select id="selectExitedOrder" resultType="java.lang.Integer">
+    select show_order
+    from ad
+  </select>
+  <update id="updateAdInfoSelective" parameterType="com.vtmer.yisanbang.dto.AdDto">
+    update ad
+    <set>
+      <if test="picturePath != null">
+        picture_path = #{picturePath},
+      </if>
+      <if test="url != null">
+        url = #{url},
+      </if>
+      <if test="showOrder != null">
+        show_order = #{showOrder},
+      </if>
+      <if test="isShow != null">
+        is_show = #{isShow},
+      </if>
+    </set>
+    where id = #{id}
+    </update>
 </mapper>

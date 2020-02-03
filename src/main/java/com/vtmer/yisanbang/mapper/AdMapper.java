@@ -1,6 +1,7 @@
 package com.vtmer.yisanbang.mapper;
 
 import com.vtmer.yisanbang.domain.Ad;
+import com.vtmer.yisanbang.dto.AdDto;
 import com.vtmer.yisanbang.dto.ShowAdDto;
 import org.springframework.stereotype.Repository;
 
@@ -34,6 +35,12 @@ public interface AdMapper {
     int updateAd2UnShow(Integer adId);
 
     // 新增广告图片
-    int addAdPic(String picPath);
+    int insertAdInfo(AdDto adDto);
+
+    // 查询已存在的显示排序
+    List<Integer> selectExitedOrder();
+
+    // 修改广告信息
+    int updateAdInfoSelective(AdDto adDto);
 
 }

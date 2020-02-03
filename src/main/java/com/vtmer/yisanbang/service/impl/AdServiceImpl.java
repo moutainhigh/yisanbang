@@ -1,6 +1,7 @@
 package com.vtmer.yisanbang.service.impl;
 
 import com.vtmer.yisanbang.domain.Ad;
+import com.vtmer.yisanbang.dto.AdDto;
 import com.vtmer.yisanbang.dto.ShowAdDto;
 import com.vtmer.yisanbang.mapper.AdMapper;
 import com.vtmer.yisanbang.service.AdService;
@@ -87,12 +88,20 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public boolean addAdPic(String picPath) {
-        int flag = adMapper.addAdPic(picPath);
-        if (flag > 0) {
-            return true;
-        }
-        return false;
+    public int addAdInfo(AdDto adDto) {
+        return adMapper.insertAdInfo(adDto);
+    }
+
+    @Override
+    public boolean isShowOrderExisted(Integer order) {
+        List<Integer> orders = adMapper.selectExitedOrder();
+        return orders.contains(order);
+    }
+
+    @Override
+    public int updateAdInfo(Integer adId, AdDto adDto) {
+        adDto.setId(adId);
+        return adMapper.updateAdInfoSelective(adDto);
     }
 
 }
