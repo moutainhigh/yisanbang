@@ -23,4 +23,7 @@ public interface ColorSizeService {
 
     // 根据商品id查找所有该商品的颜色尺寸
     public List<ColorSizeDto> selectAllByGoodsId(Integer goodsId);
+
+    // 判断颜色尺寸是否存在
+    public boolean judgeColorSize(ColorSizeDto colorSizeDto);
 }

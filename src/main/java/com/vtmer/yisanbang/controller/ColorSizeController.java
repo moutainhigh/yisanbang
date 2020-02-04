@@ -27,12 +27,13 @@ public class ColorSizeController {
 
     @PostMapping("/addColorSize")
     // 添加商品颜色尺寸
-    // 需添加判断是否相同
     public ResponseMessage addColorSize(@RequestBody ColorSizeDto colorSizeDto) {
         ColorSizeDto colorSize = colorSizeService.selectColorSizeById(colorSizeDto.getId());
         if (colorSize != null) {
             return ResponseMessage.newErrorInstance("该商品颜色尺寸id已经存在");
         }
+        boolean judgeFlag = colorSizeService.judgeColorSize(colorSizeDto);
+        if (judgeFlag) return ResponseMessage.newErrorInstance("该商品颜色尺寸已经存在");
         boolean addFlag = colorSizeService.addColorSize(colorSizeDto);
         if (addFlag) return ResponseMessage.newSuccessInstance("添加成功");
         else return ResponseMessage.newErrorInstance("添加失败");
