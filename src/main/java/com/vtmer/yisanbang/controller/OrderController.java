@@ -250,4 +250,21 @@ public class OrderController {
         }
     }
 
+    /**
+     * 根据订单id或订单编号设置快递编号（快递编号优先）
+     * @param order:orderId or orderNumber and courierNumber
+     * @return
+     */
+    @PutMapping("/setCourierNumber")
+    public ResponseMessage setCourierNumber(@RequestBody Order order) {
+        if (order==null) {
+            return ResponseMessage.newErrorInstance("传入参数有误");
+        }
+        int res = orderService.setCourierNumber(order);
+        if (res == 1) {
+            return ResponseMessage.newSuccessInstance("设置快递单号成功");
+        } else {
+            return ResponseMessage.newErrorInstance("设置快递单号失败");
+        }
+    }
 }

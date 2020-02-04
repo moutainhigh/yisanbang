@@ -129,7 +129,8 @@ public class RefundServiceImpl implements RefundService {
     }
 
     /**
-     *
+     * 根据退款编号获取申请退款所需参数
+     * @param refundNumber：退款编号
      * @return
      */
     public AgreeRefundDto getAgreeRefundDtoByRefundNumber(String refundNumber) {

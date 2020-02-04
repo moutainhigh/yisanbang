@@ -23,4 +23,6 @@ public interface OrderService {
     OrderVo selectOrderVoByOrderNumber(String orderNumber);
 
     Order selectOrderByOrderNumber(String orderNumber);
+
+    int setCourierNumber(Order order);
 }

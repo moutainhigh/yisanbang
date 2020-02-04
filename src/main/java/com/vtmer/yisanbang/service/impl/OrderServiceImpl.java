@@ -266,6 +266,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
+     * 设置订单的快递编号
+     * @param order
+     * @return
+     */
+    public int setCourierNumber(Order order) {
+        return orderMapper.setCourierNumber(order);
+    }
+
+    /**
      * 通过订单表实体类获取订单详情VO对象
      * @param order:订单表实体类
      * @return OrderVo
