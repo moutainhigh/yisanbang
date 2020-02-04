@@ -63,18 +63,18 @@ public class AdController {
         PageHelper.startPage(pageNum, pageSize);
         List<Ad> ads = adService.listAllAdInfo();
         if (ads != null) {
-            return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(ads), "获取所有广告信息成功");
+            return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(ads), "查询所有广告信息成功");
         }
-        return ResponseMessage.newErrorInstance("获取广告信息失败");
+        return ResponseMessage.newErrorInstance("查询广告信息失败");
     }
 
     @GetMapping("/{adId}")
     public ResponseMessage getAdInfo(@PathVariable("adId") Integer adId) {
         Ad ad = adService.listAdInfoByAdId(adId);
         if (ad != null) {
-            return ResponseMessage.newSuccessInstance(ad, "获取指定广告信息成功");
+            return ResponseMessage.newSuccessInstance(ad, "查询指定广告信息成功");
         }
-        return ResponseMessage.newErrorInstance("获取指定广告信息失败");
+        return ResponseMessage.newErrorInstance("查询指定广告信息失败");
     }
 
     @DeleteMapping("/{adId}")

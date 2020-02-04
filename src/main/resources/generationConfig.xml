@@ -15,7 +15,7 @@
 
         <!-- jdbcConnection:指定如何连接到目标数据库 -->
         <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
-                        connectionURL="jdbc:mysql://localhost:3306/yi_san_bang?serverTimezone=UTC&amp;allowMultiQueries=true"
+                        connectionURL="jdbc:mysql://localhost:3306/yisanbang?serverTimezone=UTC&amp;allowMultiQueries=true"
                         userId="root"
                         password="123456">
             <!-- 防止生成错误  -->

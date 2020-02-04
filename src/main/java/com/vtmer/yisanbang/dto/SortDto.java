@@ -1,8 +1,7 @@
-package com.vtmer.yisanbang.domain;
+package com.vtmer.yisanbang.dto;
 
-import java.util.Date;
+public class SortDto {
 
-public class Sort {
     private Integer id;
 
     private String name;
@@ -17,10 +16,6 @@ public class Sort {
 
     private Boolean isShow;
 
-    private Date createTime;
-
-    private Date updateTime;
-
     public Integer getId() {
         return id;
     }
@@ -34,15 +29,15 @@ public class Sort {
     }
 
     public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+        this.name = name;
     }
 
     public Boolean getIsSuit() {
         return isSuit;
     }
 
-    public void setIsSuit(Boolean isSuit) {
-        this.isSuit = isSuit;
+    public void setIsSuit(Boolean suit) {
+        isSuit = suit;
     }
 
     public Integer getParentId() {
@@ -73,23 +68,8 @@ public class Sort {
         return isShow;
     }
 
-    public void setIsShow(Boolean isShow) {
-        this.isShow = isShow;
+    public void setIsShow(Boolean show) {
+        isShow = show;
     }
 
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
 }
