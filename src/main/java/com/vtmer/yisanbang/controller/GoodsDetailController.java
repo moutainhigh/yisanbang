@@ -1,6 +1,7 @@
 package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
+import com.vtmer.yisanbang.common.qiniu.QiniuUpload;
 import com.vtmer.yisanbang.domain.GoodsDetail;
 import com.vtmer.yisanbang.dto.GoodsDetailDto;
 import com.vtmer.yisanbang.mapper.GoodsDetailMapper;
@@ -11,8 +12,10 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 public class GoodsDetailController {
@@ -67,4 +70,15 @@ public class GoodsDetailController {
         } else return ResponseMessage.newErrorInstance("该商品详细id错误，无该商品详细信息");
     }
 
+    @GetMapping("/uploadGoodsDetailPic")
+    public ResponseMessage uploadGoodsDetailPic(MultipartFile pic) {
+        String picName = UUID.randomUUID().toString();
+        try {
+            String picPath = QiniuUpload.updateFile(pic, "goodsDetail/" + picName);
+            return ResponseMessage.newSuccessInstance(picPath, "商品详细信息图片上传成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseMessage.newErrorInstance("商品详细信息图片上传失败");
+        }
+    }
 }
