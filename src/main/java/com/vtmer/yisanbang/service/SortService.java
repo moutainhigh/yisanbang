@@ -30,7 +30,7 @@ public interface SortService {
     boolean updateIsShowed(Integer sortId);
 
     // 判断分类显示顺序是否已经存在
-    boolean isShowOrderExisted(Integer order);
+    boolean isShowOrderExisted(Integer order, Boolean isSuit, Integer parentId);
 
     // 删除指定分类信息
     int deleteSort(Integer sortId);

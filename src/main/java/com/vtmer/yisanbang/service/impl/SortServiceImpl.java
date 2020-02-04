@@ -52,7 +52,7 @@ public class SortServiceImpl implements SortService {
     @Override
     public boolean updateIsShowed(Integer sortId) {
         int flag = 0;
-        Sort sort  = sortMapper.selectByPrimaryKey(sortId);
+        Sort sort = sortMapper.selectByPrimaryKey(sortId);
         if (sort != null) {
             if (sort.getIsShow()) {
                 flag = sortMapper.updateSort2UnShow(sortId);
@@ -67,8 +67,14 @@ public class SortServiceImpl implements SortService {
     }
 
     @Override
-    public boolean isShowOrderExisted(Integer order) {
-        List<Integer> orders = sortMapper.selectExitedOrder();
+    public boolean isShowOrderExisted(Integer order, Boolean isSuit, Integer parentId) {
+        Integer isSuitFlag;
+        if (isSuit) {
+            isSuitFlag = 1;
+        } else {
+            isSuitFlag = 0;
+        }
+        List<Integer> orders = sortMapper.selectExitedOrder(isSuitFlag, parentId);
         return orders.contains(order);
     }
 

@@ -110,5 +110,6 @@
   <select id="selectExitedOrder" resultType="java.lang.Integer">
     select show_order
     from sort
+    where is_suit = #{isSuit} and parent_id = #{parentId}
   </select>
 </mapper>

@@ -41,6 +41,6 @@ public interface SortMapper {
     int updateSortInfoSelective(SortDto sortDto);
 
     // 查询已存在的显示排序
-    List<Integer> selectExitedOrder();
+    List<Integer> selectExitedOrder(Integer isSuit, Integer parentId);
 
 }

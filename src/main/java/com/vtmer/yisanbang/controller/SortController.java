@@ -21,7 +21,7 @@ public class SortController {
 
     @PostMapping("/add")
     public ResponseMessage addSortInfo(@RequestBody SortDto sortDto) {
-        if (sortService.isShowOrderExisted(sortDto.getShowOrder())) {
+        if (sortService.isShowOrderExisted(sortDto.getShowOrder(), sortDto.getIsSuit(), sortDto.getParentId())) {
             return ResponseMessage.newErrorInstance("显示顺序已存在，分类信息添加失败");
         }
         int count = sortService.addSortInfo(sortDto);
@@ -74,7 +74,7 @@ public class SortController {
 
     @PutMapping("/{sortId}")
     public ResponseMessage updateSortInfo(@PathVariable("sortId") Integer sortId, @RequestBody SortDto sortDto){
-        if (!sortDto.getShowOrder().equals(sortService.listSortInfoById(sortId).getShowOrder()) && sortService.isShowOrderExisted(sortDto.getShowOrder())) {
+        if (!sortDto.getShowOrder().equals(sortService.listSortInfoById(sortId).getShowOrder()) && sortService.isShowOrderExisted(sortDto.getShowOrder(), sortDto.getIsSuit(), sortDto.getParentId())) {
             return ResponseMessage.newErrorInstance("显示顺序已存在，分类信息修改失败");
         }
         int count = sortService.updateSortInfo(sortId, sortDto);
