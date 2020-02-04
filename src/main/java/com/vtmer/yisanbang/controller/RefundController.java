@@ -1,7 +1,9 @@
 package com.vtmer.yisanbang.controller;
 
 import com.github.binarywang.wxpay.bean.request.BaseWxPayRequest;
+import com.github.binarywang.wxpay.bean.request.WxPayRefundQueryRequest;
 import com.github.binarywang.wxpay.bean.request.WxPayRefundRequest;
+import com.github.binarywang.wxpay.bean.result.WxPayRefundQueryResult;
 import com.github.binarywang.wxpay.bean.result.WxPayRefundResult;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
@@ -165,6 +167,48 @@ public class RefundController {
             return ResponseMessage.newErrorInstance("更新退款状态失败");
         }
     }
+
+
+    @PostMapping("/refundQuery")
+    public ResponseMessage refundQuery(@RequestBody String refundNumber) {
+        if (refundNumber == null) {
+            return ResponseMessage.newErrorInstance("传入参数有误");
+        }
+        WxPayRefundQueryRequest request = new WxPayRefundQueryRequest();
+        request.setOutRefundNo(refundNumber);
+        try {
+            WxPayRefundQueryResult result = this.wxPayService.refundQuery(request);
+            // 如果请求成功
+            if (result.getReturnCode().equals("SUCCESS")) {
+                List<WxPayRefundQueryResult.RefundRecord> refundRecords = result.getRefundRecords();
+                // 因为只有一笔退款，退款金额即为订单金额，所以refundRecords.size为1 在循环中返回结果
+                for (WxPayRefundQueryResult.RefundRecord refundRecord : refundRecords) {
+                    // 订单退款状态
+                    String refundStatus = refundRecord.getRefundStatus();
+                    switch (refundStatus) {
+                        case "SUCCESS":   // // 订单退款成功
+                            return ResponseMessage.newSuccessInstance("退款成功，款项已经原路返回");
+                        case "PROCESSING":   // 退款处理中
+                            return ResponseMessage.newSuccessInstance("退款处理中");
+                        case "CHANGE":  // 退款异常
+                            logger.info("退款异常，退款到银行发现用户的卡作废或者冻结了，导致原路退款银行卡失败.退款编号{}", refundNumber);
+                            return ResponseMessage.newSuccessInstance("退款异常，退款到银行发现用户的卡作废或者冻结了，" +
+                                    "导致原路退款银行卡失败, 可前往商户平台（pay.weixin.qq.com）-交易中心，手动处理此笔退款。");
+                        case "REFUNDCLOSE": // 退款关闭
+                            return ResponseMessage.newSuccessInstance("退款关闭");
+                    }
+                } // end for
+                return ResponseMessage.newSuccessInstance("该退款编号未申请微信退款");
+            } else {
+                return ResponseMessage.newErrorInstance("请求微信接口失败，请稍后重试");
+            }
+        } catch (WxPayException e) {
+            logger.error("查询退款状态失败,异常原因{}",e.getMessage());
+            e.printStackTrace();
+            return ResponseMessage.newErrorInstance("查询退款状态失败，请稍后重试");
+        }
+    }
+
 
     /**
      * 获取相应状态的退款订单

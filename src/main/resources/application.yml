@@ -68,7 +68,7 @@ wx:
     mchId: #微信支付商户号
     mchKey: #微信支付商户密钥
     payNotifyURL: #微信支付成功后的回调接口 /order/wxNotify
-    refundNotifyURL: 123456
+    refundNotifyURL: #微信退款成功后的回调接口 /refund/wxNotify
     tradeType: JSAPI
     keyPath: # p12证书的位置，可以指定绝对路径，也可以指定类路径（以classpath:开头）
   applet:
