@@ -4,6 +4,9 @@ import java.util.Date;
 
 public class CartGoodsDto {
 
+    // 商品id或套装id
+    private Integer id;
+
     private Integer colorSizeId;
 
     private Integer amount;
@@ -27,6 +30,14 @@ public class CartGoodsDto {
     private Boolean isGoods;
 
     private Date updateTime;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Date getUpdateTime() {
         return updateTime;

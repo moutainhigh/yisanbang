@@ -23,6 +23,7 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <resultMap id="cartGoodsList" type="com.vtmer.yisanbang.dto.CartGoodsDto">
+    <result column="id" jdbcType="INTEGER" property="id"/>
     <result column="color_size_id" jdbcType="INTEGER" property="colorSizeId" />
     <result column="amount" jdbcType="INTEGER" property="amount" />
     <result column="is_chosen" jdbcType="TINYINT" property="isChosen" />
@@ -35,6 +36,7 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <resultMap id="cartGoodsList1" type="com.vtmer.yisanbang.dto.CartGoodsDto">
+    <result column="id" jdbcType="INTEGER" property="id"/>
     <result column="color_size_id" jdbcType="INTEGER" property="colorSizeId" />
     <result column="amount" jdbcType="INTEGER" property="amount" />
     <result column="is_chosen" jdbcType="TINYINT" property="isChosen" />
@@ -119,7 +121,7 @@
   </select>
   <select id="selectCartGoodsByCartId" parameterType="java.lang.Integer" resultMap="cartGoodsList">
     select cg.color_size_id, cg.amount, cg.`is_goods`,cg.is_chosen,cg.`update_time`,
-    ps.price,ps.part, ps.size,s.picture,s.name
+    ps.price,ps.part, ps.size,s.picture,s.name,s.id
     from cart_goods cg,part_size ps,suit s
     where
     is_goods = 0
@@ -129,7 +131,7 @@
   </select>
   <select id="selectCartGoodsByCartId1" parameterType="java.lang.Integer" resultMap="cartGoodsList1">
       select cg.color_size_id, cg.amount, cg.`is_goods`,cg.is_chosen,cg.`update_time`,
-      cs.color,cs.size,g.name,g.price,g.picture
+      cs.color,cs.size,g.name,g.price,g.picture,g.id
       from cart_goods cg,color_size cs,goods g
       where
       is_goods = 1

@@ -10,11 +10,11 @@ import java.util.List;
 @Mapper
 @Repository
 public interface CartMapper {
-    int deleteByPrimmaryKey(Integer id);
+    int deleteByPrimaryKey(Integer id);
 
     int insert(Cart record);
 
-    Cart selectByPriaryKey(Integer id);
+    Cart selectByPrimaryKey(Integer id);
 
     List<Cart> selectAll();
 

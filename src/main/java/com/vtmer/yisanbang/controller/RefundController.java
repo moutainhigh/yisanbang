@@ -168,7 +168,11 @@ public class RefundController {
         }
     }
 
-
+    /**
+     * 查询申请了退款的订单的退款状态
+     * @param refundNumber：退款编号
+     * @return
+     */
     @PostMapping("/refundQuery")
     public ResponseMessage refundQuery(@RequestBody String refundNumber) {
         if (refundNumber == null) {

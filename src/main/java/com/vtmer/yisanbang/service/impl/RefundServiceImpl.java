@@ -59,7 +59,14 @@ public class RefundServiceImpl implements RefundService {
         } else { // 如果该订单之前未退过款
             Integer userId = order.getUserId();
             refund.setUserId(userId);
-            String refundNumber = OrderNumberUtil.getRefundNumber(userId);
+            String refundNumber;
+            Refund checkRefundNumberExist;
+            // 保证退款编号唯一
+            do {
+                refundNumber = OrderNumberUtil.getRefundNumber(userId);
+                // checkRefundNumberExist!=null说明退款编号存在,再次生成退款编号
+                checkRefundNumberExist = refundMapper.selectByRefundNumber(refundNumber);
+            } while (checkRefundNumberExist != null);
             // 设置退款编号
             refund.setRefundNumber(refundNumber);
             // 设置退款金额
