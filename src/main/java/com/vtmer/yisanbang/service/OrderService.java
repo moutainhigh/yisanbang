@@ -28,4 +28,6 @@ public interface OrderService {
     int setCourierNumber(Order order);
 
     void setCartGoodsDto(CartGoodsDto cartGoodsDto, Integer sizeId, Boolean isGoods);
+
+    int updateAddress(OrderVo orderVo);
 }

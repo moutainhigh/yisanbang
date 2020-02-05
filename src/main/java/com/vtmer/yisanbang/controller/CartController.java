@@ -58,7 +58,7 @@ public class CartController {
     @PutMapping("/updateChosen")
     public ResponseMessage updateChosen(@RequestBody AddGoodsDto addGoodsDto) {
         double totalPrice = cartService.updateChosen(addGoodsDto);
-        HashMap<String,Object> map = new HashMap<String,Object>();
+        HashMap<String,Double> map = new HashMap<>();
         map.put("totalPrice",totalPrice);
         if (totalPrice!=-1) return ResponseMessage.newSuccessInstance(map,"修改勾选成功");
         else {
@@ -70,7 +70,7 @@ public class CartController {
     @PutMapping("/addOrSubtractAmount")
     public ResponseMessage addOrSubtractAmount(@RequestBody AddGoodsDto addGoodsDto) {
         double totalPrice = cartService.addOrSubtractAmount(addGoodsDto);
-        HashMap<String,Object> map = new HashMap<String,Object>();
+        HashMap<String,Double> map = new HashMap<>();
         map.put("totalPrice",totalPrice);
         if (totalPrice == -1) {
             return ResponseMessage.newErrorInstance("更新购物车商品数量失败，请检查传入的参数");
@@ -82,7 +82,7 @@ public class CartController {
     @PutMapping("/updateAmount")
     public ResponseMessage updateAmount(@RequestBody AddGoodsDto addGoodsDto) {
         double totalPrice = cartService.updateAmount(addGoodsDto);
-        HashMap<String,Object> map = new HashMap<String,Object>();
+        HashMap<String,Double> map = new HashMap<>();
         map.put("totalPrice",totalPrice);
         if (totalPrice == -1) {
             return ResponseMessage.newErrorInstance("更新购物车商品数量失败，请检查传入的参数");

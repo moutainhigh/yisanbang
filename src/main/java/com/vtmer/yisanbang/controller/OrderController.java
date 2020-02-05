@@ -267,4 +267,30 @@ public class OrderController {
             return ResponseMessage.newErrorInstance("设置快递单号失败");
         }
     }
+
+    /**
+     *
+     * @param orderVo:用户地址UserAddress、订单编号orderNumber
+     * @return
+     */
+    @PutMapping("/updateAddress")
+    public ResponseMessage updateAddress(@RequestBody OrderVo orderVo) {
+        if (orderVo == null) {
+            return ResponseMessage.newErrorInstance("传入参数有误");
+        } else if (orderVo.getOrderNumber() == null) {
+            return ResponseMessage.newErrorInstance("订单编号为空");
+        } else if (orderVo.getUserAddress() == null) {
+            return ResponseMessage.newErrorInstance("用户地址为空");
+        }
+        int res = orderService.updateAddress(orderVo);
+        if (res == -1) {
+            return ResponseMessage.newErrorInstance("订单编号不存在");
+        } else if (res == -2) {
+            return ResponseMessage.newErrorInstance("该订单状态不能修改收货地址");
+        } else if (res == 1) {
+            return ResponseMessage.newSuccessInstance("修改收货地址成功");
+        } else {
+            return ResponseMessage.newErrorInstance("修改收货地址失败");
+        }
+    }
 }

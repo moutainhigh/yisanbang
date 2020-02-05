@@ -31,4 +31,6 @@ public interface OrderMapper {
     Order selectByOrderNumber(String orderNumber);
 
     int setCourierNumber(Order order);
+
+    int updateAddressByOrderNumber(Order order);
 }

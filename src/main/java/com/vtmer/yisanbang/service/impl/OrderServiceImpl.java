@@ -353,4 +353,25 @@ public class OrderServiceImpl implements OrderService {
             cartGoodsDto.setPicture(suit.getPicture());
         }
     }
+
+    /**
+     * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
+     * @param orderVo:userAddress、orderNumber
+     * @return
+     */
+    public int updateAddress(OrderVo orderVo) {
+        String orderNumber = orderVo.getOrderNumber();
+        Order order = orderMapper.selectByOrderNumber(orderNumber);
+        if (order==null) {
+            return -1;
+        } else if (!(order.getStatus()>=0 && order.getStatus()<=1)) {
+            // 订单状态不为 待付款、待发货，则不可修改地址
+            return -2;
+        }
+        UserAddress userAddress = orderVo.getUserAddress();
+        order.setPhoneNumber(userAddress.getPhoneNumber());
+        order.setAddressName(userAddress.getAddressName());
+        order.setUserName(userAddress.getUserName());
+        return orderMapper.updateAddressByOrderNumber(order);
+    }
 }
