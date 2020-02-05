@@ -53,11 +53,15 @@ public class RefundServiceImpl implements RefundService {
         // 查询退款基础信息
         Refund refund1 = refundMapper.selectByOrderId(orderId);
         HashMap<String, Integer> orderMap = new HashMap<>();
-        // 如果该orderId在退款信息表中存在，说明之前申请过退款并被商家拒绝了
-        // 删除之前的退款信息，再插入新的退款基础信息
+        // 如果该orderId在退款信息表中存在，说明之前申请过退款并被商家拒绝了或是重复申请
         if (refund1 != null) {
-            refundMapper.deleteByOrderId(orderId);
-            refundGoodsMapper.deleteByRefundId(refund1.getId());
+            if (refund1.getStatus() == 0) {  // 重复申请
+                return -2;
+            } else if (refund1.getStatus() == 4){ // 之前申请过退款并被商家拒绝了
+                // 删除之前的退款信息，再插入新的退款基础信息
+                refundMapper.deleteByOrderId(orderId);
+                refundGoodsMapper.deleteByRefundId(refund1.getId());
+            }
         }
         Integer userId = order.getUserId();
         refund.setUserId(userId);

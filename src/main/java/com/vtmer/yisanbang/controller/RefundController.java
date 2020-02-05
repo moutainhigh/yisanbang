@@ -74,14 +74,14 @@ public class RefundController {
             int res = refundService.applyForRefund(refund);
             if (res == -1) {
                 return ResponseMessage.newErrorInstance("订单id有误");
+            } else if (res == -2) {
+                return ResponseMessage.newErrorInstance("重复申请退款");
             } else if (res == 1) {
-                return ResponseMessage.newErrorInstance("申请退款成功");
+                return ResponseMessage.newSuccessInstance("申请退款成功");
             }
             return ResponseMessage.newErrorInstance("申请退款失败，请稍后重试");
         }
     }
-
-
 
     /**
      * 根据订单id获取退款详情接口
@@ -284,7 +284,7 @@ public class RefundController {
 
     /**
      * 根据退款编号删除退款订单接口
-     * 该接口不应该被调用，商家不应该动客户的退款信息，放着先
+     * 该接口应该由用户调用，商家不应该动客户的退款信息
      * @param refundNumber:退款编号
      * @return
      */
