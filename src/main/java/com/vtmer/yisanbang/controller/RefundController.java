@@ -211,7 +211,7 @@ public class RefundController {
     }
 
     /**
-     * 查询申请了退款的订单的退款状态
+     * 查询成功申请了退款(退款成功)的订单的退款状态
      * @param refundNumber：退款编号
      * @return
      */
@@ -219,6 +219,10 @@ public class RefundController {
     public ResponseMessage refundQuery(@RequestBody String refundNumber) {
         if (refundNumber == null) {
             return ResponseMessage.newErrorInstance("传入参数有误");
+        }
+        Refund refund = refundService.selectByRefundNumber(refundNumber);
+        if (refund.getStatus()!=3) { // 如果退款状态不为 退款成功(3)
+            return ResponseMessage.newErrorInstance("该退款编号还未成功申请退款");
         }
         WxPayRefundQueryRequest request = new WxPayRefundQueryRequest();
         request.setOutRefundNo(refundNumber);
