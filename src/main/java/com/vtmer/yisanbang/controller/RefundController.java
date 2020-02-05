@@ -88,8 +88,8 @@ public class RefundController {
      * @param orderId: 订单id
      * @return
      */
-    @GetMapping("/getByOrderId")
-    public ResponseMessage getByOrderId(@RequestBody Integer orderId) {
+    @GetMapping("/getByOrderId/{id}")
+    public ResponseMessage getByOrderId(@PathVariable("id") Integer orderId) {
         if (orderId == null) {
             return ResponseMessage.newErrorInstance("传入参数有误");
         }
@@ -103,6 +103,7 @@ public class RefundController {
 
     /**
      * 退款接口 —— 商家同意退款则调用该接口
+     * status 2-->3 0-->3使用
      * 两种情况可调用该接口：1.未发货的情况下，用户申请退款； 2. 已发货的情况下，商家收到退货商品.(商家待收货)
      * 申请退款成功会更新订单表、退款表的状态，失败则返回相关信息
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
@@ -171,39 +172,29 @@ public class RefundController {
     }
 
     /**
-     * 更新退款订单状态接口
-     * 待商家处理-->待商家收货or退款失败   and   待商家收货（商家已同意退款）-->退款成功or退款失败（商家未收到货）
-     * status改变： 0 --> 1 or 3 or 4  and  1 --> 2 or 4  and  2 --> 3 or 4
+     * 更新退款订单状态接口，status0-->1
+     * 使用，待商家处理-->待用户发货 0 --> 1
+     * status全改变： 0 --> 1 or 3 or 4  and  1 --> 2   and  2 --> 3  and 0 1 2-->删除
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败
-     * @param refund：orderId,status
+     * @param refundNumber
      * @return
      */
     @PutMapping("/update")
-    public ResponseMessage updateRefundStatus(@RequestBody Refund refund) {
-        Integer status = refund.getStatus();
-        if (status == 3) {
-            return ResponseMessage.newErrorInstance("不能使用该接口更新退款状态为退款成功");
+    public ResponseMessage updateRefundStatus(@RequestBody String refundNumber) {
+        Refund refund = refundService.selectByRefundNumber(refundNumber);
+
+        if (refund == null) {
+            return ResponseMessage.newErrorInstance("退款编号有误");
+        } else if (refund.getStatus()!=0) {
+            return ResponseMessage.newErrorInstance("该退款单的状态不为待商家处理，不能调用该接口");
         }
-        if (!(status>=1 && status<=4)) {
-            return ResponseMessage.newErrorInstance("欲修改的退款状态超出范围");
-        }
-        Integer orderId = refund.getOrderId();
-        RefundVo refundVo = refundService.getRefundVoByOrderId(orderId);
-        if (refundVo == null) {
-            return ResponseMessage.newErrorInstance("该订单id不存在退款信息");
-        }
+
         HashMap<String, Integer> refundMap = new HashMap<>();
-        refundMap.put("orderId",orderId);
-        refundMap.put("status",status);
+        refundMap.put("orderId",refund.getOrderId());
+        refundMap.put("status",1);
         int res = refundService.updateRefundStatus(refundMap);
-        if (res == -1) {
-            return ResponseMessage.newErrorInstance("欲更新的状态与订单原状态相同");
-        } else if (res == -2) {
-            return ResponseMessage.newErrorInstance("不能由待商家处理状态更新至待商家收货状态");
-        } else if (res == -3) {
-            return ResponseMessage.newErrorInstance("退款状态不可回溯");
-        } else if (res == 1) {
+        if (res == 1) {
             return ResponseMessage.newSuccessInstance("更新退款状态成功");
         } else {
             return ResponseMessage.newErrorInstance("更新退款状态失败");
@@ -283,7 +274,7 @@ public class RefundController {
     }
 
     /**
-     * 根据退款编号删除退款订单接口
+     * 根据退款编号删除退款订单接口,用户撤销退款使用
      * 该接口应该由用户调用，商家不应该动客户的退款信息
      * @param refundNumber:退款编号
      * @return
@@ -302,4 +293,14 @@ public class RefundController {
             return ResponseMessage.newErrorInstance("删除退款订单失败");
         }
     }
+
+    /**
+     * TODO 商家拒绝申请
+     * status 0-->4
+     */
+
+    /**
+     * TODO 用户填写退款发货单
+     * status 1-->2
+     */
 }
