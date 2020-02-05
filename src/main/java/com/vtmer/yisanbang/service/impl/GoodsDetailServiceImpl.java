@@ -6,7 +6,9 @@ import com.vtmer.yisanbang.mapper.GoodsDetailMapper;
 import com.vtmer.yisanbang.service.GoodsDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.vtmer.yisanbang.common.Md5Util;
 
+import java.io.File;
 import java.util.List;
 
 @Service
@@ -65,8 +67,12 @@ public class GoodsDetailServiceImpl implements GoodsDetailService {
     @Override
     // 查看商品详细信息是否相同
     public boolean judgeGoodsDetail(GoodsDetailDto goodsDetail, List<GoodsDetailDto> goodsDetailDtoList) {
+        File file1 = new File(goodsDetail.getPirtucePath());
+        String img1 = Md5Util.getFileMD5(file1);
         for (GoodsDetailDto goodDetailDto : goodsDetailDtoList) {
-            if (goodDetailDto.getPirtucePath().equals(goodsDetail.getPirtucePath()))
+            File file2 = new File(goodDetailDto.getPirtucePath());
+            String img2 = Md5Util.getFileMD5(file2);
+            if (img1.equals(img2))
                 return true;
         }
         return false;
