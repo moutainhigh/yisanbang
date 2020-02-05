@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vtmer.yisanbang.mapper.RefundGoodsMapper">
+  <sql id="BaseColumnList">
+    id, refund_id, size_id, is_goods, create_time, update_time
+  </sql>
+  <resultMap id="BaseResultMap" type="com.vtmer.yisanbang.domain.RefundGoods">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="refund_id" jdbcType="INTEGER" property="refundId" />
+    <result column="size_id" jdbcType="INTEGER" property="sizeId" />
+    <result column="is_goods" jdbcType="BIT" property="isGoods" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from refund_goods
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByRefundId" parameterType="java.lang.Integer">
+    delete from refund_goods
+    where refund_id = #{refundId}
+  </delete>
+  <insert id="insert" parameterType="com.vtmer.yisanbang.domain.RefundGoods">
+    insert into refund_goods ( refund_id, size_id, is_goods)
+    values (#{refundId,jdbcType=INTEGER}, #{sizeId,jdbcType=INTEGER},
+      #{isGoods,jdbcType=BIT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.vtmer.yisanbang.domain.RefundGoods">
+    update refund_goods
+    set refund_id = #{refundId,jdbcType=INTEGER},
+      size_id = #{sizeId,jdbcType=INTEGER},
+      is_goods = #{isGoods,jdbcType=BIT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="BaseColumnList"/>
+    from refund_goods
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="BaseColumnList"/>
+    from refund_goods
+  </select>
+  <select id="selectByRefundId" resultType="com.vtmer.yisanbang.domain.RefundGoods">
+    select
+    <include refid="BaseColumnList"/>
+    from refund_goods
+    where refund_id = #{refundId}
+  </select>
+</mapper>
