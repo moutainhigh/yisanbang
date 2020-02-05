@@ -31,4 +31,6 @@ public interface RefundMapper {
     List<Refund> selectByStatus(Integer status);
 
     int deleteByRefundNumber(String refundNumber);
+
+    void deleteByOrderId(Integer orderId);
 }

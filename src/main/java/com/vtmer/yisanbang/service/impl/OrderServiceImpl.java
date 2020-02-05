@@ -212,7 +212,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--申请退款(待商家处理) 5--退款中(待商家收货) 6--退款成功 7--退款失败 8--交易关闭 9--所有订单
+     * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 非 0--待付款 1--待发货 2--待收货 状态订单 设置订单状态
      * @param orderMap—— orderId、status
      * @return
@@ -315,32 +315,42 @@ public class OrderServiceImpl implements OrderService {
             CartGoodsDto cartGoodsDto = new CartGoodsDto();
             // 商品单价
             double price = orderGoods.getTotalPrice()/orderGoods.getAmount();
+
+            // 设置商品价格
             cartGoodsDto.setPrice(price);
             cartGoodsDto.setAmount(orderGoods.getAmount());
             cartGoodsDto.setAfterTotalPrice(orderGoods.getTotalPrice());
+
+            // 设置商品基础信息
             Integer sizeId = orderGoods.getSizeId();
-            cartGoodsDto.setColorSizeId(sizeId);
             Boolean isGoods = orderGoods.getIsGoods();
-            // 如果是普通商品
-            if (isGoods == Boolean.TRUE) {
-                ColorSize colorSize = colorSizeMapper.selectByPrimaryKey(sizeId);
-                cartGoodsDto.setSize(colorSize.getSize());
-                cartGoodsDto.setPartOrColor(colorSize.getColor());
-                Goods goods = goodsMapper.selectByPrimaryKey(colorSize.getGoodsId());
-                cartGoodsDto.setName(goods.getName());
-                cartGoodsDto.setPicture(goods.getPicture());
-            } else { // 如果是套装散件
-                PartSize partSize = partSizeMapper.selectByPrimaryKey(sizeId);
-                cartGoodsDto.setSize(partSize.getSize());
-                cartGoodsDto.setPartOrColor(partSize.getPart());
-                Suit suit = suitMapper.selectByPrimaryKey(partSize.getSuitId());
-                cartGoodsDto.setName(suit.getName());
-                cartGoodsDto.setPicture(suit.getPicture());
-            }
+            setCartGoodsDto(cartGoodsDto,sizeId,isGoods);
+
             cartGoodsList.add(cartGoodsDto);
         }
         cartVo.setCartGoodsList(cartGoodsList);
         orderVo.setOrderGoodsList(cartVo);
         return orderVo;
+    }
+
+    public void setCartGoodsDto(CartGoodsDto cartGoodsDto,Integer sizeId,Boolean isGoods) {
+        cartGoodsDto.setColorSizeId(sizeId);
+        cartGoodsDto.setIsGoods(isGoods);
+        // 如果是普通商品
+        if (isGoods == Boolean.TRUE) {
+            ColorSize colorSize = colorSizeMapper.selectByPrimaryKey(sizeId);
+            cartGoodsDto.setSize(colorSize.getSize());
+            cartGoodsDto.setPartOrColor(colorSize.getColor());
+            Goods goods = goodsMapper.selectByPrimaryKey(colorSize.getGoodsId());
+            cartGoodsDto.setName(goods.getName());
+            cartGoodsDto.setPicture(goods.getPicture());
+        } else { // 如果是套装散件
+            PartSize partSize = partSizeMapper.selectByPrimaryKey(sizeId);
+            cartGoodsDto.setSize(partSize.getSize());
+            cartGoodsDto.setPartOrColor(partSize.getPart());
+            Suit suit = suitMapper.selectByPrimaryKey(partSize.getSuitId());
+            cartGoodsDto.setName(suit.getName());
+            cartGoodsDto.setPicture(suit.getPicture());
+        }
     }
 }

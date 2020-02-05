@@ -17,6 +17,8 @@ public class Refund {
 
     private Integer status;
 
+    private Integer isReceived;
+
     private Date createTime;
 
     private Date updateTime;
@@ -91,5 +93,13 @@ public class Refund {
 
     public void setRefundPrice(Double refundPrice) {
         this.refundPrice = refundPrice;
+    }
+
+    public Integer getIsReceived() {
+        return isReceived;
+    }
+
+    public void setIsReceived(Integer isReceived) {
+        this.isReceived = isReceived;
     }
 }
