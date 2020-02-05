@@ -75,11 +75,12 @@
     select
     <include refid="BaseColumnList"/>
     from refund
-    where refund_number = #{refundNumber}
+    where refund_number = #{refundNumber,jdbcType=VARCHAR}
   </select>
   <select id="selectByStatus" parameterType="java.lang.Integer" resultType="com.vtmer.yisanbang.domain.Refund">
     select
     <include refid="BaseColumnList"/>
+    from refund
     <if test="status!=5">
       where status = #{status}
     </if>

@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -177,11 +178,12 @@ public class RefundController {
      * status全改变： 0 --> 1 or 3 or 4  and  1 --> 2   and  2 --> 3  and 0 1 2-->删除
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败
-     * @param refundNumber
+     * @param refundNumberMap:refundNumber退款编号
      * @return
      */
     @PutMapping("/update")
-    public ResponseMessage updateRefundStatus(@RequestBody String refundNumber) {
+    public ResponseMessage updateRefundStatus(@RequestBody Map<String,String> refundNumberMap) {
+        String refundNumber = refundNumberMap.get("refundNumber");
         Refund refund = refundService.selectByRefundNumber(refundNumber);
 
         if (refund == null) {
@@ -203,11 +205,12 @@ public class RefundController {
 
     /**
      * 查询成功申请了退款(退款成功)的订单的退款状态
-     * @param refundNumber：退款编号
+     * @param refundNumberMap:refundNumber：退款编号
      * @return
      */
     @PostMapping("/refundQuery")
-    public ResponseMessage refundQuery(@RequestBody String refundNumber) {
+    public ResponseMessage refundQuery(@RequestBody Map<String,String> refundNumberMap) {
+        String refundNumber = refundNumberMap.get("refundNumber");
         if (refundNumber == null) {
             return ResponseMessage.newErrorInstance("传入参数有误");
         }
@@ -258,15 +261,15 @@ public class RefundController {
      * @param status：退款状态
      * @return List<RefundVo>
      */
-    @GetMapping("/getByStatus")
-    public ResponseMessage getByStatus(@RequestBody Integer status) {
+    @GetMapping("/getByStatus/{status}")
+    public ResponseMessage getByStatus(@PathVariable(value = "status") Integer status) {
         if (status == null) {
             return ResponseMessage.newErrorInstance("传入参数有误");
         } else if (!(status>=0 && status<=5)) {
             return ResponseMessage.newErrorInstance("传入参数超过范围");
         }
         List<RefundVo> refundVoList = refundService.getRefundVoListByStatus(status);
-        if (refundVoList!=null) {
+        if (refundVoList!=null && refundVoList.size()!=0) {
             return ResponseMessage.newSuccessInstance(refundVoList,"获取相应状态的退款订单成功");
         } else {
             return ResponseMessage.newSuccessInstance("暂无该类型的退款订单");
@@ -276,11 +279,12 @@ public class RefundController {
     /**
      * 根据退款编号删除退款订单接口,用户撤销退款使用
      * 该接口应该由用户调用，商家不应该动客户的退款信息
-     * @param refundNumber:退款编号
+     * @param refundNumberMap:refundNumber退款编号
      * @return
      */
     @DeleteMapping("/delete")
-    public ResponseMessage delete(@RequestBody String refundNumber) {
+    public ResponseMessage delete(@RequestBody Map<String,String> refundNumberMap) {
+        String refundNumber = refundNumberMap.get("refundNumber");
         if (refundNumber == null) {
             return ResponseMessage.newErrorInstance("传入参数有误");
         }
@@ -293,6 +297,7 @@ public class RefundController {
             return ResponseMessage.newErrorInstance("删除退款订单失败");
         }
     }
+
 
     /**
      * TODO 商家拒绝申请
