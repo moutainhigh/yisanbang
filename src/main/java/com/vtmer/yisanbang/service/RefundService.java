@@ -11,10 +11,10 @@ public interface RefundService {
 
     /**
      * 申请退款
-     * @param refund：orderId，reason （订单id、退款原因）
+     * @param refundVo：orderId，reason（订单id、退款原因） 退款商品
      * @return
      */
-    int applyForRefund(Refund refund);
+    int applyForRefund(RefundVo refundVo);
 
     /**
      * 获取退款详情
@@ -47,4 +47,6 @@ public interface RefundService {
     Refund selectByRefundNumber(String refundNumber);
 
     int deleteByRefundNumber(String refundNumber);
+
+    Refund selectByPrimaryKey(Integer refundId);
 }

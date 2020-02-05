@@ -21,12 +21,9 @@
     where refund_id = #{refundId}
   </delete>
   <insert id="insert" parameterType="com.vtmer.yisanbang.domain.RefundGoods">
-    insert into refund_goods (id, refund_id, size_id, 
-      is_goods, create_time, update_time
-      )
-    values (#{id,jdbcType=INTEGER}, #{refundId,jdbcType=INTEGER}, #{sizeId,jdbcType=INTEGER}, 
-      #{isGoods,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
-      )
+    insert into refund_goods ( refund_id, size_id, is_goods)
+    values (#{refundId,jdbcType=INTEGER}, #{sizeId,jdbcType=INTEGER},
+      #{isGoods,jdbcType=BIT})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.vtmer.yisanbang.domain.RefundGoods">
     update refund_goods

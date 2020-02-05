@@ -28,7 +28,7 @@
     delete from refund
     where order_id = #{orderId}
   </delete>
-  <insert id="insert" parameterType="com.vtmer.yisanbang.domain.Refund">
+  <insert id="insert" parameterType="com.vtmer.yisanbang.domain.Refund" useGeneratedKeys="true" keyProperty="id">
     insert into refund (refund_number, user_id,refund_price,
       order_id, reason,is_received)
     values (#{refundNumber,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER},#{refundPrice,jdbcType=DOUBLE},

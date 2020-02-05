@@ -9,7 +9,9 @@ import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.domain.Refund;
+import com.vtmer.yisanbang.domain.RefundExpress;
 import com.vtmer.yisanbang.dto.AgreeRefundDto;
+import com.vtmer.yisanbang.dto.CartGoodsDto;
 import com.vtmer.yisanbang.service.OrderService;
 import com.vtmer.yisanbang.service.RefundService;
 import com.vtmer.yisanbang.vo.RefundVo;
@@ -60,29 +62,6 @@ public class RefundController {
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败
      */
-
-
-    /**
-     * 用户申请退款接口：未收到货（仅退款、全退）
-     * @param refund：orderId、reason
-     * @return
-     */
-    @PostMapping("/applyNotReceived")
-    public ResponseMessage refund(@RequestBody Refund refund) {
-        if (refund == null) {
-            return ResponseMessage.newErrorInstance("传入参数有误");
-        } else {
-            int res = refundService.applyForRefund(refund);
-            if (res == -1) {
-                return ResponseMessage.newErrorInstance("订单id有误");
-            } else if (res == -2) {
-                return ResponseMessage.newErrorInstance("重复申请退款");
-            } else if (res == 1) {
-                return ResponseMessage.newSuccessInstance("申请退款成功");
-            }
-            return ResponseMessage.newErrorInstance("申请退款失败，请稍后重试");
-        }
-    }
 
     /**
      * 根据订单id获取退款详情接口
@@ -298,14 +277,95 @@ public class RefundController {
         }
     }
 
-
     /**
-     * TODO 商家拒绝申请
-     * status 0-->4
+     * 商家拒绝退款申请 status 0-->4
+     * @param refundNumberMap:refundNumber退款编号
+     * @return
      */
+    @PostMapping("/refuseApplication")
+    public ResponseMessage refuseApplication(@RequestBody Map<String,String> refundNumberMap) {
+        String refundNumber = refundNumberMap.get("refundNumber");
+        if (refundNumber == null) {
+            return ResponseMessage.newErrorInstance("传入参数有误");
+        }
+        Refund refund = refundService.selectByRefundNumber(refundNumber);
+        if (refund == null) {
+            return ResponseMessage.newErrorInstance("退款编号有误");
+        } else if (refund.getStatus() != 0) { // 如果退款状态不为“待商家处理”
+            return ResponseMessage.newErrorInstance("该退款订单的状态不适合拒绝退款");
+        }
+        // 更改退款状态
+        HashMap<String, Integer> refundMap = new HashMap<>();
+        refundMap.put("orderId",refund.getOrderId());
+        refundMap.put("status",4);
+        int res = refundService.updateRefundStatus(refundMap);
+        if (res == 1) {
+            return ResponseMessage.newSuccessInstance("拒绝退款申请成功");
+        } else {
+            return ResponseMessage.newErrorInstance("拒绝退款申请失败");
+        }
+    }
 
     /**
-     * TODO 用户填写退款发货单
+     * 用户填写退款发货单
      * status 1-->2
+     * @param refundExpress:refundId、expressCompany(选填)、courierNumber(快递单号)
+     * @return
      */
+    @PostMapping("/express")
+    public ResponseMessage insertExpress(@RequestBody RefundExpress refundExpress) {
+        if (refundExpress == null) {
+            return ResponseMessage.newErrorInstance("传入参数有误");
+        }
+        Refund refund = refundService.selectByPrimaryKey(refundExpress.getRefundId());
+        if (refund == null) {
+            return ResponseMessage.newErrorInstance("refundId不存在");
+        } else if (refund.getStatus()!=1) {
+            return ResponseMessage.newErrorInstance("退款状态不为“待用户发货”");
+        }
+        HashMap<String, Integer> refundMap = new HashMap<>();
+        refundMap.put("orderId",refund.getOrderId());
+        refundMap.put("status",1);
+        int res = refundService.updateRefundStatus(refundMap);
+        if (res == 1) {
+            return ResponseMessage.newSuccessInstance("填写退款发货单成功");
+        } else {
+            return ResponseMessage.newErrorInstance("填写退款发货单失败");
+        }
+    }
+
+    /**
+     * 用户申请退款接口：
+     * 退款商品传null代表全退，此时可不传退款金额
+     * 部分退需要传退款金额，退款商品信息
+     * @param refundVo：refund，refundGoodsList 退款原因，退款金额，订单id，退款商品
+     * @return
+     */
+    @PostMapping("/apply")
+    public ResponseMessage apply(@RequestBody RefundVo refundVo) {
+        if (refundVo == null) {
+            return ResponseMessage.newErrorInstance("传入参数有误");
+        } else if (refundVo.getRefund()==null) {
+            return ResponseMessage.newErrorInstance("退款基本信息为空");
+        }
+        Refund refund = refundVo.getRefund();
+        List<CartGoodsDto> refundGoodsList = refundVo.getRefundGoodsList();
+        // 退款商品不为空
+        if (refundGoodsList!=null && refundGoodsList.size()!=0) {
+            // 设置为已收货类退款订单
+            refund.setIsReceived(1);
+        } else {
+            // 未传退款商品，说明是未收货，全退
+            refund.setIsReceived(0);
+        }
+        int res = refundService.applyForRefund(refundVo);
+        if (res == -1) {
+            return ResponseMessage.newErrorInstance("订单id有误");
+        } else if (res == -2) {
+            return ResponseMessage.newErrorInstance("重复申请退款");
+        } else if (res == 1) {
+            return ResponseMessage.newSuccessInstance("申请退款成功");
+        }
+        return ResponseMessage.newErrorInstance("申请退款失败，请稍后重试");
+    }
 }
