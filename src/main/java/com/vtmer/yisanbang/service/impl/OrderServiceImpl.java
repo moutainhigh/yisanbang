@@ -411,8 +411,8 @@ public class OrderServiceImpl implements OrderService {
     public int cancelOrder(Integer orderId) {
         Order order = orderMapper.selectByPrimaryKey(orderId);
         if (order!=null) {
-            // 如果订单状态是0或1，未付款，待发货 可以取消订单
-            if (order.getStatus()>=0 && order.getStatus()<=1) {
+            // 如果订单状态是0未付款，可以取消订单
+            if (order.getStatus()==0) {
                 // 取消订单，更新订单状态为4，交易关闭
                 HashMap<String, Integer> orderMap = new HashMap<>();
                 orderMap.put("orderId",orderId);
