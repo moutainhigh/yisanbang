@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 @Mapper
@@ -18,4 +19,6 @@ public interface PartSizeMapper {
     List<PartSize> selectAll();
 
     int updateByPrimaryKey(PartSize record);
+
+    void updateInventoryByPrimaryKey(Map<String,Integer> inventoryMap);
 }

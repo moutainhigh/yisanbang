@@ -67,6 +67,11 @@
       model = #{model,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <update id="updateInventoryByPrimaryKey">
+    update color_size
+    set inventory = inventory - #{inventory,jdbcType=INTEGER}
+    where id = #{sizeId}
+  </update>
   <select id="selectDtoByPrimaryKey" parameterType="java.lang.Integer" resultMap="ColorSizeMap">
     select id, goods_id, color, size, inventory, model
     from color_size

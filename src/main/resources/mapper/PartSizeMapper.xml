@@ -38,6 +38,11 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <update id="updateInventoryByPrimaryKey">
+    update part_size
+    set inventory = inventory - #{inventory,jdbcType=INTEGER}
+    where id = #{sizeId}
+  </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select id, suit_id, price, part, size, inventory, model, create_time, update_time
     from part_size

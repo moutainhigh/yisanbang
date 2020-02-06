@@ -4,9 +4,9 @@ import com.vtmer.yisanbang.domain.ColorSize;
 import com.vtmer.yisanbang.dto.ColorSizeDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 @Repository
@@ -20,6 +20,8 @@ public interface ColorSizeMapper {
     List<ColorSize> selectAll();
 
     int updateByPrimaryKey(ColorSize record);
+
+    void updateInventoryByPrimaryKey(Map<String,Integer> inventoryMap);
 
     // Dto
     int insertDto(ColorSizeDto record);

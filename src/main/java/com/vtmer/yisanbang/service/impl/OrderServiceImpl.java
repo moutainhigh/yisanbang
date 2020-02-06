@@ -123,8 +123,9 @@ public class OrderServiceImpl implements OrderService {
             orderMap.put("orderNumber",orderNumber);
             // 用户地址
             UserAddress userAddress = orderVo.getUserAddress();
-            // 用户购物车订单列表
+            // 用户购物车
             CartVo cartVo = orderVo.getOrderGoodsList();
+            // 购物车商品列表
             List<CartGoodsDto> cartGoodsList = cartVo.getCartGoodsList();
 
 
@@ -140,23 +141,37 @@ public class OrderServiceImpl implements OrderService {
             order.setMessage(orderVo.getMessage());
             orderMapper.insert(order);
 
-            // 生成orderGoods
-            OrderGoods orderGoods = new OrderGoods();
             for (CartGoodsDto cartGoodsDto : cartGoodsList) {
+                // 生成orderGoods
+                OrderGoods orderGoods = new OrderGoods();
+                Boolean isGoods = cartGoodsDto.getIsGoods();
+                Integer amount = cartGoodsDto.getAmount();
+                Integer colorSizeId = cartGoodsDto.getColorSizeId();
                 orderGoods.setOrderId(order.getId());
-                orderGoods.setIsGoods(cartGoodsDto.getIsGoods());
-                orderGoods.setAmount(cartGoodsDto.getAmount());
+                orderGoods.setIsGoods(isGoods);
+                orderGoods.setAmount(amount);
                 orderGoods.setTotalPrice(cartGoodsDto.getAfterTotalPrice());
-                orderGoods.setSizeId(cartGoodsDto.getColorSizeId());
+                orderGoods.setSizeId(colorSizeId);
                 orderGoodsMapper.insert(orderGoods);
-            }
+
+                // 减少相应商品的库存
+                HashMap<String, Integer> inventoryMap = new HashMap<>();
+                inventoryMap.put("inventory",amount);
+                inventoryMap.put("sizeId",colorSizeId);
+                if (isGoods == Boolean.TRUE) {
+                    colorSizeMapper.updateInventoryByPrimaryKey(inventoryMap);
+                } else {
+                    partSizeMapper.updateInventoryByPrimaryKey(inventoryMap);
+                }
+
+            } // end for
 
             // 删除购物车勾选项
             cartGoodsMapper.deleteCartGoodsByIsChosen(cartVo.getCartId());
             // 购物车总价清零
             cartMapper.updateTotalPrice(0,cartVo.getCartId());
-            // 返回订单编号
 
+            // 返回订单编号和openid
             return orderMap;
         }
 
