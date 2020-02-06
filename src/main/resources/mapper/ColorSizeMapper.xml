@@ -42,6 +42,17 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <update id="updateInventoryByPrimaryKey">
+    update color_size
+    set inventory =
+    <if test="flag==0">
+      inventory - #{amount,jdbcType=INTEGER}
+    </if>
+    <if test="flag==1">
+      inventory + #{amount,jdbcType=INTEGER}
+    </if>
+    where id = #{sizeId}
+  </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select id, goods_id, color, size, inventory, model, create_time, update_time
     from color_size
@@ -66,11 +77,6 @@
       inventory = #{inventory,jdbcType=INTEGER},
       model = #{model,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateInventoryByPrimaryKey">
-    update color_size
-    set inventory = inventory - #{inventory,jdbcType=INTEGER}
-    where id = #{sizeId}
   </update>
   <select id="selectDtoByPrimaryKey" parameterType="java.lang.Integer" resultMap="ColorSizeMap">
     select id, goods_id, color, size, inventory, model

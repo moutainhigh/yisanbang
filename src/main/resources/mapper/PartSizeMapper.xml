@@ -40,7 +40,13 @@
   </update>
   <update id="updateInventoryByPrimaryKey">
     update part_size
-    set inventory = inventory - #{inventory,jdbcType=INTEGER}
+    set inventory =
+    <if test="flag==0">
+      inventory - #{amount,jdbcType=INTEGER}
+    </if>
+    <if test="flag==1">
+      inventory + #{amount,jdbcType=INTEGER}
+    </if>
     where id = #{sizeId}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">

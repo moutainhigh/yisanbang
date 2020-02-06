@@ -10,8 +10,8 @@
       and user_id = #{userId}
     </if>
     <if test="status!=null">
-        <!-- status=6表示查询所有订单，此时不需要status查询条件 -->
-        <if test="status!=6">
+        <!-- status=5表示查询所有订单，此时不需要status查询条件 -->
+        <if test="status!=5">
             and status = #{status}
         </if>
     </if>

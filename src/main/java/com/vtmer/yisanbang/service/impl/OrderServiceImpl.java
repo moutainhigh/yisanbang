@@ -158,8 +158,10 @@ public class OrderServiceImpl implements OrderService {
 
                 // 减少相应商品的库存
                 HashMap<String, Integer> inventoryMap = new HashMap<>();
-                inventoryMap.put("inventory",amount);
+                inventoryMap.put("amount",amount);
                 inventoryMap.put("sizeId",colorSizeId);
+                // 0代表减少库存
+                inventoryMap.put("flag",0);
                 if (isGoods == Boolean.TRUE) {
                     colorSizeMapper.updateInventoryByPrimaryKey(inventoryMap);
                 } else {
@@ -181,12 +183,12 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 获取用户指定订单状态的订单
-     * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--申请退款 5--交易关闭 6--所有订单
+     * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败
      * @param orderMap —— userId、status
      *                 userId为null时查询商城内的订单
      *                 status传入3时同时获取退款成功、退款失败（3 4）的订单
-     *                 status传入6查询所有订单
+     *                 status传入5查询所有订单
      * @return
      */
     @Transactional
@@ -209,10 +211,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--申请退款(待商家处理) 5--退款中(待商家收货) 6--退款成功 7--退款失败 8--交易关闭 9--所有订单
+     * 订单状态自增修改
+     * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 0--待付款 1--待发货 2--待收货 类型订单 更新订单状态
-     * @param orderId
-     * @return
+     * @param orderId:订单id
+     * @return -2 —— 订单状态不能自增修改
+     *         -1 —— 订单id不存在
+     *         0 —— 更新订单状态失败
+     *         1 —— 更新订单状态成功
      */
     public int updateOrderStatus(Integer orderId) {
         Order order = orderMapper.selectByPrimaryKey(orderId);
@@ -234,18 +240,20 @@ public class OrderServiceImpl implements OrderService {
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 非 0--待付款 1--待发货 2--待收货 状态订单 设置订单状态
      * @param orderMap—— orderId、status
-     * @return
+     * @return -2 —— 订单id不存在
+     *         -1 —— 将要修改的订单状态与原状态相同
+     *         0 —— 更新订单状态失败
+     *         1 —— 更新订单状态成功
      */
     public int setOrderStatus(Map<String, Integer> orderMap) {
         Integer orderId = orderMap.get("orderId");
         Integer status = orderMap.get("status");
         Order order = orderMapper.selectByPrimaryKey(orderId);
         if (order != null) {
-            if (status == order.getStatus()) {  // 如果将要修改的订单状态与现状态相同
+            if (status.equals(order.getStatus())) {  // 如果将要修改的订单状态与原状态相同
                 return -1;
             } else { // 更新订单状态
-                int res = orderMapper.setOrderStatus(orderMap);
-                return res;
+                return orderMapper.setOrderStatus(orderMap);
             }
         } else {
             return -2;
@@ -286,7 +294,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 设置订单的快递编号
-     * @param order
+     * @param order：courierNumber、orderId
      * @return
      */
     public int setCourierNumber(Order order) {
@@ -392,5 +400,47 @@ public class OrderServiceImpl implements OrderService {
         order.setAddressName(userAddress.getAddressName());
         order.setUserName(userAddress.getUserName());
         return orderMapper.updateAddressByOrderNumber(order);
+    }
+
+    /**
+     * 用户取消订单
+     * @param orderId：订单id
+     * @return
+     */
+    @Transactional
+    public int cancelOrder(Integer orderId) {
+        Order order = orderMapper.selectByPrimaryKey(orderId);
+        if (order!=null) {
+            // 如果订单状态是0或1，未付款，待发货 可以取消订单
+            if (order.getStatus()>=0 && order.getStatus()<=1) {
+                // 取消订单，更新订单状态为4，交易关闭
+                HashMap<String, Integer> orderMap = new HashMap<>();
+                orderMap.put("orderId",orderId);
+                orderMap.put("status",4);
+                setOrderStatus(orderMap);
+                // 库存归位
+                List<OrderGoods> orderGoodsList = orderGoodsMapper.selectByOrderId(orderId);
+                for (OrderGoods orderGoods : orderGoodsList) {
+                    Boolean isGoods = orderGoods.getIsGoods();
+                    Integer sizeId = orderGoods.getSizeId();
+                    Integer amount = orderGoods.getAmount();
+                    HashMap<String, Integer> inventoryMap = new HashMap<>();
+                    inventoryMap.put("sizeId",sizeId);
+                    inventoryMap.put("amount",amount);
+                    // 1代表增加库存
+                    inventoryMap.put("flag",1);
+                    if (isGoods == Boolean.TRUE) {
+                        colorSizeMapper.updateInventoryByPrimaryKey(inventoryMap);
+                    } else {
+                        partSizeMapper.updateInventoryByPrimaryKey(inventoryMap);
+                    }
+                }
+                return 1;
+            } else { // 订单状态不可取消订单
+                return -2;
+            }
+        } else { // 订单id不存在
+            return -1;
+        }
     }
 }

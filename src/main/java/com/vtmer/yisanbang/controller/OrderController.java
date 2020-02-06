@@ -194,14 +194,15 @@ public class OrderController {
     }
 
     /**
+     * 订单状态自增修改，适用于待付款、待发货、待收货类订单
      * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--申请退款 5--交易关闭 6--所有订单
      * 0--待付款 1--待发货 2--待收货 状态订单 更新订单状态
-     * @param orderIdMap —— orderId
+     * @param orderId:订单id
      * @return
      */
-    @PutMapping("updateOrderStatus")
-    public ResponseMessage updateOrderStatus(@RequestBody Map<String,Integer> orderIdMap) {
-        int res = orderService.updateOrderStatus(orderIdMap.get("orderId"));
+    @PutMapping("updateOrderStatus/{orderId}")
+    public ResponseMessage updateOrderStatus(@PathVariable("orderId") Integer orderId) {
+        int res = orderService.updateOrderStatus(orderId);
         if (res == -1) {
             return ResponseMessage.newErrorInstance("订单id有误");
         } else if (res == -2) {
@@ -216,7 +217,8 @@ public class OrderController {
     }
 
     /**
-     * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--申请退款 5--交易关闭 6--所有订单
+     * 设置订单状态 —— 适用于已完成、交易关闭订单（该接口貌似没用emm）
+     * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 非 0--待付款 1--待发货 2--待收货 状态订单 设置订单状态
      * @param orderMap —— orderId、status
      * @return
@@ -224,7 +226,7 @@ public class OrderController {
     @PutMapping("/setOrderStatus")
     public ResponseMessage setOrderStatus(@RequestBody Map<String,Integer> orderMap) {
         Integer status = orderMap.get("status");
-        if (status<3 || status>6) {  // 如果订单状态超出范围
+        if (status<3 || status>5) {  // 如果订单状态超出范围
             return ResponseMessage.newErrorInstance("订单状态status值超出范围");
         } else {
             int res = orderService.setOrderStatus(orderMap);
@@ -241,12 +243,12 @@ public class OrderController {
     }
 
     /**
-     * 删除订单
+     * 删除订单，暂时无用，用户没有删除订单按钮hh
      * @param orderId：订单id
      * @return
      */
-    @DeleteMapping("/delete")
-    public ResponseMessage delete(@RequestBody Integer orderId) {
+    @DeleteMapping("/delete/{orderId}")
+    public ResponseMessage delete(@PathVariable("orderId") Integer orderId) {
         int res = orderService.deleteOrder(orderId);
         if (res == 1) {
             return ResponseMessage.newSuccessInstance("删除订单成功");
@@ -258,7 +260,7 @@ public class OrderController {
     }
 
     /**
-     * 根据订单id或订单编号设置快递编号（快递编号优先）
+     * 根据订单id或订单编号设置快递编号（订单编号优先）
      * @param order:orderId or orderNumber and courierNumber
      * @return
      */
@@ -276,7 +278,7 @@ public class OrderController {
     }
 
     /**
-     *
+     * 在未发货之前用户修改地址接口
      * @param orderVo:用户地址UserAddress、订单编号orderNumber
      * @return
      */
@@ -298,6 +300,23 @@ public class OrderController {
             return ResponseMessage.newSuccessInstance("修改收货地址成功");
         } else {
             return ResponseMessage.newErrorInstance("修改收货地址失败");
+        }
+    }
+
+    @PutMapping("/cancelOrder/{orderId}")
+    public ResponseMessage cancelOrder(@PathVariable("orderId") Integer orderId) {
+        if (orderId == null) {
+            return ResponseMessage.newErrorInstance("传入参数为空");
+        }
+        int res = orderService.cancelOrder(orderId);
+        if (res == -1) {
+            return ResponseMessage.newErrorInstance("订单id不存在");
+        } else if (res == -2) {
+            return ResponseMessage.newErrorInstance("该订单状态不可取消订单");
+        } else if (res == 1) {
+            return ResponseMessage.newSuccessInstance("取消订单成功");
+        } else {
+            return ResponseMessage.newErrorInstance("取消订单失败");
         }
     }
 }

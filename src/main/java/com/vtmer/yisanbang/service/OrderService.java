@@ -30,4 +30,6 @@ public interface OrderService {
     void setCartGoodsDto(CartGoodsDto cartGoodsDto, Integer sizeId, Boolean isGoods);
 
     int updateAddress(OrderVo orderVo);
+
+    int cancelOrder(Integer orderId);
 }
