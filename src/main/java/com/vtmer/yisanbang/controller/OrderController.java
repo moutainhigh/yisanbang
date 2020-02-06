@@ -17,6 +17,7 @@ import com.vtmer.yisanbang.vo.OrderVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,6 +37,9 @@ public class OrderController {
 
     @Autowired
     private UserService userService;
+
+    @Value("${wx.pay.spbillCreateIp}")
+    private String spbillCreateIp;
 
     /**
      * 点击去结算，显示确认订单页面
@@ -72,11 +76,12 @@ public class OrderController {
 
     /**
      * 通过订单号进行微信支付
-     * @param orderNumber：订单号
+     * @param orderNumberMap：orderNumber订单号
      * @return 返回前端调起微信支付所需的支付参数（5个参数和sign）
      */
     @PostMapping("/wxpay")
-    public ResponseMessage pay(@RequestBody String orderNumber) {
+    public ResponseMessage wxpay(@RequestBody Map<String,String> orderNumberMap) {
+        String orderNumber = orderNumberMap.get("orderNumber");
         if (orderNumber == null) {
             return ResponseMessage.newErrorInstance("订单号传入错误");
         } else { // 订单编号不为null
@@ -93,7 +98,7 @@ public class OrderController {
                     double totalPrice = orderVo.getOrderGoodsList().getTotalPrice();
                     orderRequest.setTotalFee(BaseWxPayRequest.yuanToFen(String.valueOf(totalPrice)));
                     orderRequest.setOpenid(openId);
-                    orderRequest.setSpbillCreateIp("127.0.0.1");
+                    orderRequest.setSpbillCreateIp(spbillCreateIp);
                     orderRequest.setTimeStart("yyyyMMddHHmmss");
                     orderRequest.setTimeExpire("yyyyMMddHHmmss");
 
@@ -132,6 +137,8 @@ public class OrderController {
             String orderNumber = notifyResult.getOutTradeNo();
             // 根据订单号获取订单基础信息
             Order order = orderService.selectOrderByOrderNumber(orderNumber);
+
+            // 微信回调返回的订单金额
             String totalFee = BaseWxPayResult.fenToYuan(notifyResult.getTotalFee());
             Double totalPrice = Double.parseDouble(totalFee);
 
@@ -165,8 +172,8 @@ public class OrderController {
     }
 
     /**
-     * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--申请退款 5--交易关闭 6--所有订单
      * 列出用户相关状态所有订单
+     * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--申请退款 5--交易关闭 6--所有订单
      * @param orderMap —— userId、status
      *                 userId传null可以列出商城相关状态的所有订单
      * @return
@@ -174,8 +181,8 @@ public class OrderController {
     @GetMapping("/get")
     public ResponseMessage listOrder(@RequestBody Map<String,Integer> orderMap) {
         System.out.println(orderMap.get("userId"));
-        if (orderMap.get("status")>6 || orderMap.get("status")<0) {
-            return ResponseMessage.newErrorInstance("订单状态参数有误");
+        if (!(orderMap.get("status")<=6 && orderMap.get("status")>=0)) {
+            return ResponseMessage.newErrorInstance("订单状态参数超出定义范围");
         } else {
             List<OrderVo> orderList = orderService.listOrder(orderMap);
             if (orderList!=null && orderList.size()!=0) {

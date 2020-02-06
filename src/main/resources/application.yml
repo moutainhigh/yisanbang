@@ -71,6 +71,7 @@ wx:
     refundNotifyURL: #微信退款成功后的回调接口 /refund/wxNotify
     tradeType: JSAPI
     keyPath: # p12证书的位置，可以指定绝对路径，也可以指定类路径（以classpath:开头）
+    spbillCreateIp: #服务器IP地址
   applet:
     appid: wx447bdd8f7d850c06
     appsecret: 1f8dc966cc30761d60394178a5d58301

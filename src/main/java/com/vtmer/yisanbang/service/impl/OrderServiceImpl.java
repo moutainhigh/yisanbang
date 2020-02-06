@@ -56,6 +56,9 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private SuitMapper suitMapper;
 
+    @Autowired
+    private RefundMapper refundMapper;
+
     // Free the postage after standardPrice
     private double standardPrice;
 
@@ -128,7 +131,6 @@ public class OrderServiceImpl implements OrderService {
             // 购物车商品列表
             List<CartGoodsDto> cartGoodsList = cartVo.getCartGoodsList();
 
-
             // 生成order
             Order order = new Order();
             order.setUserId(userAddress.getUserId());
@@ -178,27 +180,29 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--申请退款(待商家处理) 5--退款中(待商家收货) 6--退款成功 7--退款失败 8--交易关闭 9--所有订单
      * 获取用户指定订单状态的订单
      * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--申请退款 5--交易关闭 6--所有订单
+     * 退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败
      * @param orderMap —— userId、status
-     *                 userId为null时查询商城内的订单 status传入3时同时获取退款成功、退款失败（6 7）的订单
+     *                 userId为null时查询商城内的订单
+     *                 status传入3时同时获取退款成功、退款失败（3 4）的订单
+     *                 status传入6查询所有订单
      * @return
      */
     @Transactional
     public List<OrderVo> listOrder(Map<String,Integer> orderMap) {
 
-        List<Order> orderList;
         ArrayList<OrderVo> orderVoList = new ArrayList<>();
-        // 获取订单集合
-        Integer userId = orderMap.get("userId");
-        if (orderMap.get("status")!=9) {
-            orderList = orderMapper.selectAllByUserIdAndStatus(orderMap);
-        } else {  // 查询用户所有订单
-            orderList = orderMapper.selectAllByUserId(userId);
-        }
+
+        List<Order> orderList = orderMapper.selectAllByUserIdAndStatus(orderMap);
+
         for (Order order : orderList) {
             OrderVo orderVo = getOrderVoByOrder(order);
+            Refund refund = refundMapper.selectByOrderId(order.getId());
+            if (refund!=null) { // 如果该订单有退款信息
+                // 设置退款状态
+                orderVo.setRefundStatus(refund.getStatus());
+            }
             orderVoList.add(orderVo);
         }
         return orderVoList;

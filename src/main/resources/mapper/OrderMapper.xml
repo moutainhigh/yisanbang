@@ -10,11 +10,9 @@
       and user_id = #{userId}
     </if>
     <if test="status!=null">
-        <if test="status!=3">
+        <!-- status=6表示查询所有订单，此时不需要status查询条件 -->
+        <if test="status!=6">
             and status = #{status}
-        </if>
-        <if test="status==3">
-            and status in (3,6,7)
         </if>
     </if>
   </sql>
@@ -110,15 +108,6 @@
     from `order`
     where 1 = 1
     <include refid="OrderCondition"></include>
-    order by update_time DESC
-  </select>
-  <select id="selectAllByUserId" resultType="com.vtmer.yisanbang.domain.Order">
-    select
-    <include refid="BaseColumnList"></include>
-    from `order`
-    <if test="userId!=null">
-      where user_id = #{userId}
-    </if>
     order by update_time DESC
   </select>
   <select id="selectByOrderNumber" resultType="com.vtmer.yisanbang.domain.Order">

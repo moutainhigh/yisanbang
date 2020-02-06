@@ -18,6 +18,8 @@ public class OrderVo {
 
     private double postage;
 
+    private Integer refundStatus;
+
     private Date createTime;
 
     public UserAddress getUserAddress() {
@@ -66,5 +68,13 @@ public class OrderVo {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public Integer getRefundStatus() {
+        return refundStatus;
+    }
+
+    public void setRefundStatus(Integer refundStatus) {
+        this.refundStatus = refundStatus;
     }
 }
