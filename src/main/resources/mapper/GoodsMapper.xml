@@ -88,7 +88,8 @@
   </select>
     <select id="selectAllDto" resultMap="GoodsDtoMap">
     select id, sort_id, name, introduce, picture, price, is_show
-    from goods and is_show = 1
+    from goods
+    where is_show = 1
   </select>
     <select id="selectAllDtoBySort" parameterType="java.lang.Integer" resultMap="GoodsDtoMap">
     select id, sort_id, name, introduce, picture, price, is_show

@@ -8,21 +8,19 @@ import com.vtmer.yisanbang.mapper.GoodsDetailMapper;
 import com.vtmer.yisanbang.service.GoodsDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
 
-@Controller
+@RestController
+@RequestMapping("/goodsDetail")
 public class GoodsDetailController {
     @Autowired
     private GoodsDetailService goodsDetailService;
 
-    @GetMapping("selectAllGoodsDetail")
+    @GetMapping("/selectAllGoodsDetail")
     public ResponseMessage selectAllGoodsDetail() {
         List<GoodsDetailDto> goodsDetailDtos = goodsDetailService.selectAllDto();
         if (goodsDetailDtos != null && !goodsDetailDtos.isEmpty())
@@ -30,16 +28,16 @@ public class GoodsDetailController {
         else return ResponseMessage.newErrorInstance("查找失败");
     }
 
-    @GetMapping("selectAllGoodsDetailByGoodsId")
-    public ResponseMessage selectAllGoodsDetailByGoodsId(Integer goodsId) {
+    @GetMapping("/selectAllGoodsDetailByGoodsId/{id}")
+    public ResponseMessage selectAllGoodsDetailByGoodsId(@PathVariable("id") Integer goodsId) {
         List<GoodsDetailDto> goodsDetailDtos = goodsDetailService.selectAllDtoByGoodsId(goodsId);
         if (goodsDetailDtos != null && !goodsDetailDtos.isEmpty())
             return ResponseMessage.newSuccessInstance(goodsDetailDtos, "查找成功");
         else return ResponseMessage.newErrorInstance("查找失败");
     }
 
-    @PostMapping("addGoodsDetail")
-    public ResponseMessage addGoodsDetail(GoodsDetailDto goodsDetail) {
+    @PostMapping("/addGoodsDetail")
+    public ResponseMessage addGoodsDetail(@RequestBody GoodsDetailDto goodsDetail) {
         List<GoodsDetailDto> goodsDetailDtos = goodsDetailService.selectAllDtoByGoodsId(goodsDetail.getGoodsId());
         if (goodsDetailDtos != null && !goodsDetailDtos.isEmpty())  {
             boolean judgeFlag = goodsDetailService.judgeGoodsDetail(goodsDetail, goodsDetailDtos);
@@ -50,8 +48,8 @@ public class GoodsDetailController {
         else return ResponseMessage.newErrorInstance("添加失败");
     }
 
-    @PutMapping("updateGoodsDetail")
-    public ResponseMessage updateGoodsDetail(GoodsDetailDto goodsDetail) {
+    @PutMapping("/updateGoodsDetail")
+    public ResponseMessage updateGoodsDetail(@RequestBody GoodsDetailDto goodsDetail) {
         GoodsDetailDto goodsDetailDto = goodsDetailService.selectGoodsDetailByID(goodsDetail.getGoodsId());
         if (goodsDetailDto != null) {
             boolean updateFlag = goodsDetailService.updateGoodsDetail(goodsDetail);
@@ -60,8 +58,8 @@ public class GoodsDetailController {
         } else return ResponseMessage.newErrorInstance("该商品详细id错误，无该商品详细信息");
     }
 
-    @DeleteMapping("deleteGoodsDetail")
-    public ResponseMessage deleteGoodsDetail(GoodsDetailDto goodsDetail) {
+    @DeleteMapping("/deleteGoodsDetail")
+    public ResponseMessage deleteGoodsDetail(@RequestBody GoodsDetailDto goodsDetail) {
         GoodsDetailDto goodsDetailDto = goodsDetailService.selectGoodsDetailByID(goodsDetail.getGoodsId());
         if (goodsDetailDto != null) {
             boolean deleteFlag = goodsDetailService.deleteGoodsDetail(goodsDetail);
