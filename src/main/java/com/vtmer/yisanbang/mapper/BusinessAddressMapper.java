@@ -20,4 +20,13 @@ public interface BusinessAddressMapper {
     int updateByPrimaryKey(BusinessAddress record);
 
     Integer checkEmpty();
+
+    int updateDefault(Integer id);
+
+    void cancelDefault();
+
+    BusinessAddress getDefault();
+
+    Integer selectLatestId();
+
 }

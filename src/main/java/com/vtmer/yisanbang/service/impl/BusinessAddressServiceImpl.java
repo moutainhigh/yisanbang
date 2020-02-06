@@ -5,6 +5,9 @@ import com.vtmer.yisanbang.mapper.BusinessAddressMapper;
 import com.vtmer.yisanbang.service.BusinessAddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class BusinessAddressServiceImpl implements BusinessAddressService {
@@ -23,5 +26,50 @@ public class BusinessAddressServiceImpl implements BusinessAddressService {
             businessAddress.setIsDefault(false);
         }
         return businessAddressMapper.insert(businessAddress);
+    }
+
+    @Override
+    public int update(BusinessAddress businessAddress) {
+        return businessAddressMapper.updateByPrimaryKey(businessAddress);
+    }
+
+    @Transactional
+    public int updateDefault(Integer id) {
+        BusinessAddress businessAddress = businessAddressMapper.selectByPrimaryKey(id);
+        if (businessAddress != null) {
+            // 取消之前的默认地址
+            businessAddressMapper.cancelDefault();
+            // 设置新的默认地址
+            return businessAddressMapper.updateDefault(id);
+        } else {
+            return -1;
+        }
+
+    }
+
+    public List<BusinessAddress> selectAll() {
+        return businessAddressMapper.selectAll();
+    }
+
+    @Override
+    public BusinessAddress getDefault() {
+        return businessAddressMapper.getDefault();
+    }
+
+    @Override
+    @Transactional
+    public int deleteById(Integer id) {
+        BusinessAddress businessAddress = businessAddressMapper.selectByPrimaryKey(id);
+        if (businessAddress == null) {
+            return -1;
+        } else {
+            businessAddressMapper.deleteByPrimaryKey(id);
+            // 如果删除的是默认收货地址,设置最新修改的收货地址为默认地址
+            if (businessAddress.getIsDefault()) {
+                Integer businessAddressId = businessAddressMapper.selectLatestId();
+                businessAddressMapper.updateDefault(businessAddressId);
+            }
+            return 1;
+        }
     }
 }

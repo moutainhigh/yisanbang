@@ -24,11 +24,18 @@
     update business_address
     set address_name = #{addressName,jdbcType=VARCHAR},
       phone_number = #{phoneNumber,jdbcType=VARCHAR},
-      contact_name = #{contactName,jdbcType=VARCHAR},
-      is_default = #{isDefault,jdbcType=BIT},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
+      contact_name = #{contactName,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateDefault">
+    update business_address
+    set is_default = 1
+    where id = #{id}
+  </update>
+  <update id="cancelDefault">
+    update business_address
+    set is_default = 0
+    where is_default = 1
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select id, address_name, phone_number, contact_name, is_default, create_time, update_time
@@ -41,5 +48,13 @@
   </select>
   <select id="checkEmpty" resultType="java.lang.Integer">
     select count (*) from business_address
+  </select>
+  <select id="getDefault" resultType="com.vtmer.yisanbang.domain.BusinessAddress">
+    select id, address_name, phone_number, contact_name, is_default
+    from business_address
+    where is_default = 1
+  </select>
+  <select id="selectLatestId" resultType="java.lang.Integer">
+    select id from business_address order by update_time desc limit 1
   </select>
 </mapper>
