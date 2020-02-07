@@ -25,7 +25,7 @@ public class GoodsController {
     }
 
     @GetMapping("/selectAllGoodsOrderByTime")
-    // 根据商品分类以及更新时间顺序显示商品
+    // 根据商品更新时间顺序显示商品
     public ResponseMessage selectAllGoodsOrderByTime() {
         List<GoodsDto> goodsDtos = goodsService.selectAllDtoOrderByTime();
         if (goodsDtos != null && !goodsDtos.isEmpty())
@@ -35,7 +35,7 @@ public class GoodsController {
     }
 
     @GetMapping("/selectAllGoodsOrderByPrice")
-    // 根据商品分类以及更新时间顺序显示商品
+    // 根据商品更新时间顺序显示商品
     public ResponseMessage selectAllGoodsOrderByPrice() {
         List<GoodsDto> goodsDtos = goodsService.selectAllDtoOrderByPrice();
         if (goodsDtos != null && !goodsDtos.isEmpty())

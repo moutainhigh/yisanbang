@@ -19,7 +19,7 @@ public class SuitServiceImpl implements SuitService {
     // 查找所有套装
     public List<SuitDto> selectAll() {
         List<SuitDto> suitList = suitMapper.selectAllDto();
-        if (suitList != null) return suitList;
+        if (suitList != null && !suitList.isEmpty()) return suitList;
         return null;
     }
 
@@ -49,11 +49,9 @@ public class SuitServiceImpl implements SuitService {
 
     @Override
     public boolean judgeSuit(SuitDto suitDto, List<SuitDto> suitDtoList) {
-        for (SuitDto suit: suitDtoList) {
-            if (suit.getHighestPrice() == suitDto.getHighestPrice())
-                if (suit.getLowestPrice() == suitDto.getLowestPrice())
-                    if (suit.getPicture().equals(suitDto.getPicture()))
-                        return true;
+        for (SuitDto suit : suitDtoList) {
+            if (suit.getName().equals(suitDto.getName()))
+                return true;
         }
         return false;
     }
@@ -67,10 +65,10 @@ public class SuitServiceImpl implements SuitService {
     }
 
     @Override
-    // 根据套装名字查找套装（可能重名）
-    public List<SuitDto> selectSuitByName(String suitName) {
-        List<SuitDto> suitDtoList = suitMapper.selectDtoBySuitName(suitName);
-        if (suitDtoList != null) return suitDtoList;
+    // 根据套装名字查找套装
+    public SuitDto selectSuitByName(String suitName) {
+        SuitDto suitDto = suitMapper.selectDtoBySuitName(suitName);
+        if (suitDto != null) return suitDto;
         return null;
     }
 
@@ -78,7 +76,7 @@ public class SuitServiceImpl implements SuitService {
     // 根据套装的最低价格排序进行显示
     public List<SuitDto> selectSuitOrderByPrice() {
         List<SuitDto> suitDtoList = suitMapper.selectAllDtoOrderByPrice();
-        if (suitDtoList != null) return suitDtoList;
+        if (suitDtoList != null && !suitDtoList.isEmpty()) return suitDtoList;
         return null;
     }
 
@@ -86,7 +84,7 @@ public class SuitServiceImpl implements SuitService {
     // 根据套装的时间排序进行显示
     public List<SuitDto> selectSuitOrderByTime() {
         List<SuitDto> suitDtoList = suitMapper.selectAllDtoOrderByTime();
-        if (suitDtoList != null) return suitDtoList;
+        if (suitDtoList != null && !suitDtoList.isEmpty()) return suitDtoList;
         return null;
     }
 
@@ -94,7 +92,7 @@ public class SuitServiceImpl implements SuitService {
     // 根据分类id显示套装
     public List<SuitDto> selectSuitBySort(Integer sortId) {
         List<SuitDto> suitDtoList = suitMapper.selectAllDtoBySortId(sortId);
-        if (suitDtoList != null) return suitDtoList;
+        if (suitDtoList != null && !suitDtoList.isEmpty()) return suitDtoList;
         return null;
     }
 

@@ -67,9 +67,9 @@ public class SuitController {
     @GetMapping("/selectSuitByName/{name}")
     // 根据套装名称查找套装
     public ResponseMessage selectSuitByName(@PathVariable("name") String goodsName){
-        List<SuitDto> suitDtoList = suitService.selectSuitByName(goodsName);
-        if (suitDtoList != null && !suitDtoList.isEmpty())
-            return ResponseMessage.newSuccessInstance(suitDtoList,"查找成功");
+        SuitDto suit = suitService.selectSuitByName(goodsName);
+        if (suit != null)
+            return ResponseMessage.newSuccessInstance(suit,"查找成功");
         else return ResponseMessage.newErrorInstance("该套装名称不存在");
     }
 
