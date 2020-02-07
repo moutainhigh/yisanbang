@@ -12,6 +12,15 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
+  <resultMap id="PartSizeMap" type="com.vtmer.yisanbang.dto.PartSizeDto">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="suit_id" jdbcType="INTEGER" property="suitId" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="part" jdbcType="VARCHAR" property="part" />
+    <result column="size" jdbcType="VARCHAR" property="size" />
+    <result column="inventory" jdbcType="INTEGER" property="inventory" />
+    <result column="model" jdbcType="VARCHAR" property="model" />
+  </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from part_size
     where id = #{id,jdbcType=INTEGER}
@@ -57,5 +66,39 @@
   <select id="selectAll" resultMap="BaseResultMap">
     select id, suit_id, price, part, size, inventory, model, create_time, update_time
     from part_size
+  </select>
+  <insert id="insertDto" parameterType="com.vtmer.yisanbang.dto.PartSizeDto">
+    insert into part_size (id, suit_id, price,
+      part, size, inventory,
+      model
+      )
+    values (#{id,jdbcType=INTEGER}, #{suitId,jdbcType=INTEGER}, #{price,jdbcType=DOUBLE},
+      #{part,jdbcType=VARCHAR}, #{size,jdbcType=VARCHAR}, #{inventory,jdbcType=INTEGER},
+      #{model,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateDtoByPrimaryKey" parameterType="com.vtmer.yisanbang.dto.PartSizeDto">
+    update part_size
+    set suit_id = #{suitId,jdbcType=INTEGER},
+      price = #{price,jdbcType=DOUBLE},
+      part = #{part,jdbcType=VARCHAR},
+      size = #{size,jdbcType=VARCHAR},
+      inventory = #{inventory,jdbcType=INTEGER},
+      model = #{model,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectDtoByPrimaryKey" parameterType="java.lang.Integer" resultMap="PartSizeMap">
+    select id, suit_id, price, part, size, inventory, model
+    from part_size
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAllDto" resultMap="PartSizeMap">
+    select id, suit_id, price, part, size, inventory, model
+    from part_size
+  </select>
+  <select id="selectAllBySuitId" parameterType="java.lang.Integer" resultMap="PartSizeMap">
+    select id, suit_id, price, part, size, inventory, model
+    from part_size
+    where suit_id = #{suitId,jdbcType=INTEGER}
   </select>
 </mapper>

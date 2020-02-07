@@ -10,7 +10,7 @@ public interface GoodsDetailService {
     public boolean addGoodsDetail(GoodsDetailDto goodsDetail);
 
     // 删除商品详细信息
-    public boolean deleteGoodsDetail(GoodsDetailDto goodsDetail);
+    public boolean deleteGoodsDetail(Integer goodsDetailId);
 
     // 更新商品详细信息
     public boolean updateGoodsDetail(GoodsDetailDto goodsDetail);

@@ -51,11 +51,12 @@ public class ColorSizeController {
     }
 
     @DeleteMapping("/deleteColorSize")
+    // 删除商品颜色尺寸
     public ResponseMessage deleteColorSize(@RequestBody ColorSizeDto colorSizeDto) {
         ColorSizeDto colorSize = colorSizeService.selectColorSizeById(colorSizeDto.getId());
         if (colorSize != null) {
-            boolean updateFlag = colorSizeService.updateColorSize(colorSizeDto);
-            if (updateFlag) return ResponseMessage.newSuccessInstance("删除成功");
+            boolean deleteFlag = colorSizeService.deleteColorSize(colorSizeDto.getId());
+            if (deleteFlag) return ResponseMessage.newSuccessInstance("删除成功");
             else return ResponseMessage.newErrorInstance("删除失败");
         } else return ResponseMessage.newErrorInstance("该商品颜色尺寸不存在");
     }
