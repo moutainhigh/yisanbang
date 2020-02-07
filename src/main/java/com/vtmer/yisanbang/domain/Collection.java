@@ -1,15 +1,20 @@
 package com.vtmer.yisanbang.domain;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 public class Collection {
+
     private Integer id;
 
+    @NotNull(message = "userId is null")
     private Integer userId;
 
+    @NotNull(message = "goodsId is null")
     private Integer goodsId;
 
-    private Byte isGoods;
+    @NotNull(message = "isGoods is null")
+    private Boolean isGoods;
 
     private Date createTime;
 
@@ -39,11 +44,11 @@ public class Collection {
         this.goodsId = goodsId;
     }
 
-    public Byte getIsGoods() {
+    public Boolean getIsGoods() {
         return isGoods;
     }
 
-    public void setIsGoods(Byte isGoods) {
+    public void setIsGoods(Boolean isGoods) {
         this.isGoods = isGoods;
     }
 

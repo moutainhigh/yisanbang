@@ -2,11 +2,13 @@ package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.domain.Collection;
-import com.vtmer.yisanbang.vo.CollectionVo;
 import com.vtmer.yisanbang.service.CollectionService;
+import com.vtmer.yisanbang.vo.CollectionVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 @RestController
@@ -16,8 +18,12 @@ public class CollectionController {
     @Autowired
     private CollectionService collectionService;
 
+    /**
+     * @param collection:userId、goodsId、isGoods
+     * @return
+     */
     @PostMapping("/insert")
-    public ResponseMessage insert(@RequestBody Collection collection) {
+    public ResponseMessage insert(@RequestBody @Validated Collection collection) {
         Integer res = collectionService.insertOne(collection);
         if (res == 1) {
             return ResponseMessage.newSuccessInstance("添加收藏成功");
@@ -29,19 +35,26 @@ public class CollectionController {
         return ResponseMessage.newErrorInstance("未知错误~");
     }
 
+    /**
+     * 删除收藏接口
+     * @param collectionIdList：收藏id list集合
+     * @return
+     */
     @DeleteMapping("/delete")
-    public ResponseMessage delete(@RequestBody List<Collection> collectionList) {
-        if (collectionList!=null && collectionList.size()!=0) {
-            Boolean deleteRes = collectionService.delete(collectionList);
-            if (deleteRes) {
-                return ResponseMessage.newSuccessInstance("删除收藏成功");
-            } else {
-                return ResponseMessage.newErrorInstance("删除收藏出错");
-            }
+    public ResponseMessage delete(@RequestBody @NotEmpty(message = "收藏集合为空") List<Integer> collectionIdList) {
+        int res = collectionService.delete(collectionIdList);
+        if (res == 1) {
+            return ResponseMessage.newSuccessInstance("删除收藏成功");
+        } else {
+            return ResponseMessage.newErrorInstance("删除收藏出错");
         }
-        return ResponseMessage.newErrorInstance("传入参数不能为空");
     }
 
+    /**
+     * 获取用户收藏列表接口
+     * @param userId：用户id
+     * @return
+     */
     @GetMapping("/get/{id}")
     public ResponseMessage collectionList(@PathVariable("id") Integer userId) {
         if (userId!=null && userId>0) {

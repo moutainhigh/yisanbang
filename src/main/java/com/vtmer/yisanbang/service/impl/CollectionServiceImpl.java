@@ -30,14 +30,14 @@ public class CollectionServiceImpl implements CollectionService {
         Param goodsId、isGoods
      */
     @Override
-    public Boolean delete(List<Collection> collectionList) {
-        for (Collection collection : collectionList) {
-            Boolean deleteRes = collectionMapper.deleteOne(collection);
-            if (!deleteRes) {
-                return false;
+    public int delete(List<Integer> collectionIdList) {
+        for (Integer collectionId : collectionIdList) {
+            int res = collectionMapper.deleteByPrimaryKey(collectionId);
+            if (res == 0) {
+                return 0;
             }
         }
-        return true;
+        return 1;
     }
 
     /*
@@ -67,17 +67,17 @@ public class CollectionServiceImpl implements CollectionService {
             List<CollectionVo> collectionVoList = new ArrayList<>();
             for (Collection collection : collectionList) {
                 int goodsId = collection.getGoodsId();
-                int isGoods = collection.getIsGoods();
+                Boolean isGoods = collection.getIsGoods();
                 CollectionVo collectionVo = new CollectionVo();
                 collectionVo.setGoodsId(goodsId);
                 collectionVo.setIsGoods(isGoods);
                 // 如果是普通商品
-                if (isGoods == 1) {
+                if (isGoods) {
                     Goods goods = goodsMapper.selectByPrimaryKey(goodsId);
                     collectionVo.setName(goods.getName());
                     collectionVo.setPicture(goods.getPicture());
                     collectionVo.setPrice(goods.getPrice());
-                } else if (isGoods == 0) { // 如果是套装散件
+                } else { // 如果是套装散件
                     Suit suit = suitMapper.selectByPrimaryKey(goodsId);
                     collectionVo.setName(suit.getName());
                     collectionVo.setPicture(suit.getPicture());

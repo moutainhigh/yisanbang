@@ -4,7 +4,7 @@ public class CollectionVo {
 
     private Integer goodsId;
 
-    private Integer isGoods;
+    private Boolean isGoods;
 
     private String name;
 
@@ -20,11 +20,11 @@ public class CollectionVo {
         this.goodsId = goodsId;
     }
 
-    public Integer getIsGoods() {
+    public Boolean getIsGoods() {
         return isGoods;
     }
 
-    public void setIsGoods(Integer isGoods) {
+    public void setIsGoods(Boolean isGoods) {
         this.isGoods = isGoods;
     }
 

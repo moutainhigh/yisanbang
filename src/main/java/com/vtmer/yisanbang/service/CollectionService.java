@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface CollectionService {
 
-    public Integer insertOne(Collection collection);
+    Integer insertOne(Collection collection);
 
-    public Boolean delete(List<Collection> collectionList);
+    int delete(List<Integer> collectionIdList);
 
-    public List<CollectionVo> selectAllByUserId(Integer userId);
+    List<CollectionVo> selectAllByUserId(Integer userId);
 }
