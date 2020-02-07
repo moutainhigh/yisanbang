@@ -32,4 +32,6 @@ public interface OrderService {
     int updateAddress(OrderVo orderVo);
 
     int cancelOrder(Integer orderId);
+
+    void updateInventory(String orderNumber,Integer flag);
 }

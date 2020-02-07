@@ -136,6 +136,10 @@ public class RefundController {
                     orderMap.put("orderId",refund.getOrderId());
                     orderMap.put("status",3);
                     orderService.setOrderStatus(orderMap);
+                    // 库存归位
+                    String orderNumber = refundResult.getOutRefundNo();
+                    // 1 代表增加库存
+                    orderService.updateInventory(orderNumber,1);
                     return ResponseMessage.newSuccessInstance("微信退款成功");
                 } else { // 退款失败
                     logger.error("微信退款失败,错误码{},错误原因{}",refundResult.getErrCode(),refundResult.getErrCodeDes());

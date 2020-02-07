@@ -157,6 +157,7 @@ public class OrderServiceImpl implements OrderService {
                 orderGoodsMapper.insert(orderGoods);
 
                 // 减少相应商品的库存
+                // 不调用updateInventory方法，省得插入又再查一次数据库
                 HashMap<String, Integer> inventoryMap = new HashMap<>();
                 inventoryMap.put("amount",amount);
                 inventoryMap.put("sizeId",colorSizeId);
@@ -419,22 +420,7 @@ public class OrderServiceImpl implements OrderService {
                 orderMap.put("status",4);
                 setOrderStatus(orderMap);
                 // 库存归位
-                List<OrderGoods> orderGoodsList = orderGoodsMapper.selectByOrderId(orderId);
-                for (OrderGoods orderGoods : orderGoodsList) {
-                    Boolean isGoods = orderGoods.getIsGoods();
-                    Integer sizeId = orderGoods.getSizeId();
-                    Integer amount = orderGoods.getAmount();
-                    HashMap<String, Integer> inventoryMap = new HashMap<>();
-                    inventoryMap.put("sizeId",sizeId);
-                    inventoryMap.put("amount",amount);
-                    // 1代表增加库存
-                    inventoryMap.put("flag",1);
-                    if (isGoods == Boolean.TRUE) {
-                        colorSizeMapper.updateInventoryByPrimaryKey(inventoryMap);
-                    } else {
-                        partSizeMapper.updateInventoryByPrimaryKey(inventoryMap);
-                    }
-                }
+                updateInventory(order.getOrderNumber(),1);
                 return 1;
             } else { // 订单状态不可取消订单
                 return -2;
@@ -442,5 +428,32 @@ public class OrderServiceImpl implements OrderService {
         } else { // 订单id不存在
             return -1;
         }
+    }
+
+    /**
+     * 更新订单商品库存
+     * @param orderNumber：订单编号
+     * @param flag：1代表增加库存，0代表减少库存
+     * @return 返回成功失败状态
+     */
+    public void updateInventory(String orderNumber, Integer flag) {
+        Order order = orderMapper.selectByOrderNumber(orderNumber);
+        // 库存归位
+        List<OrderGoods> orderGoodsList = orderGoodsMapper.selectByOrderId(order.getId());
+        for (OrderGoods orderGoods : orderGoodsList) {
+            Boolean isGoods = orderGoods.getIsGoods();
+            Integer sizeId = orderGoods.getSizeId();
+            Integer amount = orderGoods.getAmount();
+            HashMap<String, Integer> inventoryMap = new HashMap<>();
+            inventoryMap.put("sizeId",sizeId);
+            inventoryMap.put("amount",amount);
+            // 1代表增加库存,0代表减少库存
+            inventoryMap.put("flag",flag);
+            if (isGoods == Boolean.TRUE) {
+                colorSizeMapper.updateInventoryByPrimaryKey(inventoryMap);
+            } else {
+                partSizeMapper.updateInventoryByPrimaryKey(inventoryMap);
+            }
+        } // end for
     }
 }

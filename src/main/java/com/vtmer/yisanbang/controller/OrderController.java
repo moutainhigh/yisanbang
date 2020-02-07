@@ -303,11 +303,13 @@ public class OrderController {
         }
     }
 
+    /**
+     * 取消订单接口
+     * @param orderId：订单id
+     * @return
+     */
     @PutMapping("/cancelOrder/{orderId}")
     public ResponseMessage cancelOrder(@PathVariable("orderId") Integer orderId) {
-        if (orderId == null) {
-            return ResponseMessage.newErrorInstance("传入参数为空");
-        }
         int res = orderService.cancelOrder(orderId);
         if (res == -1) {
             return ResponseMessage.newErrorInstance("订单id不存在");
