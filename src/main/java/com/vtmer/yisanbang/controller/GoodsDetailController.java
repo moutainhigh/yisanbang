@@ -62,7 +62,7 @@ public class GoodsDetailController {
     public ResponseMessage deleteGoodsDetail(@RequestBody GoodsDetailDto goodsDetail) {
         GoodsDetailDto goodsDetailDto = goodsDetailService.selectGoodsDetailByID(goodsDetail.getGoodsId());
         if (goodsDetailDto != null) {
-            boolean deleteFlag = goodsDetailService.deleteGoodsDetail(goodsDetail);
+            boolean deleteFlag = goodsDetailService.deleteGoodsDetail(goodsDetail.getGoodsId());
             if (deleteFlag) return ResponseMessage.newSuccessInstance("删除成功");
             else return ResponseMessage.newErrorInstance("删除失败");
         } else return ResponseMessage.newErrorInstance("该商品详细id错误，无该商品详细信息");

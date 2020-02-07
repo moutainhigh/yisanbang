@@ -1,7 +1,5 @@
 package com.vtmer.yisanbang.service.impl;
 
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
-import com.vtmer.yisanbang.domain.Suit;
 import com.vtmer.yisanbang.dto.SuitDto;
 import com.vtmer.yisanbang.mapper.SuitMapper;
 import com.vtmer.yisanbang.service.SuitService;

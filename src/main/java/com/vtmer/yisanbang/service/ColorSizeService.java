@@ -13,7 +13,7 @@ public interface ColorSizeService {
     public boolean addColorSize(ColorSizeDto colorSizeDto);
 
     // 删除颜色尺寸
-    public boolean deleteColorSize(ColorSizeDto colorSizeDto);
+    public boolean deleteColorSize(Integer colorSizeId);
 
     // 更新颜色尺寸
     public boolean updateColorSize(ColorSizeDto colorSizeDto);

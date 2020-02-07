@@ -32,8 +32,8 @@ public class ColorSizeServiceImpl implements ColorSizeService {
 
     @Override
     // 删除颜色尺寸
-    public boolean deleteColorSize(ColorSizeDto colorSizeDto) {
-        int deleteFlag = colorSizeMapper.deleteByPrimaryKey(colorSizeDto.getId());
+    public boolean deleteColorSize(Integer colorSizeId) {
+        int deleteFlag = colorSizeMapper.deleteByPrimaryKey(colorSizeId);
         if (deleteFlag > 0) return true;
         return false;
     }

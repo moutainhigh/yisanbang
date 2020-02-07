@@ -26,8 +26,8 @@ public class GoodsDetailServiceImpl implements GoodsDetailService {
 
     @Override
     // 删除商品详细信息
-    public boolean deleteGoodsDetail(GoodsDetailDto goodsDetail) {
-        int deleteFlag = goodsDetailMapper.deleteByPrimaryKey(goodsDetail.getId());
+    public boolean deleteGoodsDetail(Integer goodsDetailId) {
+        int deleteFlag = goodsDetailMapper.deleteByPrimaryKey(goodsDetailId);
         if (deleteFlag > 0) return true;
         return false;
     }
