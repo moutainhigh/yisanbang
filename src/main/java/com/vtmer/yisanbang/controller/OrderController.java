@@ -9,17 +9,20 @@ import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.github.binarywang.wxpay.util.SignUtils;
 import com.vtmer.yisanbang.common.ResponseMessage;
+import com.vtmer.yisanbang.common.validGroup.Insert;
+import com.vtmer.yisanbang.common.validGroup.Update;
 import com.vtmer.yisanbang.domain.Order;
 import com.vtmer.yisanbang.service.OrderService;
 import com.vtmer.yisanbang.service.UserService;
 import com.vtmer.yisanbang.vo.OrderVo;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
 
@@ -49,6 +52,9 @@ public class OrderController {
     @GetMapping("confirmOrder/{userId}")
     public ResponseMessage confirmOrder(@PathVariable("userId") Integer userId) {
         OrderVo orderVo = orderService.confirmCartOrder(userId);
+        if (orderVo == null) {
+            return ResponseMessage.newErrorInstance("userId有误或购物车勾选商品为空");
+        }
         return ResponseMessage.newSuccessInstance(orderVo,"获取确认订单相关信息成功");
     }
 
@@ -59,18 +65,12 @@ public class OrderController {
      * @return
      */
     @PostMapping("/insert")
-    public ResponseMessage insert(@RequestBody OrderVo orderVo) {
-        if (orderVo.getUserAddress() == null) {
-            return ResponseMessage.newErrorInstance("用户收货地址传入失败");
-        } else if (orderVo.getOrderGoodsList().getCartGoodsList() == null && orderVo.getOrderGoodsList().getCartGoodsList().size()==0) {
-            return ResponseMessage.newErrorInstance("用户订单商品信息传入失败");
+    public ResponseMessage insert(@RequestBody @Validated({Insert.class}) OrderVo orderVo) {
+        Map<String, String> orderMap = orderService.createCartOrder(orderVo);
+        if (orderMap != null) {
+            return ResponseMessage.newSuccessInstance(orderMap,"创建订单成功，返回订单编号和openId");
         } else {
-            Map<String, String> orderMap = orderService.createCartOrder(orderVo);
-            if (orderMap != null) {
-                return ResponseMessage.newSuccessInstance(orderMap,"创建订单成功，返回订单编号和openId");
-            } else {
-                return ResponseMessage.newErrorInstance("该用户还未通过微信登录，无openId");
-            }
+            return ResponseMessage.newErrorInstance("该用户还未通过微信登录，无openId");
         }
     }
 
@@ -180,7 +180,6 @@ public class OrderController {
      */
     @GetMapping("/get")
     public ResponseMessage listOrder(@RequestBody Map<String,Integer> orderMap) {
-        System.out.println(orderMap.get("userId"));
         if (!(orderMap.get("status")<=6 && orderMap.get("status")>=0)) {
             return ResponseMessage.newErrorInstance("订单状态参数超出定义范围");
         } else {
@@ -265,8 +264,8 @@ public class OrderController {
      * @return
      */
     @PutMapping("/setCourierNumber")
-    public ResponseMessage setCourierNumber(@RequestBody Order order) {
-        if (order==null) {
+    public ResponseMessage setCourierNumber(@RequestBody @NotNull(message = "传入参数为空") Order order) {
+        if (order.getId()==null) {
             return ResponseMessage.newErrorInstance("传入参数有误");
         }
         int res = orderService.setCourierNumber(order);
@@ -283,14 +282,7 @@ public class OrderController {
      * @return
      */
     @PutMapping("/updateAddress")
-    public ResponseMessage updateAddress(@RequestBody OrderVo orderVo) {
-        if (orderVo == null) {
-            return ResponseMessage.newErrorInstance("传入参数有误");
-        } else if (orderVo.getOrderNumber() == null) {
-            return ResponseMessage.newErrorInstance("订单编号为空");
-        } else if (orderVo.getUserAddress() == null) {
-            return ResponseMessage.newErrorInstance("用户地址为空");
-        }
+    public ResponseMessage updateAddress(@RequestBody @Validated({Update.class}) OrderVo orderVo) {
         int res = orderService.updateAddress(orderVo);
         if (res == -1) {
             return ResponseMessage.newErrorInstance("订单编号不存在");

@@ -82,12 +82,16 @@ public class OrderServiceImpl implements OrderService {
      * used in cart
      * @param userId
      * @return
+     * TODO 利用迭代器iterator删除list集合中未勾选的商品
      */
     public OrderVo confirmCartOrder(Integer userId) {
         setPostage();
         OrderVo orderVo = new OrderVo();
         // 获取用户购物车清单
         CartVo cartVo = cartService.selectCartVoByUserId(userId);
+        if (cartVo == null) {
+            return null;
+        }
         if (cartVo.getTotalPrice() >= standardPrice) { // 包邮
             orderVo.setPostage(0);
         } else {  // 不包邮
@@ -110,7 +114,8 @@ public class OrderServiceImpl implements OrderService {
     /**
      * create shopping cart order after users submit order
      * @param orderVo:UserAddress(用户地址、联系人、手机号)、邮费、留言、下单商品详情信息
-     * @return
+     * @return openid、orderNumber
+     * @throws DataIntegrityViolationException：库存不足抛出异常
      */
     @Transactional
     public Map<String,String> createCartOrder(OrderVo orderVo) throws DataIntegrityViolationException {

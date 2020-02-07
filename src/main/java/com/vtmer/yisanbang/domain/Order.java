@@ -6,6 +6,7 @@ import java.util.Date;
 
 @EqualsAndHashCode
 public class Order {
+
     private Integer id;
 
     private String orderNumber;
