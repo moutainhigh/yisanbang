@@ -43,9 +43,9 @@
     from user
     where open_id = #{openId}
   </select>
-  <select id="selectOpenIdByUserId" parameterType="java.lang.Integer">
+  <select id="selectOpenIdByUserId" parameterType="java.lang.Integer" resultType="java.lang.String">
     select open_id
     from user
-    where user_id = #{userId}
+    where id = #{userId}
   </select>
 </mapper>

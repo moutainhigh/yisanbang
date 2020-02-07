@@ -34,4 +34,6 @@ public interface OrderService {
     int cancelOrder(Integer orderId);
 
     void updateInventory(String orderNumber,Integer flag);
+
+    List<Order> getNotPayOrder();
 }

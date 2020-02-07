@@ -32,4 +32,6 @@ public interface OrderMapper {
 
     int updateAddressByOrderNumber(Order order);
 
+    List<Order> getNotPayOrder();
+
 }

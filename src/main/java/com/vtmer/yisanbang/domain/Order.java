@@ -1,7 +1,10 @@
 package com.vtmer.yisanbang.domain;
 
+import lombok.EqualsAndHashCode;
+
 import java.util.Date;
 
+@EqualsAndHashCode
 public class Order {
     private Integer id;
 
