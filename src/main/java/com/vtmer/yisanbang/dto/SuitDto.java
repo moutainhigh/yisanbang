@@ -1,6 +1,17 @@
 package com.vtmer.yisanbang.dto;
 
 public class SuitDto {
+    private Integer id;
+
+    private Integer sortId;
+
+    private String introduce;
+
+    private Double lowestPrice;
+
+    private Double highestPrice;
+
+    private Boolean isShow;
 
     private String name;
 
@@ -52,14 +63,82 @@ public class SuitDto {
         this.size = size;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getSortId() {
+        return sortId;
+    }
+
+    public void setSortId(Integer sortId) {
+        this.sortId = sortId;
+    }
+
+    public String getIntroduce() {
+        return introduce;
+    }
+
+    public void setIntroduce(String introduce) {
+        this.introduce = introduce;
+    }
+
+    public Double getLowestPrice() {
+        return lowestPrice;
+    }
+
+    public void setLowestPrice(Double lowestPrice) {
+        this.lowestPrice = lowestPrice;
+    }
+
+    public Double getHighestPrice() {
+        return highestPrice;
+    }
+
+    public void setHighestPrice(Double highestPrice) {
+        this.highestPrice = highestPrice;
+    }
+
+    public Boolean getShow() {
+        return isShow;
+    }
+
+    public void setShow(Boolean show) {
+        isShow = show;
+    }
+
     @Override
     public String toString() {
         return "SuitDto{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", sortId=" + sortId +
+                ", introduce='" + introduce + '\'' +
+                ", lowestPrice=" + lowestPrice +
+                ", highestPrice=" + highestPrice +
+                ", isShow=" + isShow +
+                ", name='" + name + '\'' +
                 ", picture='" + picture + '\'' +
                 ", price=" + price +
                 ", part='" + part + '\'' +
-                ", size=" + size +
+                ", size='" + size + '\'' +
                 '}';
+    }
+
+    public SuitDto(Integer id, Integer sortId, String introduce, Double lowestPrice, Double highestPrice, Boolean isShow, String name, String picture, double price, String part, String size) {
+        this.id = id;
+        this.sortId = sortId;
+        this.introduce = introduce;
+        this.lowestPrice = lowestPrice;
+        this.highestPrice = highestPrice;
+        this.isShow = isShow;
+        this.name = name;
+        this.picture = picture;
+        this.price = price;
+        this.part = part;
+        this.size = size;
     }
 }
