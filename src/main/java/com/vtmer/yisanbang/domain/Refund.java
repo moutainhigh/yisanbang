@@ -1,16 +1,20 @@
 package com.vtmer.yisanbang.domain;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 public class Refund {
+
     private Integer id;
 
     private String refundNumber;
 
+    @NotNull(message = "refundPrice is null")
     private Double refundPrice;
 
     private Integer userId;
 
+    @NotNull(message = "orderId is null")
     private Integer orderId;
 
     private String reason;

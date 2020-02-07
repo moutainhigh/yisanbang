@@ -2,6 +2,8 @@ package com.vtmer.yisanbang.dto;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+
 /**
  * 同意退款申请需要的数据
  */
@@ -9,6 +11,7 @@ import lombok.Data;
 public class AgreeRefundDto {
 
     // 退款编号
+    @NotBlank(message = "refundNumber is null")
     private String refundNumber;
 
     // 订单编号

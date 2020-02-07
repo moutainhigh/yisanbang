@@ -1,14 +1,18 @@
 package com.vtmer.yisanbang.domain;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 public class RefundExpress {
     private Integer id;
 
+    @NotNull(message = "refundId is null")
     private Integer refundId;
 
     private String expressCompany;
 
+    @NotBlank(message = "courierNumber is null")
     private String courierNumber;
 
     private Date createTime;
