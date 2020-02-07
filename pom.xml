@@ -151,11 +151,21 @@
             <artifactId>weixin-java-pay</artifactId>
             <version>3.6.0</version>
         </dependency>
-
+        <!-- 配置文件快捷键 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
+        </dependency>
+        <!--quartz -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-quartz</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>one.util</groupId>
+            <artifactId>streamex</artifactId>
+            <version>0.5.4</version>
         </dependency>
     </dependencies>
     <build>

@@ -3,7 +3,7 @@
 <mapper namespace="com.vtmer.yisanbang.mapper.OrderMapper">
   <sql id="BaseColumnList">
     id, order_number, user_id, user_name, phone_number, total_price, address_name,
-    status,postage,  courier_number, message, create_time
+    status,postage,  courier_number, message, create_time,update_time
   </sql>
   <sql id="OrderCondition">
     <if test="userId!=null">
@@ -115,5 +115,12 @@
     <include refid="BaseColumnList"></include>
     from `order`
     where order_number = #{orderNumber}
+  </select>
+  <select id="getNotPayOrder" resultType="com.vtmer.yisanbang.domain.Order">
+    select
+    <include refid="BaseColumnList"></include>
+    from `order`
+    where status = 0
+    order by create_time
   </select>
 </mapper>
