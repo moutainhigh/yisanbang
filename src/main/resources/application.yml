@@ -6,7 +6,7 @@ spring:
     # 如果存在多个数据源，监控的时候可以通过名字来区分开来
     name: mysql
     # 连接数据库的url
-    url: jdbc:mysql://localhost:3306/yisanbang?characterEncoding=utf-8&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/yisanbang?characterEncoding=utf-8&serverTimezone=GMT%2B8
     # 连接数据库的账号
     username: root
     # 连接数据库的密码
@@ -47,6 +47,24 @@ spring:
     multipart:
       # 最大文件上传限制
       max-file-size: 20MB
+  quartz:
+    #相关属性配置
+    properties:
+      org:
+        quartz:
+          scheduler:
+            #默认或是自己改名字都行
+            instanceName: DefaultQuartzScheduler
+            #如果使用集群，instanceId必须唯一，设置成AUTO
+            instanceId: AUTO
+          jobStore:
+            #存储方式使用RAMJobStore,也就是缓存
+            class: org.quartz.simpl.RAMJobStore
+          threadPool:
+            class: org.quartz.simpl.SimpleThreadPool
+            threadCount: 10
+            threadPriority: 5
+            threadsInheritContextClassLoaderOfInitializingThread: true
 
 mybatis:
   configuration:
@@ -81,3 +99,4 @@ pagehelper:
   reasonable: true
   support-methods-arguments: true
   params: count=countSql
+
