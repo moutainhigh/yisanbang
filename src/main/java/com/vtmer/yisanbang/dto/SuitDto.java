@@ -1,5 +1,7 @@
 package com.vtmer.yisanbang.dto;
 
+import java.util.Date;
+
 public class SuitDto {
     private Integer id;
 
@@ -12,6 +14,8 @@ public class SuitDto {
     private Double highestPrice;
 
     private Boolean isShow;
+
+    private Date updateTime;
 
     private String name;
 
@@ -111,6 +115,14 @@ public class SuitDto {
         isShow = show;
     }
 
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
     @Override
     public String toString() {
         return "SuitDto{" +
@@ -120,6 +132,7 @@ public class SuitDto {
                 ", lowestPrice=" + lowestPrice +
                 ", highestPrice=" + highestPrice +
                 ", isShow=" + isShow +
+                ", updateTime=" + updateTime +
                 ", name='" + name + '\'' +
                 ", picture='" + picture + '\'' +
                 ", price=" + price +
@@ -128,13 +141,14 @@ public class SuitDto {
                 '}';
     }
 
-    public SuitDto(Integer id, Integer sortId, String introduce, Double lowestPrice, Double highestPrice, Boolean isShow, String name, String picture, double price, String part, String size) {
+    public SuitDto(Integer id, Integer sortId, String introduce, Double lowestPrice, Double highestPrice, Boolean isShow, Date updateTime, String name, String picture, double price, String part, String size) {
         this.id = id;
         this.sortId = sortId;
         this.introduce = introduce;
         this.lowestPrice = lowestPrice;
         this.highestPrice = highestPrice;
         this.isShow = isShow;
+        this.updateTime = updateTime;
         this.name = name;
         this.picture = picture;
         this.price = price;

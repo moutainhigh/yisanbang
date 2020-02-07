@@ -9,6 +9,12 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
+  <resultMap id="SuitDetailMap" type="com.vtmer.yisanbang.dto.SuitDetailDto">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="suit_id" jdbcType="INTEGER" property="suitId" />
+    <result column="pirtuce_path" jdbcType="VARCHAR" property="pirtucePath" />
+    <result column="show_order" jdbcType="INTEGER" property="showOrder" />
+  </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from suit_detail
     where id = #{id,jdbcType=INTEGER}
@@ -38,5 +44,34 @@
   <select id="selectAll" resultMap="BaseResultMap">
     select id, suit_id, pirtuce_path, show_order, create_time, update_time
     from suit_detail
+  </select>
+  <insert id="insertDto" parameterType="com.vtmer.yisanbang.dto.SuitDetailDto">
+    insert into suit_detail (id, suit_id, pirtuce_path,
+      show_order
+      )
+    values (#{id,jdbcType=INTEGER}, #{suitId,jdbcType=INTEGER}, #{pirtucePath,jdbcType=VARCHAR},
+      #{showOrder,jdbcType=INTEGER}}
+      )
+  </insert>
+  <update id="updateDtoByPrimaryKey" parameterType="com.vtmer.yisanbang.dto.SuitDetailDto">
+    update suit_detail
+    set suit_id = #{suitId,jdbcType=INTEGER},
+      pirtuce_path = #{pirtucePath,jdbcType=VARCHAR},
+      show_order = #{showOrder,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectDtoByPrimaryKey" parameterType="java.lang.Integer" resultMap="SuitDetailMap">
+    select id, suit_id, pirtuce_path, show_order
+    from suit_detail
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAllDto" resultMap="SuitDetailMap">
+    select id, suit_id, pirtuce_path, show_order
+    from suit_detail
+  </select>
+  <select id="selectAllDtoBySuitId" parameterType="java.lang.Integer" resultMap="SuitDetailMap">
+    select id, suit_id, pirtuce_path, show_order
+    from suit_detail
+    where sort_id = #{sortId,jdbcType=INTEGER}
   </select>
 </mapper>

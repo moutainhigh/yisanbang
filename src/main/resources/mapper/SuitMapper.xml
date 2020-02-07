@@ -107,9 +107,9 @@
     order by lowest_price
   </select>
   <select id="selectAllDtoOrderByTime" resultMap="SuitMap">
-    select id, sort_id, name, introduce, picture, lowest_price, highest_price, is_show
+    select id, sort_id, name, introduce, picture, lowest_price, highest_price, is_show, update_time
     from suit
     where is_show = true
-     order by update_time
+    order by update_time
   </select>
 </mapper>
