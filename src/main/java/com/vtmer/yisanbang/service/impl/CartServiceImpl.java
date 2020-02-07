@@ -128,7 +128,6 @@ public class CartServiceImpl implements CartService {
         }
     }
 
-    @Override
     @Transactional
     public double addOrSubtractAmount(AddGoodsDto addGoodsDto) {
         // 更新数量

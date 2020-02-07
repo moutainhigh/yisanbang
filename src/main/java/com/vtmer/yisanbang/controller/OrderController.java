@@ -265,8 +265,10 @@ public class OrderController {
      */
     @PutMapping("/setCourierNumber")
     public ResponseMessage setCourierNumber(@RequestBody @NotNull(message = "传入参数为空") Order order) {
-        if (order.getId()==null) {
-            return ResponseMessage.newErrorInstance("传入参数有误");
+        if (order.getId()==null && order.getOrderNumber() == null) {
+            return ResponseMessage.newErrorInstance("orderId和orderNumber都为空");
+        } else if (order.getCourierNumber() == null) {
+            return ResponseMessage.newErrorInstance("快递编号courierNumber为空");
         }
         int res = orderService.setCourierNumber(order);
         if (res == 1) {

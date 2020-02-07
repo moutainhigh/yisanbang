@@ -1,15 +1,18 @@
 package com.vtmer.yisanbang.dto;
 
-import com.vtmer.yisanbang.domain.Goods;
-
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public class DeleteCartGoodsDto {
 
+    @NotNull(message = "userId is null")
     private Integer userId;
 
+    @NotNull(message = "cartId is null")
     private Integer cartId;
 
+    @Valid
     private List<GoodsDto> goodsDtoList;
 
     public DeleteCartGoodsDto getDeleteCartGoodsDto() {

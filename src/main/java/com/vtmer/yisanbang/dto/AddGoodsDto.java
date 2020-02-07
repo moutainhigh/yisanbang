@@ -1,15 +1,26 @@
 package com.vtmer.yisanbang.dto;
 
+import com.vtmer.yisanbang.common.validGroup.AddGoods;
+import com.vtmer.yisanbang.common.validGroup.Insert;
+import com.vtmer.yisanbang.common.validGroup.Update;
+
+import javax.validation.constraints.NotNull;
+
 public class AddGoodsDto {
+
 
     private Integer userId;
 
+    @NotNull(groups = {Insert.class, Update.class,AddGoods.class},message = "colorSizeId is null")
     private Integer colorSizeId;
 
+    @NotNull(groups = {AddGoods.class})
     private Integer isGoods;
 
+    @NotNull(groups = {Insert.class,AddGoods.class},message = "amount is null")
     private Integer amount;
 
+    @NotNull(groups = {AddGoods.class})
     private Integer cartId;
 
     public AddGoodsDto() {

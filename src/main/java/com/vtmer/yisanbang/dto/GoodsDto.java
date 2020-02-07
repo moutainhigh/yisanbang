@@ -1,8 +1,10 @@
 package com.vtmer.yisanbang.dto;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 public class GoodsDto {
+
     private Integer id;
 
     private Integer sortId;
@@ -17,8 +19,10 @@ public class GoodsDto {
 
     private Boolean isShow;
 
+    @NotNull(message = "colorSizeId is null")
     private Integer colorSizeId;
 
+    @NotNull(message = "isGoods is null")
     private Integer isGoods;
 
     private Date updateTime;
