@@ -1,12 +1,16 @@
 package com.vtmer.yisanbang.domain;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 public class Postage {
+
     private Integer id;
 
+    @NotNull(message = "price(达标金额) is null")
     private Double price;
 
+    @NotNull(message = "defaultPostage(默认邮费) is null")
     private Double defaultPostage;
 
     private Date createTime;
