@@ -77,6 +77,9 @@
 <!--        <table tableName="uniform_sort" domainObjectName="UniformSort"/>-->
 <!--        <table tableName="user" domainObjectName="User"/>-->
 <!--        <table tableName="user_address" domainObjectName="UserAddress"/>-->
+<!--        <table tableName="refund_goods" domainObjectName="RefundGoods"/>-->
+<!--        <table tableName="refund_express" domainObjectName="RefundExpress"/>-->
+        <table tableName="business_address" domainObjectName="BusinessAddress"/>
     </context>
 
 </generatorConfiguration>
