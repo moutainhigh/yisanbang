@@ -6,6 +6,7 @@ import com.vtmer.yisanbang.service.DiscountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,9 +18,13 @@ public class DiscountController {
     @Autowired
     private DiscountService discountService;
 
-
+    /**
+     * 插入打折信息
+     * @param discount：amount、discountRate
+     * @return
+     */
     @PostMapping("/insert")
-    public ResponseMessage insert(@RequestBody Discount discount) {
+    public ResponseMessage insert(@RequestBody @Validated Discount discount) {
         int res = discountService.insert(discount);
         if (res == 1) {
             return ResponseMessage.newSuccessInstance("插入打折数据成功");
@@ -32,8 +37,13 @@ public class DiscountController {
         }
     }
 
+    /**
+     * 修改打折信息
+     * @param discount
+     * @return
+     */
     @PutMapping("/update")
-    public ResponseMessage update(@RequestBody Discount discount) {
+    public ResponseMessage update(@RequestBody @Validated Discount discount) {
         int res = discountService.update(discount);
         if (res == 1) {
             return ResponseMessage.newSuccessInstance("修改打折数据成功");

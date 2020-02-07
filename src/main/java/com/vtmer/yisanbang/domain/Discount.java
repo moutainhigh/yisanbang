@@ -1,12 +1,19 @@
 package com.vtmer.yisanbang.domain;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 public class Discount {
     private Integer id;
 
+    @NotNull(message = "amount is null")
     private Integer amount;
 
+    @NotNull(message = "discountRate is null")
+    @Max(value = 1,message = "打折率大于1")
+    @Min(value = 0,message = "打折率小于0")
     private Double discountRate;
 
     private Date createTime;

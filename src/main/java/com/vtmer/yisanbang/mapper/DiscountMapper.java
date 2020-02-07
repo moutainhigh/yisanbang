@@ -24,4 +24,6 @@ public interface DiscountMapper {
     int delete();
 
     Boolean checkExist();
+
+    int update(Discount discount);
 }

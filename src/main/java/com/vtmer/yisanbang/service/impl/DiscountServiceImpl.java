@@ -25,8 +25,7 @@ public class DiscountServiceImpl implements DiscountService {
 
     @Override
     public int update(Discount discount) {
-        discount.setId(1);
-        return discountMapper.updateByPrimaryKey(discount);
+        return discountMapper.update(discount);
     }
 
     @Override

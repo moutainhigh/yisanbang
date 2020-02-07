@@ -25,6 +25,11 @@
       discount_rate = #{discountRate,jdbcType=DOUBLE}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <update id="update" parameterType="com.vtmer.yisanbang.domain.Discount">
+    update discount
+    set amount = #{amount,jdbcType=INTEGER},
+    discount_rate = #{discountRate,jdbcType=DOUBLE}
+  </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select id, amount, discount_rate, create_time, update_time
     from discount
