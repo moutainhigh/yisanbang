@@ -62,7 +62,8 @@ public class OrderAutoCancelJob implements Job {
                 queue.poll();
                 // 取下一个元素
                 element = queue.peek();
-            } else if (diff < EFFECTIVE_TIME) {
+            } else if (diff != null) {
+                // 如果diff<EFFECTIVE_TIME
                 try {
                     System.out.println("等待检测订单" + element.getId() + "下单时间" + element.getCreateTime() + "已下单"
                             + diff / 1000 + "秒");

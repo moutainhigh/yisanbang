@@ -9,6 +9,7 @@ import com.vtmer.yisanbang.service.OrderService;
 import com.vtmer.yisanbang.vo.CartVo;
 import com.vtmer.yisanbang.vo.OrderVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -112,8 +113,9 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     @Transactional
-    public Map<String,String> createCartOrder(OrderVo orderVo) {
+    public Map<String,String> createCartOrder(OrderVo orderVo) throws DataIntegrityViolationException {
 
+        // 返回map
         HashMap<String, String> orderMap = new HashMap<>();
         // 根据用户Id拿到openId
         String openId = userMapper.selectOpenIdByUserId(orderVo.getUserAddress().getUserId());
@@ -161,7 +163,8 @@ public class OrderServiceImpl implements OrderService {
                 HashMap<String, Integer> inventoryMap = new HashMap<>();
                 inventoryMap.put("amount",amount);
                 inventoryMap.put("sizeId",colorSizeId);
-                // 0代表减少库存
+                // 0
+                // 代表减少库存
                 inventoryMap.put("flag",0);
                 if (isGoods == Boolean.TRUE) {
                     colorSizeMapper.updateInventoryByPrimaryKey(inventoryMap);
