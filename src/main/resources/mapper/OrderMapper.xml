@@ -118,9 +118,17 @@
   </select>
   <select id="getNotPayOrder" resultType="com.vtmer.yisanbang.domain.Order">
     select
-    <include refid="BaseColumnList"></include>
+    <include refid="BaseColumnList"/>
     from `order`
     where status = 0
     order by create_time
+  </select>
+  <select id="getPayOrder" resultType="com.vtmer.yisanbang.domain.Order">
+    select
+    <include refid="BaseColumnList"/>
+    from `order`
+    where status = 1
+    or status = 2
+    or status = 3
   </select>
 </mapper>

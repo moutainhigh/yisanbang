@@ -6,6 +6,7 @@ import com.vtmer.yisanbang.dto.CartGoodsDto;
 import com.vtmer.yisanbang.mapper.*;
 import com.vtmer.yisanbang.service.CartService;
 import com.vtmer.yisanbang.service.OrderService;
+import com.vtmer.yisanbang.service.RefundService;
 import com.vtmer.yisanbang.vo.CartVo;
 import com.vtmer.yisanbang.vo.OrderVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +14,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -60,6 +58,9 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private RefundMapper refundMapper;
 
+    @Autowired
+    private RefundService refundService;
+
     // Free the postage after standardPrice
     private double standardPrice;
 
@@ -98,12 +99,25 @@ public class OrderServiceImpl implements OrderService {
             orderVo.setPostage(defaultPostage);
         }
         List<CartGoodsDto> cartGoodsList = cartVo.getCartGoodsList();
+        // IDEA推荐方式
+        cartGoodsList.removeIf(cartGoodsDto -> cartGoodsDto.getIsChosen() == Boolean.FALSE);
+        /* 使用迭代器删除集合中的元素
+        Iterator<CartGoodsDto> iterator = cartGoodsList.iterator();
+        while (iterator.hasNext()) {
+            CartGoodsDto cartGoodsDto = iterator.next();
+            if (cartGoodsDto.getIsChosen() == Boolean.FALSE) {
+                iterator.remove();
+            }
+        }
+         */
+        /* 使用foreach方式删除集合中的元素，不推荐
         for (int i = 0;i<cartGoodsList.size();i++) {
             if (cartGoodsList.get(i).getIsChosen() == Boolean.FALSE) { // 如果是未勾选的,删除之
                 cartGoodsList.remove(i);
                 i--; // 索引需要递减，这里也可以使用逆序遍历的方法
             }
         }
+         */
         cartVo.setCartGoodsList(cartGoodsList);
         orderVo.setOrderGoodsList(cartVo);
         UserAddress userAddress = userAddressMapper.selectDefaultByUserId(userId);
@@ -471,5 +485,13 @@ public class OrderServiceImpl implements OrderService {
      */
     public List<Order> getNotPayOrder() {
         return orderMapper.getNotPayOrder();
+    }
+
+    @Override
+    public List<Order> getUnRefundPayOrderList() {
+        List<Order> payOrderList = orderMapper.getPayOrder();
+        if (payOrderList!=null) {
+            return refundService.getUnRefundOrder(payOrderList);
+        } else return null;
     }
 }

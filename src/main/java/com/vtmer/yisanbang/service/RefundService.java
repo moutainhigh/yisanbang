@@ -1,5 +1,6 @@
 package com.vtmer.yisanbang.service;
 
+import com.vtmer.yisanbang.domain.Order;
 import com.vtmer.yisanbang.domain.Refund;
 import com.vtmer.yisanbang.dto.AgreeRefundDto;
 import com.vtmer.yisanbang.vo.RefundVo;
@@ -49,4 +50,11 @@ public interface RefundService {
     int deleteByRefundNumber(String refundNumber);
 
     Refund selectByPrimaryKey(Integer refundId);
+
+    /**
+     * 查找未退款的已付款订单
+     * @param orderList:已付款的订单
+     * @return:未退款的已付款订单
+     */
+    List<Order> getUnRefundOrder(List<Order> orderList);
 }

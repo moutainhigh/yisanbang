@@ -14,6 +14,7 @@ public class InitializationJobManage {
     public void Initialization(){
         // 每25分钟执行一次
         quartzManager.addJob("未支付订单半小时定时删除",OrderAutoCancelJob.class,25);
+        // 每天凌晨三点执行一次 0,10 * * * * ? *    0 0 3 1/1 * ? *
+        quartzManager.addJob("每天计算收益情况",CalculateEarningsJob.class," 0 0 3 1/1 * ? *");
     }
-
 }

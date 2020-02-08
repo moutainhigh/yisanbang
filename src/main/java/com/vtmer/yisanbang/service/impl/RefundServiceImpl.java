@@ -1,10 +1,16 @@
 package com.vtmer.yisanbang.service.impl;
 
 import com.vtmer.yisanbang.common.OrderNumberUtil;
-import com.vtmer.yisanbang.domain.*;
+import com.vtmer.yisanbang.domain.Order;
+import com.vtmer.yisanbang.domain.OrderGoods;
+import com.vtmer.yisanbang.domain.Refund;
+import com.vtmer.yisanbang.domain.RefundGoods;
 import com.vtmer.yisanbang.dto.AgreeRefundDto;
 import com.vtmer.yisanbang.dto.CartGoodsDto;
-import com.vtmer.yisanbang.mapper.*;
+import com.vtmer.yisanbang.mapper.OrderGoodsMapper;
+import com.vtmer.yisanbang.mapper.OrderMapper;
+import com.vtmer.yisanbang.mapper.RefundGoodsMapper;
+import com.vtmer.yisanbang.mapper.RefundMapper;
 import com.vtmer.yisanbang.service.OrderService;
 import com.vtmer.yisanbang.service.RefundService;
 import com.vtmer.yisanbang.vo.CartVo;
@@ -14,10 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class RefundServiceImpl implements RefundService {
@@ -264,5 +267,19 @@ public class RefundServiceImpl implements RefundService {
     @Override
     public Refund selectByPrimaryKey(Integer refundId) {
         return refundMapper.selectByPrimaryKey(refundId);
+    }
+
+    @Override
+    public List<Order> getUnRefundOrder(List<Order> orderList) {
+        Iterator<Order> iterator = orderList.iterator();
+        // 如果是退款成功的订单，从orderList中剔除
+        while (iterator.hasNext()) {
+            Order order = iterator.next();
+            Refund refund = refundMapper.selectByOrderId(order.getId());
+            if (refund!=null && refund.getStatus() == 3) {
+                iterator.remove();
+            }
+        }
+        return orderList;
     }
 }

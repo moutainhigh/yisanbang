@@ -30,7 +30,7 @@ public class OrderAutoCancelJob implements Job {
 
     @Transactional
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        System.out.println("执行订单检测任务");
+        logger.info("执行订单检测任务");
         // 队列
         Queue<Order> queue = new LinkedList<>();
         // 未付款订单列表
@@ -50,7 +50,7 @@ public class OrderAutoCancelJob implements Job {
             //时间差值
             Long diff = this.checkOrder(element);
             if (diff != null && diff >= EFFECTIVE_TIME) {
-                System.out.println("开始关闭订单" + element.getId() + "下单时间" + element.getCreateTime());
+                logger.info("开始关闭订单任务，订单编号{},下单时间{}",element.getId(),element.getCreateTime());
                 // 更待订单状态为交易关闭
                 HashMap<String, Integer> orderMap = new HashMap<>();
                 orderMap.put("orderId",element.getId());
@@ -65,8 +65,7 @@ public class OrderAutoCancelJob implements Job {
             } else if (diff != null) {
                 // 如果diff<EFFECTIVE_TIME
                 try {
-                    System.out.println("等待检测订单" + element.getId() + "下单时间" + element.getCreateTime() + "已下单"
-                            + diff / 1000 + "秒");
+                    logger.info("等待检测订单,订单编号为{}，下单时间{},已下单{}秒",element.getId(),element.getCreateTime(),diff / 1000 );
                     Thread.sleep(EFFECTIVE_TIME - diff);
                 } catch (InterruptedException e) {
                     e.printStackTrace();

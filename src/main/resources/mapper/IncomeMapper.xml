@@ -13,10 +13,8 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.vtmer.yisanbang.domain.Income">
-    insert into income (id, total_amount, total_price, 
-      create_time, update_time)
-    values (#{id,jdbcType=INTEGER}, #{totalAmount,jdbcType=INTEGER}, #{totalPrice,jdbcType=DOUBLE}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+    insert into income ( total_amount, total_price)
+    values ( #{totalAmount,jdbcType=INTEGER}, #{totalPrice,jdbcType=DOUBLE})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.vtmer.yisanbang.domain.Income">
     update income
