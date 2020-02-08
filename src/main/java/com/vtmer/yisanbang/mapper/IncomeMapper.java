@@ -4,6 +4,7 @@ import com.vtmer.yisanbang.domain.Income;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -18,4 +19,6 @@ public interface IncomeMapper {
     List<Income> selectAll();
 
     int updateByPrimaryKey(Income record);
+
+    Income getByTime(Date time);
 }

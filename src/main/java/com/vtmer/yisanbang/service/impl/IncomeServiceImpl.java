@@ -3,9 +3,12 @@ package com.vtmer.yisanbang.service.impl;
 import com.vtmer.yisanbang.domain.Income;
 import com.vtmer.yisanbang.mapper.IncomeMapper;
 import com.vtmer.yisanbang.service.IncomeService;
+import com.vtmer.yisanbang.vo.IncomeVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -22,5 +25,38 @@ public class IncomeServiceImpl implements IncomeService {
     @Override
     public List<Income> selectAll() {
         return incomeMapper.selectAll();
+    }
+
+    @Override
+    public IncomeVo getAll() {
+        List<Income> incomeList = incomeMapper.selectAll();
+        if (incomeList == null) {
+            return null;
+        } else {
+            double totalPrice = 0;
+            Integer totalAmount = 0;
+            IncomeVo incomeVo = new IncomeVo();
+            for (Income income : incomeList) {
+                totalPrice += income.getTotalPrice();
+                totalAmount += income.getTotalAmount();
+            }
+            incomeVo.setTotalAmount(totalAmount);
+            incomeVo.setTotalPrice(totalPrice);
+            incomeVo.setIncomeList(incomeList);
+            return incomeVo;
+        }
+    }
+
+    @Override
+    public Income getByTime(Long timestamp) {
+        Timestamp ts = new Timestamp(timestamp);
+        Date date = null;
+        try {
+            date = ts;
+            System.out.println(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return incomeMapper.getByTime(date);
     }
 }

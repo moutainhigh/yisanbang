@@ -25,12 +25,17 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select id, total_amount, total_price, create_time, update_time
+    select id, total_amount, total_price, create_time
     from income
     where id = #{id,jdbcType=INTEGER}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select id, total_amount, total_price, create_time, update_time
+    select id, total_amount, total_price, create_time
     from income
+  </select>
+  <select id="getByTime" resultType="com.vtmer.yisanbang.domain.Income">
+    select id, total_amount, total_price, create_time
+    from income
+    WHERE DATE_FORMAT(create_time,'%Y-%m-%d') = DATE_FORMAT(#{time,jdbcType=TIMESTAMP},'%Y-%m-%d')
   </select>
 </mapper>
