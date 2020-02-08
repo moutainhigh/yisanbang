@@ -1,4 +1,4 @@
-package com.vtmer.yisanbang.common;
+package com.vtmer.yisanbang.common.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

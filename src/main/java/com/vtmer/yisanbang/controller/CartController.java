@@ -9,6 +9,8 @@ import com.vtmer.yisanbang.dto.DeleteCartGoodsDto;
 import com.vtmer.yisanbang.service.CartService;
 import com.vtmer.yisanbang.vo.AddCartGoodsVo;
 import com.vtmer.yisanbang.vo.CartVo;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 
+@Api("购物车接口")
 @RestController
 @RequestMapping("/cart")
 public class CartController {
@@ -31,6 +34,7 @@ public class CartController {
      * @param userId
      * @return
      */
+    @ApiOperation(value = "根据userId获取用户的购物车商品列表")
     @GetMapping("/listCartGoods/{id}")
     public ResponseMessage listCartGoods(@PathVariable("id") Integer userId) {
         CartVo cartVo = cartService.selectCartVoByUserId(userId);
@@ -41,7 +45,7 @@ public class CartController {
                 return ResponseMessage.newSuccessInstance("购物车为空");
         } else {
             logger.warn("传入的userId有误");
-            return ResponseMessage.newErrorInstance("获取购物车商品列表失败");
+            return ResponseMessage.newErrorInstance("传入的userId有误,获取购物车商品列表失败");
         }
     }
 
@@ -50,6 +54,7 @@ public class CartController {
      * @param AddCartGoodsVo
      * @return
      */
+    @ApiOperation(value = "添加商品进入购物车")
     @PostMapping("/addCartGoods")
     public ResponseMessage addCartGoods(@RequestBody @Validated({Insert.class}) AddCartGoodsVo AddCartGoodsVo) {
         int res = cartService.addCartGoods(AddCartGoodsVo);

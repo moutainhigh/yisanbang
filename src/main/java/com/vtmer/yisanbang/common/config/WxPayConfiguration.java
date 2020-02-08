@@ -1,4 +1,4 @@
-package com.vtmer.yisanbang.common;
+package com.vtmer.yisanbang.common.config;
 
 
 import com.github.binarywang.wxpay.config.WxPayConfig;

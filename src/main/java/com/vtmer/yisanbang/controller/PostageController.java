@@ -1,6 +1,7 @@
 package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
+import com.vtmer.yisanbang.common.annotation.RequestLog;
 import com.vtmer.yisanbang.domain.Postage;
 import com.vtmer.yisanbang.service.PostageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ public class PostageController {
     @Autowired
     private PostageService postageService;
 
+    @RequestLog(module = "邮费设置", operationDesc = "获取邮费规则设置")
     @GetMapping("/get")
     public ResponseMessage get() {
         Postage postage = postageService.get();

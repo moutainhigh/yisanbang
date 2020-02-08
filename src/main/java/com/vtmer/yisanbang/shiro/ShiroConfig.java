@@ -22,9 +22,9 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         // 添加Shiro内置过滤器
         Map<String, String> filterMap = new LinkedHashMap<>();
-        filterMap.put("/admin/**", "anon");
-        filterMap.put("/user/**", "anon");
-        filterMap.put("/cart/**", "anon");
+        //filterMap.put("/admin/**", "anon");
+        //filterMap.put("/user/**", "anon");
+        //filterMap.put("/cart/**", "anon");
         //filterMap.put("/**","authc");
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterMap);
