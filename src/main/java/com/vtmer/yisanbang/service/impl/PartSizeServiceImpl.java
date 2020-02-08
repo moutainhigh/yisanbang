@@ -105,4 +105,16 @@ public class PartSizeServiceImpl implements PartSizeService {
         if (sizeList != null) return sizeList;
         return null;
     }
+
+    @Override
+    // 根据颜色尺寸查找显示库存
+    public Integer selectInventoryByPartSize(Integer suitId, String part, String size) {
+        List<PartSizeDto> partSizeDtos = partSizeMapper.selectAllBySuitId(suitId);
+        for (PartSizeDto partSize : partSizeDtos) {
+            if (partSize.getPart().equals(part))
+                if (partSize.getSize().equals(size))
+                    return partSize.getInventory();
+        }
+        return null;
+    }
 }

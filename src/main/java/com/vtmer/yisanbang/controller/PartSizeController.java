@@ -94,4 +94,16 @@ public class PartSizeController {
             return ResponseMessage.newErrorInstance("该套装id错误，查找无结果");
         }
     }
+
+    @GetMapping("/selectInventoryByPartSize/{id}/{part}/{size}")
+    public ResponseMessage selectInventoryByPartSize(@PathVariable("id") Integer suitId, @PathVariable("part") String part, @PathVariable("size") String size) {
+        PartSizeDto partSizeDto = partSizeService.selectPartSizeById(suitId);
+        if (partSizeDto!= null){
+            Integer inventory = partSizeService.selectInventoryByPartSize(suitId, part, size);
+            if (inventory != null)
+                return ResponseMessage.newSuccessInstance(inventory,"查找成功");
+            else
+                return ResponseMessage.newErrorInstance("查找失败");
+        }else return ResponseMessage.newErrorInstance("该套装id错误，查找无结果");
+    }
 }

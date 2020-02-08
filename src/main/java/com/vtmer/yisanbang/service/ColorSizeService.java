@@ -32,4 +32,7 @@ public interface ColorSizeService {
 
     // 查找所有尺寸
     public List<String> selectAllSizeById(Integer goodsId);
+
+    // 根据颜色尺寸查找显示库存
+    public Integer selectInventoryByColorSize(Integer goodsId, String Color, String Size);
 }

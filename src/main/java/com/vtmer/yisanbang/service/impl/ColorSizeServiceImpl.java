@@ -102,4 +102,16 @@ public class ColorSizeServiceImpl implements ColorSizeService {
         return null;
     }
 
+    @Override
+    // 根据颜色尺寸查找显示库存
+    public Integer selectInventoryByColorSize(Integer goodsId, String Color, String Size) {
+        List<ColorSizeDto> colorSizeDtos = colorSizeMapper.selectAllDtoByGoodsId(goodsId);
+        for (ColorSizeDto colorSize : colorSizeDtos) {
+            if (colorSize.getColor().equals(Color))
+                if (colorSize.getSize().equals(Size))
+                    return colorSize.getInventory();
+        }
+        return null;
+    }
+
 }

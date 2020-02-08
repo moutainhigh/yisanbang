@@ -32,4 +32,7 @@ public interface PartSizeService {
 
     // 查找所有尺寸
     public List<String> selectAllSizeById(Integer suitId);
+
+    // 根据部件尺寸查找库存
+    public Integer selectInventoryByPartSize(Integer suitId, String part, String size);
 }
