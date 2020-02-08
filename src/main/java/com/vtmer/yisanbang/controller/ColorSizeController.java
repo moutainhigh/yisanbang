@@ -60,4 +60,36 @@ public class ColorSizeController {
             else return ResponseMessage.newErrorInstance("删除失败");
         } else return ResponseMessage.newErrorInstance("该商品颜色尺寸不存在");
     }
+
+    @GetMapping("/selectAllColorById/{id}")
+    // 查找所有颜色
+    public ResponseMessage selectAllColorById(@PathVariable("id") Integer goodsId) {
+        ColorSizeDto colorSizeDto = colorSizeService.selectColorSizeById(goodsId);
+        if (colorSizeDto != null) {
+            List<String> list = colorSizeService.selectAllColorById(goodsId);
+            if (list != null && !list.isEmpty()) {
+                return ResponseMessage.newSuccessInstance(list, "查找成功");
+            } else {
+                return ResponseMessage.newErrorInstance("查找失败");
+            }
+        } else {
+            return ResponseMessage.newErrorInstance("该商品id错误，查找无结果");
+        }
+    }
+
+    @GetMapping("/selectAllSizeById/{id}")
+    // 查找所有尺寸
+    public ResponseMessage selectAllSizeById(@PathVariable("id") Integer goodsId) {
+        ColorSizeDto colorSizeDto = colorSizeService.selectColorSizeById(goodsId);
+        if (colorSizeDto != null) {
+            List<String> list = colorSizeService.selectAllSizeById(goodsId);
+            if (list != null && !list.isEmpty()) {
+                return ResponseMessage.newSuccessInstance(list, "查找成功");
+            } else {
+                return ResponseMessage.newErrorInstance("查找失败");
+            }
+        } else {
+            return ResponseMessage.newErrorInstance("该商品id错误，查找无结果");
+        }
+    }
 }

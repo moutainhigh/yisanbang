@@ -76,4 +76,30 @@ public class ColorSizeServiceImpl implements ColorSizeService {
         return false;
     }
 
+    @Override
+    // 查找所有颜色
+    public List<String> selectAllColorById(Integer goodsId) {
+        List<ColorSizeDto> colorSizeDtos = colorSizeMapper.selectAllDtoByGoodsId(goodsId);
+        List<String> colorList = null;
+        for (ColorSizeDto colorSize : colorSizeDtos) {
+            String color = colorSize.getColor();
+            colorList.add(color);
+        }
+        if (colorList != null) return colorList;
+        return null;
+    }
+
+    @Override
+    // 查找所有尺寸
+    public List<String> selectAllSizeById(Integer goodsId) {
+        List<ColorSizeDto> colorSizeDtos = colorSizeMapper.selectAllDtoByGoodsId(goodsId);
+        List<String> sizeList = null;
+        for (ColorSizeDto colorSize : colorSizeDtos) {
+            String size = colorSize.getSize();
+            sizeList.add(size);
+        }
+        if (sizeList != null) return sizeList;
+        return null;
+    }
+
 }

@@ -26,4 +26,10 @@ public interface PartSizeService {
 
     // 判断部件尺寸是否存在
     public boolean judgePartSize(PartSizeDto partSizeDto);
+
+    // 查找所有部件
+    public List<String> selectAllPartById(Integer suitId);
+
+    // 查找所有尺寸
+    public List<String> selectAllSizeById(Integer suitId);
 }
