@@ -11,7 +11,7 @@ public class UpdatePwdDto {
     @NotBlank(message = "旧密码不能为空")
     private String oldPassword;
     // 新密码
-    @ApiModelProperty(value = "新密码", required = true, example = "Abc123456")
+    @ApiModelProperty(value = "新密码(密码必须包含数字、小写字母、大写字母，限制长度为8-20位)", required = true, example = "Abc123456")
     @Pattern(regexp = "^(?=.*[0-9].*)(?=.*[A-Z].*)(?=.*[a-z].*).{8,20}$", message = "密码必须包含数字、小写字母、大写字母，限制长度为8-20位")
     private String newPassword;
     // 二次输入新密码
