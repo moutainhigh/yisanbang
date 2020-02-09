@@ -1,26 +1,36 @@
 package com.vtmer.yisanbang.dto;
 
+import com.vtmer.yisanbang.common.validGroup.Delete;
+import com.vtmer.yisanbang.common.validGroup.Insert;
+import com.vtmer.yisanbang.common.validGroup.Update;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 @ApiModel(value = "suit对象", description = "套装对象suit")
 public class SuitDto {
+    @NotBlank(groups = {Update.class, Delete.class}, message = "套装id不可为空")
     @ApiModelProperty(value = "套装id", example = "1")
     private Integer id;
 
+    @NotBlank(groups = {Update.class, Insert.class}, message = "分类id不可为空")
     @ApiModelProperty(value = "分类id", example = "2")
     private Integer sortId;
 
+    @NotBlank(groups = {Update.class, Insert.class}, message = "套装简介不可为空")
     @ApiModelProperty(value = "套装简介", example = "服务承诺 正品保证 极速退款 七天无理由退换")
     private String introduce;
 
+    @NotBlank(groups = {Update.class, Insert.class}, message = "最低价不可为空")
     @ApiModelProperty(value = "该套装内部件的最低价", example = "699")
     private Double lowestPrice;
 
+    @NotBlank(groups = {Update.class, Insert.class}, message = "最高价不可为空")
     @ApiModelProperty(value = "该套装内部件的最高价", example = "999")
     private Double highestPrice;
 
+    @NotBlank(groups = {Update.class, Insert.class}, message = "显示标志不可为空")
     @ApiModelProperty(value = "是否显示", example = "true")
     private Boolean isShow;
 
