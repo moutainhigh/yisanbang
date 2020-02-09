@@ -66,8 +66,8 @@ public class PartSizeController {
     @GetMapping("/selectAllPartById/{id}")
     // 查找所有部件
     public ResponseMessage selectAllPartById(@PathVariable("id") Integer suitId) {
-        PartSizeDto partSizeDto = partSizeService.selectPartSizeById(suitId);
-        if (partSizeDto != null) {
+        List<PartSizeDto> partSizeDtos = partSizeService.selectAllBySuitId(suitId);
+        if (partSizeDtos != null) {
             List<String> list = partSizeService.selectAllPartById(suitId);
             if (list != null && !list.isEmpty()) {
                 return ResponseMessage.newSuccessInstance(list, "查找成功");
@@ -82,8 +82,8 @@ public class PartSizeController {
     @GetMapping("/selectAllSizeById/{id}")
     // 查找所有尺寸
     public ResponseMessage selectAllSizeById(@PathVariable("id") Integer suitId) {
-        PartSizeDto partSizeDto = partSizeService.selectPartSizeById(suitId);
-        if (partSizeDto != null) {
+        List<PartSizeDto> partSizeDtos = partSizeService.selectAllBySuitId(suitId);
+        if (partSizeDtos != null) {
             List<String> list = partSizeService.selectAllSizeById(suitId);
             if (list != null && !list.isEmpty()) {
                 return ResponseMessage.newSuccessInstance(list, "查找成功");

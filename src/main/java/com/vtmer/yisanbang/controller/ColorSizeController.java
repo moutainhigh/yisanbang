@@ -80,8 +80,8 @@ public class ColorSizeController {
     @GetMapping("/selectAllSizeById/{id}")
     // 查找所有尺寸
     public ResponseMessage selectAllSizeById(@PathVariable("id") Integer goodsId) {
-        ColorSizeDto colorSizeDto = colorSizeService.selectColorSizeById(goodsId);
-        if (colorSizeDto != null) {
+        List<ColorSizeDto> colorSizeDtos = colorSizeService.selectAllByGoodsId(goodsId);
+        if (colorSizeDtos != null) {
             List<String> list = colorSizeService.selectAllSizeById(goodsId);
             if (list != null && !list.isEmpty()) {
                 return ResponseMessage.newSuccessInstance(list, "查找成功");
