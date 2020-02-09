@@ -3,12 +3,16 @@ package com.vtmer.yisanbang.controller;
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.domain.BusinessAddress;
 import com.vtmer.yisanbang.service.BusinessAddressService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Api("商家收货地址接口")
 @Validated
 @RestController
 @RequestMapping("/businessAddress")
@@ -17,6 +21,7 @@ public class BusinessAddressController {
     @Autowired
     private BusinessAddressService businessAddressService;
 
+    @ApiOperation(value = "添加新的收货地址")
     @PostMapping("/insert")
     public ResponseMessage insert(@RequestBody @Validated BusinessAddress businessAddress) {
         int res = businessAddressService.insert(businessAddress);
@@ -27,6 +32,7 @@ public class BusinessAddressController {
         }
     }
 
+    @ApiOperation(value = "更新收货地址")
     @PutMapping("/update")
     public ResponseMessage update(@RequestBody @Validated BusinessAddress businessAddress) {
         if (businessAddress.getId() == null) {
@@ -40,8 +46,10 @@ public class BusinessAddressController {
         }
     }
 
+    @ApiOperation("更新某一地址为默认收货地址")
     @PutMapping("/updateDefault/{id}")
-    public ResponseMessage updateDefault(@PathVariable("id") Integer id) {
+    public ResponseMessage updateDefault(@ApiParam(name = "id",value = "商家收货地址信息id",example = "3")
+                                             @PathVariable Integer id) {
         int res = businessAddressService.updateDefault(id);
         if (res == 1) {
             return ResponseMessage.newSuccessInstance("修改默认收货地址成功");
@@ -52,8 +60,9 @@ public class BusinessAddressController {
         }
     }
 
+    @ApiOperation(value = "获取商家的所有收货地址")
     @GetMapping("/getAll")
-    public ResponseMessage getAll() {
+    public ResponseMessage<List<BusinessAddress>> getAll() {
         List<BusinessAddress> businessAddresses = businessAddressService.selectAll();
         if (businessAddresses != null && businessAddresses.size()!=0) {
             return ResponseMessage.newSuccessInstance(businessAddresses,"获取收货地址列表成功");
@@ -62,8 +71,10 @@ public class BusinessAddressController {
         }
     }
 
+    @ApiOperation(value = "获取商家的默认收货地址",
+            notes = "获取商家的默认收货地址,可在用户填写退款单时调用显示")
     @GetMapping("/getDefault")
-    public ResponseMessage getDefault() {
+    public ResponseMessage<BusinessAddress> getDefault() {
         BusinessAddress businessAddress = businessAddressService.getDefault();
         if (businessAddress!=null) {
             return ResponseMessage.newSuccessInstance(businessAddress,"获取默认收货地址成功");
@@ -72,8 +83,10 @@ public class BusinessAddressController {
         }
     }
 
+    @ApiOperation(value = "删除商家收货地址信息")
     @DeleteMapping("/delete/{id}")
-    public ResponseMessage delete(@PathVariable("id") Integer id) {
+    public ResponseMessage delete(@ApiParam(name = "id",value = "商家收货地址信息id",example = "5")
+                                      @PathVariable Integer id) {
         int res = businessAddressService.deleteById(id);
         if (res == -1) {
             return ResponseMessage.newErrorInstance("地址id不存在");

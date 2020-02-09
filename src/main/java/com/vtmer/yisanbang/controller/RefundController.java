@@ -249,7 +249,8 @@ public class RefundController {
      * @param status：退款状态
      * @return List<RefundVo>
      */
-    @ApiOperation(value = "获取相应状态的退款订单详情",notes = "退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败")
+    @ApiOperation(value = "获取相应状态的退款订单详情",notes = "该接口可在后台管理系统中调用，方便商家查看\n" +
+            "退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败")
     @GetMapping("/getByStatus/{status}")
     public ResponseMessage<List<RefundVo>> getByStatus(@ApiParam(value = "退款状态",example = "3",required = true)
                                                            @PathVariable Integer status) {
