@@ -11,6 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -62,7 +63,7 @@ public class AdController {
 
     @ApiOperation("添加广告信息")
     @PostMapping("/add")
-    public ResponseMessage addAdInfo(@RequestBody AdDto adDto) {
+    public ResponseMessage addAdInfo(@Validated @RequestBody AdDto adDto) {
         if (adService.isShowOrderExisted(adDto.getShowOrder())) {
             return ResponseMessage.newErrorInstance("显示顺序已存在，广告信息添加失败");
         }
@@ -75,7 +76,7 @@ public class AdController {
 
     @ApiOperation("根据id修改广告信息")
     @PutMapping("/{adId}")
-    public ResponseMessage updateAdInfo(@PathVariable("adId") Integer adId, @RequestBody AdDto adDto){
+    public ResponseMessage updateAdInfo(@PathVariable("adId") Integer adId, @Validated @RequestBody AdDto adDto) {
         if (!adDto.getShowOrder().equals(adService.listAdInfoByAdId(adId).getShowOrder()) && adService.isShowOrderExisted(adDto.getShowOrder())) {
             return ResponseMessage.newErrorInstance("显示顺序已存在，广告信息修改失败");
         }
@@ -147,7 +148,6 @@ public class AdController {
         return ResponseMessage.newErrorInstance("广告图片修改失败");
     }
      */
-
 
 
 }
