@@ -4,11 +4,15 @@ import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.dto.GoodsDto;
 import com.vtmer.yisanbang.dto.SuitDto;
 import com.vtmer.yisanbang.service.SuitService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Api("套装管理接口")
 @RestController
 @RequestMapping("/suit")
 public class SuitController {
@@ -16,6 +20,7 @@ public class SuitController {
     private SuitService suitService;
 
     @GetMapping("/selectAllSuit")
+    @ApiOperation(value = "查找显示所有套装")
     // 查找所有套装
     public ResponseMessage selectAllSuit() {
         List<SuitDto> suitDtoList = suitService.selectAll();
@@ -26,7 +31,8 @@ public class SuitController {
     }
 
     @GetMapping("/selectAllSuitOrderByTime")
-    // 根据套装更新时间顺序显示商品
+    @ApiOperation(value = "根据套装更新时间顺序查找显示套装")
+    // 根据套装更新时间顺序显示套装
     public ResponseMessage selectAllSuitOrderByTime() {
         List<SuitDto> suitDtoList = suitService.selectSuitOrderByTime();
         if (suitDtoList != null && !suitDtoList.isEmpty())
@@ -36,7 +42,8 @@ public class SuitController {
     }
 
     @GetMapping("/selectAllSuitOrderByPrice")
-    // 根据套装更新时间顺序显示商品
+    @ApiOperation(value = "根据套装价格顺序查找显示套装")
+    // 根据套装价格顺序显示套装
     public ResponseMessage selectAllGoodsOrderByPrice() {
         List<SuitDto> suitDtoList = suitService.selectSuitOrderByTime();
         if (suitDtoList != null && !suitDtoList.isEmpty())
@@ -46,8 +53,9 @@ public class SuitController {
     }
 
     @GetMapping("/selectAllSuitBySortId/{id}")
-    // 根据套装分类查找商品
-    public ResponseMessage selectAllSuitBySortId(@PathVariable("id") Integer sortId) {
+    @ApiOperation(value = "根据套装分类id查找套装")
+    // 根据套装分类查找套装
+    public ResponseMessage selectAllSuitBySortId(@ApiParam(name = "sortId", value = "分类Id", required = true) @PathVariable("id") Integer sortId) {
         List<SuitDto> suitDtoList = suitService.selectSuitBySort(sortId);
         if (suitDtoList != null && !suitDtoList.isEmpty())
             return ResponseMessage.newSuccessInstance(suitDtoList, "查找成功");
@@ -56,8 +64,9 @@ public class SuitController {
     }
 
     @GetMapping("/selectSuitById/{id}")
+    @ApiOperation(value = "根据套装id查找套装")
     // 根据套装id查找套装
-    public ResponseMessage selectSuitById(@PathVariable("id") Integer goodsId) {
+    public ResponseMessage selectSuitById(@ApiParam(name = "goodsId", value = "商品Id", required = true) @PathVariable("id") Integer goodsId) {
         SuitDto suitDto = suitService.selectSuitById(goodsId);
         if (suitDto != null)
             return ResponseMessage.newSuccessInstance(suitDto, "查找成功");
@@ -65,8 +74,9 @@ public class SuitController {
     }
 
     @GetMapping("/selectSuitByName/{name}")
+    @ApiOperation(value = "根据套装名称查找套装")
     // 根据套装名称查找套装
-    public ResponseMessage selectSuitByName(@PathVariable("name") String goodsName) {
+    public ResponseMessage selectSuitByName(@ApiParam(name = "goodsName", value = "商品名称", required = true) @PathVariable("name") String goodsName) {
         SuitDto suit = suitService.selectSuitByName(goodsName);
         if (suit != null)
             return ResponseMessage.newSuccessInstance(suit, "查找成功");
@@ -74,8 +84,9 @@ public class SuitController {
     }
 
     @PostMapping("/addSuit")
+    @ApiOperation(value = "添加套装")
     // 添加套装
-    public ResponseMessage addGoods(@RequestBody SuitDto suitDto) {
+    public ResponseMessage addGoods(@ApiParam(name = "套装Dto实体类", value = "传入Json格式", required = true) @RequestBody SuitDto suitDto) {
         List<SuitDto> suitDtoList = suitService.selectAll();
         boolean judgeFlag = suitService.judgeSuit(suitDto, suitDtoList);
         if (judgeFlag) return ResponseMessage.newErrorInstance("该套装名称已经存在");
@@ -85,8 +96,9 @@ public class SuitController {
     }
 
     @DeleteMapping("/deleteSuit")
+    @ApiOperation(value = "删除套装")
     // 删除套装
-    public ResponseMessage deleteGoods(@RequestBody SuitDto suitDto) {
+    public ResponseMessage deleteGoods(@ApiParam(name = "套装Dto实体类", value = "传入Json格式", required = true) @RequestBody SuitDto suitDto) {
         SuitDto suit = suitService.selectSuitById(suitDto.getId());
         if (suit != null) {
             boolean deleteFlag = suitService.deleteSuitById(suitDto.getId());
@@ -96,8 +108,9 @@ public class SuitController {
     }
 
     @PutMapping("/updateSuit")
+    @ApiOperation(value = "更新套装")
     // 更新套装
-    public ResponseMessage updateSuit(@RequestBody SuitDto suitDto) {
+    public ResponseMessage updateSuit(@ApiParam(name = "套装Dto实体类", value = "传入Json格式", required = true) @RequestBody SuitDto suitDto) {
         SuitDto suit = suitService.selectSuitById(suitDto.getId());
         if (suit != null) {
             boolean updateFlag = suitService.updateSuitById(suitDto);
@@ -107,8 +120,9 @@ public class SuitController {
     }
 
     @PutMapping("/hideSuit")
+    @ApiOperation(value = "隐藏套装，即下架")
     // 隐藏套装
-    public ResponseMessage hideSuit(@RequestBody SuitDto suitDto) {
+    public ResponseMessage hideSuit(@ApiParam(name = "套装Dto实体类", value = "传入Json格式", required = true) @RequestBody SuitDto suitDto) {
         SuitDto suit = suitService.selectSuitById(suitDto.getId());
         if (suit != null) {
             boolean hideFlag = suitService.hideSuit(suitDto);
