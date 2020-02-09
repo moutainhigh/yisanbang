@@ -11,10 +11,14 @@ import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.domain.Refund;
 import com.vtmer.yisanbang.domain.RefundExpress;
 import com.vtmer.yisanbang.dto.AgreeRefundDto;
-import com.vtmer.yisanbang.dto.CartGoodsDto;
+import com.vtmer.yisanbang.dto.GoodsSkuDto;
+import com.vtmer.yisanbang.dto.RefundDto;
 import com.vtmer.yisanbang.service.OrderService;
 import com.vtmer.yisanbang.service.RefundService;
 import com.vtmer.yisanbang.vo.RefundVo;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +29,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-
+@Api(value = "退款接口")
 @RestController
 @RequestMapping("/refund")
 public class RefundController {
@@ -69,8 +72,9 @@ public class RefundController {
      * @param orderId: 订单id
      * @return
      */
-    @GetMapping("/getByOrderId/{id}")
-    public ResponseMessage getByOrderId(@PathVariable("id") Integer orderId) {
+    @ApiOperation(value = "获取退款详情",notes = "根据订单id获取退款详情接口")
+    @GetMapping("/getByOrderId/{orderId}")
+    public ResponseMessage<RefundVo> getByOrderId(@ApiParam(value = "订单id",example = "1",required = true,name = "orderId") @PathVariable Integer orderId) {
         RefundVo refundVo = refundService.getRefundVoByOrderId(orderId);
         if (refundVo!=null) {
             return ResponseMessage.newSuccessInstance(refundVo,"获取退款详情信息成功");
@@ -89,6 +93,9 @@ public class RefundController {
      * @param agreeRefundDto:退款编号（必填）、退款原因（商家选填，如无货）
      * @return
      */
+    @ApiOperation(value = "退款接口",notes = "商家同意退款则调用该接口，" +
+            "只有在【待商家处理】或【待商家收货】的退款状态下可调用，调用成功后退款金额将原路退回给用户\n" +
+            "退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败")
     @Transactional
     @PostMapping("/agree")
     public ResponseMessage agreeRefund(@RequestBody @Validated AgreeRefundDto agreeRefundDto) {
@@ -156,12 +163,14 @@ public class RefundController {
      * status全改变： 0 --> 1 or 3 or 4  and  1 --> 2   and  2 --> 3  and 0 1 2-->删除
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败
-     * @param refundNumberMap:refundNumber退款编号
+     * @param refundNumber:退款编号
      * @return
      */
-    @PutMapping("/update")
-    public ResponseMessage updateRefundStatus(@RequestBody Map<String,String> refundNumberMap) {
-        String refundNumber = refundNumberMap.get("refundNumber");
+    @ApiOperation(value = "同意退款之【待商家处理】-->【待用户发货】",
+            notes = "更新退款订单状态，【待商家处理】-->【待用户发货】")
+    @PutMapping("/update/{refundNumber}")
+    public ResponseMessage updateRefundStatus(@ApiParam(name = "refundNumber",value = "退款编号",example = "12345678998765432110",required = true)
+                                                  @PathVariable String refundNumber) {
         Refund refund = refundService.selectByRefundNumber(refundNumber);
         if (refund == null) {
             return ResponseMessage.newErrorInstance("退款编号有误");
@@ -182,12 +191,14 @@ public class RefundController {
 
     /**
      * 查询成功申请了退款(退款成功)的订单的退款状态
-     * @param refundNumberMap:refundNumber：退款编号
+     * @param refundNumber：退款编号
      * @return
      */
-    @PostMapping("/refundQuery")
-    public ResponseMessage refundQuery(@RequestBody Map<String,String> refundNumberMap) {
-        String refundNumber = refundNumberMap.get("refundNumber");
+    @ApiOperation(value = "查询成功申请了退款(退款成功)的订单的退款状态",
+            notes = "调用该接口的前提是商家已同意退款，查询微信端退款情况（受理中、退款成功、退款失败）")
+    @GetMapping("/refundQuery/{refundNumber}")
+    public ResponseMessage refundQuery(@ApiParam(name = "refundNumber",value = "退款编号",example = "12345678998765432110",required = true)
+                                           @PathVariable String refundNumber) {
         Refund refund = refundService.selectByRefundNumber(refundNumber);
         if (refund == null) {
             return ResponseMessage.newErrorInstance("退款编号不存在");
@@ -238,8 +249,10 @@ public class RefundController {
      * @param status：退款状态
      * @return List<RefundVo>
      */
+    @ApiOperation(value = "获取相应状态的退款订单详情",notes = "退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败")
     @GetMapping("/getByStatus/{status}")
-    public ResponseMessage getByStatus(@PathVariable(value = "status") Integer status) {
+    public ResponseMessage<List<RefundVo>> getByStatus(@ApiParam(value = "退款状态",example = "3",required = true)
+                                                           @PathVariable Integer status) {
         if (!(status>=0 && status<=5)) {
             return ResponseMessage.newErrorInstance("传入参数超过范围");
         }
@@ -254,12 +267,13 @@ public class RefundController {
     /**
      * 根据退款编号删除退款订单接口,用户撤销退款使用
      * 该接口应该由用户调用，商家不应该动客户的退款信息
-     * @param refundNumberMap:refundNumber退款编号
+     * @param refundNumber:退款编号
      * @return
      */
+    @ApiOperation(value = "撤销退款申请",notes = "根据退款编号删除退款订单接口,用户撤销退款使用")
     @DeleteMapping("/delete")
-    public ResponseMessage delete(@RequestBody Map<String,String> refundNumberMap) {
-        String refundNumber = refundNumberMap.get("refundNumber");
+    public ResponseMessage delete(@ApiParam(name = "refundNumber",value = "退款编号",example = "12345678998765432110",required = true)
+                                      @PathVariable String refundNumber) {
         int res = refundService.deleteByRefundNumber(refundNumber);
         if (res == -1) {
             return ResponseMessage.newErrorInstance("传入的退款编号不存在");
@@ -272,12 +286,13 @@ public class RefundController {
 
     /**
      * 商家拒绝退款申请 status 0-->4
-     * @param refundNumberMap:refundNumber退款编号
+     * @param refundNumber:退款编号
      * @return
      */
-    @PostMapping("/refuseApplication")
-    public ResponseMessage refuseApplication(@RequestBody Map<String,String> refundNumberMap) {
-        String refundNumber = refundNumberMap.get("refundNumber");
+    @ApiOperation(value = "商家拒绝退款申请",notes = "商家拒绝退款申请调用，退款状态：【待商家处理】-->【退款失败】")
+    @PutMapping("/refuseApplication")
+    public ResponseMessage refuseApplication(@ApiParam(name = "refundNumber",value = "退款编号",example = "12345678998765432110",required = true)
+                                                 @PathVariable String refundNumber) {
         Refund refund = refundService.selectByRefundNumber(refundNumber);
         if (refund == null) {
             return ResponseMessage.newErrorInstance("退款编号有误");
@@ -302,6 +317,8 @@ public class RefundController {
      * @param refundExpress:refundId、expressCompany(选填)、courierNumber(快递单号)
      * @return
      */
+    @ApiOperation(value = "用户填写退款发货单",
+            notes = "用户填写退款发货单,退款状态【待用户发货】-->【待商家收货】")
     @PostMapping("/express")
     public ResponseMessage insertExpress(@RequestBody @Validated RefundExpress refundExpress) {
         Refund refund = refundService.selectByPrimaryKey(refundExpress.getRefundId());
@@ -325,13 +342,14 @@ public class RefundController {
      * 用户申请退款接口：
      * 退款商品传null代表全退，此时可不传退款金额
      * 部分退需要传退款金额，退款商品信息
-     * @param refundVo：refund，refundGoodsList 退款原因，退款金额，订单id，退款商品:sizeId、isGoods
+     * @param refundDto：refund，refundGoodsList 退款原因，退款金额，订单id，退款商品:sizeId、isGoods
      * @return
      */
+    @ApiOperation(value = "申请退款",notes = "用户申请退款接口;退款商品传null代表全退，退款原因非必需")
     @PostMapping("/apply")
-    public ResponseMessage apply(@RequestBody @Validated RefundVo refundVo) {
-        Refund refund = refundVo.getRefund();
-        List<CartGoodsDto> refundGoodsList = refundVo.getRefundGoodsList();
+    public ResponseMessage apply(@RequestBody @Validated RefundDto refundDto) {
+        Refund refund = refundDto.getRefund();
+        List<GoodsSkuDto> refundGoodsList = refundDto.getRefundGoodsList();
         // 退款商品不为空
         if (refundGoodsList!=null && refundGoodsList.size()!=0) {
             // 设置为已收货类退款订单
@@ -340,7 +358,7 @@ public class RefundController {
             // 未传退款商品，说明是未收货，全退
             refund.setIsReceived(0);
         }
-        int res = refundService.applyForRefund(refundVo);
+        int res = refundService.applyForRefund(refundDto);
         if (res == -1) {
             return ResponseMessage.newErrorInstance("订单id有误");
         } else if (res == -2) {

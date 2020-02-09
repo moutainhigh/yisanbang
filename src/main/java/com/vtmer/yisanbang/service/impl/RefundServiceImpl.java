@@ -7,6 +7,8 @@ import com.vtmer.yisanbang.domain.Refund;
 import com.vtmer.yisanbang.domain.RefundGoods;
 import com.vtmer.yisanbang.dto.AgreeRefundDto;
 import com.vtmer.yisanbang.dto.CartGoodsDto;
+import com.vtmer.yisanbang.dto.GoodsSkuDto;
+import com.vtmer.yisanbang.dto.RefundDto;
 import com.vtmer.yisanbang.mapper.OrderGoodsMapper;
 import com.vtmer.yisanbang.mapper.OrderMapper;
 import com.vtmer.yisanbang.mapper.RefundGoodsMapper;
@@ -43,12 +45,12 @@ public class RefundServiceImpl implements RefundService {
     /**
      * 申请退款,同时修改订单表状态，因此开启事务
      * 当该订单申请过退款，再次发起申请时，更新该订单退款信息，因此退款信息表中orderId唯一
-     * @param refundVo：orderId,reason,refundGoodsList
+     * @param refundDto：orderId,reason,refundGoodsList
      * @return
      */
     @Transactional
-    public int applyForRefund(RefundVo refundVo) {
-        Refund refund = refundVo.getRefund();
+    public int applyForRefund(RefundDto refundDto) {
+        Refund refund = refundDto.getRefund();
         Integer orderId = refund.getOrderId();
         Order order = orderMapper.selectByPrimaryKey(orderId);
         if (order == null) {  // 该订单不存在
@@ -87,13 +89,13 @@ public class RefundServiceImpl implements RefundService {
         // 如果是已收货订单，部分部分退款；此时的退款金额不需要设置，前端传递
         refundMapper.insert(refund);
         // 插入退款商品数据
-        List<CartGoodsDto> refundGoodsList = refundVo.getRefundGoodsList();
+        List<GoodsSkuDto> refundGoodsList = refundDto.getRefundGoodsList();
         if (refundGoodsList != null && refundGoodsList.size()!=0) {
-            for (CartGoodsDto cartGoodsDto : refundGoodsList) {
+            for (GoodsSkuDto goodsSkuDto : refundGoodsList) {
                 RefundGoods refundGoods = new RefundGoods();
                 refundGoods.setRefundId(refund.getId());
-                refundGoods.setIsGoods(cartGoodsDto.getIsGoods());
-                refundGoods.setSizeId(cartGoodsDto.getColorSizeId());
+                refundGoods.setIsGoods(goodsSkuDto.getIsGoods());
+                refundGoods.setSizeId(goodsSkuDto.getColorSizeId());
                 refundGoodsMapper.insert(refundGoods);
             }
         }

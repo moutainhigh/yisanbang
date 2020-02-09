@@ -1,22 +1,32 @@
 package com.vtmer.yisanbang.domain;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
+@ApiModel
 public class RefundExpress {
+    @ApiModelProperty(value = "退款收货单id",example = "1",readOnly = true)
     private Integer id;
 
     @NotNull(message = "refundId is null")
+    @ApiModelProperty(value = "退款id",example = "2",required = true)
     private Integer refundId;
 
+    @ApiModelProperty(value = "快递公司",example = "顺丰速运",required = false)
     private String expressCompany;
 
     @NotBlank(message = "courierNumber is null")
+    @ApiModelProperty(value = "快递编号",example = "1314520132654",required = true)
     private String courierNumber;
 
+    @ApiModelProperty(hidden = true)
     private Date createTime;
 
+    @ApiModelProperty(hidden = true)
     private Date updateTime;
 
     public Integer getId() {

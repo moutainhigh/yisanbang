@@ -3,6 +3,7 @@ package com.vtmer.yisanbang.service;
 import com.vtmer.yisanbang.domain.Order;
 import com.vtmer.yisanbang.domain.Refund;
 import com.vtmer.yisanbang.dto.AgreeRefundDto;
+import com.vtmer.yisanbang.dto.RefundDto;
 import com.vtmer.yisanbang.vo.RefundVo;
 
 import java.util.List;
@@ -12,10 +13,10 @@ public interface RefundService {
 
     /**
      * 申请退款
-     * @param refundVo：orderId，reason（订单id、退款原因） 退款商品
+     * @param refundDto：orderId，reason（订单id、退款原因） 退款商品
      * @return
      */
-    int applyForRefund(RefundVo refundVo);
+    int applyForRefund(RefundDto refundDto);
 
     /**
      * 获取退款详情
