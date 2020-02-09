@@ -7,6 +7,7 @@ import com.vtmer.yisanbang.service.PartSizeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -84,7 +85,7 @@ public class PartSizeServiceImpl implements PartSizeService {
     // 查找所有部件
     public List<String> selectAllPartById(Integer suitId) {
         List<PartSizeDto> partSizeDtos = partSizeMapper.selectAllBySuitId(suitId);
-        List<String> partList = null;
+        List<String> partList = new ArrayList<>();
         for (PartSizeDto partSize : partSizeDtos) {
             String part = partSize.getPart();
             partList.add(part);
@@ -97,7 +98,7 @@ public class PartSizeServiceImpl implements PartSizeService {
     // 查找所有尺寸
     public List<String> selectAllSizeById(Integer suitId) {
         List<PartSizeDto> partSizeDtos = partSizeMapper.selectAllBySuitId(suitId);
-        List<String> sizeList = null;
+        List<String> sizeList = new ArrayList<>();
         for (PartSizeDto partSize : partSizeDtos) {
             String size = partSize.getSize();
             sizeList.add(size);

@@ -7,6 +7,7 @@ import com.vtmer.yisanbang.service.ColorSizeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -80,7 +81,7 @@ public class ColorSizeServiceImpl implements ColorSizeService {
     // 查找所有颜色
     public List<String> selectAllColorById(Integer goodsId) {
         List<ColorSizeDto> colorSizeDtos = colorSizeMapper.selectAllDtoByGoodsId(goodsId);
-        List<String> colorList = null;
+        List<String> colorList = new ArrayList<>();
         for (ColorSizeDto colorSize : colorSizeDtos) {
             String color = colorSize.getColor();
             colorList.add(color);
@@ -93,7 +94,7 @@ public class ColorSizeServiceImpl implements ColorSizeService {
     // 查找所有尺寸
     public List<String> selectAllSizeById(Integer goodsId) {
         List<ColorSizeDto> colorSizeDtos = colorSizeMapper.selectAllDtoByGoodsId(goodsId);
-        List<String> sizeList = null;
+        List<String> sizeList = new ArrayList<>();
         for (ColorSizeDto colorSize : colorSizeDtos) {
             String size = colorSize.getSize();
             sizeList.add(size);
