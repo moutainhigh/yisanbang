@@ -37,6 +37,7 @@ public class AdminController {
      * @param addAdminDto
      * @return
      */
+    @ApiOperation("添加普通管理员")
     @PostMapping("/addAdmin")
     public ResponseMessage addAdmin(@Validated @RequestBody AddAdminDto addAdminDto) {
         if (!addAdminDto.getPassword().equals(addAdminDto.getPasswordConfirm())) {
@@ -61,6 +62,7 @@ public class AdminController {
      * @param loginDto
      * @return
      */
+    @ApiOperation("管理员登录")
     @PostMapping("/login")
     public ResponseMessage login(@Validated @RequestBody LoginDto loginDto) {
         /**
