@@ -3,12 +3,15 @@ package com.vtmer.yisanbang.controller;
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.domain.Discount;
 import com.vtmer.yisanbang.service.DiscountService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+@Api("优惠规则设置接口")
 @RestController
 @RequestMapping("/discount")
 public class DiscountController {
@@ -23,6 +26,9 @@ public class DiscountController {
      * @param discount：amount、discountRate
      * @return
      */
+    @ApiOperation(value = "添加打折优惠信息设置",
+            notes = "满amount件打discountRate*10折，discountRate范围在0-1之间\n" +
+            "同时只能存在一种优惠信息设置，重复添加无效，添加后可选择更新或删除")
     @PostMapping("/insert")
     public ResponseMessage insert(@RequestBody @Validated Discount discount) {
         int res = discountService.insert(discount);
@@ -42,6 +48,7 @@ public class DiscountController {
      * @param discount
      * @return
      */
+    @ApiOperation("修改打折优惠信息设置")
     @PutMapping("/update")
     public ResponseMessage update(@RequestBody @Validated Discount discount) {
         int res = discountService.update(discount);
@@ -53,6 +60,7 @@ public class DiscountController {
         }
     }
 
+    @ApiOperation("获取打折优惠信息设置")
     @GetMapping("/get")
     public ResponseMessage get() {
         Discount discount = discountService.selectDiscount();
@@ -63,6 +71,7 @@ public class DiscountController {
         }
     }
 
+    @ApiOperation("删除打折优惠信息设置")
     @DeleteMapping("/delete")
     public ResponseMessage delete() {
         int res = discountService.deleteDiscount();
