@@ -1,6 +1,7 @@
 package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
+import com.vtmer.yisanbang.common.qiniu.QiniuUpload;
 import com.vtmer.yisanbang.dto.GoodsDto;
 import com.vtmer.yisanbang.service.GoodsService;
 import io.swagger.annotations.Api;
@@ -8,8 +9,11 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.UUID;
+
 @Api("商品管理接口")
 @RestController
 @RequestMapping("/goods")
@@ -148,5 +152,17 @@ public class GoodsController {
             if (hideFlag) return ResponseMessage.newSuccessInstance("隐藏成功");
             else return ResponseMessage.newErrorInstance("隐藏失败");
         } else return ResponseMessage.newErrorInstance("该商品不存在");
+    }
+
+    @GetMapping("/uploadGoodsPic")
+    public ResponseMessage uploadGoodsPic(MultipartFile pic) {
+        String picName = UUID.randomUUID().toString();
+        try {
+            String picPath = QiniuUpload.updateFile(pic, "goods/" + picName);
+            return ResponseMessage.newSuccessInstance(picPath, "商品图片上传成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseMessage.newErrorInstance("商品图片上传失败");
+        }
     }
 }
