@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 
-@Api("购物车接口")
+@Api(value = "购物车接口")
 @RestController
 @RequestMapping("/cart")
 public class CartController {
@@ -70,9 +70,9 @@ public class CartController {
      * @return
      */
     @ApiOperation(value = "更新购物车勾选",notes = "每次用户(取消)勾选请求该接口，amount不用传")
-    @ApiResponse(code = 200,message = "成功",examples = @Example({
-            @ExampleProperty(value = "totalPrice",mediaType = "application/json")
-    }))
+    @ApiResponses( {
+            @ApiResponse(code = 200,message = "返回修改后的购物车商品总价,ResponseMessage => 'data':{'totalPrice':'666'}")
+    }   )
     @PutMapping("/updateChosen")
     public ResponseMessage updateChosen(@RequestBody @Validated({Update.class}) AddGoodsDto addGoodsDto) {
         double totalPrice = cartService.updateChosen(addGoodsDto);
@@ -91,9 +91,9 @@ public class CartController {
      * @return
      */
     @ApiOperation(value = "购物车商品增加1或删减1",notes = "用于购物车中+ -按钮，+ amount传1，- amount传-1")
-    @ApiResponse(code = 200,message = "成功",examples = @Example({
-            @ExampleProperty(value = "totalPrice",mediaType = "application/json")
-    }))
+    @ApiResponses( {
+            @ApiResponse(code = 200,message = "返回修改后的购物车商品总价,ResponseMessage => 'data':{'totalPrice':'666'}")
+    }   )
     @PutMapping("/addOrSubtractAmount")
     public ResponseMessage addOrSubtractAmount(@RequestBody @Validated({AddGoods.class}) AddGoodsDto addGoodsDto) {
         double totalPrice = cartService.addOrSubtractAmount(addGoodsDto);
@@ -112,9 +112,9 @@ public class CartController {
      * @return
      */
     @ApiOperation(value = "直接修改购物车某件商品的数量",notes = "amount传修改数量")
-    @ApiResponse(code = 200,message = "成功",examples = @Example({
-            @ExampleProperty(value = "totalPrice",mediaType = "application/json")
-    }))
+    @ApiResponses( {
+            @ApiResponse(code = 200,message = "返回修改后的购物车商品总价,ResponseMessage => 'data':{'totalPrice':'666'}")
+    }   )
     @PutMapping("/updateAmount")
     public ResponseMessage updateAmount(@RequestBody @Validated({AddGoods.class}) AddGoodsDto addGoodsDto) {
         double totalPrice = cartService.updateAmount(addGoodsDto);
