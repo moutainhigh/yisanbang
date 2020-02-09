@@ -2,33 +2,44 @@ package com.vtmer.yisanbang.domain;
 
 import com.vtmer.yisanbang.common.validGroup.Insert;
 import com.vtmer.yisanbang.common.validGroup.Update;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
 
+@ApiModel
 public class UserAddress {
 
+    @ApiModelProperty(hidden = true)
     private Integer id;
 
     @NotNull(groups = {Insert.class, Update.class},message = "userId为空")
+    @ApiModelProperty(name = "userId",value = "用户id", required = true)
     private Integer userId;
 
     @NotBlank(groups = {Insert.class, Update.class},message = "联系人姓名为空")
+    @ApiModelProperty(name = "userName",value = "联系人姓名",required = true)
     private String userName;
 
     @NotBlank(groups = {Insert.class, Update.class},message = "联系地址为空")
+    @ApiModelProperty(name = "addressName",value = "用户收货地址",required = true)
     private String addressName;
 
     @NotBlank(groups = {Insert.class, Update.class},message = "联系号码不能为空")
     @Pattern(groups = {Insert.class, Update.class},regexp = "^1([34578])\\d{9}$",message = "手机号码格式不正确")
+    @ApiModelProperty(name = "phoneNumber",value = "用户电话号码",required = true)
     private String phoneNumber;
 
+    @ApiModelProperty(hidden = true)
     private Boolean isDefault;
 
+    @ApiModelProperty(hidden = true)
     private Date createTime;
 
+    @ApiModelProperty(hidden = true)
     private Date updateTime;
 
     public Integer getId() {

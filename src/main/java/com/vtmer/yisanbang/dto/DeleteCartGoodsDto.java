@@ -1,19 +1,24 @@
 package com.vtmer.yisanbang.dto;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+@ApiModel
 public class DeleteCartGoodsDto {
 
     @NotNull(message = "userId is null")
+    @ApiModelProperty(value = "用户id",example = "1")
     private Integer userId;
 
-    @NotNull(message = "cartId is null")
     private Integer cartId;
 
     @Valid
-    private List<GoodsDto> goodsDtoList;
+    @ApiModelProperty("商品列表")
+    private List<GoodsSkuDto> goodsDtoList;
 
     public DeleteCartGoodsDto getDeleteCartGoodsDto() {
         return this;
@@ -27,11 +32,11 @@ public class DeleteCartGoodsDto {
         this.userId = userId;
     }
 
-    public List<GoodsDto> getGoodsDtoList() {
+    public List<GoodsSkuDto> getGoodsDtoList() {
         return goodsDtoList;
     }
 
-    public void setGoodsDtoList(List<GoodsDto> goodsDtoList) {
+    public void setGoodsDtoList(List<GoodsSkuDto> goodsDtoList) {
         this.goodsDtoList = goodsDtoList;
     }
 

@@ -14,18 +14,18 @@ import java.util.List;
 public class AddCartGoodsVo {
 
     @NotNull(groups = {Insert.class, Update.class},message = "userId is null")
-    @ApiModelProperty(value = "用户id",required = true)
+    @ApiModelProperty(value = "用户id",required = true,example = "1")
     private Integer userId;
 
     /**
      * 商品加入购物车时使用的字段，因为在一个页面中商品的isGoods是一样的
      */
     @NotNull(groups = {Insert.class, Update.class},message = "isGoods is null")
-    @ApiModelProperty(value = "是否是普通商品(非套装散件)",required = true)
-    private Integer isGoods;
+    @ApiModelProperty(value = "是否是普通商品(非套装散件)",required = true,example = "true")
+    private Boolean isGoods;
 
     @Valid
-    @ApiModelProperty(value = "添加进购物车的商品列表")
+    @ApiModelProperty(value = "添加进购物车的商品列表",required = true)
     private List<AddGoodsDto> addGoodsDtoList;
 
     public Integer getUserId() {
@@ -44,12 +44,12 @@ public class AddCartGoodsVo {
         this.addGoodsDtoList = addGoodsDtoList;
     }
 
-    public Integer getIsGoods() {
+    public Boolean getIsGoods() {
         return isGoods;
     }
 
-    public void setIsGoods(Integer isGoods) {
-        this.isGoods = isGoods;
+    public void setIsGoods(Boolean goods) {
+        isGoods = goods;
     }
 
     @Override

@@ -2,10 +2,7 @@ package com.vtmer.yisanbang.service.impl;
 
 import com.vtmer.yisanbang.common.ListSort;
 import com.vtmer.yisanbang.domain.Discount;
-import com.vtmer.yisanbang.dto.AddGoodsDto;
-import com.vtmer.yisanbang.dto.CartGoodsDto;
-import com.vtmer.yisanbang.dto.DeleteCartGoodsDto;
-import com.vtmer.yisanbang.dto.GoodsDto;
+import com.vtmer.yisanbang.dto.*;
 import com.vtmer.yisanbang.mapper.CartGoodsMapper;
 import com.vtmer.yisanbang.mapper.CartMapper;
 import com.vtmer.yisanbang.mapper.DiscountMapper;
@@ -130,6 +127,8 @@ public class CartServiceImpl implements CartService {
 
     @Transactional
     public double addOrSubtractAmount(AddGoodsDto addGoodsDto) {
+        Integer cartId = cartMapper.selectCartIdByUserId(addGoodsDto.getUserId());
+        addGoodsDto.setCartId(cartId);
         // 更新数量
         boolean b = cartGoodsMapper.addOrSubtractAmount(addGoodsDto);
         if (b) {
@@ -142,6 +141,8 @@ public class CartServiceImpl implements CartService {
     @Override
     @Transactional
     public double updateAmount(AddGoodsDto addGoodsDto) {
+        Integer cartId = cartMapper.selectCartIdByUserId(addGoodsDto.getUserId());
+        addGoodsDto.setCartId(cartId);
         boolean b = cartGoodsMapper.updateAmount(addGoodsDto);
         if (b) {
             return updateTotalPrice(addGoodsDto);
@@ -154,9 +155,9 @@ public class CartServiceImpl implements CartService {
     @Transactional
     public Boolean deleteCartGoods(DeleteCartGoodsDto deleteCartGoodsDto) {
         // 删除商品
-        Integer cartId = deleteCartGoodsDto.getCartId();
-        List<GoodsDto> goodsDtoList = deleteCartGoodsDto.getGoodsDtoList();
-        for (GoodsDto goodsDto : goodsDtoList) {
+        Integer cartId = cartMapper.selectCartIdByUserId(deleteCartGoodsDto.getUserId());
+        List<GoodsSkuDto> goodsDtoList = deleteCartGoodsDto.getGoodsDtoList();
+        for (GoodsSkuDto goodsDto : goodsDtoList) {
             // 使用AddGoodsDto进行数据传输——colorSizeId,isGoods,cartId
             AddGoodsDto addGoodsDto = new AddGoodsDto(goodsDto.getColorSizeId(), goodsDto.getIsGoods(), cartId);
             Boolean b = cartGoodsMapper.deleteCartGoods(addGoodsDto);
