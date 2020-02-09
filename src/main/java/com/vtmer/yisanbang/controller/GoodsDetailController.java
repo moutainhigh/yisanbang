@@ -6,6 +6,8 @@ import com.vtmer.yisanbang.domain.GoodsDetail;
 import com.vtmer.yisanbang.dto.GoodsDetailDto;
 import com.vtmer.yisanbang.mapper.GoodsDetailMapper;
 import com.vtmer.yisanbang.service.GoodsDetailService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.UUID;
 
+@Api("商品详情管理接口")
 @RestController
 @RequestMapping("/goodsDetail")
 public class GoodsDetailController {
@@ -21,6 +24,8 @@ public class GoodsDetailController {
     private GoodsDetailService goodsDetailService;
 
     @GetMapping("/selectAllGoodsDetail")
+    @ApiOperation(value = "查找所有商品详情信息")
+    // 查找所有商品详情信息
     public ResponseMessage selectAllGoodsDetail() {
         List<GoodsDetailDto> goodsDetailDtos = goodsDetailService.selectAllDto();
         if (goodsDetailDtos != null && !goodsDetailDtos.isEmpty())
@@ -29,6 +34,8 @@ public class GoodsDetailController {
     }
 
     @GetMapping("/selectAllGoodsDetailByGoodsId/{id}")
+    @ApiOperation(value = "根据商品id查找该商品的所有商品详情信息")
+    // 根据商品id查找该商品的所有商品详情信息
     public ResponseMessage selectAllGoodsDetailByGoodsId(@PathVariable("id") Integer goodsId) {
         List<GoodsDetailDto> goodsDetailDtos = goodsDetailService.selectAllDtoByGoodsId(goodsId);
         if (goodsDetailDtos != null && !goodsDetailDtos.isEmpty())
@@ -37,6 +44,8 @@ public class GoodsDetailController {
     }
 
     @PostMapping("/addGoodsDetail")
+    @ApiOperation(value = "添加商品详情信息")
+    // 添加商品详情信息
     public ResponseMessage addGoodsDetail(@RequestBody GoodsDetailDto goodsDetail) {
         List<GoodsDetailDto> goodsDetailDtos = goodsDetailService.selectAllDtoByGoodsId(goodsDetail.getGoodsId());
         if (goodsDetailDtos != null && !goodsDetailDtos.isEmpty()) {
@@ -49,6 +58,8 @@ public class GoodsDetailController {
     }
 
     @PutMapping("/updateGoodsDetail")
+    @ApiOperation(value = "更新商品详情信息")
+    // 更新商品详情信息
     public ResponseMessage updateGoodsDetail(@RequestBody GoodsDetailDto goodsDetail) {
         GoodsDetailDto goodsDetailDto = goodsDetailService.selectGoodsDetailByID(goodsDetail.getGoodsId());
         if (goodsDetailDto != null) {
@@ -59,6 +70,8 @@ public class GoodsDetailController {
     }
 
     @DeleteMapping("/deleteGoodsDetail")
+    @ApiOperation(value = "删除商品详情信息")
+    // 删除商品详情信息
     public ResponseMessage deleteGoodsDetail(@RequestBody GoodsDetailDto goodsDetail) {
         GoodsDetailDto goodsDetailDto = goodsDetailService.selectGoodsDetailByID(goodsDetail.getGoodsId());
         if (goodsDetailDto != null) {
@@ -69,6 +82,8 @@ public class GoodsDetailController {
     }
 
     @GetMapping("/uploadGoodsDetailPic")
+    @ApiOperation(value = "上传商品详情信息图片")
+    // 上传商品详情信息图片
     public ResponseMessage uploadGoodsDetailPic(MultipartFile pic) {
         String picName = UUID.randomUUID().toString();
         try {

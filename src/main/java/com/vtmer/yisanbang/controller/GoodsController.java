@@ -155,6 +155,7 @@ public class GoodsController {
     }
 
     @GetMapping("/uploadGoodsPic")
+    @ApiOperation(value = "上传商品图片")
     public ResponseMessage uploadGoodsPic(MultipartFile pic) {
         String picName = UUID.randomUUID().toString();
         try {
