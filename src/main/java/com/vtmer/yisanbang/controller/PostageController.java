@@ -1,13 +1,15 @@
 package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
-import com.vtmer.yisanbang.common.annotation.RequestLog;
 import com.vtmer.yisanbang.domain.Postage;
 import com.vtmer.yisanbang.service.PostageService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+@Api("邮费设置接口")
 @RestController
 @RequestMapping("/postage")
 public class PostageController {
@@ -15,9 +17,9 @@ public class PostageController {
     @Autowired
     private PostageService postageService;
 
-    @RequestLog(module = "邮费设置", operationDesc = "获取邮费规则设置")
+    @ApiOperation("获取邮费设置信息")
     @GetMapping("/get")
-    public ResponseMessage get() {
+    public ResponseMessage<Postage> get() {
         Postage postage = postageService.get();
         if (postage!=null) {
             return ResponseMessage.newSuccessInstance(postage,"获取邮费设置成功");
@@ -26,6 +28,8 @@ public class PostageController {
         }
     }
 
+    @ApiOperation(value = "添加邮费设置",notes = "同时只能存在一条邮费设置信息，不可重复添加，添加后可删除或更新" +
+            "若不存在邮费设置，则默认满0元包邮")
     @PostMapping("/insert")
     public ResponseMessage insert(@RequestBody @Validated Postage postage) {
         int res = postageService.insert(postage);
@@ -38,6 +42,7 @@ public class PostageController {
         }
     }
 
+    @ApiOperation(value = "删除邮费设置")
     @DeleteMapping("/delete")
     public ResponseMessage delete() {
         int res = postageService.delete();
@@ -50,6 +55,7 @@ public class PostageController {
         }
     }
 
+    @ApiOperation("更新邮费设置")
     @PutMapping("/update")
     public ResponseMessage update(@RequestBody @Validated Postage postage) {
         int res = postageService.update(postage);

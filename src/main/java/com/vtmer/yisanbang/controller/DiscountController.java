@@ -62,7 +62,7 @@ public class DiscountController {
 
     @ApiOperation("获取打折优惠信息设置")
     @GetMapping("/get")
-    public ResponseMessage get() {
+    public ResponseMessage<Discount> get() {
         Discount discount = discountService.selectDiscount();
         if (discount!=null) {
             return ResponseMessage.newSuccessInstance(discount,"获取打折信息成功");

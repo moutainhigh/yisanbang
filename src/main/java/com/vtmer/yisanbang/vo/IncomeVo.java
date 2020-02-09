@@ -1,17 +1,23 @@
 package com.vtmer.yisanbang.vo;
 
 import com.vtmer.yisanbang.domain.Income;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
+@ApiModel
 public class IncomeVo {
 
+    @ApiModelProperty(readOnly = true,example = "7200",value = "总销售金额")
     private double totalPrice;
 
+    @ApiModelProperty(readOnly = true,example = "200",value = "总销售量")
     private Integer totalAmount;
 
+    @ApiModelProperty(value = "每日收益",readOnly = true)
     private List<Income> incomeList;
 
     public double getTotalPrice() {
