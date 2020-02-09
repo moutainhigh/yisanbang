@@ -4,13 +4,16 @@ import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.domain.Collection;
 import com.vtmer.yisanbang.service.CollectionService;
 import com.vtmer.yisanbang.vo.CollectionVo;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
+@Api("用户收藏夹接口")
 @RestController
 @RequestMapping("/collection")
 public class CollectionController {
@@ -22,6 +25,7 @@ public class CollectionController {
      * @param collection:userId、goodsId、isGoods
      * @return
      */
+    @ApiOperation(value = "添加商品到收藏夹")
     @PostMapping("/insert")
     public ResponseMessage insert(@RequestBody @Validated Collection collection) {
         Integer res = collectionService.insertOne(collection);
@@ -40,13 +44,20 @@ public class CollectionController {
      * @param collectionIdList：收藏id list集合
      * @return
      */
+    @ApiOperation(value = "批量删除收藏商品")
     @DeleteMapping("/delete")
-    public ResponseMessage delete(@RequestBody @NotEmpty(message = "收藏集合为空") List<Integer> collectionIdList) {
-        int res = collectionService.delete(collectionIdList);
-        if (res == 1) {
-            return ResponseMessage.newSuccessInstance("删除收藏成功");
+    public ResponseMessage delete(@RequestBody
+                                    @ApiParam(name = "collectionIdList",value = "收藏夹id列表",example = "[1,2,3]")
+                                  List<Integer> collectionIdList) {
+        if(collectionIdList!=null&&collectionIdList.size()!=0) {
+            int res = collectionService.delete(collectionIdList);
+            if (res == 1) {
+                return ResponseMessage.newSuccessInstance(collectionIdList,"删除收藏成功");
+            } else {
+                return ResponseMessage.newErrorInstance("删除收藏出错");
+            }
         } else {
-            return ResponseMessage.newErrorInstance("删除收藏出错");
+            return ResponseMessage.newErrorInstance("收藏夹id列表为空");
         }
     }
 
@@ -55,17 +66,19 @@ public class CollectionController {
      * @param userId：用户id
      * @return
      */
-    @GetMapping("/get/{id}")
-    public ResponseMessage collectionList(@PathVariable("id") Integer userId) {
+    @ApiOperation(value = "获取用户收藏商品列表")
+    @GetMapping("/get/{userId}")
+    public ResponseMessage<List<CollectionVo>> collectionList(@ApiParam(value = "用户id",name = "userId",example = "!",required = true)
+                                              @PathVariable Integer userId) {
         if (userId!=null && userId>0) {
             List<CollectionVo> collectionVoList = collectionService.selectAllByUserId(userId);
             if (collectionVoList == null) {
                 return ResponseMessage.newSuccessInstance("收藏夹为空");
             } else {
-                return ResponseMessage.newSuccessInstance(collectionVoList,"获取收藏夹成功");
+                return ResponseMessage.newSuccessInstance(collectionVoList,"获取收藏夹列表成功");
             }
         } else {
-            return ResponseMessage.newErrorInstance("传入参数有误");
+            return ResponseMessage.newErrorInstance("传入的userId有误");
         }
     }
 }

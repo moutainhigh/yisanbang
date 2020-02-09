@@ -30,7 +30,9 @@ public class CollectionServiceImpl implements CollectionService {
         Param goodsId、isGoods
      */
     @Override
-    public int delete(List<Integer> collectionIdList) {
+    public int
+
+    delete(List<Integer> collectionIdList) {
         for (Integer collectionId : collectionIdList) {
             int res = collectionMapper.deleteByPrimaryKey(collectionId);
             if (res == 0) {

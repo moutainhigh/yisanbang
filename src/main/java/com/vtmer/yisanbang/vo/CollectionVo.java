@@ -1,15 +1,24 @@
 package com.vtmer.yisanbang.vo;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel
 public class CollectionVo {
 
+    @ApiModelProperty(readOnly = true,value = "商品id",example = "2")
     private Integer goodsId;
 
+    @ApiModelProperty(readOnly = true,value = "是否是普通商品",example = "true")
     private Boolean isGoods;
 
+    @ApiModelProperty(readOnly = true,value = "商品名称",example = "职业装")
     private String name;
 
+    @ApiModelProperty(readOnly = true,value = "商品图片url",example = "xxxUrl")
     private String picture;
 
+    @ApiModelProperty(readOnly = true,value = "商品价格",example = "88")
     private double price;
 
     public Integer getGoodsId() {
