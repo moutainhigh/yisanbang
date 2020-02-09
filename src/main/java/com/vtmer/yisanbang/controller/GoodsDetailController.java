@@ -39,7 +39,7 @@ public class GoodsDetailController {
     @PostMapping("/addGoodsDetail")
     public ResponseMessage addGoodsDetail(@RequestBody GoodsDetailDto goodsDetail) {
         List<GoodsDetailDto> goodsDetailDtos = goodsDetailService.selectAllDtoByGoodsId(goodsDetail.getGoodsId());
-        if (goodsDetailDtos != null && !goodsDetailDtos.isEmpty())  {
+        if (goodsDetailDtos != null && !goodsDetailDtos.isEmpty()) {
             boolean judgeFlag = goodsDetailService.judgeGoodsDetail(goodsDetail, goodsDetailDtos);
             if (judgeFlag) return ResponseMessage.newErrorInstance("该商品详细信息内容已经存在");
         }

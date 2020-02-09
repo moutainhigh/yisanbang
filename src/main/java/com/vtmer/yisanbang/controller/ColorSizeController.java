@@ -60,4 +60,50 @@ public class ColorSizeController {
             else return ResponseMessage.newErrorInstance("删除失败");
         } else return ResponseMessage.newErrorInstance("该商品颜色尺寸不存在");
     }
+
+    @GetMapping("/selectAllColorById/{id}")
+    // 查找所有颜色
+    public ResponseMessage selectAllColorById(@PathVariable("id") Integer goodsId) {
+        List<ColorSizeDto> colorSizeDtos = colorSizeService.selectAllByGoodsId(goodsId);
+        if (colorSizeDtos != null) {
+            List<String> list = colorSizeService.selectAllColorById(goodsId);
+            if (list != null && !list.isEmpty()) {
+                return ResponseMessage.newSuccessInstance(list, "查找成功");
+            } else {
+                return ResponseMessage.newErrorInstance("查找失败");
+            }
+        } else {
+            return ResponseMessage.newErrorInstance("该商品id错误，查找无结果");
+        }
+    }
+
+    @GetMapping("/selectAllSizeById/{id}")
+    // 查找所有尺寸
+    public ResponseMessage selectAllSizeById(@PathVariable("id") Integer goodsId) {
+        List<ColorSizeDto> colorSizeDtos = colorSizeService.selectAllByGoodsId(goodsId);
+        if (colorSizeDtos != null) {
+            List<String> list = colorSizeService.selectAllSizeById(goodsId);
+            if (list != null && !list.isEmpty()) {
+                return ResponseMessage.newSuccessInstance(list, "查找成功");
+            } else {
+                return ResponseMessage.newErrorInstance("查找失败");
+            }
+        } else {
+            return ResponseMessage.newErrorInstance("该商品id错误，查找无结果");
+        }
+    }
+
+    @GetMapping("/selectInventoryByColorSize/{id}/{color}/{size}")
+    // 根据颜色尺寸查找显示库存
+    public ResponseMessage selectInventoryByColorSize(@PathVariable("id") Integer goodsId, @PathVariable("color") String color, @PathVariable("size") String size) {
+        ColorSizeDto colorSizeDto = colorSizeService.selectColorSizeById(goodsId);
+        if (colorSizeDto != null) {
+            Integer inventory = colorSizeService.selectInventoryByColorSize(goodsId, color, size);
+            if (inventory != null)
+                return ResponseMessage.newSuccessInstance(inventory, "查找成功");
+            else return ResponseMessage.newErrorInstance("查找失败");
+        } else {
+            return ResponseMessage.newErrorInstance("查找失败，该商品id错误");
+        }
+    }
 }

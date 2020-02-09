@@ -7,6 +7,7 @@ import com.vtmer.yisanbang.service.PartSizeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -78,5 +79,85 @@ public class PartSizeServiceImpl implements PartSizeService {
                                     return true;
         }
         return false;
+    }
+
+    @Override
+    // 查找所有部件
+    public List<String> selectAllPartById(Integer suitId) {
+        List<PartSizeDto> partSizeDtos = partSizeMapper.selectAllBySuitId(suitId);
+        List<String> partList = new ArrayList<>();
+        for (PartSizeDto partSize : partSizeDtos) {
+            String part = partSize.getPart();
+            partList.add(part);
+        }
+        if (partList != null) return partList;
+        return null;
+    }
+
+    @Override
+    // 查找所有尺寸
+    public List<String> selectAllSizeById(Integer suitId) {
+        List<PartSizeDto> partSizeDtos = partSizeMapper.selectAllBySuitId(suitId);
+        List<String> sizeList = new ArrayList<>();
+        for (PartSizeDto partSize : partSizeDtos) {
+            String size = partSize.getSize();
+            sizeList.add(size);
+        }
+        if (sizeList != null) return sizeList;
+        return null;
+    }
+
+    @Override
+    // 根据颜色尺寸查找显示库存
+    public Integer selectInventoryByPartSize(Integer suitId, String part, String size) {
+        List<PartSizeDto> partSizeDtos = partSizeMapper.selectAllBySuitId(suitId);
+        for (PartSizeDto partSize : partSizeDtos) {
+            if (partSize.getPart().equals(part))
+                if (partSize.getSize().equals(size))
+                    return partSize.getInventory();
+        }
+        return null;
+    }
+
+    @Override
+    // 根据部件尺寸返回价格
+    public Double selectPriceByPartSize(Integer suitId, String part, String size) {
+        List<PartSizeDto> partSizeDtos = partSizeMapper.selectAllBySuitId(suitId);
+        for (PartSizeDto partSize : partSizeDtos) {
+            if (partSize.getPart().equals(part))
+                if (partSize.getSize().equals(size))
+                    return partSize.getPrice();
+        }
+        return null;
+    }
+
+    @Override
+    // 查找最低价
+    public Double selectLowPriceBySuitId(Integer suitId) {
+        List<PartSizeDto> partSizeDtos = partSizeMapper.selectAllBySuitId(suitId);
+        Double lowPrice = null;
+        for (PartSizeDto partSize : partSizeDtos) {
+            Double price = partSize.getPrice();
+            for (PartSizeDto partSizeDto : partSizeDtos) {
+                if (partSizeDto.getPrice() < price)
+                    lowPrice = partSizeDto.getPrice();
+            }
+        }
+        return lowPrice;
+    }
+
+    @Override
+    // 查找最高价
+    public Double selecgHighPriceBySuitId(Integer suitId) {
+        List<PartSizeDto> partSizeDtos = partSizeMapper.selectAllBySuitId(suitId);
+        Double highPrice = null;
+        for (PartSizeDto partSize : partSizeDtos) {
+            Double price = partSize.getPrice();
+            for (PartSizeDto partSizeDto : partSizeDtos) {
+                if (partSizeDto.getPrice() > price)
+                    highPrice = partSizeDto.getPrice();
+            }
+        }
+        return highPrice;
     }
 }
