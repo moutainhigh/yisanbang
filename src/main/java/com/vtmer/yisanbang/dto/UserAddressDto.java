@@ -1,14 +1,23 @@
 package com.vtmer.yisanbang.dto;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel(value = "userAddress对象", description = "用户地址Dto对象")
 public class UserAddressDto {
+    @ApiModelProperty(value = "用户地址id", example = "1")
     private Integer id;
 
+    @ApiModelProperty(value = "用户id", example = "1")
     private Integer userId;
 
+    @ApiModelProperty(value = "地址名称", example = "**省**市**镇**村***号")
     private String addressName;
 
+    @ApiModelProperty(value = "联系方式", example = "130*****8888")
     private String phoneNumber;
 
+    @ApiModelProperty(value = "是否为默认地址", example = "false", notes = "除修改其他皆不填")
     private Boolean isDefault;
 
     public Integer getId() {

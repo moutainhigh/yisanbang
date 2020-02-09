@@ -1,12 +1,20 @@
 package com.vtmer.yisanbang.dto;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel(value = "suitDetail对象", description = "套装详情对象suitDetail")
 public class SuitDetailDto {
+    @ApiModelProperty(value = "套装详情id", example = "1")
     private Integer id;
 
+    @ApiModelProperty(value = "套装id", example = "1")
     private Integer suitId;
 
+    @ApiModelProperty(value = "图片路径", example = "suitDetail/****")
     private String pirtucePath;
 
+    @ApiModelProperty(value = "显示顺序", example = "2")
     private Integer showOrder;
 
     public Integer getId() {

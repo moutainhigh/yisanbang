@@ -1,30 +1,44 @@
 package com.vtmer.yisanbang.dto;
 
-import java.util.Date;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
+import java.util.Date;
+@ApiModel(value = "suit对象", description = "套装对象suit")
 public class SuitDto {
+    @ApiModelProperty(value = "套装id", example = "1")
     private Integer id;
 
+    @ApiModelProperty(value = "分类id", example = "2")
     private Integer sortId;
 
+    @ApiModelProperty(value = "套装简介", example = "服务承诺 正品保证 极速退款 七天无理由退换")
     private String introduce;
 
+    @ApiModelProperty(value = "该套装内部件的最低价", example = "699")
     private Double lowestPrice;
 
+    @ApiModelProperty(value = "该套装内部件的最高价", example = "999")
     private Double highestPrice;
 
+    @ApiModelProperty(value = "是否显示", example = "true")
     private Boolean isShow;
 
     private Date updateTime;
 
+    @ApiModelProperty(hidden = true)
     private String name;
 
+    @ApiModelProperty(hidden = true)
     private String picture;
 
+    @ApiModelProperty(hidden = true)
     private double price;
 
+    @ApiModelProperty(hidden = true)
     private String part;
 
+    @ApiModelProperty(hidden = true)
     private String size;
 
     public String getName() {

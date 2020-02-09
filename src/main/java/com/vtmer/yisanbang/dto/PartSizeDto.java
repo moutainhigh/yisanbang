@@ -1,18 +1,29 @@
 package com.vtmer.yisanbang.dto;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel(value = "partSize对象", description = "部件尺寸对象partSize")
 public class PartSizeDto {
+    @ApiModelProperty(value = "部件尺寸id", example = "1")
     private Integer id;
 
+    @ApiModelProperty(value = "套装id", example = "1")
     private Integer suitId;
 
+    @ApiModelProperty(value = "价格", example = "999")
     private Double price;
 
+    @ApiModelProperty(value = "部件", example = "上衣")
     private String part;
 
+    @ApiModelProperty(value = "大小", example = "S")
     private String size;
 
+    @ApiModelProperty(value = "库存", example = "99")
     private Integer inventory;
 
+    @ApiModelProperty(value = "型号", example = "XM1213SD")
     private String model;
 
     public PartSizeDto(Integer id, Integer suitId, Double price, String part, String size, Integer inventory, String model) {

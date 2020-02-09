@@ -1,28 +1,39 @@
 package com.vtmer.yisanbang.dto;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.validation.constraints.NotNull;
 import java.util.Date;
-
+@ApiModel(value = "goods对象", description = "商品对象goods")
 public class GoodsDto {
-
+    @ApiModelProperty(value = "商品id", example = "1")
     private Integer id;
 
+    @ApiModelProperty(value = "分类id", example = "1")
     private Integer sortId;
 
+    @ApiModelProperty(value = "商品名称", example = "舒适短袖")
     private String name;
 
+    @ApiModelProperty(value = "商品简介", example = "服务承诺 正品保证 极速退款 七天无理由退换")
     private String introduce;
 
+    @ApiModelProperty(value = "商品图片", example = "goods/****")
     private String picture;
 
+    @ApiModelProperty(value = "价格", example = "99")
     private Double price;
 
+    @ApiModelProperty(value = "是否显示", example = "true")
     private Boolean isShow;
 
     @NotNull(message = "colorSizeId is null")
+    @ApiModelProperty(hidden = true)
     private Integer colorSizeId;
 
     @NotNull(message = "isGoods is null")
+    @ApiModelProperty(hidden = true)
     private Integer isGoods;
 
     private Date updateTime;
