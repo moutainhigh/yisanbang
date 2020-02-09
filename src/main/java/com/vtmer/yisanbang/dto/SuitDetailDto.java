@@ -1,19 +1,28 @@
 package com.vtmer.yisanbang.dto;
 
+import com.vtmer.yisanbang.common.validGroup.Delete;
+import com.vtmer.yisanbang.common.validGroup.Insert;
+import com.vtmer.yisanbang.common.validGroup.Update;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.NotBlank;
+
 @ApiModel(value = "suitDetail对象", description = "套装详情对象suitDetail")
 public class SuitDetailDto {
+    @NotBlank(groups = {Update.class, Delete.class}, message = "套装详情id不可为空")
     @ApiModelProperty(value = "套装详情id", example = "1")
     private Integer id;
 
+    @NotBlank(groups = {Update.class, Insert.class}, message = "套装id不可为空")
     @ApiModelProperty(value = "套装id", example = "1")
     private Integer suitId;
 
+    @NotBlank(groups = {Update.class, Insert.class}, message = "图片路径不可为空")
     @ApiModelProperty(value = "图片路径", example = "suitDetail/****")
     private String pirtucePath;
 
+    @NotBlank(groups = {Update.class, Insert.class}, message = "显示顺序不可为空")
     @ApiModelProperty(value = "显示顺序", example = "2")
     private Integer showOrder;
 

@@ -2,12 +2,16 @@ package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.common.qiniu.QiniuUpload;
+import com.vtmer.yisanbang.common.validGroup.Delete;
+import com.vtmer.yisanbang.common.validGroup.Insert;
+import com.vtmer.yisanbang.common.validGroup.Update;
 import com.vtmer.yisanbang.dto.SuitDetailDto;
 import com.vtmer.yisanbang.service.SuitDetailService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,7 +38,8 @@ public class SuitDetailController {
     @GetMapping("/selectSuitDetailBySuitId/{id}")
     @ApiOperation(value = "根据套装id查找显示该套装的所有套装详情")
     // 根据套装id查找显示该套装的所有套装详情
-    public ResponseMessage selectSuitDetailBySuitId(@ApiParam(name = "suitId", value = "套装Id", required = true) @PathVariable("id") Integer suitId) {
+    public ResponseMessage selectSuitDetailBySuitId(@ApiParam(name = "suitId", value = "套装Id", required = true)
+                                                        @PathVariable("id") Integer suitId) {
         List<SuitDetailDto> suitDetailDtoList = suitDetailService.selectAllDtoBySuitId(suitId);
         if (suitDetailDtoList != null && !suitDetailDtoList.isEmpty())
             return ResponseMessage.newSuccessInstance(suitDetailDtoList, "查找成功");
@@ -44,7 +49,8 @@ public class SuitDetailController {
     @GetMapping("/selectSuitDetailById/{id}")
     @ApiOperation(value = "根据套装详情id查找套装详情")
     // 根据套装详情id查找套装详情
-    public ResponseMessage selectSuitDetailById(@ApiParam(name = "suitDetailId", value = "套装详情Id", required = true) @PathVariable("id") Integer suitDetailId) {
+    public ResponseMessage selectSuitDetailById(@ApiParam(name = "suitDetailId", value = "套装详情Id", required = true)
+                                                    @PathVariable("id") Integer suitDetailId) {
         SuitDetailDto suitDetailDto = suitDetailService.selectSuitDetailByID(suitDetailId);
         if (suitDetailDto != null) return ResponseMessage.newSuccessInstance(suitDetailDto, "查找成功");
         else return ResponseMessage.newErrorInstance("查找失败");
@@ -53,7 +59,9 @@ public class SuitDetailController {
     @PostMapping("/addSuitDetail")
     @ApiOperation(value = "添加套装详情")
     // 添加套装详情
-    public ResponseMessage addSuitDetail(@ApiParam(name = "套装详情Dto实体类", value = "传入Json格式", required = true) @RequestBody SuitDetailDto suitDetailDto) {
+    public ResponseMessage addSuitDetail(@ApiParam(name = "套装详情Dto实体类", value = "传入Json格式", required = true)
+                                             @RequestBody
+                                                     @Validated(Insert.class) SuitDetailDto suitDetailDto) {
         List<SuitDetailDto> suitDetailDtoList = suitDetailService.selectAllDtoBySuitId(suitDetailDto.getSuitId());
         if (suitDetailDtoList != null && !suitDetailDtoList.isEmpty()) {
             boolean judgeFlag = suitDetailService.judgeSuitDetail(suitDetailDto, suitDetailDtoList);
@@ -67,7 +75,9 @@ public class SuitDetailController {
     @PutMapping("/updateSuitDetail")
     @ApiOperation(value = "更新套装详情")
     // 更新套装详情
-    public ResponseMessage updateSuitDetail(@ApiParam(name = "套装详情Dto实体类", value = "传入Json格式", required = true) @RequestBody SuitDetailDto suitDetailDto) {
+    public ResponseMessage updateSuitDetail(@ApiParam(name = "套装详情Dto实体类", value = "传入Json格式", required = true)
+                                                @RequestBody
+                                                        @Validated(Update.class) SuitDetailDto suitDetailDto) {
         SuitDetailDto suitDetail = suitDetailService.selectSuitDetailByID(suitDetailDto.getId());
         if (suitDetail != null) {
             boolean updateFlag = suitDetailService.updateSuitDetail(suitDetailDto);
@@ -79,7 +89,9 @@ public class SuitDetailController {
     @DeleteMapping("/deleteSuitDetail")
     @ApiOperation(value = "删除套装详情")
     // 删除套装详情
-    public ResponseMessage deleteSuitDetail(@ApiParam(name = "套装详情Dto实体类", value = "传入Json格式", required = true) @RequestBody SuitDetailDto suitDetailDto) {
+    public ResponseMessage deleteSuitDetail(@ApiParam(name = "套装详情Dto实体类", value = "传入Json格式", required = true)
+                                                @RequestBody
+                                                        @Validated(Delete.class) SuitDetailDto suitDetailDto) {
         SuitDetailDto suitDetail = suitDetailService.selectSuitDetailByID(suitDetailDto.getId());
         if (suitDetail != null) {
             boolean deleteFlag = suitDetailService.deleteSuitDetail(suitDetailDto.getId());
