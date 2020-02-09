@@ -3,11 +3,14 @@ package com.vtmer.yisanbang.controller;
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.dto.GoodsDto;
 import com.vtmer.yisanbang.service.GoodsService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@Api("商品管理接口")
 @RestController
 @RequestMapping("/goods")
 public class GoodsController {
@@ -15,6 +18,7 @@ public class GoodsController {
     private GoodsService goodsService;
 
     @GetMapping("/selectAllGoods")
+    @ApiOperation(value = "查找所有商品")
     // 查找所有商品
     public ResponseMessage selectAllGoods() {
         List<GoodsDto> goodsDtos = goodsService.selectAllDto();
@@ -25,6 +29,7 @@ public class GoodsController {
     }
 
     @GetMapping("/selectAllGoodsOrderByTime")
+    @ApiOperation(value = "根据商品更新时间顺序显示商品")
     // 根据商品更新时间顺序显示商品
     public ResponseMessage selectAllGoodsOrderByTime() {
         List<GoodsDto> goodsDtos = goodsService.selectAllDtoOrderByTime();
@@ -35,7 +40,8 @@ public class GoodsController {
     }
 
     @GetMapping("/selectAllGoodsOrderByPrice")
-    // 根据商品更新时间顺序显示商品
+    @ApiOperation(value = "根据商品价格顺序显示商品")
+    // 根据商品价格顺序显示商品
     public ResponseMessage selectAllGoodsOrderByPrice() {
         List<GoodsDto> goodsDtos = goodsService.selectAllDtoOrderByPrice();
         if (goodsDtos != null && !goodsDtos.isEmpty())
@@ -45,8 +51,9 @@ public class GoodsController {
     }
 
     @GetMapping("/selectAllGoodsBySortId/{id}")
+    @ApiOperation(value = "根据分类id查找商品")
     // 根据商品分类查找商品
-    public ResponseMessage selectAllGoodsBySortId(@PathVariable("id") Integer sortId) {
+    public ResponseMessage selectAllGoodsBySortId(@ApiParam(name = "sortId", value = "分类Id", required = true) @PathVariable("id") Integer sortId) {
         List<GoodsDto> goodsDtos = goodsService.selectAllDtoBySort(sortId);
         if (goodsDtos != null && !goodsDtos.isEmpty())
             return ResponseMessage.newSuccessInstance(goodsDtos, "查找成功");
@@ -55,8 +62,9 @@ public class GoodsController {
     }
 
     @GetMapping("/selectAllGoodsBySortIdOrderByTime/{id}")
+    @ApiOperation(value = "根据分类id以及更新时间顺序显示商品")
     // 根据商品分类以及更新时间顺序显示商品
-    public ResponseMessage selectAllGoodsBySortIdOrderByTime(@PathVariable("id") Integer sortId) {
+    public ResponseMessage selectAllGoodsBySortIdOrderByTime(@ApiParam(name = "sortId", value = "分类Id", required = true) @PathVariable("id") Integer sortId) {
         List<GoodsDto> goodsDtos = goodsService.selectAllDtoBySortOrderByTime(sortId);
         if (goodsDtos != null && !goodsDtos.isEmpty())
             return ResponseMessage.newSuccessInstance(goodsDtos, "查找成功");
@@ -65,8 +73,9 @@ public class GoodsController {
     }
 
     @GetMapping("/selectAllGoodsBySortIdOrderByPrice/{id}")
-    // 根据商品分类以及更新时间顺序显示商品
-    public ResponseMessage selectAllGoodsBySortIdOrderByPrice(@PathVariable("id") Integer sortId) {
+    @ApiOperation(value = "根据分类id以及价格顺序显示商品")
+    // 根据商品分类以及价格顺序显示商品
+    public ResponseMessage selectAllGoodsBySortIdOrderByPrice(@ApiParam(name = "sortId", value = "分类Id", required = true) @PathVariable("id") Integer sortId) {
         List<GoodsDto> goodsDtos = goodsService.selectAllDtoBySortOrderByPrice(sortId);
         if (goodsDtos != null && !goodsDtos.isEmpty())
             return ResponseMessage.newSuccessInstance(goodsDtos, "查找成功");
@@ -75,8 +84,9 @@ public class GoodsController {
     }
 
     @GetMapping("/selectGoodsById/{id}")
+    @ApiOperation(value = "根据商品id查找商品")
     // 根据商品id查找商品
-    public ResponseMessage selectGoodsById(@PathVariable("id") Integer goodsId) {
+    public ResponseMessage selectGoodsById(@ApiParam(name = "goodsId", value = "商品Id", required = true) @PathVariable("id") Integer goodsId) {
         GoodsDto goodsDto = goodsService.selectDtoByPrimaryKey(goodsId);
         if (goodsDto != null)
             return ResponseMessage.newSuccessInstance(goodsDto, "查找成功");
@@ -84,16 +94,18 @@ public class GoodsController {
     }
 
     @GetMapping("/selectGoodsByName/{name}")
+    @ApiOperation(value = "根据商品名称查找商品")
     // 根据商品名称查找商品
-    public ResponseMessage selectGoodsByName(@PathVariable("name") String goodsName) {
+    public ResponseMessage selectGoodsByName(@ApiParam(name = "goodsName", value = "商品名称", required = true) @PathVariable("name") String goodsName) {
         GoodsDto goodsDto = goodsService.selectDtoByGoodsName(goodsName);
         if (goodsDto != null) return ResponseMessage.newSuccessInstance(goodsDto, "查找成功");
         else return ResponseMessage.newErrorInstance("该商品名称不存在");
     }
 
     @PostMapping("/addGoods")
+    @ApiOperation(value = "添加商品")
     // 添加商品
-    public ResponseMessage addGoods(@RequestBody GoodsDto goodsDto) {
+    public ResponseMessage addGoods(@ApiParam(name = "商品Dto实体类", value = "传入Json格式", required = true) @RequestBody GoodsDto goodsDto) {
         List<GoodsDto> goodsDtos = goodsService.selectAllDto();
         boolean judgeFlag = goodsService.judgeGoods(goodsDto, goodsDtos);
         if (judgeFlag) return ResponseMessage.newErrorInstance("该商品名称已经存在");
@@ -103,8 +115,9 @@ public class GoodsController {
     }
 
     @DeleteMapping("/deleteGoods")
+    @ApiOperation(value = "删除商品")
     // 删除商品
-    public ResponseMessage deleteGoods(@RequestBody GoodsDto goodsDto) {
+    public ResponseMessage deleteGoods(@ApiParam(name = "商品Dto实体类", value = "传入Json格式", required = true) @RequestBody GoodsDto goodsDto) {
         GoodsDto goods = goodsService.selectDtoByPrimaryKey(goodsDto.getId());
         if (goods != null) {
             boolean deleteFlag = goodsService.deleteGoodsById(goodsDto.getId());
@@ -114,8 +127,9 @@ public class GoodsController {
     }
 
     @PutMapping("/updateGoods")
+    @ApiOperation(value = "更新商品")
     // 更新商品
-    public ResponseMessage updateGoods(@RequestBody GoodsDto goodsDto) {
+    public ResponseMessage updateGoods(@ApiParam(name = "商品Dto实体类", value = "传入Json格式", required = true) @RequestBody GoodsDto goodsDto) {
         GoodsDto goods = goodsService.selectDtoByPrimaryKey(goodsDto.getId());
         if (goods != null) {
             boolean updateFlag = goodsService.updateGoods(goodsDto);
@@ -125,8 +139,9 @@ public class GoodsController {
     }
 
     @PutMapping("/hideGoods")
+    @ApiOperation(value = "隐藏商品，即下架商品")
     // 隐藏商品
-    public ResponseMessage hideGoods(@RequestBody GoodsDto goodsDto) {
+    public ResponseMessage hideGoods(@ApiParam(name = "商品Dto实体类", value = "传入Json格式", required = true) @RequestBody GoodsDto goodsDto) {
         GoodsDto goods = goodsService.selectDtoByPrimaryKey(goodsDto.getId());
         if (goods != null) {
             boolean hideFlag = goodsService.hideGoods(goodsDto);
