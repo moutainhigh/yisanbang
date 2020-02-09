@@ -391,6 +391,7 @@ public class OrderServiceImpl implements OrderService {
             ColorSize colorSize = colorSizeMapper.selectByPrimaryKey(sizeId);
             cartGoodsDto.setSize(colorSize.getSize());
             cartGoodsDto.setPartOrColor(colorSize.getColor());
+            cartGoodsDto.setId(colorSize.getGoodsId());
             Goods goods = goodsMapper.selectByPrimaryKey(colorSize.getGoodsId());
             cartGoodsDto.setName(goods.getName());
             cartGoodsDto.setPicture(goods.getPicture());
@@ -401,6 +402,7 @@ public class OrderServiceImpl implements OrderService {
             Suit suit = suitMapper.selectByPrimaryKey(partSize.getSuitId());
             cartGoodsDto.setName(suit.getName());
             cartGoodsDto.setPicture(suit.getPicture());
+            cartGoodsDto.setId(suit.getId());
         }
     }
 

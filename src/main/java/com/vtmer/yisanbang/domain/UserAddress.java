@@ -17,23 +17,23 @@ public class UserAddress {
     private Integer id;
 
     @NotNull(groups = {Insert.class, Update.class},message = "userId为空")
-    @ApiModelProperty(name = "userId",value = "用户id", required = true)
+    @ApiModelProperty(name = "userId",value = "用户id", required = true,example = "1")
     private Integer userId;
 
     @NotBlank(groups = {Insert.class, Update.class},message = "联系人姓名为空")
-    @ApiModelProperty(name = "userName",value = "联系人姓名",required = true)
+    @ApiModelProperty(name = "userName",value = "联系人姓名",required = true,example = "一叄邦")
     private String userName;
 
     @NotBlank(groups = {Insert.class, Update.class},message = "联系地址为空")
-    @ApiModelProperty(name = "addressName",value = "用户收货地址",required = true)
+    @ApiModelProperty(name = "addressName",value = "用户收货地址",required = true,example = "广东工业大学生活东区")
     private String addressName;
 
     @NotBlank(groups = {Insert.class, Update.class},message = "联系号码不能为空")
     @Pattern(groups = {Insert.class, Update.class},regexp = "^1([34578])\\d{9}$",message = "手机号码格式不正确")
-    @ApiModelProperty(name = "phoneNumber",value = "用户电话号码",required = true)
+    @ApiModelProperty(name = "phoneNumber",value = "用户电话号码",required = true,example = "17666289644")
     private String phoneNumber;
 
-    @ApiModelProperty(hidden = true)
+    @ApiModelProperty(readOnly = true)
     private Boolean isDefault;
 
     @ApiModelProperty(hidden = true)

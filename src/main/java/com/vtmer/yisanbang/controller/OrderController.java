@@ -10,11 +10,12 @@ import com.github.binarywang.wxpay.service.WxPayService;
 import com.github.binarywang.wxpay.util.SignUtils;
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.common.validGroup.Insert;
-import com.vtmer.yisanbang.common.validGroup.Update;
 import com.vtmer.yisanbang.domain.Order;
 import com.vtmer.yisanbang.service.OrderService;
 import com.vtmer.yisanbang.service.UserService;
 import com.vtmer.yisanbang.vo.OrderVo;
+import com.vtmer.yisanbang.vo.UpdateUserAddressVo;
+import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +24,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Api("订单接口")
 @RestController
 @RequestMapping("/order")
 public class OrderController {
@@ -49,8 +52,9 @@ public class OrderController {
      * @param userId：用户id
      * @return
      */
+    @ApiOperation(value = "确认订单",notes = "点击去结算，显示确认订单页面")
     @GetMapping("confirmOrder/{userId}")
-    public ResponseMessage confirmOrder(@PathVariable("userId") Integer userId) {
+    public ResponseMessage<OrderVo> confirmOrder(@ApiParam(name = "userId",value = "用户id",required = true) @PathVariable Integer userId) {
         OrderVo orderVo = orderService.confirmCartOrder(userId);
         if (orderVo == null) {
             return ResponseMessage.newErrorInstance("userId有误或购物车勾选商品为空");
@@ -64,6 +68,7 @@ public class OrderController {
      * @param orderVo：订单详情信息
      * @return
      */
+    @ApiOperation(value = "创建订单",notes = "用户点击提交订单后调用")
     @PostMapping("/insert")
     public ResponseMessage insert(@RequestBody @Validated({Insert.class}) OrderVo orderVo) {
         Map<String, String> orderMap = orderService.createCartOrder(orderVo);
@@ -76,12 +81,23 @@ public class OrderController {
 
     /**
      * 通过订单号进行微信支付
-     * @param orderNumberMap：orderNumber订单号
+     * @param orderNumber：orderNumber订单号
      * @return 返回前端调起微信支付所需的支付参数（5个参数和sign）
      */
-    @PostMapping("/wxpay")
-    public ResponseMessage wxpay(@RequestBody Map<String,String> orderNumberMap) {
-        String orderNumber = orderNumberMap.get("orderNumber");
+    @ApiOperation(value = "微信支付",notes = "通过订单号进行微信支付，返回前端调起微信支付所需的支付参数（5个参数和sign）")
+    @ApiResponses({
+            @ApiResponse(code = 200,message = "ResponseMessage => \n 'data:" +
+                    "{\n'appId':'wxd678efh567hg6787'" +
+                    "\n'timeStamp':'1490840662'" +
+                    "\n'nonceStr':'5K8264ILTKCH16CQ2502SI8ZNMTM67VS'" +
+                    "\n'packageValue':'prepay_id=wx2017033010242291fcfe0db70013231072'" +
+                    "\n'signType':'MD5'" +
+                    "\n'paySign':' MD5(appId=wxd678efh567hg6787&nonceStr=5K8264ILTKCH16CQ2502SI8ZNMTM67VS&package=prepay_id=wx2017033010242291fcfe0db70013231072&signType=MD5&timeStamp=1490840662&key=qazwsxedcrfvtgbyhnujmikolp111111) = 22D9B4E54AB1950F51E0649E8810ACD6'" +
+                    "\n}")
+    })
+    @GetMapping("/wxpay/{orderNumber}")
+    public ResponseMessage wxpay(@ApiParam(name = "orderNumber",value = "订单编号",required = true)
+                                     @PathVariable String orderNumber) {
         if (orderNumber == null) {
             return ResponseMessage.newErrorInstance("订单号传入错误");
         } else { // 订单编号不为null
@@ -174,13 +190,20 @@ public class OrderController {
     /**
      * 列出用户相关状态所有订单
      * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--申请退款 5--交易关闭 6--所有订单
-     * @param orderMap —— userId、status
-     *                 userId传null可以列出商城相关状态的所有订单
+     * @param userId、status
+     *                 userId传0可以列出商城相关状态的所有订单
      * @return
      */
-    @GetMapping("/get")
-    public ResponseMessage listOrder(@RequestBody Map<String,Integer> orderMap) {
-        if (!(orderMap.get("status")<=6 && orderMap.get("status")>=0)) {
+    @ApiOperation(value = "获取用户相关状态的所有订单",
+            notes = "status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--申请退款 5--交易关闭 6--所有订单;userId传0可以获取商城相关状态的所有订单")
+    @GetMapping("/get/status/{status}/userId/{userId}")
+    public ResponseMessage<List<OrderVo>> listOrder(@ApiParam(name = "status",value = "订单状态标识",required = true) @PathVariable Integer status,
+                                     @ApiParam(name = "userId",value = "用户id",required = true) @PathVariable Integer userId) {
+        System.out.println(userId);
+        Map<String,Integer> orderMap = new HashMap<>();
+        orderMap.put("status",status);
+        orderMap.put("userId",userId);
+        if (!(status<=6 && status>=0)) {
             return ResponseMessage.newErrorInstance("订单状态参数超出定义范围");
         } else {
             List<OrderVo> orderList = orderService.listOrder(orderMap);
@@ -199,8 +222,10 @@ public class OrderController {
      * @param orderId:订单id
      * @return
      */
+    @ApiOperation(value = "确认收货",notes = "修改订单状态为下一状态，适用于'确认收货'按钮")
     @PutMapping("updateOrderStatus/{orderId}")
-    public ResponseMessage updateOrderStatus(@PathVariable("orderId") Integer orderId) {
+    public ResponseMessage updateOrderStatus(@ApiParam(name = "orderId",value = "订单id",required = true)
+                                                 @PathVariable Integer orderId) {
         int res = orderService.updateOrderStatus(orderId);
         if (res == -1) {
             return ResponseMessage.newErrorInstance("订单id有误");
@@ -242,12 +267,14 @@ public class OrderController {
     }
 
     /**
-     * 删除订单，暂时无用，用户没有删除订单按钮hh
+     * 删除订单，暂时无用，用户没有删除订单按钮emm
      * @param orderId：订单id
      * @return
      */
+    @ApiOperation(value = "删除订单",notes = "暂时无用，用户没有删除订单按钮emm")
     @DeleteMapping("/delete/{orderId}")
-    public ResponseMessage delete(@PathVariable("orderId") Integer orderId) {
+    public ResponseMessage delete(@ApiParam(name = "orderId",value = "订单id",required = true)
+                                      @PathVariable Integer orderId) {
         int res = orderService.deleteOrder(orderId);
         if (res == 1) {
             return ResponseMessage.newSuccessInstance("删除订单成功");
@@ -263,6 +290,7 @@ public class OrderController {
      * @param order:orderId or orderNumber and courierNumber
      * @return
      */
+    @ApiOperation(value = "商家发货",notes = "商家发货设置快递编号，需要订单id或订单编号")
     @PutMapping("/setCourierNumber")
     public ResponseMessage setCourierNumber(@RequestBody @NotNull(message = "传入参数为空") Order order) {
         if (order.getId()==null && order.getOrderNumber() == null) {
@@ -280,11 +308,15 @@ public class OrderController {
 
     /**
      * 在未发货之前用户修改地址接口
-     * @param orderVo:用户地址UserAddress、订单编号orderNumber
+     * @param updateUserAddressVo:用户地址UserAddress、订单编号orderNumber
      * @return
      */
+    @ApiOperation(value = "修改收货地址",notes = "待付款、待发货状态适用")
     @PutMapping("/updateAddress")
-    public ResponseMessage updateAddress(@RequestBody @Validated({Update.class}) OrderVo orderVo) {
+    public ResponseMessage updateAddress(@RequestBody @Validated UpdateUserAddressVo updateUserAddressVo) {
+        OrderVo orderVo = new OrderVo();
+        orderVo.setUserAddress(updateUserAddressVo.getUserAddress());
+        orderVo.setOrderNumber(updateUserAddressVo.getOrderNumber());
         int res = orderService.updateAddress(orderVo);
         if (res == -1) {
             return ResponseMessage.newErrorInstance("订单编号不存在");
@@ -302,8 +334,10 @@ public class OrderController {
      * @param orderId：订单id
      * @return
      */
+    @ApiOperation(value = "取消订单",notes = "在未支付的情况下用户可以取消订单")
     @PutMapping("/cancelOrder/{orderId}")
-    public ResponseMessage cancelOrder(@PathVariable("orderId") Integer orderId) {
+    public ResponseMessage cancelOrder(@ApiParam(name = "orderId",value = "订单id",required = true)
+                                           @PathVariable Integer orderId) {
         int res = orderService.cancelOrder(orderId);
         if (res == -1) {
             return ResponseMessage.newErrorInstance("订单id不存在");

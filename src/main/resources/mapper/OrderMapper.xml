@@ -6,7 +6,7 @@
     status,postage,  courier_number, message, create_time,update_time
   </sql>
   <sql id="OrderCondition">
-    <if test="userId!=null">
+    <if test="userId!=null and userId!=0">
       and user_id = #{userId}
     </if>
     <if test="status!=null">

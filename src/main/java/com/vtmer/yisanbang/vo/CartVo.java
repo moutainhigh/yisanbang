@@ -9,7 +9,7 @@ import java.util.List;
 @ApiModel
 public class CartVo {
 
-    @ApiModelProperty(value = "购物车id",readOnly = true,example = "1")
+    @ApiModelProperty(hidden = true)
     private Integer cartId;
 
     @ApiModelProperty(value = "优惠后总价",name = "totalPrice",required = true,example = "250")
@@ -18,7 +18,7 @@ public class CartVo {
     @ApiModelProperty(value = "优惠前总价",readOnly = true,example = "520")
     private double beforeTotalPrice;
 
-    @ApiModelProperty(value = "预下单的购物车商品列表",name = "cartGoodsList",required = true)
+    @ApiModelProperty(value = "商品列表",name = "cartGoodsList",required = true)
     private List<CartGoodsDto> cartGoodsList;
 
     public List<CartGoodsDto> getCartGoodsList() {
