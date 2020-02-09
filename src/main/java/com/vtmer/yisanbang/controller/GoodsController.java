@@ -76,18 +76,18 @@ public class GoodsController {
 
     @GetMapping("/selectGoodsById/{id}")
     // 根据商品id查找商品
-    public ResponseMessage selectGoodsById(@PathVariable("id") Integer goodsId){
+    public ResponseMessage selectGoodsById(@PathVariable("id") Integer goodsId) {
         GoodsDto goodsDto = goodsService.selectDtoByPrimaryKey(goodsId);
         if (goodsDto != null)
-            return ResponseMessage.newSuccessInstance(goodsDto,"查找成功");
+            return ResponseMessage.newSuccessInstance(goodsDto, "查找成功");
         else return ResponseMessage.newErrorInstance("该商品id错误");
     }
 
     @GetMapping("/selectGoodsByName/{name}")
     // 根据商品名称查找商品
-    public ResponseMessage selectGoodsByName(@PathVariable("name") String goodsName){
+    public ResponseMessage selectGoodsByName(@PathVariable("name") String goodsName) {
         GoodsDto goodsDto = goodsService.selectDtoByGoodsName(goodsName);
-        if (goodsDto != null) return ResponseMessage.newSuccessInstance(goodsDto,"查找成功");
+        if (goodsDto != null) return ResponseMessage.newSuccessInstance(goodsDto, "查找成功");
         else return ResponseMessage.newErrorInstance("该商品名称不存在");
     }
 
@@ -106,22 +106,22 @@ public class GoodsController {
     // 删除商品
     public ResponseMessage deleteGoods(@RequestBody GoodsDto goodsDto) {
         GoodsDto goods = goodsService.selectDtoByPrimaryKey(goodsDto.getId());
-        if (goods!= null) {
+        if (goods != null) {
             boolean deleteFlag = goodsService.deleteGoodsById(goodsDto.getId());
             if (deleteFlag) return ResponseMessage.newSuccessInstance("删除成功");
             else return ResponseMessage.newErrorInstance("删除失败");
-        }else return ResponseMessage.newSuccessInstance("该商品不存在");
+        } else return ResponseMessage.newSuccessInstance("该商品不存在");
     }
 
     @PutMapping("/updateGoods")
     // 更新商品
     public ResponseMessage updateGoods(@RequestBody GoodsDto goodsDto) {
         GoodsDto goods = goodsService.selectDtoByPrimaryKey(goodsDto.getId());
-        if (goods!= null) {
+        if (goods != null) {
             boolean updateFlag = goodsService.updateGoods(goodsDto);
             if (updateFlag) return ResponseMessage.newSuccessInstance("更新成功");
             else return ResponseMessage.newErrorInstance("更新失败");
-        }else return ResponseMessage.newSuccessInstance("该商品不存在");
+        } else return ResponseMessage.newSuccessInstance("该商品不存在");
     }
 
     @PutMapping("/hideGoods")
@@ -132,6 +132,6 @@ public class GoodsController {
             boolean hideFlag = goodsService.hideGoods(goodsDto);
             if (hideFlag) return ResponseMessage.newSuccessInstance("隐藏成功");
             else return ResponseMessage.newErrorInstance("隐藏失败");
-        }else return ResponseMessage.newErrorInstance("该商品不存在");
+        } else return ResponseMessage.newErrorInstance("该商品不存在");
     }
 }

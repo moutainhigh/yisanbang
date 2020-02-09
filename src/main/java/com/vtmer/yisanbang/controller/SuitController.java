@@ -57,19 +57,19 @@ public class SuitController {
 
     @GetMapping("/selectSuitById/{id}")
     // 根据套装id查找套装
-    public ResponseMessage selectSuitById(@PathVariable("id") Integer goodsId){
+    public ResponseMessage selectSuitById(@PathVariable("id") Integer goodsId) {
         SuitDto suitDto = suitService.selectSuitById(goodsId);
         if (suitDto != null)
-            return ResponseMessage.newSuccessInstance(suitDto,"查找成功");
+            return ResponseMessage.newSuccessInstance(suitDto, "查找成功");
         else return ResponseMessage.newErrorInstance("该套装id错误");
     }
 
     @GetMapping("/selectSuitByName/{name}")
     // 根据套装名称查找套装
-    public ResponseMessage selectSuitByName(@PathVariable("name") String goodsName){
+    public ResponseMessage selectSuitByName(@PathVariable("name") String goodsName) {
         SuitDto suit = suitService.selectSuitByName(goodsName);
         if (suit != null)
-            return ResponseMessage.newSuccessInstance(suit,"查找成功");
+            return ResponseMessage.newSuccessInstance(suit, "查找成功");
         else return ResponseMessage.newErrorInstance("该套装名称不存在");
     }
 
@@ -88,22 +88,22 @@ public class SuitController {
     // 删除套装
     public ResponseMessage deleteGoods(@RequestBody SuitDto suitDto) {
         SuitDto suit = suitService.selectSuitById(suitDto.getId());
-        if (suit!= null) {
+        if (suit != null) {
             boolean deleteFlag = suitService.deleteSuitById(suitDto.getId());
             if (deleteFlag) return ResponseMessage.newSuccessInstance("删除成功");
             else return ResponseMessage.newErrorInstance("删除失败");
-        }else return ResponseMessage.newSuccessInstance("该商品不存在");
+        } else return ResponseMessage.newSuccessInstance("该商品不存在");
     }
 
     @PutMapping("/updateSuit")
     // 更新套装
     public ResponseMessage updateSuit(@RequestBody SuitDto suitDto) {
         SuitDto suit = suitService.selectSuitById(suitDto.getId());
-        if (suit!= null) {
+        if (suit != null) {
             boolean updateFlag = suitService.updateSuitById(suitDto);
             if (updateFlag) return ResponseMessage.newSuccessInstance("更新成功");
             else return ResponseMessage.newErrorInstance("更新失败");
-        }else return ResponseMessage.newSuccessInstance("该商品不存在");
+        } else return ResponseMessage.newSuccessInstance("该商品不存在");
     }
 
     @PutMapping("/hideSuit")
@@ -114,6 +114,6 @@ public class SuitController {
             boolean hideFlag = suitService.hideSuit(suitDto);
             if (hideFlag) return ResponseMessage.newSuccessInstance("隐藏成功");
             else return ResponseMessage.newErrorInstance("隐藏失败");
-        }else return ResponseMessage.newErrorInstance("该商品不存在");
+        } else return ResponseMessage.newErrorInstance("该商品不存在");
     }
 }

@@ -96,14 +96,55 @@ public class PartSizeController {
     }
 
     @GetMapping("/selectInventoryByPartSize/{id}/{part}/{size}")
+    // 根据部件尺寸返回库存
     public ResponseMessage selectInventoryByPartSize(@PathVariable("id") Integer suitId, @PathVariable("part") String part, @PathVariable("size") String size) {
         PartSizeDto partSizeDto = partSizeService.selectPartSizeById(suitId);
-        if (partSizeDto!= null){
+        if (partSizeDto != null) {
             Integer inventory = partSizeService.selectInventoryByPartSize(suitId, part, size);
             if (inventory != null)
-                return ResponseMessage.newSuccessInstance(inventory,"查找成功");
+                return ResponseMessage.newSuccessInstance(inventory, "查找成功");
             else
                 return ResponseMessage.newErrorInstance("查找失败");
-        }else return ResponseMessage.newErrorInstance("该套装id错误，查找无结果");
+        } else return ResponseMessage.newErrorInstance("该套装id错误，查找无结果");
     }
+
+    @GetMapping("/selectPriceByPartSize/{id}/{part}/{size}")
+    // 根据部件尺寸返回价格
+    public ResponseMessage selectPriceByPartSize(@PathVariable("id") Integer suitId, @PathVariable("part") String part, @PathVariable("size") String size) {
+        PartSizeDto partSizeDto = partSizeService.selectPartSizeById(suitId);
+        if (partSizeDto != null) {
+            Double price = partSizeService.selectPriceByPartSize(suitId, part, size);
+            if (price != null)
+                return ResponseMessage.newSuccessInstance(price, "查找成功");
+            else
+                return ResponseMessage.newErrorInstance("查找失败");
+        } else return ResponseMessage.newErrorInstance("该套装id错误，查找无结果");
+    }
+
+    @GetMapping("/selectLowPriceById/{id}")
+    // 返回套装内部件最低价
+    public ResponseMessage selectLowPriceById(@PathVariable("id") Integer suitId) {
+        List<PartSizeDto> partSizeDtos = partSizeService.selectAllBySuitId(suitId);
+        if (partSizeDtos != null && !partSizeDtos.isEmpty()) {
+            Double lowPrice = partSizeService.selectLowPriceBySuitId(suitId);
+            if (lowPrice != null)
+                return ResponseMessage.newSuccessInstance(lowPrice, "查找成功");
+            else
+                return ResponseMessage.newErrorInstance("查找失败");
+        } else return ResponseMessage.newErrorInstance("该套装id错误，查找无结果");
+    }
+
+    @GetMapping("/selectHighPriceById/{id}")
+    // 返回套装内部件最高价
+    public ResponseMessage selectHighPriceById(@PathVariable("id") Integer suitId) {
+        List<PartSizeDto> partSizeDtos = partSizeService.selectAllBySuitId(suitId);
+        if (partSizeDtos != null && !partSizeDtos.isEmpty()) {
+            Double highPrice = partSizeService.selecgHighPriceBySuitId(suitId);
+            if (highPrice != null)
+                return ResponseMessage.newSuccessInstance(highPrice, "查找成功");
+            else
+                return ResponseMessage.newErrorInstance("查找失败");
+        } else return ResponseMessage.newErrorInstance("该套装id错误，查找无结果");
+    }
+
 }

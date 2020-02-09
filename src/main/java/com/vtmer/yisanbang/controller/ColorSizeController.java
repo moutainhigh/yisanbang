@@ -97,12 +97,12 @@ public class ColorSizeController {
     // 根据颜色尺寸查找显示库存
     public ResponseMessage selectInventoryByColorSize(@PathVariable("id") Integer goodsId, @PathVariable("color") String color, @PathVariable("size") String size) {
         ColorSizeDto colorSizeDto = colorSizeService.selectColorSizeById(goodsId);
-        if (colorSizeDto!=null){
+        if (colorSizeDto != null) {
             Integer inventory = colorSizeService.selectInventoryByColorSize(goodsId, color, size);
-                if (inventory != null)
-                    return ResponseMessage.newSuccessInstance(inventory,"查找成功");
-                else return ResponseMessage.newErrorInstance("查找失败");
-        }else{
+            if (inventory != null)
+                return ResponseMessage.newSuccessInstance(inventory, "查找成功");
+            else return ResponseMessage.newErrorInstance("查找失败");
+        } else {
             return ResponseMessage.newErrorInstance("查找失败，该商品id错误");
         }
     }

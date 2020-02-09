@@ -43,7 +43,7 @@ public class SuitDetailController {
     @PostMapping("/addSuitDetail")
     public ResponseMessage addSuitDetail(@RequestBody SuitDetailDto suitDetailDto) {
         List<SuitDetailDto> suitDetailDtoList = suitDetailService.selectAllDtoBySuitId(suitDetailDto.getSuitId());
-        if (suitDetailDtoList != null && !suitDetailDtoList.isEmpty()){
+        if (suitDetailDtoList != null && !suitDetailDtoList.isEmpty()) {
             boolean judgeFlag = suitDetailService.judgeSuitDetail(suitDetailDto, suitDetailDtoList);
             if (judgeFlag) return ResponseMessage.newSuccessInstance("该套装详情已经存在");
         }
@@ -55,21 +55,21 @@ public class SuitDetailController {
     @PutMapping("/updateSuitDetail")
     public ResponseMessage updateSuitDetail(@RequestBody SuitDetailDto suitDetailDto) {
         SuitDetailDto suitDetail = suitDetailService.selectSuitDetailByID(suitDetailDto.getId());
-        if (suitDetail!=null) {
+        if (suitDetail != null) {
             boolean updateFlag = suitDetailService.updateSuitDetail(suitDetailDto);
             if (updateFlag) return ResponseMessage.newSuccessInstance("更新成功");
             else return ResponseMessage.newErrorInstance("更新失败");
-        }else return ResponseMessage.newErrorInstance("该套装详情id错误");
+        } else return ResponseMessage.newErrorInstance("该套装详情id错误");
     }
 
     @DeleteMapping("/deleteSuitDetail")
     public ResponseMessage deleteSuitDetail(@RequestBody SuitDetailDto suitDetailDto) {
         SuitDetailDto suitDetail = suitDetailService.selectSuitDetailByID(suitDetailDto.getId());
-        if (suitDetail!=null) {
+        if (suitDetail != null) {
             boolean deleteFlag = suitDetailService.deleteSuitDetail(suitDetailDto.getId());
             if (deleteFlag) return ResponseMessage.newSuccessInstance("删除成功");
             else return ResponseMessage.newErrorInstance("删除失败");
-        }else return ResponseMessage.newErrorInstance("该套装详情id错误");
+        } else return ResponseMessage.newErrorInstance("该套装详情id错误");
     }
 
     @GetMapping("/uploadSuitDetailPic")
