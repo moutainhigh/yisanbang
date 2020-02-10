@@ -70,13 +70,10 @@ public class PartSizeServiceImpl implements PartSizeService {
     public boolean judgePartSize(PartSizeDto partSizeDto) {
         List<PartSizeDto> partSizeDtoList = partSizeMapper.selectAllDto();
         for (PartSizeDto partSize : partSizeDtoList) {
-            if (partSize.getInventory() == partSizeDto.getInventory())
-                if (partSize.getPrice() == partSizeDto.getPrice())
-                    if (partSize.getSuitId() == partSizeDto.getSuitId())
-                        if (partSize.getModel().equals(partSizeDto.getModel()))
-                            if (partSize.getPart().equals(partSizeDto.getPart()))
-                                if (partSize.getSize().equals(partSizeDto.getSize()))
-                                    return true;
+            if (partSize.getSuitId() == partSizeDto.getSuitId())
+                if (partSize.getPart().equals(partSizeDto.getPart()))
+                    if (partSize.getSize().equals(partSizeDto.getSize()))
+                        return true;
         }
         return false;
     }
@@ -136,8 +133,8 @@ public class PartSizeServiceImpl implements PartSizeService {
     public Double selectLowPriceBySuitId(Integer suitId) {
         List<PartSizeDto> partSizeDtos = partSizeMapper.selectAllBySuitId(suitId);
         Double lowPrice = partSizeDtos.get(0).getPrice();
-        for (int i=0; i<partSizeDtos.size(); i++){
-            if (lowPrice > partSizeDtos.get(i).getPrice()){
+        for (int i = 0; i < partSizeDtos.size(); i++) {
+            if (lowPrice > partSizeDtos.get(i).getPrice()) {
                 lowPrice = partSizeDtos.get(i).getPrice();
             }
         }
@@ -149,8 +146,8 @@ public class PartSizeServiceImpl implements PartSizeService {
     public Double selecgHighPriceBySuitId(Integer suitId) {
         List<PartSizeDto> partSizeDtos = partSizeMapper.selectAllBySuitId(suitId);
         Double highPrice = partSizeDtos.get(0).getPrice();
-        for (int i=0; i<partSizeDtos.size(); i++){
-            if (highPrice < partSizeDtos.get(i).getPrice()){
+        for (int i = 0; i < partSizeDtos.size(); i++) {
+            if (highPrice < partSizeDtos.get(i).getPrice()) {
                 highPrice = partSizeDtos.get(i).getPrice();
             }
         }

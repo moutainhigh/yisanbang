@@ -3,6 +3,7 @@ package com.vtmer.yisanbang.controller;
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.common.validGroup.Delete;
 import com.vtmer.yisanbang.common.validGroup.Update;
+import com.vtmer.yisanbang.dto.ColorSizeDto;
 import com.vtmer.yisanbang.dto.PartSizeDto;
 import com.vtmer.yisanbang.service.PartSizeService;
 import io.swagger.annotations.Api;
@@ -13,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Api("部件尺寸管理接口")
 @RestController
@@ -50,7 +52,23 @@ public class PartSizeController {
         PartSizeDto partSizeDto = partSizeService.selectPartSizeById(partSizeId);
         if (partSizeDto != null)
             return ResponseMessage.newSuccessInstance(partSizeDto, "查找成功");
-        else return ResponseMessage.newErrorInstance("查找失败");
+        else return ResponseMessage.newErrorInstance("查找失败，该套装id不存在");
+    }
+    @PostMapping("/addPartSize")
+    @ApiOperation(value = "添加套装部件尺寸")
+    // 添加套装部件尺寸
+    public ResponseMessage addPartSize(@ApiParam(name = "部件尺寸Dto实体类", value = "传入Json格式", required = true)
+                                           @RequestBody
+                                           @Validated PartSizeDto partSizeDto) {
+        PartSizeDto partSize = partSizeService.selectPartSizeById(partSizeDto.getId());
+        if (partSize != null) {
+            return ResponseMessage.newErrorInstance("该套装部件尺寸id已经存在");
+        }
+        boolean judgeFlag = partSizeService.judgePartSize(partSizeDto);
+        if (judgeFlag) return ResponseMessage.newErrorInstance("该套装部件尺寸已经存在");
+        boolean addFlag = partSizeService.addPartSize(partSizeDto);
+        if (addFlag) return ResponseMessage.newSuccessInstance("添加成功");
+        else return ResponseMessage.newErrorInstance("添加失败");
     }
 
     @DeleteMapping("/deletePartSize")
@@ -73,6 +91,8 @@ public class PartSizeController {
     public ResponseMessage updatePartSize(@ApiParam(name = "部件尺寸Dto实体类", value = "传入Json格式", required = true)
                                           @RequestBody
                                           @Validated(Update.class) PartSizeDto partSizeDto) {
+        boolean judgeFlag = partSizeService.judgePartSize(partSizeDto);
+        if (judgeFlag) return ResponseMessage.newErrorInstance("该套装部件尺寸已经存在");
         PartSizeDto partSize = partSizeService.selectPartSizeById(partSizeDto.getId());
         if (partSize != null) {
             boolean updateFlag = partSizeService.updatePartSize(partSizeDto);
@@ -90,7 +110,8 @@ public class PartSizeController {
         if (partSizeDtos != null) {
             List<String> list = partSizeService.selectAllPartById(suitId);
             if (list != null && !list.isEmpty()) {
-                return ResponseMessage.newSuccessInstance(list, "查找成功");
+                List uniqueList = list.stream().distinct().collect(Collectors.toList());
+                return ResponseMessage.newSuccessInstance(uniqueList, "查找成功");
             } else {
                 return ResponseMessage.newErrorInstance("查找失败");
             }
@@ -108,7 +129,8 @@ public class PartSizeController {
         if (partSizeDtos != null) {
             List<String> list = partSizeService.selectAllSizeById(suitId);
             if (list != null && !list.isEmpty()) {
-                return ResponseMessage.newSuccessInstance(list, "查找成功");
+                List uniqueList = list.stream().distinct().collect(Collectors.toList());
+                return ResponseMessage.newSuccessInstance(uniqueList, "查找成功");
             } else {
                 return ResponseMessage.newErrorInstance("查找失败");
             }
