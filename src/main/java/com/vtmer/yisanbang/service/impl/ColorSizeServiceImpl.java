@@ -69,8 +69,7 @@ public class ColorSizeServiceImpl implements ColorSizeService {
         List<ColorSizeDto> colorSizeDtoList = colorSizeMapper.selectAllDto();
         for (ColorSizeDto colorSize : colorSizeDtoList) {
             if (colorSize.getGoodsId() == colorSizeDto.getGoodsId())
-                if (colorSize.getSize() == colorSizeDto.getSize())
-                    if (colorSize.getInventory() == colorSizeDto.getInventory())
+                if (colorSize.getSize().equals(colorSizeDto.getSize()))
                         if (colorSize.getColor().equals(colorSizeDto.getColor()))
                             return true;
         }

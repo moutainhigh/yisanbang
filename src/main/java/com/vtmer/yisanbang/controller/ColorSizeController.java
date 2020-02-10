@@ -1,6 +1,8 @@
 package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
+import com.vtmer.yisanbang.common.validGroup.Delete;
+import com.vtmer.yisanbang.common.validGroup.Update;
 import com.vtmer.yisanbang.dto.ColorSizeDto;
 import com.vtmer.yisanbang.dto.GoodsDto;
 import com.vtmer.yisanbang.service.ColorSizeService;
@@ -8,6 +10,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,7 +37,9 @@ public class ColorSizeController {
     @PostMapping("/addColorSize")
     @ApiOperation(value = "添加商品颜色尺寸")
     // 添加商品颜色尺寸
-    public ResponseMessage addColorSize(@ApiParam(name = "颜色尺寸Dto实体类", value = "传入Json格式", required = true) @RequestBody ColorSizeDto colorSizeDto) {
+    public ResponseMessage addColorSize(@ApiParam(name = "颜色尺寸Dto实体类", value = "传入Json格式", required = true)
+                                            @RequestBody
+                                                    @Validated ColorSizeDto colorSizeDto) {
         ColorSizeDto colorSize = colorSizeService.selectColorSizeById(colorSizeDto.getId());
         if (colorSize != null) {
             return ResponseMessage.newErrorInstance("该商品颜色尺寸id已经存在");
@@ -49,7 +54,9 @@ public class ColorSizeController {
     @PutMapping("/updateColorSize")
     @ApiOperation(value = "更新商品颜色尺寸")
     // 更新商品颜色尺寸
-    public ResponseMessage updateColorSize(@ApiParam(name = "颜色尺寸Dto实体类", value = "传入Json格式", required = true)@RequestBody ColorSizeDto colorSizeDto) {
+    public ResponseMessage updateColorSize(@ApiParam(name = "颜色尺寸Dto实体类", value = "传入Json格式", required = true)
+                                               @RequestBody
+                                               @Validated(Update.class) ColorSizeDto colorSizeDto) {
         ColorSizeDto colorSize = colorSizeService.selectColorSizeById(colorSizeDto.getId());
         if (colorSize != null) {
             boolean updateFlag = colorSizeService.updateColorSize(colorSizeDto);
@@ -61,7 +68,9 @@ public class ColorSizeController {
     @DeleteMapping("/deleteColorSize")
     @ApiOperation(value = "删除商品颜色尺寸")
     // 删除商品颜色尺寸
-    public ResponseMessage deleteColorSize(@ApiParam(name = "颜色尺寸Dto实体类", value = "传入Json格式", required = true)@RequestBody ColorSizeDto colorSizeDto) {
+    public ResponseMessage deleteColorSize(@ApiParam(name = "颜色尺寸Dto实体类", value = "传入Json格式", required = true)
+                                               @RequestBody
+                                               @Validated(Delete.class) ColorSizeDto colorSizeDto) {
         ColorSizeDto colorSize = colorSizeService.selectColorSizeById(colorSizeDto.getId());
         if (colorSize != null) {
             boolean deleteFlag = colorSizeService.deleteColorSize(colorSizeDto.getId());
