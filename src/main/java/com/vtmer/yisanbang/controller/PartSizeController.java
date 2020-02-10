@@ -126,8 +126,8 @@ public class PartSizeController {
                                                      @PathVariable("part") String part,
                                                      @ApiParam(name = "size", value = "套装价格", required = true)
                                                      @PathVariable("size") String size) {
-        PartSizeDto partSizeDto = partSizeService.selectPartSizeById(suitId);
-        if (partSizeDto != null) {
+        List<PartSizeDto> partSizeDtos = partSizeService.selectAllBySuitId(suitId);
+        if (partSizeDtos != null && !partSizeDtos.isEmpty()) {
             Integer inventory = partSizeService.selectInventoryByPartSize(suitId, part, size);
             if (inventory != null)
                 return ResponseMessage.newSuccessInstance(inventory, "查找成功");
@@ -145,8 +145,8 @@ public class PartSizeController {
                                                  @PathVariable("part") String part,
                                                  @ApiParam(name = "size", value = "套装价格", required = true)
                                                  @PathVariable("size") String size) {
-        PartSizeDto partSizeDto = partSizeService.selectPartSizeById(suitId);
-        if (partSizeDto != null) {
+        List<PartSizeDto> partSizeDtos = partSizeService.selectAllBySuitId(suitId);
+        if (partSizeDtos != null && !partSizeDtos.isEmpty()) {
             Double price = partSizeService.selectPriceByPartSize(suitId, part, size);
             if (price != null)
                 return ResponseMessage.newSuccessInstance(price, "查找成功");
