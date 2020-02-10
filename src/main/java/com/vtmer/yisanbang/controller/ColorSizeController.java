@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Api("颜色尺寸管理接口")
 @RestController
 @RequestMapping("/colorSize")
@@ -76,7 +78,8 @@ public class ColorSizeController {
         if (colorSizeDtos != null) {
             List<String> list = colorSizeService.selectAllColorById(goodsId);
             if (list != null && !list.isEmpty()) {
-                return ResponseMessage.newSuccessInstance(list, "查找成功");
+                List uniqueList = list.stream().distinct().collect(Collectors.toList());
+                return ResponseMessage.newSuccessInstance(uniqueList, "查找成功");
             } else {
                 return ResponseMessage.newErrorInstance("查找失败");
             }
@@ -93,7 +96,8 @@ public class ColorSizeController {
         if (colorSizeDtos != null) {
             List<String> list = colorSizeService.selectAllSizeById(goodsId);
             if (list != null && !list.isEmpty()) {
-                return ResponseMessage.newSuccessInstance(list, "查找成功");
+                List uniqueList = list.stream().distinct().collect(Collectors.toList());
+                return ResponseMessage.newSuccessInstance(uniqueList, "查找成功");
             } else {
                 return ResponseMessage.newErrorInstance("查找失败");
             }
