@@ -2,6 +2,7 @@ package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.common.qiniu.QiniuUpload;
+import com.vtmer.yisanbang.domain.Goods;
 import com.vtmer.yisanbang.dto.GoodsDto;
 import com.vtmer.yisanbang.service.GoodsService;
 import io.swagger.annotations.Api;

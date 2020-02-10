@@ -1,12 +1,15 @@
 package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
+import com.vtmer.yisanbang.common.validGroup.Delete;
+import com.vtmer.yisanbang.common.validGroup.Update;
 import com.vtmer.yisanbang.dto.PartSizeDto;
 import com.vtmer.yisanbang.service.PartSizeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,7 +34,8 @@ public class PartSizeController {
     @GetMapping("/selectPartBySuitId/{id}")
     @ApiOperation(value = "根据套装id查找所有该套装的部件尺寸")
     // 根据套装id查找所有该套装的部件尺寸
-    public ResponseMessage selectPartBySuitId(@ApiParam(name = "suitId", value = "套装Id", required = true) @PathVariable("id") Integer suitId) {
+    public ResponseMessage selectPartBySuitId(@ApiParam(name = "suitId", value = "套装Id", required = true)
+                                              @PathVariable("id") Integer suitId) {
         List<PartSizeDto> partSizeDtos = partSizeService.selectAllBySuitId(suitId);
         if (partSizeDtos != null && !partSizeDtos.isEmpty())
             return ResponseMessage.newSuccessInstance(partSizeDtos, "查找成功");
@@ -41,7 +45,8 @@ public class PartSizeController {
     @GetMapping("/selectPartById/{id}")
     @ApiOperation(value = "根据部件尺寸id查找部件尺寸")
     // 根据部件尺寸id查找部件尺寸
-    public ResponseMessage selectPartById(@ApiParam(name = "partSizeId", value = "部件尺寸Id", required = true) @PathVariable("id") Integer partSizeId) {
+    public ResponseMessage selectPartById(@ApiParam(name = "partSizeId", value = "部件尺寸Id", required = true)
+                                          @PathVariable("id") Integer partSizeId) {
         PartSizeDto partSizeDto = partSizeService.selectPartSizeById(partSizeId);
         if (partSizeDto != null)
             return ResponseMessage.newSuccessInstance(partSizeDto, "查找成功");
@@ -51,7 +56,9 @@ public class PartSizeController {
     @DeleteMapping("/deletePartSize")
     @ApiOperation(value = "删除部件尺寸")
     // 删除部件尺寸
-    public ResponseMessage deletePartSize(@ApiParam(name = "部件尺寸Dto实体类", value = "传入Json格式", required = true) @RequestBody PartSizeDto partSizeDto) {
+    public ResponseMessage deletePartSize(@ApiParam(name = "部件尺寸Dto实体类", value = "传入Json格式", required = true)
+                                          @RequestBody
+                                          @Validated(Delete.class) PartSizeDto partSizeDto) {
         PartSizeDto partSize = partSizeService.selectPartSizeById(partSizeDto.getId());
         if (partSize != null) {
             boolean deleteFlag = partSizeService.deletePartSize(partSizeDto.getId());
@@ -63,7 +70,9 @@ public class PartSizeController {
     @PutMapping("/updatePartSize")
     @ApiOperation(value = "更新部件尺寸")
     // 更新部件尺寸
-    public ResponseMessage updatePartSize(@ApiParam(name = "部件尺寸Dto实体类", value = "传入Json格式", required = true) @RequestBody PartSizeDto partSizeDto) {
+    public ResponseMessage updatePartSize(@ApiParam(name = "部件尺寸Dto实体类", value = "传入Json格式", required = true)
+                                          @RequestBody
+                                          @Validated(Update.class) PartSizeDto partSizeDto) {
         PartSizeDto partSize = partSizeService.selectPartSizeById(partSizeDto.getId());
         if (partSize != null) {
             boolean updateFlag = partSizeService.updatePartSize(partSizeDto);
@@ -75,7 +84,8 @@ public class PartSizeController {
     @GetMapping("/selectAllPartById/{id}")
     @ApiOperation(value = "根据套装id查找该套装的所有部件")
     // 根据套装id查找该套装的所有部件
-    public ResponseMessage selectAllPartById(@ApiParam(name = "suitId", value = "套装Id", required = true) @PathVariable("id") Integer suitId) {
+    public ResponseMessage selectAllPartById(@ApiParam(name = "suitId", value = "套装Id", required = true)
+                                             @PathVariable("id") Integer suitId) {
         List<PartSizeDto> partSizeDtos = partSizeService.selectAllBySuitId(suitId);
         if (partSizeDtos != null) {
             List<String> list = partSizeService.selectAllPartById(suitId);
@@ -92,7 +102,8 @@ public class PartSizeController {
     @GetMapping("/selectAllSizeById/{id}")
     @ApiOperation(value = "根据套装id查找该套装的所有尺寸")
     // 根据套装id查找该套装的所有尺寸
-    public ResponseMessage selectAllSizeById(@ApiParam(name = "suitId", value = "套装Id", required = true) @PathVariable("id") Integer suitId) {
+    public ResponseMessage selectAllSizeById(@ApiParam(name = "suitId", value = "套装Id", required = true)
+                                             @PathVariable("id") Integer suitId) {
         List<PartSizeDto> partSizeDtos = partSizeService.selectAllBySuitId(suitId);
         if (partSizeDtos != null) {
             List<String> list = partSizeService.selectAllSizeById(suitId);
@@ -109,9 +120,12 @@ public class PartSizeController {
     @GetMapping("/selectInventoryByPartSize/{id}/{part}/{size}")
     @ApiOperation(value = "根据部件尺寸返回该部件尺寸对应的库存")
     // 根据部件尺寸返回该部件尺寸对应的库存
-    public ResponseMessage selectInventoryByPartSize(@ApiParam(name = "suitId", value = "套装Id", required = true) @PathVariable("id") Integer suitId,
-                                                     @ApiParam(name = "part", value = "套装部件", required = true) @PathVariable("part") String part,
-                                                     @ApiParam(name = "size", value = "套装价格", required = true) @PathVariable("size") String size) {
+    public ResponseMessage selectInventoryByPartSize(@ApiParam(name = "suitId", value = "套装Id", required = true)
+                                                     @PathVariable("id") Integer suitId,
+                                                     @ApiParam(name = "part", value = "套装部件", required = true)
+                                                     @PathVariable("part") String part,
+                                                     @ApiParam(name = "size", value = "套装价格", required = true)
+                                                     @PathVariable("size") String size) {
         PartSizeDto partSizeDto = partSizeService.selectPartSizeById(suitId);
         if (partSizeDto != null) {
             Integer inventory = partSizeService.selectInventoryByPartSize(suitId, part, size);
@@ -125,9 +139,12 @@ public class PartSizeController {
     @GetMapping("/selectPriceByPartSize/{id}/{part}/{size}")
     @ApiOperation(value = "根据部件尺寸返回该部件尺寸对应的价格")
     // 根据部件尺寸返回该部件尺寸对应的价格
-    public ResponseMessage selectPriceByPartSize(@ApiParam(name = "suitId", value = "套装Id", required = true) @PathVariable("id") Integer suitId,
-                                                 @ApiParam(name = "part", value = "套装部件", required = true) @PathVariable("part") String part,
-                                                 @ApiParam(name = "size", value = "套装价格", required = true) @PathVariable("size") String size) {
+    public ResponseMessage selectPriceByPartSize(@ApiParam(name = "suitId", value = "套装Id", required = true)
+                                                 @PathVariable("id") Integer suitId,
+                                                 @ApiParam(name = "part", value = "套装部件", required = true)
+                                                 @PathVariable("part") String part,
+                                                 @ApiParam(name = "size", value = "套装价格", required = true)
+                                                 @PathVariable("size") String size) {
         PartSizeDto partSizeDto = partSizeService.selectPartSizeById(suitId);
         if (partSizeDto != null) {
             Double price = partSizeService.selectPriceByPartSize(suitId, part, size);
@@ -141,7 +158,8 @@ public class PartSizeController {
     @GetMapping("/selectLowPriceById/{id}")
     @ApiOperation(value = "返回套装内部件的最低价")
     // 返回套装内部件的最低价
-    public ResponseMessage selectLowPriceById(@ApiParam(name = "suitId", value = "套装Id", required = true) @PathVariable("id") Integer suitId) {
+    public ResponseMessage selectLowPriceById(@ApiParam(name = "suitId", value = "套装Id", required = true)
+                                              @PathVariable("id") Integer suitId) {
         List<PartSizeDto> partSizeDtos = partSizeService.selectAllBySuitId(suitId);
         if (partSizeDtos != null && !partSizeDtos.isEmpty()) {
             Double lowPrice = partSizeService.selectLowPriceBySuitId(suitId);
@@ -155,7 +173,8 @@ public class PartSizeController {
     @GetMapping("/selectHighPriceById/{id}")
     @ApiOperation(value = "返回套装内部件的最高价")
     // 返回套装内部件的最高价
-    public ResponseMessage selectHighPriceById(@ApiParam(name = "suitId", value = "套装Id", required = true) @PathVariable("id") Integer suitId) {
+    public ResponseMessage selectHighPriceById(@ApiParam(name = "suitId", value = "套装Id", required = true)
+                                               @PathVariable("id") Integer suitId) {
         List<PartSizeDto> partSizeDtos = partSizeService.selectAllBySuitId(suitId);
         if (partSizeDtos != null && !partSizeDtos.isEmpty()) {
             Double highPrice = partSizeService.selecgHighPriceBySuitId(suitId);

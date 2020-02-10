@@ -1,4 +1,6 @@
 package com.vtmer.yisanbang.common.validGroup;
 
-public interface Insert {
+import javax.validation.groups.Default;
+
+public interface Insert extends Default {
 }

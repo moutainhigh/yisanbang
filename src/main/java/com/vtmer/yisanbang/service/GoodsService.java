@@ -1,5 +1,6 @@
 package com.vtmer.yisanbang.service;
 
+import com.vtmer.yisanbang.domain.Goods;
 import com.vtmer.yisanbang.dto.GoodsDto;
 
 import java.util.List;

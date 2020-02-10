@@ -49,7 +49,7 @@ public class SuitController {
     @ApiOperation(value = "根据套装价格顺序查找显示套装")
     // 根据套装价格顺序显示套装
     public ResponseMessage selectAllGoodsOrderByPrice() {
-        List<SuitDto> suitDtoList = suitService.selectSuitOrderByTime();
+        List<SuitDto> suitDtoList = suitService.selectSuitOrderByPrice();
         if (suitDtoList != null && !suitDtoList.isEmpty())
             return ResponseMessage.newSuccessInstance(suitDtoList, "查找成功");
         else
@@ -95,7 +95,7 @@ public class SuitController {
     // 添加套装
     public ResponseMessage addGoods(@ApiParam(name = "套装Dto实体类", value = "传入Json格式", required = true)
                                         @RequestBody
-                                            @Validated(Insert.class) SuitDto suitDto) {
+                                            @Validated SuitDto suitDto) {
         List<SuitDto> suitDtoList = suitService.selectAll();
         boolean judgeFlag = suitService.judgeSuit(suitDto, suitDtoList);
         if (judgeFlag) return ResponseMessage.newErrorInstance("该套装名称已经存在");
@@ -124,6 +124,9 @@ public class SuitController {
     public ResponseMessage updateSuit(@ApiParam(name = "套装Dto实体类", value = "传入Json格式", required = true)
                                           @RequestBody
                                                 @Validated(Update.class) SuitDto suitDto) {
+        List<SuitDto> suitDtoList = suitService.selectAll();
+        boolean judgeFlag = suitService.judgeSuit(suitDto, suitDtoList);
+        if (judgeFlag) return ResponseMessage.newErrorInstance("该套装名称已经存在");
         SuitDto suit = suitService.selectSuitById(suitDto.getId());
         if (suit != null) {
             boolean updateFlag = suitService.updateSuitById(suitDto);

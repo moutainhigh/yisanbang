@@ -1,4 +1,6 @@
 package com.vtmer.yisanbang.common.validGroup;
 
-public interface Delete {
+import javax.validation.groups.Default;
+
+public interface Delete extends Default {
 }

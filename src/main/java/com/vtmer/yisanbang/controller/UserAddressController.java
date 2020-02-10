@@ -53,7 +53,7 @@ public class UserAddressController {
     @ApiOperation(value = "添加用户地址")
     public ResponseMessage insertUserAddress(@ApiParam(name = "用户地址Dto实体类", value = "传入Json格式", required = true)
                                                  @RequestBody
-                                                         @Validated(Insert.class) UserAddressDto userAddress) {
+                                                         @Validated UserAddressDto userAddress) {
         List<UserAddressDto> userAddressDtos = userAddressService.selectUserAddressByUserId(userAddress.getUserId());
         boolean flag = userAddressService.JudegAddressContent(userAddress, userAddressDtos);
         if (flag) return ResponseMessage.newErrorInstance("该地址已存在");
