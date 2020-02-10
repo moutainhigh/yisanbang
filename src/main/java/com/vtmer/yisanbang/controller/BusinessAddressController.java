@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Api("商家收货地址接口")
+@Api(tags = "商家收货地址接口")
 @Validated
 @RestController
 @RequestMapping("/businessAddress")

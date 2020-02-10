@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 
-@Api(value = "退款接口")
+@Api(tags = "退款接口")
 @RestController
 @RequestMapping("/refund")
 public class RefundController {

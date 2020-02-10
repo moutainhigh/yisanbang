@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@Api("优惠规则设置接口")
+@Api(tags = "优惠规则设置接口")
 @RestController
 @RequestMapping("/discount")
 public class DiscountController {

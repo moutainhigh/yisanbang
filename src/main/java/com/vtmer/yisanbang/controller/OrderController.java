@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Api("订单接口")
+@Api(tags = "订单接口")
 @RestController
 @RequestMapping("/order")
 public class OrderController {
@@ -68,7 +68,7 @@ public class OrderController {
      * @param orderVo：订单详情信息
      * @return
      */
-    @ApiOperation(value = "创建订单",notes = "用户点击提交订单后调用")
+    @ApiOperation(value = "创建订单",notes = "用户点击提交订单后调用,若是订单中的某件商品数量超过库存，会返回【库存不足】的提示")
     @PostMapping("/insert")
     public ResponseMessage insert(@RequestBody @Validated({Insert.class}) OrderVo orderVo) {
         Map<String, String> orderMap = orderService.createCartOrder(orderVo);

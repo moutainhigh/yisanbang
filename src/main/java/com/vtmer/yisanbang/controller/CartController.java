@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 
-@Api(value = "购物车接口")
+@Api(tags = "购物车接口")
 @RestController
 @RequestMapping("/cart")
 public class CartController {

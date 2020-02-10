@@ -2,7 +2,6 @@ package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.dto.ColorSizeDto;
-import com.vtmer.yisanbang.dto.GoodsDto;
 import com.vtmer.yisanbang.service.ColorSizeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -108,6 +107,9 @@ public class ColorSizeController {
     public ResponseMessage selectInventoryByColorSize(@ApiParam(name = "goodsId", value = "商品Id", required = true) @PathVariable("id") Integer goodsId,
                                                       @ApiParam(name = "color", value = "颜色", required = true) @PathVariable("color") String color,
                                                       @ApiParam(name = "size", value = "大小", required = true) @PathVariable("size") String size) {
+        System.out.println(goodsId);
+        System.out.println(color);
+        System.out.println(size);
         ColorSizeDto colorSizeDto = colorSizeService.selectColorSizeById(goodsId);
         if (colorSizeDto != null) {
             Integer inventory = colorSizeService.selectInventoryByColorSize(goodsId, color, size);
