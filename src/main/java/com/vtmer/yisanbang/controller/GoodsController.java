@@ -113,11 +113,13 @@ public class GoodsController {
     @ApiOperation(value = "添加商品")
     // 添加商品
     public ResponseMessage addGoods(@ApiParam(name = "商品Dto实体类", value = "传入Json格式", required = true)
-                                        @RequestBody
-                                                @Validated GoodsDto goodsDto) {
+                                    @RequestBody
+                                    @Validated GoodsDto goodsDto) {
         List<GoodsDto> goodsDtos = goodsService.selectAllDto();
-        boolean judgeFlag = goodsService.judgeGoods(goodsDto, goodsDtos);
-        if (judgeFlag) return ResponseMessage.newErrorInstance("该商品名称已经存在");
+        if (goodsDtos != null && !goodsDtos.isEmpty()) {
+            boolean judgeFlag = goodsService.judgeGoods(goodsDto, goodsDtos);
+            if (judgeFlag) return ResponseMessage.newErrorInstance("该商品名称已经存在");
+        }
         boolean addFlag = goodsService.addGoods(goodsDto);
         if (addFlag) return ResponseMessage.newSuccessInstance("添加成功");
         else return ResponseMessage.newErrorInstance("添加失败");
@@ -127,8 +129,8 @@ public class GoodsController {
     @ApiOperation(value = "删除商品")
     // 删除商品
     public ResponseMessage deleteGoods(@ApiParam(name = "商品Dto实体类", value = "传入Json格式", required = true)
-                                           @RequestBody
-                                                   @Validated(Delete.class) GoodsDto goodsDto) {
+                                       @RequestBody
+                                       @Validated(Delete.class) GoodsDto goodsDto) {
         GoodsDto goods = goodsService.selectDtoByPrimaryKey(goodsDto.getId());
         if (goods != null) {
             boolean deleteFlag = goodsService.deleteGoodsById(goodsDto.getId());
@@ -141,8 +143,8 @@ public class GoodsController {
     @ApiOperation(value = "更新商品")
     // 更新商品
     public ResponseMessage updateGoods(@ApiParam(name = "商品Dto实体类", value = "传入Json格式", required = true)
-                                           @RequestBody
-                                                   @Validated(Update.class) GoodsDto goodsDto) {
+                                       @RequestBody
+                                       @Validated(Update.class) GoodsDto goodsDto) {
         GoodsDto goods = goodsService.selectDtoByPrimaryKey(goodsDto.getId());
         if (goods != null) {
             boolean updateFlag = goodsService.updateGoods(goodsDto);
@@ -155,8 +157,8 @@ public class GoodsController {
     @ApiOperation(value = "隐藏商品，即下架商品")
     // 隐藏商品
     public ResponseMessage hideGoods(@ApiParam(name = "商品Dto实体类", value = "传入Json格式", required = true)
-                                         @RequestBody
-                                                 @Validated(Update.class) GoodsDto goodsDto) {
+                                     @RequestBody
+                                     @Validated(Update.class) GoodsDto goodsDto) {
         GoodsDto goods = goodsService.selectDtoByPrimaryKey(goodsDto.getId());
         if (goods != null) {
             boolean hideFlag = goodsService.hideGoods(goodsDto);

@@ -23,8 +23,8 @@ public class GoodsDto {
     @ApiModelProperty(value = "商品名称", example = "衣服")
     private String name;
 
-    @NotBlank(message = "库存不可为空")
-    @ApiModelProperty(value = "库存", example = "99")
+    @NotBlank(message = "简介不可为空")
+    @ApiModelProperty(value = "简介", example = "服务舒适....")
     private String introduce;
 
     @NotBlank(message = "图片路径不可为空")
