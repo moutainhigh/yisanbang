@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Api("收益信息接口")
+@Api(tags = "收益信息接口")
 @RestController
 @RequestMapping("/income")
 public class IncomeController {

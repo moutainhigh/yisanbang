@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Api("用户收藏夹接口")
+@Api(tags = "用户收藏夹接口")
 @RestController
 @RequestMapping("/collection")
 public class CollectionController {
