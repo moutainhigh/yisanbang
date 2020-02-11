@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Api("颜色尺寸管理接口")
+@Api(tags = "颜色尺寸管理接口")
 @RestController
 @RequestMapping("/colorSize")
 public class ColorSizeController {

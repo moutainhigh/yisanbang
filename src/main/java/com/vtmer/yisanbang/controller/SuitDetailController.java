@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.UUID;
 
-@Api("套装详情管理接口")
+@Api(tags = "套装详情管理接口")
 @RestController
 @RequestMapping("/suitDetail")
 public class SuitDetailController {

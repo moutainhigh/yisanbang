@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.UUID;
 
-@Api("商品管理接口")
+@Api(tags = "商品管理接口")
 @RestController
 @RequestMapping("/goods")
 public class GoodsController {

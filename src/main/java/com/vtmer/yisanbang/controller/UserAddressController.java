@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Api("用户地址管理接口")
+@Api(tags = "用户地址管理接口")
 @RestController
 @RequestMapping("/userAddress")
 public class UserAddressController {

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Api("部件尺寸管理接口")
+@Api(tags = "部件尺寸管理接口")
 @RestController
 @RequestMapping("/partSize")
 public class PartSizeController {

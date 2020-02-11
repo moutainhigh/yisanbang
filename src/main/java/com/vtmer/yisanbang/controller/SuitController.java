@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Api("套装管理接口")
+@Api(tags = "套装管理接口")
 @RestController
 @RequestMapping("/suit")
 public class SuitController {
