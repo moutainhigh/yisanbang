@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.UUID;
 
-@Api("商品详情管理接口")
+@Api(tags = "商品详情管理接口")
 @RestController
 @RequestMapping("/goodsDetail")
 public class GoodsDetailController {
@@ -61,7 +61,10 @@ public class GoodsDetailController {
     @ApiOperation(value = "更新商品详情信息")
     // 更新商品详情信息
     public ResponseMessage updateGoodsDetail(@RequestBody GoodsDetailDto goodsDetail) {
-        GoodsDetailDto goodsDetailDto = goodsDetailService.selectGoodsDetailByID(goodsDetail.getGoodsId());
+        List<GoodsDetailDto> goodsDetailDtos = goodsDetailService.selectAllDtoByGoodsId(goodsDetail.getGoodsId());
+        boolean judgeFlag = goodsDetailService.judgeGoodsDetail(goodsDetail, goodsDetailDtos);
+        if (judgeFlag) return ResponseMessage.newErrorInstance("该商品详细信息内容已经存在");
+        GoodsDetailDto goodsDetailDto = goodsDetailService.selectGoodsDetailByID(goodsDetail.getId());
         if (goodsDetailDto != null) {
             boolean updateFlag = goodsDetailService.updateGoodsDetail(goodsDetail);
             if (updateFlag) return ResponseMessage.newSuccessInstance("更新成功");
@@ -73,9 +76,9 @@ public class GoodsDetailController {
     @ApiOperation(value = "删除商品详情信息")
     // 删除商品详情信息
     public ResponseMessage deleteGoodsDetail(@RequestBody GoodsDetailDto goodsDetail) {
-        GoodsDetailDto goodsDetailDto = goodsDetailService.selectGoodsDetailByID(goodsDetail.getGoodsId());
+        GoodsDetailDto goodsDetailDto = goodsDetailService.selectGoodsDetailByID(goodsDetail.getId());
         if (goodsDetailDto != null) {
-            boolean deleteFlag = goodsDetailService.deleteGoodsDetail(goodsDetail.getGoodsId());
+            boolean deleteFlag = goodsDetailService.deleteGoodsDetail(goodsDetail.getId());
             if (deleteFlag) return ResponseMessage.newSuccessInstance("删除成功");
             else return ResponseMessage.newErrorInstance("删除失败");
         } else return ResponseMessage.newErrorInstance("该商品详细id错误，无该商品详细信息");

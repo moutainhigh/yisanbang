@@ -1,5 +1,7 @@
 package com.vtmer.yisanbang.service.impl;
 
+import com.vtmer.yisanbang.domain.Goods;
+
 import com.vtmer.yisanbang.dto.GoodsDto;
 import com.vtmer.yisanbang.mapper.GoodsMapper;
 import com.vtmer.yisanbang.service.GoodsService;
@@ -65,7 +67,9 @@ public class GoodsServiceImpl implements GoodsService {
     // 查看是否存在相同商品
     public boolean judgeGoods(GoodsDto goods, List<GoodsDto> goodsList) {
         for (GoodsDto goodsDto : goodsList) {
-            if (goodsDto.getName().equals(goods.getName())) return true;
+            if (goodsDto.getName().equals(goods.getName()))
+                if (goodsDto.getSortId() == goods.getSortId())
+                    return true;
         }
         return false;
     }

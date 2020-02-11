@@ -1,6 +1,6 @@
 package com.vtmer.yisanbang.service.impl;
 
-import com.vtmer.yisanbang.domain.GoodsDetail;
+
 import com.vtmer.yisanbang.dto.GoodsDetailDto;
 import com.vtmer.yisanbang.mapper.GoodsDetailMapper;
 import com.vtmer.yisanbang.service.GoodsDetailService;

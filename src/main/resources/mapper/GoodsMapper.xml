@@ -12,7 +12,7 @@
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
-    <resultMap id="GoodsDtoMap" type="com.vtmer.yisanbang.dto.GoodsDto">
+    <resultMap id="GoodsMap" type="com.vtmer.yisanbang.dto.GoodsDto">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="sort_id" jdbcType="INTEGER" property="sortId"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
@@ -20,6 +20,7 @@
         <result column="picture" jdbcType="VARCHAR" property="picture"/>
         <result column="price" jdbcType="DOUBLE" property="price"/>
         <result column="is_show" jdbcType="BIT" property="isShow"/>
+      <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from goods
@@ -76,48 +77,47 @@
       is_show = #{isShow,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
-    <select id="selectDtoByPrimaryKey" parameterType="java.lang.Integer" resultMap="GoodsDtoMap">
+    <select id="selectDtoByPrimaryKey" parameterType="java.lang.Integer" resultMap="GoodsMap">
     select id, sort_id, name, introduce, picture, price, is_show
     from goods
-    where id = #{id,jdbcType=INTEGER} and is_show = 1
+    where id = #{id,jdbcType=INTEGER} and is_show = true
   </select>
-    <select id="selectDtoByGoodsName" parameterType="java.lang.String" resultMap="GoodsDtoMap">
+    <select id="selectDtoByGoodsName" parameterType="java.lang.String" resultMap="GoodsMap">
     select id, sort_id, name, introduce, picture, price, is_show
     from goods
-    where name = #{name,jdbcType=VARCHAR} and is_show = 1
+    where name = #{name,jdbcType=VARCHAR} and is_show = true
   </select>
-    <select id="selectAllDto" resultMap="GoodsDtoMap">
+  <select id="selectAllDto" resultMap="GoodsMap">
     select id, sort_id, name, introduce, picture, price, is_show
     from goods
-    where is_show = 1
   </select>
-    <select id="selectAllDtoBySort" parameterType="java.lang.Integer" resultMap="GoodsDtoMap">
+    <select id="selectAllDtoBySort" parameterType="java.lang.Integer" resultMap="GoodsMap">
     select id, sort_id, name, introduce, picture, price, is_show
     from goods
-    where sort_id = id = #{id,jdbcType=INTEGER} and is_show = 1
+    where sort_id = #{id,jdbcType=INTEGER} and is_show = true
   </select>
-    <select id="selectAllDtoBySortOrderByPrice" parameterType="java.lang.Integer" resultMap="GoodsDtoMap">
-    select id, sort_id, name, introduce, picture, price, is_show, update_time
+    <select id="selectAllDtoBySortOrderByPrice" parameterType="java.lang.Integer" resultMap="GoodsMap">
+    select id, sort_id, name, introduce, picture, price, is_show
     from goods
-    where sort_id = id = #{id,jdbcType=INTEGER} and is_show = 1
+    where sort_id = #{id,jdbcType=INTEGER} and is_show = true
     order by price
   </select>
-    <select id="selectAllDtoBySortOrderByTime" parameterType="java.lang.Integer" resultMap="GoodsDtoMap">
-    select id, sort_id, name, introduce, picture, price, is_show
+    <select id="selectAllDtoBySortOrderByTime" parameterType="java.lang.Integer" resultMap="GoodsMap">
+    select id, sort_id, name, introduce, picture, price, is_show, update_time
     from goods
-    where sort_id = id = #{id,jdbcType=INTEGER} and is_show = 1
+    where sort_id = #{id,jdbcType=INTEGER} and is_show = true
     order by update_time
   </select>
-    <select id="selectAllDtoOrderByPrice" resultMap="GoodsDtoMap">
-    select id, sort_id, name, introduce, picture, price, is_show, update_time
-    from goods
-    where is_show = 1
-    order by price
-  </select>
-    <select id="selectAllDtoOrderByTime" resultMap="GoodsDtoMap">
+    <select id="selectAllDtoOrderByPrice" resultMap="GoodsMap">
     select id, sort_id, name, introduce, picture, price, is_show
     from goods
-    where is_show = 1
+    where is_show = true
+    order by price
+  </select>
+    <select id="selectAllDtoOrderByTime" resultMap="GoodsMap">
+    select id, sort_id, name, introduce, picture, price, is_show, update_time
+    from goods
+    where is_show = true
     order by update_time
   </select>
 </mapper>

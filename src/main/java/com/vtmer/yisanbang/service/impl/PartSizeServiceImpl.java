@@ -70,13 +70,10 @@ public class PartSizeServiceImpl implements PartSizeService {
     public boolean judgePartSize(PartSizeDto partSizeDto) {
         List<PartSizeDto> partSizeDtoList = partSizeMapper.selectAllDto();
         for (PartSizeDto partSize : partSizeDtoList) {
-            if (partSize.getInventory() == partSizeDto.getInventory())
-                if (partSize.getPrice() == partSizeDto.getPrice())
-                    if (partSize.getSuitId() == partSizeDto.getSuitId())
-                        if (partSize.getModel().equals(partSizeDto.getModel()))
-                            if (partSize.getPart().equals(partSizeDto.getPart()))
-                                if (partSize.getSize().equals(partSizeDto.getSize()))
-                                    return true;
+            if (partSize.getSuitId() == partSizeDto.getSuitId())
+                if (partSize.getPart().equals(partSizeDto.getPart()))
+                    if (partSize.getSize().equals(partSizeDto.getSize()))
+                        return true;
         }
         return false;
     }
@@ -108,7 +105,7 @@ public class PartSizeServiceImpl implements PartSizeService {
     }
 
     @Override
-    // 根据颜色尺寸查找显示库存
+    // 根据部件尺寸查找显示库存
     public Integer selectInventoryByPartSize(Integer suitId, String part, String size) {
         List<PartSizeDto> partSizeDtos = partSizeMapper.selectAllBySuitId(suitId);
         for (PartSizeDto partSize : partSizeDtos) {
@@ -135,12 +132,10 @@ public class PartSizeServiceImpl implements PartSizeService {
     // 查找最低价
     public Double selectLowPriceBySuitId(Integer suitId) {
         List<PartSizeDto> partSizeDtos = partSizeMapper.selectAllBySuitId(suitId);
-        Double lowPrice = null;
-        for (PartSizeDto partSize : partSizeDtos) {
-            Double price = partSize.getPrice();
-            for (PartSizeDto partSizeDto : partSizeDtos) {
-                if (partSizeDto.getPrice() < price)
-                    lowPrice = partSizeDto.getPrice();
+        Double lowPrice = partSizeDtos.get(0).getPrice();
+        for (int i = 0; i < partSizeDtos.size(); i++) {
+            if (lowPrice > partSizeDtos.get(i).getPrice()) {
+                lowPrice = partSizeDtos.get(i).getPrice();
             }
         }
         return lowPrice;
@@ -150,12 +145,10 @@ public class PartSizeServiceImpl implements PartSizeService {
     // 查找最高价
     public Double selecgHighPriceBySuitId(Integer suitId) {
         List<PartSizeDto> partSizeDtos = partSizeMapper.selectAllBySuitId(suitId);
-        Double highPrice = null;
-        for (PartSizeDto partSize : partSizeDtos) {
-            Double price = partSize.getPrice();
-            for (PartSizeDto partSizeDto : partSizeDtos) {
-                if (partSizeDto.getPrice() > price)
-                    highPrice = partSizeDto.getPrice();
+        Double highPrice = partSizeDtos.get(0).getPrice();
+        for (int i = 0; i < partSizeDtos.size(); i++) {
+            if (highPrice < partSizeDtos.get(i).getPrice()) {
+                highPrice = partSizeDtos.get(i).getPrice();
             }
         }
         return highPrice;

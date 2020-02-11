@@ -21,4 +21,20 @@ public class UpdateUserAddressVo {
     @ApiModelProperty(name = "orderNumber",value = "订单编号",required = true,example = "12345678998765432110")
     @NotBlank(message = "订单编号为空")
     private String orderNumber;
+
+    public UserAddress getUserAddress() {
+        return userAddress;
+    }
+
+    public void setUserAddress(UserAddress userAddress) {
+        this.userAddress = userAddress;
+    }
+
+    public String getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(String orderNumber) {
+        this.orderNumber = orderNumber;
+    }
 }

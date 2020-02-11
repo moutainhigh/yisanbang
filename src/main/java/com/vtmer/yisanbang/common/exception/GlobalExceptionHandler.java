@@ -67,5 +67,4 @@ public class GlobalExceptionHandler {
         logger.info("库存不足:{}", ex.getMessage());
         return ResponseMessage.newErrorInstance("商品库存不足，请稍后重试！");
     }
-
 }
