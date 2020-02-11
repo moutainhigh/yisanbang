@@ -30,7 +30,7 @@ public class UserAddressDto {
     private String addressName;
 
     @NotBlank(message = "联系号码不可为空")
-    //@Pattern(groups = {Insert.class, Update.class}, regexp = "^1([34578])\\d{9}$", message = "手机号码格式不正确")
+    @Pattern(groups = {Insert.class, Update.class}, regexp = "^1([34578])\\d{9}$", message = "手机号码格式不正确")
     @ApiModelProperty(value = "联系方式", example = "130*****8888")
     private String phoneNumber;
 

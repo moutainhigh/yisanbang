@@ -2,13 +2,15 @@ package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.common.qiniu.QiniuUpload;
-import com.vtmer.yisanbang.domain.Goods;
+import com.vtmer.yisanbang.common.validGroup.Delete;
+import com.vtmer.yisanbang.common.validGroup.Update;
 import com.vtmer.yisanbang.dto.GoodsDto;
 import com.vtmer.yisanbang.service.GoodsService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -110,7 +112,9 @@ public class GoodsController {
     @PostMapping("/addGoods")
     @ApiOperation(value = "添加商品")
     // 添加商品
-    public ResponseMessage addGoods(@ApiParam(name = "商品Dto实体类", value = "传入Json格式", required = true) @RequestBody GoodsDto goodsDto) {
+    public ResponseMessage addGoods(@ApiParam(name = "商品Dto实体类", value = "传入Json格式", required = true)
+                                        @RequestBody
+                                                @Validated GoodsDto goodsDto) {
         List<GoodsDto> goodsDtos = goodsService.selectAllDto();
         boolean judgeFlag = goodsService.judgeGoods(goodsDto, goodsDtos);
         if (judgeFlag) return ResponseMessage.newErrorInstance("该商品名称已经存在");
@@ -122,7 +126,9 @@ public class GoodsController {
     @DeleteMapping("/deleteGoods")
     @ApiOperation(value = "删除商品")
     // 删除商品
-    public ResponseMessage deleteGoods(@ApiParam(name = "商品Dto实体类", value = "传入Json格式", required = true) @RequestBody GoodsDto goodsDto) {
+    public ResponseMessage deleteGoods(@ApiParam(name = "商品Dto实体类", value = "传入Json格式", required = true)
+                                           @RequestBody
+                                                   @Validated(Delete.class) GoodsDto goodsDto) {
         GoodsDto goods = goodsService.selectDtoByPrimaryKey(goodsDto.getId());
         if (goods != null) {
             boolean deleteFlag = goodsService.deleteGoodsById(goodsDto.getId());
@@ -134,7 +140,9 @@ public class GoodsController {
     @PutMapping("/updateGoods")
     @ApiOperation(value = "更新商品")
     // 更新商品
-    public ResponseMessage updateGoods(@ApiParam(name = "商品Dto实体类", value = "传入Json格式", required = true) @RequestBody GoodsDto goodsDto) {
+    public ResponseMessage updateGoods(@ApiParam(name = "商品Dto实体类", value = "传入Json格式", required = true)
+                                           @RequestBody
+                                                   @Validated(Update.class) GoodsDto goodsDto) {
         GoodsDto goods = goodsService.selectDtoByPrimaryKey(goodsDto.getId());
         if (goods != null) {
             boolean updateFlag = goodsService.updateGoods(goodsDto);
@@ -146,7 +154,9 @@ public class GoodsController {
     @PutMapping("/hideGoods")
     @ApiOperation(value = "隐藏商品，即下架商品")
     // 隐藏商品
-    public ResponseMessage hideGoods(@ApiParam(name = "商品Dto实体类", value = "传入Json格式", required = true) @RequestBody GoodsDto goodsDto) {
+    public ResponseMessage hideGoods(@ApiParam(name = "商品Dto实体类", value = "传入Json格式", required = true)
+                                         @RequestBody
+                                                 @Validated(Update.class) GoodsDto goodsDto) {
         GoodsDto goods = goodsService.selectDtoByPrimaryKey(goodsDto.getId());
         if (goods != null) {
             boolean hideFlag = goodsService.hideGoods(goodsDto);
