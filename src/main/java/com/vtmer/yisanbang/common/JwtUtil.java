@@ -6,6 +6,8 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.vtmer.yisanbang.domain.User;
 import com.vtmer.yisanbang.vo.WxAccount;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -17,6 +19,8 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class JwtUtil {
 
+
+    private final Logger logger = LoggerFactory.getLogger(JwtUtil.class);
     /**
      * 设置token过期时间：15分钟
      */
@@ -51,6 +55,7 @@ public class JwtUtil {
                 .withClaim("jwt-id", jwtId)
                 .withExpiresAt(expireTime)
                 .sign(algorithm);
+        logger.info("得到token：{}",token);
         // redis缓存JWT,并设置过期时间
         redisTemplate.opsForValue().set("JWT-SESSION-" + jwtId, token, EXPIRE_TIME, TimeUnit.SECONDS);
         return token;
@@ -75,6 +80,7 @@ public class JwtUtil {
                     .acceptExpiresAt(System.currentTimeMillis() + EXPIRE_TIME)
                     .build();
             // 验证token
+            logger.info("开始验证token");
             verifier.verify(redisToken.toString());
             // 续期redis中缓存的JWT
             redisTemplate.opsForValue().set("JWT-SESSION-" + getJwtIdByToken(token), redisToken, EXPIRE_TIME, TimeUnit.SECONDS);

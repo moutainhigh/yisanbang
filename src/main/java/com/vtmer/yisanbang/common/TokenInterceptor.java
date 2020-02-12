@@ -2,6 +2,8 @@ package com.vtmer.yisanbang.common;
 
 import com.alibaba.fastjson.JSONObject;
 import com.vtmer.yisanbang.domain.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -15,6 +17,7 @@ public class TokenInterceptor implements HandlerInterceptor {
     @Autowired
     private JwtUtil jwtUtil;
 
+    private final Logger logger = LoggerFactory.getLogger(TokenInterceptor.class);
     /**
      * 定义一个线程域，存储登录用户
      */
@@ -29,6 +32,7 @@ public class TokenInterceptor implements HandlerInterceptor {
             boolean flag = jwtUtil.verifyToken(token);
             System.out.println(flag);
             if (flag) {
+                logger.info("验证token成功，开始设置user对象进线程域");
                 t1.set(JwtUtil.getUserInfoByToken(token));
                 return true;
             }

@@ -33,7 +33,7 @@
     select id, open_id, create_time, update_time
     from user
   </select>
-  <insert id="addUser" parameterType="java.lang.String" useGeneratedKeys="true" keyProperty="id">
+  <insert id="addUser" parameterType="com.vtmer.yisanbang.domain.User" useGeneratedKeys="true" keyProperty="id">
     insert into user (
     open_id)
     values (#{openId})
