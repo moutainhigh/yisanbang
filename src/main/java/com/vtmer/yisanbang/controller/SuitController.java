@@ -58,7 +58,7 @@ public class SuitController {
     @ApiOperation(value = "根据套装分类id查找套装")
     // 根据套装分类查找套装
     public ResponseMessage selectAllSuitBySortId(@ApiParam(name = "sortId", value = "分类Id", required = true)
-                                                     @PathVariable("id") Integer sortId) {
+                                                 @PathVariable("id") Integer sortId) {
         List<SuitDto> suitDtoList = suitService.selectSuitBySort(sortId);
         if (suitDtoList != null && !suitDtoList.isEmpty())
             return ResponseMessage.newSuccessInstance(suitDtoList, "查找成功");
@@ -70,7 +70,7 @@ public class SuitController {
     @ApiOperation(value = "根据套装id查找套装")
     // 根据套装id查找套装
     public ResponseMessage selectSuitById(@ApiParam(name = "goodsId", value = "商品Id", required = true)
-                                              @PathVariable("id") Integer goodsId) {
+                                          @PathVariable("id") Integer goodsId) {
         SuitDto suitDto = suitService.selectSuitById(goodsId);
         if (suitDto != null)
             return ResponseMessage.newSuccessInstance(suitDto, "查找成功");
@@ -81,7 +81,7 @@ public class SuitController {
     @ApiOperation(value = "根据套装名称查找套装")
     // 根据套装名称查找套装
     public ResponseMessage selectSuitByName(@ApiParam(name = "goodsName", value = "商品名称", required = true)
-                                                @PathVariable("name") String goodsName) {
+                                            @PathVariable("name") String goodsName) {
         SuitDto suit = suitService.selectSuitByName(goodsName);
         if (suit != null)
             return ResponseMessage.newSuccessInstance(suit, "查找成功");
@@ -92,11 +92,13 @@ public class SuitController {
     @ApiOperation(value = "添加套装")
     // 添加套装
     public ResponseMessage addGoods(@ApiParam(name = "套装Dto实体类", value = "传入Json格式", required = true)
-                                        @RequestBody
-                                            @Validated SuitDto suitDto) {
+                                    @RequestBody
+                                    @Validated SuitDto suitDto) {
         List<SuitDto> suitDtoList = suitService.selectAll();
-        boolean judgeFlag = suitService.judgeSuit(suitDto, suitDtoList);
-        if (judgeFlag) return ResponseMessage.newErrorInstance("该套装名称已经存在");
+        if (suitDtoList != null && !suitDtoList.isEmpty()) {
+            boolean judgeFlag = suitService.judgeSuit(suitDto, suitDtoList);
+            if (judgeFlag) return ResponseMessage.newErrorInstance("该套装名称已经存在");
+        }
         boolean addFlag = suitService.addSuit(suitDto);
         if (addFlag) return ResponseMessage.newSuccessInstance("添加成功");
         else return ResponseMessage.newErrorInstance("添加失败");
@@ -106,8 +108,8 @@ public class SuitController {
     @ApiOperation(value = "删除套装")
     // 删除套装
     public ResponseMessage deleteGoods(@ApiParam(name = "套装Dto实体类", value = "传入Json格式", required = true)
-                                           @RequestBody
-                                                @Validated(Delete.class) SuitDto suitDto) {
+                                       @RequestBody
+                                       @Validated(Delete.class) SuitDto suitDto) {
         SuitDto suit = suitService.selectSuitById(suitDto.getId());
         if (suit != null) {
             boolean deleteFlag = suitService.deleteSuitById(suitDto.getId());
@@ -120,8 +122,8 @@ public class SuitController {
     @ApiOperation(value = "更新套装")
     // 更新套装
     public ResponseMessage updateSuit(@ApiParam(name = "套装Dto实体类", value = "传入Json格式", required = true)
-                                          @RequestBody
-                                                @Validated(Update.class) SuitDto suitDto) {
+                                      @RequestBody
+                                      @Validated(Update.class) SuitDto suitDto) {
         List<SuitDto> suitDtoList = suitService.selectAll();
         boolean judgeFlag = suitService.judgeSuit(suitDto, suitDtoList);
         if (judgeFlag) return ResponseMessage.newErrorInstance("该套装名称已经存在");
@@ -137,8 +139,8 @@ public class SuitController {
     @ApiOperation(value = "隐藏套装，即下架")
     // 隐藏套装
     public ResponseMessage hideSuit(@ApiParam(name = "套装Dto实体类", value = "传入Json格式", required = true)
-                                        @RequestBody
-                                                @Validated(Update.class) SuitDto suitDto) {
+                                    @RequestBody
+                                    @Validated(Update.class) SuitDto suitDto) {
         SuitDto suit = suitService.selectSuitById(suitDto.getId());
         if (suit != null) {
             boolean hideFlag = suitService.hideSuit(suitDto);
