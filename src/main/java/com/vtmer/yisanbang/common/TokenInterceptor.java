@@ -1,6 +1,7 @@
 package com.vtmer.yisanbang.common;
 
 import com.alibaba.fastjson.JSONObject;
+import com.vtmer.yisanbang.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -14,6 +15,11 @@ public class TokenInterceptor implements HandlerInterceptor {
     @Autowired
     private JwtUtil jwtUtil;
 
+    /**
+     * 定义一个线程域，存储登录用户
+     */
+    private static final ThreadLocal<User> t1 = new ThreadLocal<>();
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         response.setCharacterEncoding("utf-8");
@@ -23,6 +29,7 @@ public class TokenInterceptor implements HandlerInterceptor {
             boolean flag = jwtUtil.verifyToken(token);
             System.out.println(flag);
             if (flag) {
+                t1.set(JwtUtil.getUserInfoByToken(token));
                 return true;
             }
         }
@@ -30,6 +37,10 @@ public class TokenInterceptor implements HandlerInterceptor {
         ResponseMessage responseMessage = ResponseMessage.newErrorInstance("token认证失败");
         response.getWriter().write(JSONObject.toJSONString(responseMessage));
         return false;
+    }
+
+    public static User getLoginUser() {
+        return t1.get();
     }
 
 }

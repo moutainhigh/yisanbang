@@ -2,6 +2,8 @@ package com.vtmer.yisanbang.vo;
 
 public class WxAccount {
 
+    private Integer userId;
+
     private String openId;
 
     private String sessionKey;
@@ -20,5 +22,13 @@ public class WxAccount {
 
     public void setSessionKey(String sessionKey) {
         this.sessionKey = sessionKey;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 }

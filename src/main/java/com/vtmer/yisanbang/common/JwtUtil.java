@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.vtmer.yisanbang.domain.User;
 import com.vtmer.yisanbang.vo.WxAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -44,6 +45,7 @@ public class JwtUtil {
         Algorithm algorithm = Algorithm.HMAC256(TOKEN_SECRET);
         // 附带用户信息，生成签名
         String token = JWT.create()
+                .withClaim("userId",wxAccount.getUserId())
                 .withClaim("openId", wxAccount.getOpenId())
                 .withClaim("sessionKey", wxAccount.getSessionKey())
                 .withClaim("jwt-id", jwtId)
@@ -65,6 +67,7 @@ public class JwtUtil {
             // 获取算法相同的JWTVerifier
             Algorithm algorithm = Algorithm.HMAC256(TOKEN_SECRET);
             JWTVerifier verifier = JWT.require(algorithm)
+                    .withClaim("userId",getUserIdByToken(redisToken.toString()))
                     .withClaim("openId", getOpenIdByToken(redisToken.toString()))
                     .withClaim("sessionKey", getSessionKeyByToken(redisToken.toString()))
                     .withClaim("jwt-id", getJwtIdByToken(redisToken.toString()))
@@ -90,9 +93,16 @@ public class JwtUtil {
     }
 
     /**
+     * 根据token获取userId
+     */
+    public static Integer getUserIdByToken(String token) throws JWTDecodeException {
+        return JWT.decode(token).getClaim("userId").asInt();
+    }
+
+    /**
      * 根据token获取openId
      */
-    public String getOpenIdByToken(String token) throws JWTDecodeException {
+    public static String getOpenIdByToken(String token) throws JWTDecodeException {
         return JWT.decode(token).getClaim("openId").asString();
     }
 
@@ -103,4 +113,10 @@ public class JwtUtil {
         return JWT.decode(token).getClaim("sessionKey").asString();
     }
 
+    public static User getUserInfoByToken(String token) throws JWTDecodeException {
+        User user = new User();
+        user.setId(getUserIdByToken(token));
+        user.setOpenId(getOpenIdByToken(token));
+        return user;
+    }
 }
