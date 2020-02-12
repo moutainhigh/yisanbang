@@ -8,6 +8,8 @@ import com.vtmer.yisanbang.dto.GoodsSkuDto;
 import com.vtmer.yisanbang.service.CartService;
 import com.vtmer.yisanbang.vo.CartVo;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +35,9 @@ public class CartController {
      * @return
      */
     @ApiOperation(value = "获取用户的购物车商品列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "校验token",name = "accessToken",paramType = "header",required = true)
+    })
     @GetMapping("/listCartGoods")
     public ResponseMessage<CartVo> listCartGoods() {
         CartVo cartVo = cartService.selectCartVo();
@@ -49,9 +54,12 @@ public class CartController {
      * @return
      */
     @ApiOperation(value = "添加商品进入购物车")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "校验token",name = "accessToken",paramType = "header",required = true)
+    })
     @PostMapping("/addCartGoods")
     public ResponseMessage addCartGoods(@RequestBody @Validated({Insert.class}) List<CartGoodsDto> cartGoodsDtoList) {
-
+        logger.info("购物车添加商品，商品参数[{}]",cartGoodsDtoList);
         cartService.addCartGoods(cartGoodsDtoList);
         return ResponseMessage.newSuccessInstance("加入购物车成功");
 
@@ -63,8 +71,13 @@ public class CartController {
      * @return
      */
     @ApiOperation(value = "更新购物车勾选",notes = "每次用户(取消)勾选请求该接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "校验token",name = "accessToken",paramType = "header",required = true)
+    })
     @PutMapping("/updateChosen")
     public ResponseMessage updateChosen(@RequestBody @Validated GoodsSkuDto goodsSkuDto) {
+        logger.info("更新购物车商品勾选，商品skuId[{}],是否为普通商品[{}]",
+                goodsSkuDto.getColorSizeId(),goodsSkuDto.getIsGoods());
         boolean res = cartService.updateChosen(goodsSkuDto);
         if (res) {
             return ResponseMessage.newSuccessInstance("修改勾选成功");
@@ -80,8 +93,13 @@ public class CartController {
      * @return
      */
     @ApiOperation(value = "购物车商品增加1或删减1",notes = "用于购物车中+ -按钮，+ amount传1，- amount传-1")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "校验token",name = "accessToken",paramType = "header",required = true)
+    })
     @PutMapping("/addOrSubtractAmount")
     public ResponseMessage addOrSubtractAmount(@RequestBody @Validated({Update.class}) CartGoodsDto cartGoodsDto) {
+        logger.info("购物车商品增减1，商品skuId[{}],是否为普通商品[{}]，数量[{}]",
+                cartGoodsDto.getColorSizeId(),cartGoodsDto.getIsGoods(),cartGoodsDto.getAmount());
         boolean res = cartService.addOrSubtractAmount(cartGoodsDto);
         if (res) {
             return ResponseMessage.newSuccessInstance("更新购物车商品数量成功");
@@ -96,8 +114,13 @@ public class CartController {
      * @return
      */
     @ApiOperation(value = "直接修改购物车某件商品的数量",notes = "amount传修改数量")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "校验token",name = "accessToken",paramType = "header",required = true)
+    })
     @PutMapping("/updateAmount")
     public ResponseMessage updateAmount(@RequestBody @Validated({Insert.class}) CartGoodsDto cartGoodsDto) {
+        logger.info("购物车商品修改数量，商品skuId[{}],是否为普通商品[{}]，数量[{}]",
+                cartGoodsDto.getColorSizeId(),cartGoodsDto.getIsGoods(),cartGoodsDto.getAmount());
         boolean res = cartService.updateAmount(cartGoodsDto);
         if (res) {
             return ResponseMessage.newSuccessInstance("更新购物车商品数量成功");
@@ -112,8 +135,12 @@ public class CartController {
      * @return
      */
     @ApiOperation(value = "批量删除购物车商品",notes = "在goodsDtoList中传isGoods、sizeId集合，即欲删除的购物车商品集合")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "校验token",name = "accessToken",paramType = "header",required = true)
+    })
     @DeleteMapping("/deleteCartGoods")
     public ResponseMessage deleteCartGoods(@RequestBody @Validated List<GoodsSkuDto> goodsSkuDtoList) {
+        logger.info("批量删除购物车商品，商品参数[{}]",goodsSkuDtoList);
         Boolean b = cartService.deleteCartGoods(goodsSkuDtoList);
         if (b) {
             return ResponseMessage.newSuccessInstance("删除购物车商品成功");
