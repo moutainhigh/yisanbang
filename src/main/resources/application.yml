@@ -8,14 +8,14 @@ spring:
     # 如果存在多个数据源，监控的时候可以通过名字来区分开来
     name: mysql
     # 连接数据库的url
-    url: jdbc:mysql://119.3.254.171:3306/yi_san_bang?characterEncoding=utf-8&serverTimezone=GMT%2B8
+    url: jdbc:mysql://localhost:3306/yisanbang?characterEncoding=utf-8&serverTimezone=GMT%2B8
     # 连接数据库的账号
     username: root
     # 连接数据库的密码
-    password: wlt123..
+    password: 123456
     # 使用druid数据源
     type: com.alibaba.druid.pool.DruidDataSource
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     # 扩展插件
     # 监控统计用的filter:stat 日志用的filter:log4j 防御sql注入的filter:wall
     druid:
@@ -50,14 +50,19 @@ spring:
         login-username: root
         login-password: wlt123..
 
-
   redis:
-    host: 127.0.0.1
+    host: 119.3.254.171
     port: 6379
+    # redis密码，默认为空
+    password:
+
+
+
   servlet:
     multipart:
       # 最大文件上传限制
       max-file-size: 20MB
+
   quartz:
     #相关属性配置
     properties:
@@ -79,7 +84,7 @@ spring:
 
 mybatis:
   configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: true
   mapper-locations: classpath:mapper/*.xml
 
@@ -102,8 +107,8 @@ wx:
     keyPath: # p12证书的位置，可以指定绝对路径，也可以指定类路径（以classpath:开头）
     spbillCreateIp: #服务器IP地址
   applet:
-    appid: wx447bdd8f7d850c06
-    appsecret: 1f8dc966cc30761d60394178a5d58301
+    appid: wx92f1fb1b509237f7
+    appsecret: 0d4b463c3b468d8d2f2a33ea7772291c
 
 pagehelper:
   helper-dialect: mysql
@@ -115,6 +120,7 @@ server:
   servlet:
     context-path: /
   port: 8089
+  max-http-header-size: 81920 # 修改请求头允许的最大值
 
 sop:
   swagger:

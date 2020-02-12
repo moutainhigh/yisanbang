@@ -49,7 +49,7 @@
   <select id="checkEmpty" resultType="java.lang.Integer">
     select count (*) from business_address
   </select>
-  <select id="getDefault" resultType="com.vtmer.yisanbang.domain.BusinessAddress">
+  <select id="getDefault" resultMap="BaseResultMap">
     select id, address_name, phone_number, contact_name, is_default
     from business_address
     where is_default = 1
