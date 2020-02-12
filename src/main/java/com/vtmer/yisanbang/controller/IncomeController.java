@@ -37,7 +37,7 @@ public class IncomeController {
 
     @ApiOperation(value = "获取某日的收益信息",notes = "传某个日期的时间戳")
     @GetMapping("/getByTime/{timestamp}")
-    public ResponseMessage<Income> getByTime(@ApiParam(value = "时间戳",name = "timestamp",example = "timestamp")
+    public ResponseMessage<Income> getByTime(@ApiParam(value = "时间戳",name = "timestamp",example = "123456789",type = "long")
                                          @PathVariable Long timestamp) {
         Income income = incomeService.getByTime(timestamp);
         if (income != null) {
