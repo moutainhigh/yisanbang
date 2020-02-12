@@ -68,7 +68,7 @@ public class CollectionController {
      */
     @ApiOperation(value = "获取用户收藏商品列表")
     @GetMapping("/get/{userId}")
-    public ResponseMessage<List<CollectionVo>> collectionList(@ApiParam(value = "用户id",name = "userId",example = "!",required = true)
+    public ResponseMessage<List<CollectionVo>> collectionList(@ApiParam(value = "用户id",name = "userId",example = "1",required = true)
                                               @PathVariable Integer userId) {
         if (userId!=null && userId>0) {
             List<CollectionVo> collectionVoList = collectionService.selectAllByUserId(userId);

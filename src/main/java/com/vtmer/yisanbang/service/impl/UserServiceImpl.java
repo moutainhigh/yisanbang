@@ -108,6 +108,8 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+
+
     public String getOpenIdByUserId(Integer userId) {
         return userMapper.selectOpenIdByUserId(userId);
     }

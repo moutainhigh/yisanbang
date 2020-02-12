@@ -48,7 +48,7 @@ public class BusinessAddressController {
 
     @ApiOperation("更新某一地址为默认收货地址")
     @PutMapping("/updateDefault/{id}")
-    public ResponseMessage updateDefault(@ApiParam(name = "id",value = "商家收货地址信息id",example = "3")
+    public ResponseMessage updateDefault(@ApiParam(name = "id",value = "商家收货地址信息id",example = "1",type = "int")
                                              @PathVariable Integer id) {
         int res = businessAddressService.updateDefault(id);
         if (res == 1) {
@@ -85,7 +85,7 @@ public class BusinessAddressController {
 
     @ApiOperation(value = "删除商家收货地址信息")
     @DeleteMapping("/delete/{id}")
-    public ResponseMessage delete(@ApiParam(name = "id",value = "商家收货地址信息id",example = "5")
+    public ResponseMessage delete(@ApiParam(name = "id",value = "商家收货地址id",example = "1",type = "int")
                                       @PathVariable Integer id) {
         int res = businessAddressService.deleteById(id);
         if (res == -1) {

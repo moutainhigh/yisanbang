@@ -18,7 +18,7 @@ public interface UserMapper {
     int updateByPrimaryKey(User record);
 
     // 新建微信用户信息
-    int addUser(String openId);
+    int addUser(User user);
 
     // 根据微信用户OpenId查找用户信息
     User selectUserByOpenId(String openId);

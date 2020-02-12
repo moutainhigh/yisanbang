@@ -11,7 +11,7 @@ import java.util.Date;
 @ApiModel
 public class BusinessAddress {
 
-    @ApiModelProperty(value = "商家收货地址id",readOnly = true,example = "1")
+    @ApiModelProperty(value = "商家收货地址id",readOnly = true,example = "3")
     private Integer id;
 
     @NotBlank(message = "商家地址不能为空")
