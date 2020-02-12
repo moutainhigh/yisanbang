@@ -65,7 +65,6 @@ public class JwtUtil {
         try {
             // 根据token解密，解密出jwt-id，先从redis中查出redisToken，判断是否相同
             Object redisToken = redisTemplate.opsForValue().get("JWT-SESSION-" + getJwtIdByToken(token));
-            System.out.println(redisToken+"123456");
             if (!redisToken.equals(token)) {
                 return false;
             }

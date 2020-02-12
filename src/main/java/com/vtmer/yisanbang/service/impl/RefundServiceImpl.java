@@ -5,10 +5,7 @@ import com.vtmer.yisanbang.domain.Order;
 import com.vtmer.yisanbang.domain.OrderGoods;
 import com.vtmer.yisanbang.domain.Refund;
 import com.vtmer.yisanbang.domain.RefundGoods;
-import com.vtmer.yisanbang.dto.AgreeRefundDto;
-import com.vtmer.yisanbang.dto.CartGoodsDto;
-import com.vtmer.yisanbang.dto.GoodsSkuDto;
-import com.vtmer.yisanbang.dto.RefundDto;
+import com.vtmer.yisanbang.dto.*;
 import com.vtmer.yisanbang.mapper.OrderGoodsMapper;
 import com.vtmer.yisanbang.mapper.OrderMapper;
 import com.vtmer.yisanbang.mapper.RefundGoodsMapper;
@@ -154,7 +151,7 @@ public class RefundServiceImpl implements RefundService {
             // 封装退款商品详情
             OrderVo orderVo = orderService.selectOrderVoByOrderNumber(order.getOrderNumber());
             CartVo cartVo = orderVo.getOrderGoodsList();
-            refundVo.setRefundGoodsList(cartVo.getCartGoodsList());
+            //refundVo.setRefundGoodsList(cartVo.getCartGoodsList());
 
         } else { // 如果是部分退
             List<CartGoodsDto> refundGoodsList1 = new ArrayList<>();

@@ -14,7 +14,10 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -89,7 +92,7 @@ public class OrderServiceImpl implements OrderService {
         setPostage();
         OrderVo orderVo = new OrderVo();
         // 获取用户购物车清单
-        CartVo cartVo = cartService.selectCartVoByUserId(userId);
+        CartVo cartVo = cartService.selectCartVo();
         if (cartVo == null) {
             return null;
         }
@@ -194,9 +197,9 @@ public class OrderServiceImpl implements OrderService {
             } // end for
 
             // 删除购物车勾选项
-            cartGoodsMapper.deleteCartGoodsByIsChosen(cartVo.getCartId());
+            //cartGoodsMapper.deleteCartGoodsByIsChosen(cartVo.getCartId());
             // 购物车总价清零
-            cartMapper.updateTotalPrice(0,cartVo.getCartId());
+            //cartMapper.updateTotalPrice(0,cartVo.getCartId());
 
             // 返回订单编号和openid
             return orderMap;
@@ -383,7 +386,7 @@ public class OrderServiceImpl implements OrderService {
         return orderVo;
     }
 
-    public void setCartGoodsDto(CartGoodsDto cartGoodsDto,Integer sizeId,Boolean isGoods) {
+    public void setCartGoodsDto(CartGoodsDto cartGoodsDto, Integer sizeId, Boolean isGoods) {
         cartGoodsDto.setColorSizeId(sizeId);
         cartGoodsDto.setIsGoods(isGoods);
         // 如果是普通商品
@@ -393,14 +396,14 @@ public class OrderServiceImpl implements OrderService {
             cartGoodsDto.setPartOrColor(colorSize.getColor());
             cartGoodsDto.setId(colorSize.getGoodsId());
             Goods goods = goodsMapper.selectByPrimaryKey(colorSize.getGoodsId());
-            cartGoodsDto.setName(goods.getName());
+            cartGoodsDto.setTitle(goods.getName());
             cartGoodsDto.setPicture(goods.getPicture());
         } else { // 如果是套装散件
             PartSize partSize = partSizeMapper.selectByPrimaryKey(sizeId);
             cartGoodsDto.setSize(partSize.getSize());
             cartGoodsDto.setPartOrColor(partSize.getPart());
             Suit suit = suitMapper.selectByPrimaryKey(partSize.getSuitId());
-            cartGoodsDto.setName(suit.getName());
+            cartGoodsDto.setTitle(suit.getName());
             cartGoodsDto.setPicture(suit.getPicture());
             cartGoodsDto.setId(suit.getId());
         }

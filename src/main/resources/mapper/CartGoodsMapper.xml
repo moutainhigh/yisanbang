@@ -106,9 +106,9 @@
     <if test="isChosen == 0">
       set is_chosen = 1
     </if>
-    where cart_id = #{addGoodsDto.cartId}
-    and is_goods = #{addGoodsDto.isGoods}
-    and color_size_id = #{addGoodsDto.colorSizeId}
+    where cart_id = #{cartGoodsDto.cartId}
+    and is_goods = #{cartGoodsDto.isGoods}
+    and color_size_id = #{cartGoodsDto.colorSizeId}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select id, cart_id, color_size_id, amount, is_goods, is_chosen, create_time, update_time

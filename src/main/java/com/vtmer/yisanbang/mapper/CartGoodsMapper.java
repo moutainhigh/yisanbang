@@ -1,7 +1,6 @@
 package com.vtmer.yisanbang.mapper;
 
 import com.vtmer.yisanbang.domain.CartGoods;
-import com.vtmer.yisanbang.dto.AddGoodsDto;
 import com.vtmer.yisanbang.dto.CartGoodsDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -29,19 +28,19 @@ public interface CartGoodsMapper {
     // 根据购物车id查询购物车中普通商品信息
     List<CartGoodsDto> selectCartGoodsByCartId1(Integer cartId);
 
-    boolean checkGoodsExist(AddGoodsDto addGoodsDto);
+    boolean checkGoodsExist(CartGoodsDto cartGoodsDto);
 
-    boolean addOrSubtractAmount(AddGoodsDto addGoodsDto);
+    boolean addOrSubtractAmount(CartGoodsDto cartGoodsDto);
 
-    boolean insertCartGoods(AddGoodsDto addGoodsDto);
+    boolean insertCartGoods(CartGoodsDto cartGoodsDto);
 
-    boolean updateAmount(AddGoodsDto addGoodsDto);
+    boolean updateAmount(CartGoodsDto cartGoodsDto);
 
-    Integer selectChosen(AddGoodsDto addGoodsDto);
+    Integer selectChosen(CartGoodsDto cartGoodsDto);
 
-    Boolean updateChosen(@Param("addGoodsDto") AddGoodsDto addGoodsDto,@Param("isChosen") Integer isChosen);
+    Boolean updateChosen(@Param("addGoodsDto") CartGoodsDto cartGoodsDto, @Param("isChosen") Integer isChosen);
 
-    Boolean deleteCartGoods(AddGoodsDto addGoodsDto);
+    Boolean deleteCartGoods(CartGoodsDto cartGoodsDto);
 
     void deleteCartGoodsByIsChosen(Integer cartId);
 

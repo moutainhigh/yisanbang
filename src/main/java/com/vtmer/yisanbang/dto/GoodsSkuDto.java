@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 public class GoodsSkuDto {
 
     @NotNull(message = "colorSizeId is null")
-    @ApiModelProperty(value = "颜色尺寸id",example = "!",required = true)
+    @ApiModelProperty(value = "颜色尺寸id",example = "1",required = true)
     private Integer colorSizeId;
 
     @NotNull(message = "isGoods is null")

@@ -22,7 +22,7 @@ public class Discount {
     @Max(value = 1,message = "打折率大于1")
     @Min(value = 0,message = "打折率小于0")
     @ApiModelProperty(value = "打x折",example = "0.8",required = true)
-    private Double discountRate;
+    private double discountRate;
 
     @ApiModelProperty(hidden = true)
     private Date createTime;
@@ -68,5 +68,16 @@ public class Discount {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    @Override
+    public String toString() {
+        return "Discount{" +
+                "id=" + id +
+                ", amount=" + amount +
+                ", discountRate=" + discountRate +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
     }
 }
