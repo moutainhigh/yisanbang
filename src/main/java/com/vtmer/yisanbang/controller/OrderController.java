@@ -9,6 +9,7 @@ import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.github.binarywang.wxpay.util.SignUtils;
 import com.vtmer.yisanbang.common.ResponseMessage;
+import com.vtmer.yisanbang.common.TokenInterceptor;
 import com.vtmer.yisanbang.common.annotation.RequestLog;
 import com.vtmer.yisanbang.common.validGroup.Insert;
 import com.vtmer.yisanbang.domain.Order;
@@ -50,16 +51,18 @@ public class OrderController {
 
     /**
      * 点击去结算，显示确认订单页面
-     * @param userId：用户id
      * @return
      */
     @RequestLog(module = "订单",operationDesc = "确认订单")
     @ApiOperation(value = "确认订单",notes = "点击去结算，显示确认订单页面")
-    @GetMapping("confirmOrder/{userId}")
-    public ResponseMessage<OrderVo> confirmOrder(@ApiParam(name = "userId",value = "用户id",required = true) @PathVariable Integer userId) {
-        OrderVo orderVo = orderService.confirmCartOrder(userId);
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "校验token",name = "accessToken",paramType = "header",required = true)
+    })
+    @GetMapping("confirmOrder")
+    public ResponseMessage<OrderVo> confirmOrder() {
+        OrderVo orderVo = orderService.confirmCartOrder();
         if (orderVo == null) {
-            return ResponseMessage.newErrorInstance("userId有误或购物车勾选商品为空");
+            return ResponseMessage.newErrorInstance("购物车勾选商品为空");
         }
         return ResponseMessage.newSuccessInstance(orderVo,"获取确认订单相关信息成功");
     }
@@ -71,15 +74,15 @@ public class OrderController {
      * @return
      */
     @RequestLog(module = "订单",operationDesc = "创建订单")
-    @ApiOperation(value = "创建订单",notes = "用户点击提交订单后调用,若是订单中的某件商品数量超过库存，会返回【库存不足】的提示")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "校验token",name = "accessToken",paramType = "header",required = true)
+    })
+    @ApiOperation(value = "创建订单",notes = "用户从购物车页面确认订单，点击提交订单后调用,若是订单中的某件商品数量超过库存，会返回【库存不足】的提示")
     @PostMapping("/insert")
     public ResponseMessage insert(@RequestBody @Validated({Insert.class}) OrderVo orderVo) {
         Map<String, String> orderMap = orderService.createCartOrder(orderVo);
-        if (orderMap != null) {
-            return ResponseMessage.newSuccessInstance(orderMap,"创建订单成功，返回订单编号和openId");
-        } else {
-            return ResponseMessage.newErrorInstance("该用户还未通过微信登录，无openId");
-        }
+        return ResponseMessage.newSuccessInstance(orderMap,"创建订单成功，返回订单编号和openId");
+
     }
 
     /**
@@ -89,6 +92,9 @@ public class OrderController {
      */
     @RequestLog(module = "订单",operationDesc = "微信支付")
     @ApiOperation(value = "微信支付",notes = "通过订单号进行微信支付，返回前端调起微信支付所需的支付参数（5个参数和sign）")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "校验token",name = "accessToken",paramType = "header",required = true)
+    })
     @ApiResponses({
             @ApiResponse(code = 200,message = "ResponseMessage => \n 'data:" +
                     "{\n'appId':'wxd678efh567hg6787'" +
@@ -109,7 +115,7 @@ public class OrderController {
             if (orderVo == null) {
                 return ResponseMessage.newErrorInstance("订单号有误，无此订单号相关信息");
             } else {
-                Integer userId = orderVo.getUserAddress().getUserId();
+                Integer userId = TokenInterceptor.getLoginUser().getId();
                 String openId = userService.getOpenIdByUserId(userId);
                 try {
                     WxPayUnifiedOrderRequest orderRequest = new WxPayUnifiedOrderRequest();
@@ -121,8 +127,9 @@ public class OrderController {
                     orderRequest.setSpbillCreateIp(spbillCreateIp);
                     orderRequest.setTimeStart("yyyyMMddHHmmss");
                     orderRequest.setTimeExpire("yyyyMMddHHmmss");
-
-                    return ResponseMessage.newSuccessInstance(wxPayService.createOrder(orderRequest),"返回支付参数");
+                    Object orderResponse = wxPayService.createOrder(orderRequest);
+                    logger.info("调用微信支付接口，返回参数[{}]",orderResponse);
+                    return ResponseMessage.newSuccessInstance(orderResponse,"返回支付参数");
                 } catch (WxPayException e) {
                     logger.error("微信支付失败！订单号：{},原因:{}", orderNumber, e.getMessage());
                     e.printStackTrace();
@@ -167,18 +174,22 @@ public class OrderController {
             String sign = notifyResult.getSign();
             boolean checkSignRes = SignUtils.checkSign(xmlData, "MD5", sign);
             if(!checkSignRes) { // 如果签名验证失败
+                logger.warn("微信支付回调——签名验证有误");
                 return WxPayNotifyResponse.fail("签名验证有误");
             }
 
             // 校验返回的订单金额是否与商户侧的订单金额一致
             if (!order.getTotalPrice().equals(totalPrice)) { // 返回的订单金额与商户侧的订单金额不一致
+                logger.warn("微信支付回调——返回的订单金额与商户侧的订单金额不一致");
                 return WxPayNotifyResponse.fail("返回的订单金额与商户侧的订单金额不一致");
             }
             // 如果交易成功(支付成功)
             if (notifyResult.getResultCode().equals("SUCCESS")) {
                 if (order.getStatus() == 0) { // 判断订单状态，避免微信重复通知调用该接口，如果该订单的状态是未付款
-                    int res = orderService.updateOrderStatus(order.getId());// 更新该订单为待发货
+                    int res = orderService.updateOrderStatus(order.getOrderNumber());// 更新该订单为待发货
+                    logger.info("更新订单[{}]状态：[未付款]-->[待发货]",orderNumber);
                     if (res == 0) { // 如果更新订单状态失败
+                        logger.warn("更新订单[{}]状态：[未付款]-->[待发货]出现异常",orderNumber);
                         // 更新操作出现异常，向微信返回错误的xml代码，用微信的重试机制来二次回调
                         return WxPayNotifyResponse.fail("更新订单状态失败");
                     }
@@ -194,22 +205,26 @@ public class OrderController {
 
     /**
      * 列出用户相关状态所有订单
-     * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--申请退款 5--交易关闭 6--所有订单
-     * @param userId、status
-     *                 userId传0可以列出商城相关状态的所有订单
+     * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
+     * @param flag、status
+     *                 flag传0可以列出商城相关状态的所有订单
      * @return
      */
     @RequestLog(module = "订单",operationDesc = "获取用户相关状态的所有订单")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "校验token",name = "accessToken",paramType = "header",required = true)
+    })
     @ApiOperation(value = "获取用户相关状态的所有订单",
-            notes = "status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--申请退款 5--交易关闭 6--所有订单;userId传0可以获取商城相关状态的所有订单")
-    @GetMapping("/get/status/{status}/userId/{userId}")
+            notes = "订单状态定义：status 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单;\n" +
+                    "退款状态定义：status 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败\n" +
+            "flag传0获取商城相关状态的所有订单,flag传1获取用户相关状态的所有订单")
+    @GetMapping("/get/status/{status}/flag/{flag}")
     public ResponseMessage<List<OrderVo>> listOrder(@ApiParam(name = "status",value = "订单状态标识",required = true) @PathVariable Integer status,
-                                     @ApiParam(name = "userId",value = "用户id",required = true) @PathVariable Integer userId) {
-        System.out.println(userId);
+                                     @ApiParam(name = "flag",value = "查询标识",required = true) @PathVariable Integer flag) {
         Map<String,Integer> orderMap = new HashMap<>();
         orderMap.put("status",status);
-        orderMap.put("userId",userId);
-        if (!(status<=6 && status>=0)) {
+        orderMap.put("flag",flag);
+        if (!(status<=5 && status>=0)) {
             return ResponseMessage.newErrorInstance("订单状态参数超出定义范围");
         } else {
             List<OrderVo> orderList = orderService.listOrder(orderMap);
@@ -223,17 +238,22 @@ public class OrderController {
 
     /**
      * 订单状态自增修改，适用于待付款、待发货、待收货类订单
-     * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--申请退款 5--交易关闭 6--所有订单
+     * 订单状态定义：status 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 0--待付款 1--待发货 2--待收货 状态订单 更新订单状态
-     * @param orderId:订单id
+     * @param orderNumber:订单编号
      * @return
      */
     @RequestLog(module = "订单",operationDesc = "确认收货")
-    @ApiOperation(value = "确认收货",notes = "修改订单状态为下一状态，适用于'确认收货'按钮")
-    @PutMapping("updateOrderStatus/{orderId}")
-    public ResponseMessage updateOrderStatus(@ApiParam(name = "orderId",value = "订单id",required = true)
-                                                 @PathVariable Integer orderId) {
-        int res = orderService.updateOrderStatus(orderId);
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "校验token",name = "accessToken",paramType = "header",required = true)
+    })
+    @ApiOperation(value = "确认收货",notes = "订单状态定义：status 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单\n"
+            +"修改订单状态为下一状态，适用于'确认收货'按钮")
+
+    @PutMapping("updateOrderStatus/{orderNumber}")
+    public ResponseMessage updateOrderStatus(@ApiParam(name = "orderNumber",value = "订单编号",required = true)
+                                                 @PathVariable String orderNumber) {
+        int res = orderService.updateOrderStatus(orderNumber);
         if (res == -1) {
             return ResponseMessage.newErrorInstance("订单id有误");
         } else if (res == -2) {
@@ -243,7 +263,6 @@ public class OrderController {
         } else if (res == 1) {
             return ResponseMessage.newSuccessInstance("更新订单状态成功");
         }
-
         return ResponseMessage.newErrorInstance("异常错误");
     }
 
@@ -279,6 +298,9 @@ public class OrderController {
      * @return
      */
     @RequestLog(module = "订单",operationDesc = "删除订单")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "校验token",name = "accessToken",paramType = "header",required = true)
+    })
     @ApiOperation(value = "删除订单",notes = "暂时无用，用户没有删除订单按钮emm")
     @DeleteMapping("/delete/{orderId}")
     public ResponseMessage delete(@ApiParam(name = "orderId",value = "订单id",required = true)
@@ -299,6 +321,9 @@ public class OrderController {
      * @return
      */
     @RequestLog(module = "订单",operationDesc = "商家发货")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "校验token",name = "accessToken",paramType = "header",required = true)
+    })
     @ApiOperation(value = "商家发货",notes = "商家发货设置快递编号，需要订单id或订单编号")
     @PutMapping("/setCourierNumber")
     public ResponseMessage setCourierNumber(@RequestBody @NotNull(message = "传入参数为空") Order order) {
@@ -321,6 +346,9 @@ public class OrderController {
      * @return
      */
     @RequestLog(module = "订单",operationDesc = "修改收货地址")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "校验token",name = "accessToken",paramType = "header",required = true)
+    })
     @ApiOperation(value = "修改收货地址",notes = "待付款、待发货状态适用")
     @PutMapping("/updateAddress")
     public ResponseMessage updateAddress(@RequestBody @Validated UpdateUserAddressVo updateUserAddressVo) {
@@ -345,6 +373,9 @@ public class OrderController {
      * @return
      */
     @RequestLog(module = "订单",operationDesc = "取消订单")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "校验token",name = "accessToken",paramType = "header",required = true)
+    })
     @ApiOperation(value = "取消订单",notes = "在未支付的情况下用户可以取消订单")
     @PutMapping("/cancelOrder/{orderId}")
     public ResponseMessage cancelOrder(@ApiParam(name = "orderId",value = "订单id",required = true)

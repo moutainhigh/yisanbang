@@ -1,14 +1,11 @@
 package com.vtmer.yisanbang.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.vtmer.yisanbang.common.JedisClient;
 import com.vtmer.yisanbang.common.ListSort;
 import com.vtmer.yisanbang.common.TokenInterceptor;
 import com.vtmer.yisanbang.domain.Discount;
 import com.vtmer.yisanbang.dto.CartGoodsDto;
 import com.vtmer.yisanbang.dto.GoodsSkuDto;
-import com.vtmer.yisanbang.mapper.CartGoodsMapper;
-import com.vtmer.yisanbang.mapper.CartMapper;
 import com.vtmer.yisanbang.mapper.DiscountMapper;
 import com.vtmer.yisanbang.service.CartService;
 import com.vtmer.yisanbang.service.ColorSizeService;
@@ -23,7 +20,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,17 +37,10 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private ColorSizeService colorSizeService;
 
-    @Autowired
-    private CartMapper cartMapper;
-
-    @Autowired
-    private CartGoodsMapper cartGoodsMapper;
 
     @Autowired
     private DiscountMapper discountMapper;
 
-    @Autowired
-    private JedisClient jedisClient;
 
     @Autowired
     private RedisTemplate<String,Object> stringRedisTemplate;
@@ -67,7 +60,7 @@ public class CartServiceImpl implements CartService {
     private String key;
 
     // hash操作对象
-    BoundHashOperations<String, Object, Object> hashOperations;
+    private BoundHashOperations<String, Object, Object> hashOperations;
 
     // 设置优惠信息
     private void setDiscount() {
@@ -94,7 +87,7 @@ public class CartServiceImpl implements CartService {
             // 不存在直接返回
             return null;
         }
-        // 获取hash的操作对象
+        // 获取所有数据
         List<Object> ObjectList = hashOperations.values();
         // 判断是否有数据
         if (CollectionUtils.isEmpty(ObjectList)) {
@@ -276,18 +269,29 @@ public class CartServiceImpl implements CartService {
         return priceMap;
     }
 
-    /*
-        检查是否需要更新总价
-
-    private double updateTotalPrice(AddGoodsDto addGoodsDto) {
-        Integer isChosen = cartGoodsMapper.selectChosen(addGoodsDto);
-        // 如果是已勾选的商品，则需要更新价格
-        if (isChosen == 1) {
-            // 更新价格并返回更新后的总价
-            return calculateTotalPrice(addGoodsDto.getUserId());
-        } else return 0;
+    // 删除购物车中的勾选商品
+    public boolean deleteCartGoodsByIsChosen() {
+        getUserIdAndSetKey();
+        if (!stringRedisTemplate.hasKey(key)) {
+            // 不存在直接返回
+            return false;
+        }
+        // 获取所有数据
+        List<Object> ObjectList = hashOperations.values();
+        // 判断是否有数据
+        if (CollectionUtils.isEmpty(ObjectList)) {
+            return false;
+        }
+        // 查询购物车数据
+        List<CartGoodsDto> cartGoodsList;
+        cartGoodsList = ObjectList.stream().map(o -> JSON.parseObject(o.toString(), CartGoodsDto.class)).collect(Collectors.toList());
+        // 删除其中已勾选的购物车商品
+        for (CartGoodsDto cartGoodsDto : cartGoodsList) {
+            if (cartGoodsDto.getIsChosen()) {
+                // 如果是已勾选的，从redis中删除之
+                hashOperations.delete(cartGoodsDto.getColorSizeId().toString() + cartGoodsDto.getIsGoods().toString());
+            }
+        }
+        return true;
     }
-
-     */
-
 }

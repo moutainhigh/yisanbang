@@ -23,4 +23,7 @@ public interface CartService {
 
     // 计算购物车总价并更新
     Map<String,Double> calculateTotalPrice(List<CartGoodsDto> cartGoodsList);
+
+    // 根据用户id删除购物车勾选项
+    boolean deleteCartGoodsByIsChosen();
 }

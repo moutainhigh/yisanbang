@@ -1,6 +1,7 @@
 package com.vtmer.yisanbang.service.impl;
 
 import com.vtmer.yisanbang.common.OrderNumberUtil;
+import com.vtmer.yisanbang.common.TokenInterceptor;
 import com.vtmer.yisanbang.domain.*;
 import com.vtmer.yisanbang.dto.CartGoodsDto;
 import com.vtmer.yisanbang.mapper.*;
@@ -9,6 +10,8 @@ import com.vtmer.yisanbang.service.OrderService;
 import com.vtmer.yisanbang.service.RefundService;
 import com.vtmer.yisanbang.vo.CartVo;
 import com.vtmer.yisanbang.vo.OrderVo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -22,8 +25,7 @@ import java.util.Map;
 @Service
 public class OrderServiceImpl implements OrderService {
 
-    @Autowired
-    private UserMapper userMapper;
+    private final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     @Autowired
     private PostageMapper postageMapper;
@@ -32,16 +34,10 @@ public class OrderServiceImpl implements OrderService {
     private OrderMapper orderMapper;
 
     @Autowired
-    private CartMapper cartMapper;
-
-    @Autowired
     private OrderGoodsMapper orderGoodsMapper;
 
     @Autowired
     private CartService cartService;
-
-    @Autowired
-    private CartGoodsMapper cartGoodsMapper;
 
     @Autowired
     private UserAddressMapper userAddressMapper;
@@ -84,11 +80,12 @@ public class OrderServiceImpl implements OrderService {
     /**
      * The user clicks the settlement button,and then confirm the order
      * used in cart
-     * @param userId
+     * @param
      * @return
-     * TODO 利用迭代器iterator删除list集合中未勾选的商品
+     *
      */
-    public OrderVo confirmCartOrder(Integer userId) {
+    public OrderVo confirmCartOrder() {
+        Integer userId = TokenInterceptor.getLoginUser().getId();
         setPostage();
         OrderVo orderVo = new OrderVo();
         // 获取用户购物车清单
@@ -137,73 +134,70 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public Map<String,String> createCartOrder(OrderVo orderVo) throws DataIntegrityViolationException {
 
+        User user = TokenInterceptor.getLoginUser();
         // 返回map
         HashMap<String, String> orderMap = new HashMap<>();
-        // 根据用户Id拿到openId
-        String openId = userMapper.selectOpenIdByUserId(orderVo.getUserAddress().getUserId());
-        if (openId == null) {
-            return null;
-        } else {
-            orderMap.put("openId",openId);
-            // 生成订单编号
-            String orderNumber = OrderNumberUtil.getOrderNumber();
-            orderMap.put("orderNumber",orderNumber);
-            // 用户地址
-            UserAddress userAddress = orderVo.getUserAddress();
-            // 用户购物车
-            CartVo cartVo = orderVo.getOrderGoodsList();
-            // 购物车商品列表
-            List<CartGoodsDto> cartGoodsList = cartVo.getCartGoodsList();
+        // 从登录信息中拿到openId
+        String openId = user.getOpenId();
 
-            // 生成order
-            Order order = new Order();
-            order.setUserId(userAddress.getUserId());
-            order.setAddressName(userAddress.getAddressName());
-            order.setUserName(userAddress.getUserName());
-            order.setPhoneNumber(userAddress.getPhoneNumber());
-            order.setOrderNumber(orderNumber);
-            order.setTotalPrice(cartVo.getTotalPrice());
-            order.setPostage(orderVo.getPostage());
+        orderMap.put("openId",openId);
+        // 生成订单编号
+        String orderNumber = OrderNumberUtil.getOrderNumber();
+        // 订单编号放进map
+        orderMap.put("orderNumber",orderNumber);
+        // 用户地址
+        UserAddress userAddress = orderVo.getUserAddress();
+        // 用户购物车
+        CartVo cartVo = orderVo.getOrderGoodsList();
+        // 购物车商品列表
+        List<CartGoodsDto> cartGoodsList = cartVo.getCartGoodsList();
+
+        // 生成order
+        Order order = new Order();
+        order.setUserId(user.getId());
+        order.setAddressName(userAddress.getAddressName());
+        order.setUserName(userAddress.getUserName());
+        order.setPhoneNumber(userAddress.getPhoneNumber());
+        order.setOrderNumber(orderNumber);
+        order.setTotalPrice(cartVo.getTotalPrice());
+        order.setPostage(orderVo.getPostage());
+        if (orderVo.getMessage()!=null) {
             order.setMessage(orderVo.getMessage());
-            orderMapper.insert(order);
-
-            for (CartGoodsDto cartGoodsDto : cartGoodsList) {
-                // 生成orderGoods
-                OrderGoods orderGoods = new OrderGoods();
-                Boolean isGoods = cartGoodsDto.getIsGoods();
-                Integer amount = cartGoodsDto.getAmount();
-                Integer colorSizeId = cartGoodsDto.getColorSizeId();
-                orderGoods.setOrderId(order.getId());
-                orderGoods.setIsGoods(isGoods);
-                orderGoods.setAmount(amount);
-                orderGoods.setTotalPrice(cartGoodsDto.getAfterTotalPrice());
-                orderGoods.setSizeId(colorSizeId);
-                orderGoodsMapper.insert(orderGoods);
-
-                // 减少相应商品的库存
-                // 不调用updateInventory方法，省得插入又再查一次数据库
-                HashMap<String, Integer> inventoryMap = new HashMap<>();
-                inventoryMap.put("amount",amount);
-                inventoryMap.put("sizeId",colorSizeId);
-                // 0
-                // 代表减少库存
-                inventoryMap.put("flag",0);
-                if (isGoods == Boolean.TRUE) {
-                    colorSizeMapper.updateInventoryByPrimaryKey(inventoryMap);
-                } else {
-                    partSizeMapper.updateInventoryByPrimaryKey(inventoryMap);
-                }
-
-            } // end for
-
-            // 删除购物车勾选项
-            //cartGoodsMapper.deleteCartGoodsByIsChosen(cartVo.getCartId());
-            // 购物车总价清零
-            //cartMapper.updateTotalPrice(0,cartVo.getCartId());
-
-            // 返回订单编号和openid
-            return orderMap;
         }
+        orderMapper.insert(order);
+        logger.info("创建订单[{}]，订单状态[未支付]---用户openid[{}]",orderNumber,openId);
+        for (CartGoodsDto cartGoodsDto : cartGoodsList) {
+            // 生成orderGoods
+            OrderGoods orderGoods = new OrderGoods();
+            Boolean isGoods = cartGoodsDto.getIsGoods();
+            Integer amount = cartGoodsDto.getAmount();
+            Integer colorSizeId = cartGoodsDto.getColorSizeId();
+            orderGoods.setOrderId(order.getId());
+            orderGoods.setIsGoods(isGoods);
+            orderGoods.setAmount(amount);
+            orderGoods.setTotalPrice(cartGoodsDto.getAfterTotalPrice());
+            orderGoods.setSizeId(colorSizeId);
+            orderGoodsMapper.insert(orderGoods);
+
+            // 减少相应商品的库存
+            // 不调用updateInventory方法，省得插入又再查一次数据库
+            HashMap<String, Integer> inventoryMap = new HashMap<>();
+            inventoryMap.put("amount",amount);
+            inventoryMap.put("sizeId",colorSizeId);
+            // 0代表减少库存
+            inventoryMap.put("flag",0);
+            if (isGoods == Boolean.TRUE) {
+                colorSizeMapper.updateInventoryByPrimaryKey(inventoryMap);
+            } else {
+                partSizeMapper.updateInventoryByPrimaryKey(inventoryMap);
+            }
+        } // end for
+
+        // 删除购物车勾选项
+        cartService.deleteCartGoodsByIsChosen();
+
+        // 返回订单编号和openid
+        return orderMap;
 
     }
 
@@ -211,14 +205,23 @@ public class OrderServiceImpl implements OrderService {
      * 获取用户指定订单状态的订单
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败
-     * @param orderMap —— userId、status
-     *                 userId为null时查询商城内的订单
+     * @param orderMap —— flag、status
+     *                 flag为0时查询商城内的订单
      *                 status传入3时同时获取退款成功、退款失败（3 4）的订单
      *                 status传入5查询所有订单
      * @return
      */
     @Transactional
     public List<OrderVo> listOrder(Map<String,Integer> orderMap) {
+
+        Integer userId = TokenInterceptor.getLoginUser().getId();
+        if (orderMap.get("flag") == 1) {
+            // 如果是获取用户的订单
+            // 向map中添加userId,查询订单
+            orderMap.put("userId",userId);
+        } else {
+            orderMap.put("userId",null);
+        }
 
         ArrayList<OrderVo> orderVoList = new ArrayList<>();
 
@@ -240,19 +243,20 @@ public class OrderServiceImpl implements OrderService {
      * 订单状态自增修改
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 0--待付款 1--待发货 2--待收货 类型订单 更新订单状态
-     * @param orderId:订单id
+     * @param orderNumber:订单编号
      * @return -2 —— 订单状态不能自增修改
      *         -1 —— 订单id不存在
      *         0 —— 更新订单状态失败
      *         1 —— 更新订单状态成功
      */
-    public int updateOrderStatus(Integer orderId) {
-        Order order = orderMapper.selectByPrimaryKey(orderId);
+    public int updateOrderStatus(String orderNumber) {
+        Order order = orderMapper.selectByOrderNumber(orderNumber);
         if (order!=null) { // 如果该订单存在
             Integer status = order.getStatus();
             if (status>=0 && status<3) { // 如果订单状态是待付款、待发货、待收货
                 // 更新订单状态
-                int res = orderMapper.updateOrderStatus(orderId);
+                int res = orderMapper.updateOrderStatus(order.getId());
+                logger.info("更新订单[{}]状态：[待收货]-->[已完成]",orderNumber);
                 return res;
             } else { // 订单状态不能自增修改
                 return -2;
@@ -294,6 +298,7 @@ public class OrderServiceImpl implements OrderService {
     public int deleteOrder(Integer orderId) {
         Order order = orderMapper.selectByPrimaryKey(orderId);
         if (order!=null) {
+            logger.info("删除订单[{}]",order.getOrderNumber());
             return orderMapper.deleteByPrimaryKey(orderId);
         } else {
             return -1;
@@ -324,6 +329,7 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     public int setCourierNumber(Order order) {
+        logger.info("设置订单[{}]的快递编号[{}]",order,order.getCourierNumber());
         return orderMapper.setCourierNumber(order);
     }
 
@@ -421,12 +427,15 @@ public class OrderServiceImpl implements OrderService {
             return -1;
         } else if (!(order.getStatus()>=0 && order.getStatus()<=1)) {
             // 订单状态不为 待付款、待发货，则不可修改地址
+            logger.info("订单[{}]的状态为[{}]，不可修改收货地址",orderNumber,order.getStatus());
             return -2;
         }
         UserAddress userAddress = orderVo.getUserAddress();
         order.setPhoneNumber(userAddress.getPhoneNumber());
         order.setAddressName(userAddress.getAddressName());
         order.setUserName(userAddress.getUserName());
+        logger.info("修改订单[{}]地址信息---收货地址：[{}],联系人姓名[{}],联系号码[{}]",
+                orderNumber,order.getAddressName(),order.getUserName(),order.getPhoneNumber());
         return orderMapper.updateAddressByOrderNumber(order);
     }
 
@@ -442,6 +451,7 @@ public class OrderServiceImpl implements OrderService {
             // 如果订单状态是0未付款，可以取消订单
             if (order.getStatus()==0) {
                 // 取消订单，更新订单状态为4，交易关闭
+                logger.info("订单[{}]取消，状态[未付款]-->[交易关闭]",order.getOrderNumber());
                 HashMap<String, Integer> orderMap = new HashMap<>();
                 orderMap.put("orderId",orderId);
                 orderMap.put("status",4);
@@ -450,9 +460,11 @@ public class OrderServiceImpl implements OrderService {
                 updateInventory(order.getOrderNumber(),1);
                 return 1;
             } else { // 订单状态不可取消订单
+                logger.info("订单[{}]的状态[{}]不可取消订单",order.getOrderNumber(),order.getStatus());
                 return -2;
             }
         } else { // 订单id不存在
+            logger.info("订单id[{}]不存在",orderId);
             return -1;
         }
     }

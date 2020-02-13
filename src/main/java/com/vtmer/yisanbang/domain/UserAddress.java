@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
 
@@ -16,8 +15,7 @@ public class UserAddress {
     @ApiModelProperty(hidden = true)
     private Integer id;
 
-    @NotNull(groups = {Insert.class, Update.class},message = "userId为空")
-    @ApiModelProperty(name = "userId",value = "用户id", required = true,example = "1")
+    @ApiModelProperty(name = "userId",value = "用户id", readOnly = true,example = "1")
     private Integer userId;
 
     @NotBlank(groups = {Insert.class, Update.class},message = "联系人姓名为空")
