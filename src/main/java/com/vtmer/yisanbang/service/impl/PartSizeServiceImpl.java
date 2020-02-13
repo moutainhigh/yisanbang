@@ -1,8 +1,10 @@
 package com.vtmer.yisanbang.service.impl;
 
-import com.vtmer.yisanbang.dto.ColorSizeDto;
+import com.vtmer.yisanbang.dto.CartGoodsDto;
 import com.vtmer.yisanbang.dto.PartSizeDto;
+import com.vtmer.yisanbang.dto.SuitDto;
 import com.vtmer.yisanbang.mapper.PartSizeMapper;
+import com.vtmer.yisanbang.mapper.SuitMapper;
 import com.vtmer.yisanbang.service.PartSizeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,28 @@ import java.util.List;
 public class PartSizeServiceImpl implements PartSizeService {
     @Autowired
     private PartSizeMapper partSizeMapper;
+
+    @Autowired
+    private SuitMapper suitMapper;
+
+    public CartGoodsDto setSkuById(CartGoodsDto cartGoodsDto) {
+        PartSizeDto suitSku = partSizeMapper.selectDtoByPrimaryKey(cartGoodsDto.getColorSizeId());
+        // 套装尺寸
+        cartGoodsDto.setSize(suitSku.getSize());
+        // 套装部件
+        cartGoodsDto.setPartOrColor(suitSku.getPart());
+        // 查询商品信息
+        SuitDto suitDto = suitMapper.selectDtoByPrimaryKey(suitSku.getSuitId());
+        // 套装标题
+        cartGoodsDto.setTitle(suitDto.getName());
+        // 套装价格（最低价）
+        cartGoodsDto.setPrice(suitDto.getLowestPrice());
+        // 设置套装id
+        cartGoodsDto.setId(suitDto.getId());
+        // 套装图片
+        cartGoodsDto.setPicture(suitDto.getPicture());
+        return cartGoodsDto;
+    }
 
     @Override
     // 查找所有部件尺寸
@@ -70,13 +94,10 @@ public class PartSizeServiceImpl implements PartSizeService {
     public boolean judgePartSize(PartSizeDto partSizeDto) {
         List<PartSizeDto> partSizeDtoList = partSizeMapper.selectAllDto();
         for (PartSizeDto partSize : partSizeDtoList) {
-            if (partSize.getInventory() == partSizeDto.getInventory())
-                if (partSize.getPrice() == partSizeDto.getPrice())
-                    if (partSize.getSuitId() == partSizeDto.getSuitId())
-                        if (partSize.getModel().equals(partSizeDto.getModel()))
-                            if (partSize.getPart().equals(partSizeDto.getPart()))
-                                if (partSize.getSize().equals(partSizeDto.getSize()))
-                                    return true;
+            if (partSize.getSuitId() == partSizeDto.getSuitId())
+                if (partSize.getPart().equals(partSizeDto.getPart()))
+                    if (partSize.getSize().equals(partSizeDto.getSize()))
+                        return true;
         }
         return false;
     }
@@ -108,7 +129,7 @@ public class PartSizeServiceImpl implements PartSizeService {
     }
 
     @Override
-    // 根据颜色尺寸查找显示库存
+    // 根据部件尺寸查找显示库存
     public Integer selectInventoryByPartSize(Integer suitId, String part, String size) {
         List<PartSizeDto> partSizeDtos = partSizeMapper.selectAllBySuitId(suitId);
         for (PartSizeDto partSize : partSizeDtos) {
@@ -135,12 +156,10 @@ public class PartSizeServiceImpl implements PartSizeService {
     // 查找最低价
     public Double selectLowPriceBySuitId(Integer suitId) {
         List<PartSizeDto> partSizeDtos = partSizeMapper.selectAllBySuitId(suitId);
-        Double lowPrice = null;
-        for (PartSizeDto partSize : partSizeDtos) {
-            Double price = partSize.getPrice();
-            for (PartSizeDto partSizeDto : partSizeDtos) {
-                if (partSizeDto.getPrice() < price)
-                    lowPrice = partSizeDto.getPrice();
+        Double lowPrice = partSizeDtos.get(0).getPrice();
+        for (int i = 0; i < partSizeDtos.size(); i++) {
+            if (lowPrice > partSizeDtos.get(i).getPrice()) {
+                lowPrice = partSizeDtos.get(i).getPrice();
             }
         }
         return lowPrice;
@@ -150,12 +169,10 @@ public class PartSizeServiceImpl implements PartSizeService {
     // 查找最高价
     public Double selecgHighPriceBySuitId(Integer suitId) {
         List<PartSizeDto> partSizeDtos = partSizeMapper.selectAllBySuitId(suitId);
-        Double highPrice = null;
-        for (PartSizeDto partSize : partSizeDtos) {
-            Double price = partSize.getPrice();
-            for (PartSizeDto partSizeDto : partSizeDtos) {
-                if (partSizeDto.getPrice() > price)
-                    highPrice = partSizeDto.getPrice();
+        Double highPrice = partSizeDtos.get(0).getPrice();
+        for (int i = 0; i < partSizeDtos.size(); i++) {
+            if (highPrice < partSizeDtos.get(i).getPrice()) {
+                highPrice = partSizeDtos.get(i).getPrice();
             }
         }
         return highPrice;

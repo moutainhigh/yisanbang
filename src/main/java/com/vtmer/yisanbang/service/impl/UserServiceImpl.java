@@ -4,12 +4,14 @@ import com.vtmer.yisanbang.common.HttpUtil;
 import com.vtmer.yisanbang.common.JSONUtil;
 import com.vtmer.yisanbang.common.JwtUtil;
 import com.vtmer.yisanbang.domain.User;
-import com.vtmer.yisanbang.vo.Token;
 import com.vtmer.yisanbang.mapper.UserMapper;
 import com.vtmer.yisanbang.service.UserService;
 import com.vtmer.yisanbang.vo.Code2SessionResponse;
+import com.vtmer.yisanbang.vo.Token;
 import com.vtmer.yisanbang.vo.WxAccount;
 import org.apache.shiro.authc.AuthenticationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -25,6 +27,8 @@ import java.net.URI;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+    private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Value("${wx.applet.appid}")
     private String appId;
@@ -55,6 +59,7 @@ public class UserServiceImpl implements UserService {
         params.add("secret", appSecret);
         params.add("js_code", code);
         params.add("grant_type", "authorization_code");
+        logger.info("开始请求微信登录接口，获取openid和sessionkey");
         URI code2Session = HttpUtil.getUriWithParams(code2SessionUrl, params);
         return restTemplate.exchange(code2Session, HttpMethod.GET, new HttpEntity<String>(new HttpHeaders()),
                 String.class).getBody();
@@ -64,19 +69,28 @@ public class UserServiceImpl implements UserService {
     public Token wxUserLogin(String code) {
         // code2session接口返回JSON数据
         String resultJson = code2Session(code);
+        logger.info("code2session接口返回JSON数据{}",resultJson);
         // 解析数据
         Code2SessionResponse response = JSONUtil.toJavaObject(resultJson, Code2SessionResponse.class);
         if (!"0".equals(response.getErrcode())) {
             throw new AuthenticationException("code2session失败：" + response.getErrmsg());
         } else {
             // 查询数据库是否存在该微信用户
+            logger.info("用户的openid为{},根据openid查询数据库是否存在该微信用户",response.getOpenid());
             User user = userMapper.selectUserByOpenId(response.getOpenid());
+            User newUser = new User();
             if (null == user) {
+                logger.info("数据库中不存在该微信用户，插入新数据");
+                String openid = response.getOpenid();
                 // 若不存在则新建用户到数据库中
-                userMapper.addUser(response.getOpenid());
+                newUser.setOpenId(openid);
+                userMapper.addUser(newUser);
+                logger.info("插入数据成功，自增userId为{}",newUser.getId());
+                user = newUser;
             }
             // JWT返回自定义登录态token并把token缓存到redis中
             WxAccount wxAccount = new WxAccount();
+            wxAccount.setUserId(user.getId());
             wxAccount.setOpenId(response.getOpenid());
             wxAccount.setSessionKey(response.getSession_key());
             String token = jwtUtil.createTokenByUser(wxAccount);
@@ -93,6 +107,8 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
+
+
 
     public String getOpenIdByUserId(Integer userId) {
         return userMapper.selectOpenIdByUserId(userId);

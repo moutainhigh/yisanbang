@@ -1,17 +1,21 @@
 package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
+import com.vtmer.yisanbang.common.validGroup.Delete;
+import com.vtmer.yisanbang.common.validGroup.Update;
 import com.vtmer.yisanbang.dto.ColorSizeDto;
-import com.vtmer.yisanbang.dto.GoodsDto;
 import com.vtmer.yisanbang.service.ColorSizeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-@Api("颜色尺寸管理接口")
+import java.util.stream.Collectors;
+
+@Api(tags = "颜色尺寸管理接口")
 @RestController
 @RequestMapping("/colorSize")
 public class ColorSizeController {
@@ -32,7 +36,9 @@ public class ColorSizeController {
     @PostMapping("/addColorSize")
     @ApiOperation(value = "添加商品颜色尺寸")
     // 添加商品颜色尺寸
-    public ResponseMessage addColorSize(@ApiParam(name = "颜色尺寸Dto实体类", value = "传入Json格式", required = true) @RequestBody ColorSizeDto colorSizeDto) {
+    public ResponseMessage addColorSize(@ApiParam(name = "颜色尺寸Dto实体类", value = "传入Json格式", required = true)
+                                            @RequestBody
+                                                    @Validated ColorSizeDto colorSizeDto) {
         ColorSizeDto colorSize = colorSizeService.selectColorSizeById(colorSizeDto.getId());
         if (colorSize != null) {
             return ResponseMessage.newErrorInstance("该商品颜色尺寸id已经存在");
@@ -47,7 +53,9 @@ public class ColorSizeController {
     @PutMapping("/updateColorSize")
     @ApiOperation(value = "更新商品颜色尺寸")
     // 更新商品颜色尺寸
-    public ResponseMessage updateColorSize(@ApiParam(name = "颜色尺寸Dto实体类", value = "传入Json格式", required = true)@RequestBody ColorSizeDto colorSizeDto) {
+    public ResponseMessage updateColorSize(@ApiParam(name = "颜色尺寸Dto实体类", value = "传入Json格式", required = true)
+                                               @RequestBody
+                                               @Validated(Update.class) ColorSizeDto colorSizeDto) {
         ColorSizeDto colorSize = colorSizeService.selectColorSizeById(colorSizeDto.getId());
         if (colorSize != null) {
             boolean updateFlag = colorSizeService.updateColorSize(colorSizeDto);
@@ -59,7 +67,9 @@ public class ColorSizeController {
     @DeleteMapping("/deleteColorSize")
     @ApiOperation(value = "删除商品颜色尺寸")
     // 删除商品颜色尺寸
-    public ResponseMessage deleteColorSize(@ApiParam(name = "颜色尺寸Dto实体类", value = "传入Json格式", required = true)@RequestBody ColorSizeDto colorSizeDto) {
+    public ResponseMessage deleteColorSize(@ApiParam(name = "颜色尺寸Dto实体类", value = "传入Json格式", required = true)
+                                               @RequestBody
+                                               @Validated(Delete.class) ColorSizeDto colorSizeDto) {
         ColorSizeDto colorSize = colorSizeService.selectColorSizeById(colorSizeDto.getId());
         if (colorSize != null) {
             boolean deleteFlag = colorSizeService.deleteColorSize(colorSizeDto.getId());
@@ -76,7 +86,8 @@ public class ColorSizeController {
         if (colorSizeDtos != null) {
             List<String> list = colorSizeService.selectAllColorById(goodsId);
             if (list != null && !list.isEmpty()) {
-                return ResponseMessage.newSuccessInstance(list, "查找成功");
+                List uniqueList = list.stream().distinct().collect(Collectors.toList());
+                return ResponseMessage.newSuccessInstance(uniqueList, "查找成功");
             } else {
                 return ResponseMessage.newErrorInstance("查找失败");
             }
@@ -93,7 +104,8 @@ public class ColorSizeController {
         if (colorSizeDtos != null) {
             List<String> list = colorSizeService.selectAllSizeById(goodsId);
             if (list != null && !list.isEmpty()) {
-                return ResponseMessage.newSuccessInstance(list, "查找成功");
+                List uniqueList = list.stream().distinct().collect(Collectors.toList());
+                return ResponseMessage.newSuccessInstance(uniqueList, "查找成功");
             } else {
                 return ResponseMessage.newErrorInstance("查找失败");
             }
@@ -108,6 +120,9 @@ public class ColorSizeController {
     public ResponseMessage selectInventoryByColorSize(@ApiParam(name = "goodsId", value = "商品Id", required = true) @PathVariable("id") Integer goodsId,
                                                       @ApiParam(name = "color", value = "颜色", required = true) @PathVariable("color") String color,
                                                       @ApiParam(name = "size", value = "大小", required = true) @PathVariable("size") String size) {
+        System.out.println(goodsId);
+        System.out.println(color);
+        System.out.println(size);
         ColorSizeDto colorSizeDto = colorSizeService.selectColorSizeById(goodsId);
         if (colorSizeDto != null) {
             Integer inventory = colorSizeService.selectInventoryByColorSize(goodsId, color, size);

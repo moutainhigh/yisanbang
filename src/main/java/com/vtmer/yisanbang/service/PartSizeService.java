@@ -1,6 +1,6 @@
 package com.vtmer.yisanbang.service;
 
-import com.vtmer.yisanbang.dto.ColorSizeDto;
+import com.vtmer.yisanbang.dto.CartGoodsDto;
 import com.vtmer.yisanbang.dto.PartSizeDto;
 
 import java.util.List;
@@ -44,4 +44,11 @@ public interface PartSizeService {
 
     // 根据套装id返回最高价
     public Double selecgHighPriceBySuitId(Integer suitId);
+
+    /**
+     * 根据colorSizeId设置套装sku属性——价格、图片、尺寸、部件
+     * @param cartGoodsDto:colorSizeId
+     * @return
+     */
+    CartGoodsDto setSkuById(CartGoodsDto cartGoodsDto);
 }

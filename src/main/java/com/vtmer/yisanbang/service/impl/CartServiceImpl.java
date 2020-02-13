@@ -1,37 +1,66 @@
 package com.vtmer.yisanbang.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.vtmer.yisanbang.common.ListSort;
+import com.vtmer.yisanbang.common.TokenInterceptor;
 import com.vtmer.yisanbang.domain.Discount;
-import com.vtmer.yisanbang.dto.*;
-import com.vtmer.yisanbang.mapper.CartGoodsMapper;
-import com.vtmer.yisanbang.mapper.CartMapper;
+import com.vtmer.yisanbang.dto.CartGoodsDto;
+import com.vtmer.yisanbang.dto.GoodsSkuDto;
 import com.vtmer.yisanbang.mapper.DiscountMapper;
 import com.vtmer.yisanbang.service.CartService;
-import com.vtmer.yisanbang.vo.AddCartGoodsVo;
+import com.vtmer.yisanbang.service.ColorSizeService;
+import com.vtmer.yisanbang.service.PartSizeService;
 import com.vtmer.yisanbang.vo.CartVo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.BoundHashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class CartServiceImpl implements CartService {
 
-    @Autowired
-    private CartMapper cartMapper;
+    private static final Logger logger = LoggerFactory.getLogger(CartServiceImpl.class);
 
     @Autowired
-    private CartGoodsMapper cartGoodsMapper;
+    private PartSizeService partSizeService;
+
+    @Autowired
+    private ColorSizeService colorSizeService;
+
 
     @Autowired
     private DiscountMapper discountMapper;
+
+
+    @Autowired
+    private RedisTemplate<String,Object> stringRedisTemplate;
+
+    private static final String REDIS_CART = "cart";
 
     // 满X件打折
     private int discountAmount;
 
     // 打折率
     private double discountRate;
+
+    // 用户id
+    private Integer userId;
+
+    // redis key
+    private String key;
+
+    // hash操作对象
+    private BoundHashOperations<String, Object, Object> hashOperations;
 
     // 设置优惠信息
     private void setDiscount() {
@@ -45,165 +74,224 @@ public class CartServiceImpl implements CartService {
         }
     }
 
+    private void getUserIdAndSetKey() {
+        userId = TokenInterceptor.getLoginUser().getId();
+        key = REDIS_CART + ":" + userId;
+        hashOperations = stringRedisTemplate.boundHashOps(key);
+    }
+
     @Override
-    public CartVo selectCartVoByUserId(Integer userId) {
-        setDiscount();
-        double beforeCartTotalPrice = 0;
-        // 根据userId查cartId
-        Integer cartId = cartMapper.selectCartIdByUserId(userId);
-        if (cartId!=null) {
-            CartVo cartVo = cartMapper.selectCartDtoByUserId(userId);
-            // 由购物车id查询购物车所有普通商品信息
-            List<CartGoodsDto> CartGoodsList = cartGoodsMapper.selectCartGoodsByCartId1(cartId);
-            // 由购物车id查询购物车所有套装散件信息
-            List<CartGoodsDto> CartSuitList = cartGoodsMapper.selectCartGoodsByCartId(cartId);
-            // 两个集合合并
-            CartGoodsList.addAll(CartSuitList);
-            // 根据时间排序
-            ListSort.listTimeSort(CartGoodsList);
-            for (CartGoodsDto cartGoodsDto : CartGoodsList) {
-                double afterTotalPrice = 0;
-                // 计算单件商品总价
-                double totalPrice = cartGoodsDto.getPrice() * cartGoodsDto.getAmount();
-                // 购物车计算优惠前的总价格
-                beforeCartTotalPrice += totalPrice;
-                cartGoodsDto.setTotalPrice(totalPrice);
-                // 如果符合优惠
-                if (cartGoodsDto.getAmount() >= discountAmount) {
-                    afterTotalPrice = totalPrice * discountRate;
-                    cartGoodsDto.setAfterTotalPrice(afterTotalPrice);
-                } else {
-                    cartGoodsDto.setAfterTotalPrice(totalPrice);
-                }
-            } // end for
-            cartVo.setCartGoodsList(CartGoodsList);
-            cartVo.setBeforeTotalPrice(beforeCartTotalPrice);
-            return cartVo;
-        } else {
+    public CartVo selectCartVo() {
+        getUserIdAndSetKey();
+        if (!stringRedisTemplate.hasKey(key)) {
+            // 不存在直接返回
             return null;
         }
+        // 获取所有数据
+        List<Object> ObjectList = hashOperations.values();
+        // 判断是否有数据
+        if (CollectionUtils.isEmpty(ObjectList)) {
+            return null;
+        }
+        // 查询购物车数据
+        List<CartGoodsDto> cartGoodsList;
+        cartGoodsList = ObjectList.stream().map(o -> JSON.parseObject(o.toString(), CartGoodsDto.class)).collect(Collectors.toList());
+        // 计算总价
+        Map<String, Double> priceMap = calculateTotalPrice(cartGoodsList);
+        CartVo cartVo = new CartVo();
+        // 设置总价
+        cartVo.setTotalPrice(priceMap.get("totalPrice"));
+        cartVo.setBeforeTotalPrice(priceMap.get("beforeTotalPrice"));
+        // 根据时间排序
+        ListSort.listTimeSort(cartGoodsList);
+        cartVo.setCartGoodsList(cartGoodsList);
+        return cartVo;
     }
 
-    @Override
-    @Transactional
-    public int addCartGoods(AddCartGoodsVo addCartGoodsVo) {
-        // 根据userId获取cartId
-        Integer cartId = cartMapper.selectCartIdByUserId(addCartGoodsVo.getUserId());
-        if (cartId!=null) {
-            List<AddGoodsDto> addGoodsDtoList = addCartGoodsVo.getAddGoodsDtoList();
-            for (AddGoodsDto addGoodsDto : addGoodsDtoList) {
-                addGoodsDto.setCartId(cartId);
-                addGoodsDto.setIsGoods(addCartGoodsVo.getIsGoods());
-                boolean isGoodsExist = cartGoodsMapper.checkGoodsExist(addGoodsDto);
-                // 如果该商品已经存在，则增加其amount,否则插入新数据
-                if (isGoodsExist) {
-                    cartGoodsMapper.addOrSubtractAmount(addGoodsDto);
+    public void addCartGoods(List<CartGoodsDto> cartGoodsDtoList) {
+        getUserIdAndSetKey();
+
+        for (CartGoodsDto cartGoodsDto : cartGoodsDtoList) {
+            // 更新时间
+            cartGoodsDto.setUpdateTime(System.currentTimeMillis());
+            // 查询商品是否存在
+            Integer colorSizeId = cartGoodsDto.getColorSizeId();
+            Boolean isGoods = cartGoodsDto.getIsGoods();
+            Integer amount = cartGoodsDto.getAmount();
+            Boolean result = hashOperations.hasKey(colorSizeId.toString()+isGoods.toString());
+            assert result != null;
+            if (result) {
+                // 存在，获取购物车数据
+                String json = Objects.requireNonNull(hashOperations.get(colorSizeId.toString() + isGoods.toString())).toString();
+                cartGoodsDto = JSON.parseObject(json, CartGoodsDto.class);
+                // 修改购物车商品数量
+                cartGoodsDto.setAmount(cartGoodsDto.getAmount() + amount);
+            } else {
+                // 不存在，新增购物车数据
+                cartGoodsDto.setUserId(userId);
+                // 默认为已勾选
+                cartGoodsDto.setIsChosen(true);
+                // 设置商品信息
+                if (isGoods) {
+                    // 如果是普通商品
+                    colorSizeService.setSkuById(cartGoodsDto);
                 } else {
-                    cartGoodsMapper.insertCartGoods(addGoodsDto);
+                    // 如果是套装商品
+                    partSizeService.setSkuById(cartGoodsDto);
                 }
-            } // end for
-        } else {
-            return -1;
-        }
-        // 更新价格
-        calculateTotalPrice(addCartGoodsVo.getUserId());
-        return 1;
+            }
+            // 将购物车数据写入redis
+            hashOperations.put(colorSizeId.toString() + isGoods.toString(),JSON.toJSONString(cartGoodsDto));
+        } // end for
     }
 
-    @Transactional
-    public double updateChosen(AddGoodsDto addGoodsDto) {
-        // 根据userId获取cartId
-        Integer cartId = cartMapper.selectCartIdByUserId(addGoodsDto.getUserId());
-        if (cartId!=null) {
-            addGoodsDto.setCartId(cartId);
-            Integer isChosen = cartGoodsMapper.selectChosen(addGoodsDto);
-            cartGoodsMapper.updateChosen(addGoodsDto,isChosen);
-            // 更新价格
-            return updateTotalPrice(addGoodsDto);
-        } else {
-            return -1;
-        }
-    }
 
     @Transactional
-    public double addOrSubtractAmount(AddGoodsDto addGoodsDto) {
-        Integer cartId = cartMapper.selectCartIdByUserId(addGoodsDto.getUserId());
-        addGoodsDto.setCartId(cartId);
-        // 更新数量
-        boolean b = cartGoodsMapper.addOrSubtractAmount(addGoodsDto);
-        if (b) {
-            return updateTotalPrice(addGoodsDto);
-        } else {
-            return -1;
+    public boolean updateChosen(GoodsSkuDto goodsSkuDto) {
+        getUserIdAndSetKey();
+        Boolean isGoods = goodsSkuDto.getIsGoods();
+        Integer colorSizeId = goodsSkuDto.getColorSizeId();
+        if (!hashOperations.hasKey(colorSizeId.toString() + isGoods.toString())) {
+            // 如果不存在该商品
+            return false;
         }
+        // 存在，获取购物车数据
+        String json = Objects.requireNonNull(hashOperations.get(colorSizeId.toString() + isGoods.toString())).toString();
+        CartGoodsDto cartGoodsDto = JSON.parseObject(json, CartGoodsDto.class);
+        // 修改勾选
+        Boolean isChosen = cartGoodsDto.getIsChosen();
+        if (isChosen) {
+            cartGoodsDto.setIsChosen(false);
+        } else {
+            cartGoodsDto.setIsChosen(true);
+        }
+        // 将购物车数据写入redis
+        hashOperations.put(colorSizeId.toString() + isGoods.toString(),JSON.toJSONString(cartGoodsDto));
+        return true;
     }
+
+
+
+    @Transactional
+    public boolean addOrSubtractAmount(CartGoodsDto cartGoodsDto) {
+        getUserIdAndSetKey();
+        Boolean isGoods = cartGoodsDto.getIsGoods();
+        Integer colorSizeId = cartGoodsDto.getColorSizeId();
+        Integer amount = cartGoodsDto.getAmount();
+        if (!hashOperations.hasKey(colorSizeId.toString() + isGoods.toString())) {
+            // 如果不存在该商品
+            return false;
+        }
+        // 存在，获取购物车数据
+        String json = Objects.requireNonNull(hashOperations.get(colorSizeId.toString() + isGoods.toString())).toString();
+        cartGoodsDto = JSON.parseObject(json, CartGoodsDto.class);
+        // 增减购物车数量
+        cartGoodsDto.setAmount(cartGoodsDto.getAmount() + amount);
+        // 将购物车数据写入redis
+        hashOperations.put(colorSizeId.toString() + isGoods.toString(),JSON.toJSONString(cartGoodsDto));
+        return true;
+    }
+
+
+
 
     @Override
     @Transactional
-    public double updateAmount(AddGoodsDto addGoodsDto) {
-        Integer cartId = cartMapper.selectCartIdByUserId(addGoodsDto.getUserId());
-        addGoodsDto.setCartId(cartId);
-        boolean b = cartGoodsMapper.updateAmount(addGoodsDto);
-        if (b) {
-            return updateTotalPrice(addGoodsDto);
-        } else {
-            return -1;
+    public boolean updateAmount(CartGoodsDto cartGoodsDto) {
+        getUserIdAndSetKey();
+        Boolean isGoods = cartGoodsDto.getIsGoods();
+        Integer colorSizeId = cartGoodsDto.getColorSizeId();
+        Integer amount = cartGoodsDto.getAmount();
+        if (!hashOperations.hasKey(colorSizeId.toString() + isGoods.toString())) {
+            // 如果不存在该商品
+            return false;
         }
+        // 存在，获取购物车数据
+        String json = Objects.requireNonNull(hashOperations.get(colorSizeId.toString() + isGoods.toString())).toString();
+        cartGoodsDto = JSON.parseObject(json, CartGoodsDto.class);
+        // 修改购物车数量
+        cartGoodsDto.setAmount(amount);
+        // 将购物车数据写入redis
+        hashOperations.put(colorSizeId.toString() + isGoods.toString(),JSON.toJSONString(cartGoodsDto));
+        return true;
     }
+
+
 
     @Override
     @Transactional
-    public Boolean deleteCartGoods(DeleteCartGoodsDto deleteCartGoodsDto) {
-        // 删除商品
-        Integer cartId = cartMapper.selectCartIdByUserId(deleteCartGoodsDto.getUserId());
-        List<GoodsSkuDto> goodsDtoList = deleteCartGoodsDto.getGoodsDtoList();
-        for (GoodsSkuDto goodsDto : goodsDtoList) {
-            // 使用AddGoodsDto进行数据传输——colorSizeId,isGoods,cartId
-            AddGoodsDto addGoodsDto = new AddGoodsDto(goodsDto.getColorSizeId(), goodsDto.getIsGoods(), cartId);
-            Boolean b = cartGoodsMapper.deleteCartGoods(addGoodsDto);
-            // 删除失败返回false
-            if (!b) return false;
+    public Boolean deleteCartGoods(List<GoodsSkuDto> goodsSkuDtoList) {
+        getUserIdAndSetKey();
+        for (GoodsSkuDto goodsSkuDto : goodsSkuDtoList) {
+            Integer colorSizeId = goodsSkuDto.getColorSizeId();
+            Boolean isGoods = goodsSkuDto.getIsGoods();
+            if (!hashOperations.hasKey(colorSizeId.toString() + isGoods.toString())) {
+                // 如果redis中不存在该商品
+                return false;
+            }
+            // 删除商品
+            hashOperations.delete(colorSizeId.toString() + isGoods.toString());
         }
-        // 更新总价
-        calculateTotalPrice(deleteCartGoodsDto.getUserId());
         return true;
     }
 
 
     /*
-        根据购物车所有商品信息计算总价，并更新
+        根据购物车所有商品信息计算总价
     */
-    public double calculateTotalPrice(Integer userId) {
+    public Map<String,Double> calculateTotalPrice(List<CartGoodsDto> cartGoodsList) {
         setDiscount();
-        CartVo cartVo = selectCartVoByUserId(userId);
+        HashMap<String, Double> priceMap = new HashMap<>();
+        // 优惠后的总价
         double totalPrice = 0;
-        List<CartGoodsDto> cartGoodsDtos = cartVo.getCartGoodsList();
-        for (CartGoodsDto cartGoodsDto : cartGoodsDtos) {
+        // 优惠前的总价
+        double beforeTotalPrice = 0;
+        for (CartGoodsDto cartGoodsDto : cartGoodsList) {
+            // 单项商品总价
+            double price = 0;
             // 如果勾选了，计算总价
             if (cartGoodsDto.getIsChosen() == Boolean.TRUE) {
-                // 如果符合优惠
+                // 优惠前总价
+                price = cartGoodsDto.getPrice() * cartGoodsDto.getAmount();
+                cartGoodsDto.setTotalPrice(price);
+                beforeTotalPrice += price;
+                // 如果符合优惠,乘上打折率0.8
                 if (cartGoodsDto.getAmount() >= discountAmount) {
-                    totalPrice += cartGoodsDto.getPrice() * cartGoodsDto.getAmount() * discountRate;
-                } else {
-                    totalPrice += cartGoodsDto.getPrice() * cartGoodsDto.getAmount();
+                    price *=  discountRate;
                 }
+                cartGoodsDto.setAfterTotalPrice(price);
+                // 优惠后总价
+                totalPrice += price;
             }
         }
-        // 更新总价
-        cartMapper.updateTotalPrice(totalPrice, cartVo.getCartId());
-        return totalPrice;
+        priceMap.put("totalPrice",totalPrice);
+        priceMap.put("beforeTotalPrice",beforeTotalPrice);
+        return priceMap;
     }
 
-    /*
-        检查是否需要更新总价
-     */
-    private double updateTotalPrice(AddGoodsDto addGoodsDto) {
-        Integer isChosen = cartGoodsMapper.selectChosen(addGoodsDto);
-        // 如果是已勾选的商品，则需要更新价格
-        if (isChosen == 1) {
-            // 更新价格并返回更新后的总价
-            return calculateTotalPrice(addGoodsDto.getUserId());
-        } else return 0;
+    // 删除购物车中的勾选商品
+    public boolean deleteCartGoodsByIsChosen() {
+        getUserIdAndSetKey();
+        if (!stringRedisTemplate.hasKey(key)) {
+            // 不存在直接返回
+            return false;
+        }
+        // 获取所有数据
+        List<Object> ObjectList = hashOperations.values();
+        // 判断是否有数据
+        if (CollectionUtils.isEmpty(ObjectList)) {
+            return false;
+        }
+        // 查询购物车数据
+        List<CartGoodsDto> cartGoodsList;
+        cartGoodsList = ObjectList.stream().map(o -> JSON.parseObject(o.toString(), CartGoodsDto.class)).collect(Collectors.toList());
+        // 删除其中已勾选的购物车商品
+        for (CartGoodsDto cartGoodsDto : cartGoodsList) {
+            if (cartGoodsDto.getIsChosen()) {
+                // 如果是已勾选的，从redis中删除之
+                hashOperations.delete(cartGoodsDto.getColorSizeId().toString() + cartGoodsDto.getIsGoods().toString());
+            }
+        }
+        return true;
     }
-
 }

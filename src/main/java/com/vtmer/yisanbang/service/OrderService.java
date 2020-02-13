@@ -9,13 +9,13 @@ import java.util.Map;
 
 public interface OrderService {
 
-    OrderVo confirmCartOrder(Integer userId);
+    OrderVo confirmCartOrder();
 
     Map<String,String> createCartOrder(OrderVo orderVo);
 
     List<OrderVo> listOrder(Map<String,Integer> orderMap);
 
-    int updateOrderStatus(Integer orderId);
+    int updateOrderStatus(String orderNumber);
 
     int setOrderStatus(Map<String,Integer> orderMap);
 

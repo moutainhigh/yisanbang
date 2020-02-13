@@ -40,4 +40,60 @@ public class WxPayProperties {
      * apiclient_cert.p12文件的绝对路径，或者如果放在项目中，请以classpath:开头指定
      */
     private String keyPath;
+
+    public String getAppId() {
+        return appId;
+    }
+
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
+
+    public String getMchId() {
+        return mchId;
+    }
+
+    public void setMchId(String mchId) {
+        this.mchId = mchId;
+    }
+
+    public String getMchKey() {
+        return mchKey;
+    }
+
+    public void setMchKey(String mchKey) {
+        this.mchKey = mchKey;
+    }
+
+    public String getPayNotifyURL() {
+        return payNotifyURL;
+    }
+
+    public void setPayNotifyURL(String payNotifyURL) {
+        this.payNotifyURL = payNotifyURL;
+    }
+
+    public String getRefundNotifyURL() {
+        return refundNotifyURL;
+    }
+
+    public void setRefundNotifyURL(String refundNotifyURL) {
+        this.refundNotifyURL = refundNotifyURL;
+    }
+
+    public String getTradeType() {
+        return tradeType;
+    }
+
+    public void setTradeType(String tradeType) {
+        this.tradeType = tradeType;
+    }
+
+    public String getKeyPath() {
+        return keyPath;
+    }
+
+    public void setKeyPath(String keyPath) {
+        this.keyPath = keyPath;
+    }
 }

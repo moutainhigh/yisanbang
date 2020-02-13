@@ -1,8 +1,10 @@
 package com.vtmer.yisanbang.service.impl;
 
-import com.vtmer.yisanbang.domain.ColorSize;
+import com.vtmer.yisanbang.dto.CartGoodsDto;
 import com.vtmer.yisanbang.dto.ColorSizeDto;
+import com.vtmer.yisanbang.dto.GoodsDto;
 import com.vtmer.yisanbang.mapper.ColorSizeMapper;
+import com.vtmer.yisanbang.mapper.GoodsMapper;
 import com.vtmer.yisanbang.service.ColorSizeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,9 @@ import java.util.List;
 public class ColorSizeServiceImpl implements ColorSizeService {
     @Autowired
     private ColorSizeMapper colorSizeMapper;
+
+    @Autowired
+    private GoodsMapper goodsMapper;
 
     @Override
     // 查找所有的颜色尺寸
@@ -69,8 +74,7 @@ public class ColorSizeServiceImpl implements ColorSizeService {
         List<ColorSizeDto> colorSizeDtoList = colorSizeMapper.selectAllDto();
         for (ColorSizeDto colorSize : colorSizeDtoList) {
             if (colorSize.getGoodsId() == colorSizeDto.getGoodsId())
-                if (colorSize.getSize() == colorSizeDto.getSize())
-                    if (colorSize.getInventory() == colorSizeDto.getInventory())
+                if (colorSize.getSize().equals(colorSizeDto.getSize()))
                         if (colorSize.getColor().equals(colorSizeDto.getColor()))
                             return true;
         }
@@ -113,6 +117,25 @@ public class ColorSizeServiceImpl implements ColorSizeService {
                     return colorSize.getInventory();
         }
         return null;
+    }
+
+    public CartGoodsDto setSkuById(CartGoodsDto cartGoodsDto) {
+        ColorSizeDto goodsSku = colorSizeMapper.selectDtoByPrimaryKey(cartGoodsDto.getColorSizeId());
+        // 商品尺寸
+        cartGoodsDto.setSize(goodsSku.getSize());
+        // 商品颜色
+        cartGoodsDto.setPartOrColor(goodsSku.getColor());
+        // 查询商品信息
+        GoodsDto goodsDto = goodsMapper.selectDtoByPrimaryKey(goodsSku.getGoodsId());
+        // 商品标题
+        cartGoodsDto.setTitle(goodsDto.getName());
+        // 商品价格
+        cartGoodsDto.setPrice(goodsDto.getPrice());
+        // 设置商品id
+        cartGoodsDto.setId(goodsDto.getId());
+        // 商品图片
+        cartGoodsDto.setPicture(goodsDto.getPicture());
+        return cartGoodsDto;
     }
 
 }

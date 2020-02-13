@@ -1,42 +1,59 @@
 package com.vtmer.yisanbang.dto;
 
+import com.vtmer.yisanbang.common.validGroup.Delete;
+import com.vtmer.yisanbang.common.validGroup.Update;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+
 @ApiModel(value = "goods对象", description = "商品对象goods")
 public class GoodsDto {
+    @NotNull(groups = {Update.class, Delete.class}, message = "商品id不可为空")
     @ApiModelProperty(value = "商品id", example = "1")
     private Integer id;
 
-    @ApiModelProperty(value = "分类id", example = "1")
+    @NotNull(message = "分类id不可为空")
+    @ApiModelProperty(value = "分类", example = "1")
     private Integer sortId;
 
-    @ApiModelProperty(value = "商品名称", example = "舒适短袖")
+    @NotBlank(message = "商品名称不可为空")
+    @ApiModelProperty(value = "商品名称", example = "衣服")
     private String name;
 
-    @ApiModelProperty(value = "商品简介", example = "服务承诺 正品保证 极速退款 七天无理由退换")
+    @NotBlank(message = "简介不可为空")
+    @ApiModelProperty(value = "简介", example = "服务舒适....")
     private String introduce;
 
-    @ApiModelProperty(value = "商品图片", example = "goods/****")
+    @NotBlank(message = "图片路径不可为空")
+    @ApiModelProperty(value = "图片", example = "goods/****")
     private String picture;
 
-    @ApiModelProperty(value = "价格", example = "99")
+    @NotNull(message = "价格不可为空")
+    @ApiModelProperty(value = "价格", example = "100")
     private Double price;
 
-    @ApiModelProperty(value = "是否显示", example = "true")
+    @NotNull(message = "显示标志不可为空")
+    @ApiModelProperty(value = "显示标志", example = "true")
     private Boolean isShow;
 
-    @NotNull(message = "colorSizeId is null")
+    private Date updateTime;
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
     @ApiModelProperty(hidden = true)
     private Integer colorSizeId;
 
-    @NotNull(message = "isGoods is null")
     @ApiModelProperty(hidden = true)
     private Integer isGoods;
-
-    private Date updateTime;
 
     public Integer getColorSizeId() {
         return colorSizeId;
@@ -110,15 +127,7 @@ public class GoodsDto {
         this.isShow = isShow;
     }
 
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public GoodsDto(Integer id, Integer sortId, String name, String introduce, String picture, Double price, Boolean isShow, Integer colorSizeId, Integer isGoods, Date updateTime) {
+    public GoodsDto(Integer id, Integer sortId, String name, String introduce, String picture, Double price, Boolean isShow) {
         this.id = id;
         this.sortId = sortId;
         this.name = name;
@@ -126,9 +135,6 @@ public class GoodsDto {
         this.picture = picture;
         this.price = price;
         this.isShow = isShow;
-        this.colorSizeId = colorSizeId;
-        this.isGoods = isGoods;
-        this.updateTime = updateTime;
     }
 
     @Override
@@ -141,9 +147,6 @@ public class GoodsDto {
                 ", picture='" + picture + '\'' +
                 ", price=" + price +
                 ", isShow=" + isShow +
-                ", colorSizeId=" + colorSizeId +
-                ", isGoods=" + isGoods +
-                ", updateTime=" + updateTime +
                 '}';
     }
 }

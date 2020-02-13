@@ -50,7 +50,7 @@
       show_order
       )
     values (#{id,jdbcType=INTEGER}, #{suitId,jdbcType=INTEGER}, #{pirtucePath,jdbcType=VARCHAR},
-      #{showOrder,jdbcType=INTEGER}}
+      #{showOrder,jdbcType=INTEGER}
       )
   </insert>
   <update id="updateDtoByPrimaryKey" parameterType="com.vtmer.yisanbang.dto.SuitDetailDto">
@@ -72,6 +72,6 @@
   <select id="selectAllDtoBySuitId" parameterType="java.lang.Integer" resultMap="SuitDetailMap">
     select id, suit_id, pirtuce_path, show_order
     from suit_detail
-    where sort_id = #{sortId,jdbcType=INTEGER}
+    where suit_id = #{suitId,jdbcType=INTEGER}
   </select>
 </mapper>

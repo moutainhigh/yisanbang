@@ -1,6 +1,6 @@
 package com.vtmer.yisanbang.service;
 
-import com.vtmer.yisanbang.domain.ColorSize;
+import com.vtmer.yisanbang.dto.CartGoodsDto;
 import com.vtmer.yisanbang.dto.ColorSizeDto;
 
 import java.util.List;
@@ -35,4 +35,11 @@ public interface ColorSizeService {
 
     // 根据颜色尺寸查找显示库存
     public Integer selectInventoryByColorSize(Integer goodsId, String Color, String Size);
+
+    /**
+     * 根据colorSizeId设置商品sku属性——价格、图片、尺寸、颜色
+     * @param cartGoodsDto:colorSizeId
+     * @return
+     */
+    CartGoodsDto setSkuById(CartGoodsDto cartGoodsDto);
 }

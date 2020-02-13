@@ -16,7 +16,7 @@ public class OrderVo {
 
     @Valid
     @NotNull(groups = {Insert.class,Update.class},message = "用户地址信息为空")
-    @ApiModelProperty(value = "用户地址信息",required = true,example = "广东工业大学教学三号楼创客基地E102")
+    @ApiModelProperty(value = "用户默认收货地址信息",required = true,example = "广东工业大学教学三号楼创客基地E102")
     private UserAddress userAddress;
 
     @Valid

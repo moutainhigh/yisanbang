@@ -14,7 +14,7 @@ public interface GoodsMapper {
 
     int insert(Goods record);
 
-    Goods selectByPrimaryKey(Integer goodsId);
+    Goods selectByPrimaryKey(Integer id);
 
     List<Goods> selectAll();
 
