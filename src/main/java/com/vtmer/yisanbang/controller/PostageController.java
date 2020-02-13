@@ -1,6 +1,7 @@
 package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
+import com.vtmer.yisanbang.common.annotation.RequestLog;
 import com.vtmer.yisanbang.domain.Postage;
 import com.vtmer.yisanbang.service.PostageService;
 import io.swagger.annotations.Api;
@@ -17,6 +18,7 @@ public class PostageController {
     @Autowired
     private PostageService postageService;
 
+    @RequestLog(module = "邮费设置",operationDesc = "获取邮费设置信息")
     @ApiOperation("获取邮费设置信息")
     @GetMapping("/get")
     public ResponseMessage<Postage> get() {
@@ -28,6 +30,7 @@ public class PostageController {
         }
     }
 
+    @RequestLog(module = "邮费设置",operationDesc = "添加邮费设置")
     @ApiOperation(value = "添加邮费设置",notes = "同时只能存在一条邮费设置信息，不可重复添加，添加后可删除或更新" +
             "若不存在邮费设置，则默认满0元包邮")
     @PostMapping("/insert")
@@ -42,6 +45,7 @@ public class PostageController {
         }
     }
 
+    @RequestLog(module = "邮费设置",operationDesc = "删除邮费设置")
     @ApiOperation(value = "删除邮费设置")
     @DeleteMapping("/delete")
     public ResponseMessage delete() {
@@ -55,6 +59,7 @@ public class PostageController {
         }
     }
 
+    @RequestLog(module = "邮费设置",operationDesc = "更新邮费设置")
     @ApiOperation("更新邮费设置")
     @PutMapping("/update")
     public ResponseMessage update(@RequestBody @Validated Postage postage) {

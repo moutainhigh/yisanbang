@@ -30,6 +30,11 @@ public class JwtUtil {
      */
     private static final String TOKEN_SECRET = "c0a3e1c5de644ebda158414a10627212";
 
+    /**
+     * token名
+     */
+    public static final String TOKEN_HEADER = "accessToken";
+
     @Autowired
     private RedisTemplate redisTemplate;
 

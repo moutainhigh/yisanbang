@@ -1,6 +1,7 @@
 package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
+import com.vtmer.yisanbang.common.annotation.RequestLog;
 import com.vtmer.yisanbang.domain.Collection;
 import com.vtmer.yisanbang.service.CollectionService;
 import com.vtmer.yisanbang.vo.CollectionVo;
@@ -25,6 +26,7 @@ public class CollectionController {
      * @param collection:userId、goodsId、isGoods
      * @return
      */
+    @RequestLog(module = "收藏夹",operationDesc = "添加商品到收藏夹")
     @ApiOperation(value = "添加商品到收藏夹")
     @PostMapping("/insert")
     public ResponseMessage insert(@RequestBody @Validated Collection collection) {
@@ -44,6 +46,7 @@ public class CollectionController {
      * @param collectionIdList：收藏id list集合
      * @return
      */
+    @RequestLog(module = "收藏夹",operationDesc = "批量删除收藏夹中的商品")
     @ApiOperation(value = "批量删除收藏商品")
     @DeleteMapping("/delete")
     public ResponseMessage delete(@RequestBody
@@ -66,6 +69,7 @@ public class CollectionController {
      * @param userId：用户id
      * @return
      */
+    @RequestLog(module = "收藏夹",operationDesc = "获取用户收藏商品列表")
     @ApiOperation(value = "获取用户收藏商品列表")
     @GetMapping("/get/{userId}")
     public ResponseMessage<List<CollectionVo>> collectionList(@ApiParam(value = "用户id",name = "userId",example = "1",required = true)

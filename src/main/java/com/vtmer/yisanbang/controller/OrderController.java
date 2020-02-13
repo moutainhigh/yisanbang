@@ -9,6 +9,7 @@ import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.github.binarywang.wxpay.util.SignUtils;
 import com.vtmer.yisanbang.common.ResponseMessage;
+import com.vtmer.yisanbang.common.annotation.RequestLog;
 import com.vtmer.yisanbang.common.validGroup.Insert;
 import com.vtmer.yisanbang.domain.Order;
 import com.vtmer.yisanbang.service.OrderService;
@@ -33,7 +34,7 @@ import java.util.Map;
 @RequestMapping("/order")
 public class OrderController {
 
-    private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
+    private final Logger logger = LoggerFactory.getLogger(OrderController.class);
 
     @Autowired
     private OrderService orderService;
@@ -52,6 +53,7 @@ public class OrderController {
      * @param userId：用户id
      * @return
      */
+    @RequestLog(module = "订单",operationDesc = "确认订单")
     @ApiOperation(value = "确认订单",notes = "点击去结算，显示确认订单页面")
     @GetMapping("confirmOrder/{userId}")
     public ResponseMessage<OrderVo> confirmOrder(@ApiParam(name = "userId",value = "用户id",required = true) @PathVariable Integer userId) {
@@ -68,6 +70,7 @@ public class OrderController {
      * @param orderVo：订单详情信息
      * @return
      */
+    @RequestLog(module = "订单",operationDesc = "创建订单")
     @ApiOperation(value = "创建订单",notes = "用户点击提交订单后调用,若是订单中的某件商品数量超过库存，会返回【库存不足】的提示")
     @PostMapping("/insert")
     public ResponseMessage insert(@RequestBody @Validated({Insert.class}) OrderVo orderVo) {
@@ -84,6 +87,7 @@ public class OrderController {
      * @param orderNumber：orderNumber订单号
      * @return 返回前端调起微信支付所需的支付参数（5个参数和sign）
      */
+    @RequestLog(module = "订单",operationDesc = "微信支付")
     @ApiOperation(value = "微信支付",notes = "通过订单号进行微信支付，返回前端调起微信支付所需的支付参数（5个参数和sign）")
     @ApiResponses({
             @ApiResponse(code = 200,message = "ResponseMessage => \n 'data:" +
@@ -144,6 +148,7 @@ public class OrderController {
      * 推荐的做法是，当收到通知进行处理时，首先检查对应业务数据的状态，判断该通知是否已经处理过，如果没有处理过再进行处理，如果处理过直接返回结果成功。在对业务数据进行状态检查和处理之前，要采用数据锁进行并发控制，以避免函数重入造成的数据混乱。
      * 特别提醒：商户系统对于支付结果通知的内容一定要做签名验证,并校验返回的订单金额是否与商户侧的订单金额一致，防止数据泄漏导致出现“假通知”，造成资金损失。
      */
+    @RequestLog(module = "订单",operationDesc = "支付回调通知处理")
     @PostMapping("/wxNotify")
     public String parseOrderNotifyResult(@RequestBody String xmlData) {
 
@@ -194,6 +199,7 @@ public class OrderController {
      *                 userId传0可以列出商城相关状态的所有订单
      * @return
      */
+    @RequestLog(module = "订单",operationDesc = "获取用户相关状态的所有订单")
     @ApiOperation(value = "获取用户相关状态的所有订单",
             notes = "status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--申请退款 5--交易关闭 6--所有订单;userId传0可以获取商城相关状态的所有订单")
     @GetMapping("/get/status/{status}/userId/{userId}")
@@ -222,6 +228,7 @@ public class OrderController {
      * @param orderId:订单id
      * @return
      */
+    @RequestLog(module = "订单",operationDesc = "确认收货")
     @ApiOperation(value = "确认收货",notes = "修改订单状态为下一状态，适用于'确认收货'按钮")
     @PutMapping("updateOrderStatus/{orderId}")
     public ResponseMessage updateOrderStatus(@ApiParam(name = "orderId",value = "订单id",required = true)
@@ -271,6 +278,7 @@ public class OrderController {
      * @param orderId：订单id
      * @return
      */
+    @RequestLog(module = "订单",operationDesc = "删除订单")
     @ApiOperation(value = "删除订单",notes = "暂时无用，用户没有删除订单按钮emm")
     @DeleteMapping("/delete/{orderId}")
     public ResponseMessage delete(@ApiParam(name = "orderId",value = "订单id",required = true)
@@ -290,6 +298,7 @@ public class OrderController {
      * @param order:orderId or orderNumber and courierNumber
      * @return
      */
+    @RequestLog(module = "订单",operationDesc = "商家发货")
     @ApiOperation(value = "商家发货",notes = "商家发货设置快递编号，需要订单id或订单编号")
     @PutMapping("/setCourierNumber")
     public ResponseMessage setCourierNumber(@RequestBody @NotNull(message = "传入参数为空") Order order) {
@@ -311,6 +320,7 @@ public class OrderController {
      * @param updateUserAddressVo:用户地址UserAddress、订单编号orderNumber
      * @return
      */
+    @RequestLog(module = "订单",operationDesc = "修改收货地址")
     @ApiOperation(value = "修改收货地址",notes = "待付款、待发货状态适用")
     @PutMapping("/updateAddress")
     public ResponseMessage updateAddress(@RequestBody @Validated UpdateUserAddressVo updateUserAddressVo) {
@@ -334,6 +344,7 @@ public class OrderController {
      * @param orderId：订单id
      * @return
      */
+    @RequestLog(module = "订单",operationDesc = "取消订单")
     @ApiOperation(value = "取消订单",notes = "在未支付的情况下用户可以取消订单")
     @PutMapping("/cancelOrder/{orderId}")
     public ResponseMessage cancelOrder(@ApiParam(name = "orderId",value = "订单id",required = true)

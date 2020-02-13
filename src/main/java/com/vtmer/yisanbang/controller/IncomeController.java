@@ -1,6 +1,7 @@
 package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
+import com.vtmer.yisanbang.common.annotation.RequestLog;
 import com.vtmer.yisanbang.domain.Income;
 import com.vtmer.yisanbang.service.IncomeService;
 import com.vtmer.yisanbang.vo.IncomeVo;
@@ -24,6 +25,7 @@ public class IncomeController {
      * 获取所有的收益记录
      * @return
      */
+    @RequestLog(module = "收益信息",operationDesc = "获取所有(每天)的收益记录")
     @ApiOperation(value = "获取所有(每天)的收益记录",notes = "其中包括总收益和总销售量")
     @GetMapping("/getAll")
     public ResponseMessage<IncomeVo> getAll() {
@@ -35,6 +37,7 @@ public class IncomeController {
         }
     }
 
+    @RequestLog(module = "收益信息",operationDesc = "获取某日的收益信息")
     @ApiOperation(value = "获取某日的收益信息",notes = "传某个日期的时间戳")
     @GetMapping("/getByTime/{timestamp}")
     public ResponseMessage<Income> getByTime(@ApiParam(value = "时间戳",name = "timestamp",example = "123456789",type = "long")

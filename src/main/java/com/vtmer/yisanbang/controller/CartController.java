@@ -1,6 +1,7 @@
 package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
+import com.vtmer.yisanbang.common.annotation.RequestLog;
 import com.vtmer.yisanbang.common.validGroup.Insert;
 import com.vtmer.yisanbang.common.validGroup.Update;
 import com.vtmer.yisanbang.dto.CartGoodsDto;
@@ -34,6 +35,7 @@ public class CartController {
      * 获取用户购物车商品列表接口
      * @return
      */
+    @RequestLog(module = "购物车",operationDesc = "获取用户购物车商品列表")
     @ApiOperation(value = "获取用户的购物车商品列表")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token",name = "accessToken",paramType = "header",required = true)
@@ -53,6 +55,7 @@ public class CartController {
      * @param cartGoodsDtoList：添加进购物车商品列表
      * @return
      */
+    @RequestLog(module = "购物车",operationDesc = "添加商品进入购物车")
     @ApiOperation(value = "添加商品进入购物车")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token",name = "accessToken",paramType = "header",required = true)
@@ -66,10 +69,11 @@ public class CartController {
     }
 
     /**
-     * 更新购物车勾选接口
+     * 更新购物车商品勾选接口
      * @param goodsSkuDto：colorSizeId、isGoods
      * @return
      */
+    @RequestLog(module = "购物车",operationDesc = "更新购物车商品勾选")
     @ApiOperation(value = "更新购物车勾选",notes = "每次用户(取消)勾选请求该接口")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token",name = "accessToken",paramType = "header",required = true)
@@ -92,6 +96,7 @@ public class CartController {
      * @param cartGoodsDto:colorSizeId、isGoods、amount
      * @return
      */
+    @RequestLog(module = "购物车",operationDesc = "购物车商品增加1或删减1")
     @ApiOperation(value = "购物车商品增加1或删减1",notes = "用于购物车中+ -按钮，+ amount传1，- amount传-1")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token",name = "accessToken",paramType = "header",required = true)
@@ -113,6 +118,7 @@ public class CartController {
      * @param cartGoodsDto：colorSizeId、isGoods、amount
      * @return
      */
+    @RequestLog(module = "购物车",operationDesc = "购物车修改商品数量")
     @ApiOperation(value = "直接修改购物车某件商品的数量",notes = "amount传修改数量")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token",name = "accessToken",paramType = "header",required = true)
@@ -134,6 +140,7 @@ public class CartController {
      * @param goodsSkuDtoList:isGoods、sizeId
      * @return
      */
+    @RequestLog(module = "购物车",operationDesc = "批量删除购物车商品")
     @ApiOperation(value = "批量删除购物车商品",notes = "在goodsDtoList中传isGoods、sizeId集合，即欲删除的购物车商品集合")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token",name = "accessToken",paramType = "header",required = true)

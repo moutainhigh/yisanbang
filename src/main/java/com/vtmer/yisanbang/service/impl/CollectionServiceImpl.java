@@ -3,11 +3,11 @@ package com.vtmer.yisanbang.service.impl;
 import com.vtmer.yisanbang.domain.Collection;
 import com.vtmer.yisanbang.domain.Goods;
 import com.vtmer.yisanbang.domain.Suit;
-import com.vtmer.yisanbang.vo.CollectionVo;
 import com.vtmer.yisanbang.mapper.CollectionMapper;
 import com.vtmer.yisanbang.mapper.GoodsMapper;
 import com.vtmer.yisanbang.mapper.SuitMapper;
 import com.vtmer.yisanbang.service.CollectionService;
+import com.vtmer.yisanbang.vo.CollectionVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -76,6 +76,7 @@ public class CollectionServiceImpl implements CollectionService {
                 // 如果是普通商品
                 if (isGoods) {
                     Goods goods = goodsMapper.selectByPrimaryKey(goodsId);
+                    System.out.println(goods);
                     collectionVo.setName(goods.getName());
                     collectionVo.setPicture(goods.getPicture());
                     collectionVo.setPrice(goods.getPrice());
