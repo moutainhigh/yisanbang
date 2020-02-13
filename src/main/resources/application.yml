@@ -47,8 +47,8 @@ spring:
     port: 6379
   servlet:
     multipart:
-      # 最大文件上传限制
-      max-file-size: 20MB
+      max-file-size: 50MB
+        max-request-size: 200MB
   quartz:
     #相关属性配置
     properties:
