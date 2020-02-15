@@ -39,7 +39,7 @@ public class SortServiceImpl implements SortService {
 
     @Override
     public List<SuitSortWithChildrenSort> listAllSuitSortWithChildren() {
-        return null;
+        return sortMapper.selectAllSuitSortWithChildren();
     }
 
     @Override
