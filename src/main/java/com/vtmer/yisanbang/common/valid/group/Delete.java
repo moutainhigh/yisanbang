@@ -1,4 +1,4 @@
-package com.vtmer.yisanbang.common.validGroup;
+package com.vtmer.yisanbang.common.valid.group;
 
 import javax.validation.groups.Default;
 
