@@ -26,5 +26,5 @@ public class InsertBusinessAddressDTO {
     private String contactName;
 
     @ApiModelProperty(readOnly = true,example = "true",value = "是否是默认地址")
-    private Boolean isDefault;
+    private Boolean whetherDefault;
 }

@@ -6,7 +6,7 @@
     <result column="address_name" jdbcType="VARCHAR" property="addressName" />
     <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
     <result column="contact_name" jdbcType="VARCHAR" property="contactName" />
-    <result column="is_default" jdbcType="BIT" property="isDefault" />
+    <result column="is_default" jdbcType="BIT" property="whetherDefault" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
@@ -18,7 +18,7 @@
     insert into business_address (address_name, phone_number,
       contact_name, is_default)
     values (#{addressName,jdbcType=VARCHAR}, #{phoneNumber,jdbcType=VARCHAR},
-      #{contactName,jdbcType=VARCHAR}, #{isDefault,jdbcType=BIT})
+      #{contactName,jdbcType=VARCHAR}, #{whetherDefault,jdbcType=BIT})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.vtmer.yisanbang.domain.BusinessAddress">
     update business_address

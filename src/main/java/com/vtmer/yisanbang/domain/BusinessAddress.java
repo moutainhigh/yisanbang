@@ -1,9 +1,11 @@
 package com.vtmer.yisanbang.domain;
 
 
+import lombok.Data;
+
 import java.util.Date;
 
-
+@Data
 public class BusinessAddress {
 
     private Integer id;
@@ -14,65 +16,10 @@ public class BusinessAddress {
 
     private String contactName;
 
-    private Boolean isDefault;
+    private Boolean whetherDefault;
 
     private Date createTime;
 
     private Date updateTime;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getAddressName() {
-        return addressName;
-    }
-
-    public void setAddressName(String addressName) {
-        this.addressName = addressName == null ? null : addressName.trim();
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber == null ? null : phoneNumber.trim();
-    }
-
-    public String getContactName() {
-        return contactName;
-    }
-
-    public void setContactName(String contactName) {
-        this.contactName = contactName == null ? null : contactName.trim();
-    }
-
-    public Boolean getIsDefault() {
-        return isDefault;
-    }
-
-    public void setIsDefault(Boolean isDefault) {
-        this.isDefault = isDefault;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
 }
