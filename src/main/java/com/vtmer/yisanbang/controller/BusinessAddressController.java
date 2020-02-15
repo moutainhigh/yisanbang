@@ -2,11 +2,11 @@ package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.common.annotation.RequestLog;
-import com.vtmer.yisanbang.common.exception.apiException.ApiException;
-import com.vtmer.yisanbang.common.exception.apiException.businessaddress.ApiDefaultAddressYetException;
-import com.vtmer.yisanbang.common.exception.apiException.businessaddress.ApiNotFindBusinessAddressException;
-import com.vtmer.yisanbang.common.exception.serviceException.businessaddress.DefaultAddressYetException;
-import com.vtmer.yisanbang.common.exception.serviceException.businessaddress.NotFindBusinessAddressException;
+import com.vtmer.yisanbang.common.exception.api.ApiException;
+import com.vtmer.yisanbang.common.exception.api.businessaddress.ApiDefaultAddressYetException;
+import com.vtmer.yisanbang.common.exception.api.businessaddress.ApiNotFindBusinessAddressException;
+import com.vtmer.yisanbang.common.exception.service.businessaddress.DefaultAddressYetException;
+import com.vtmer.yisanbang.common.exception.service.businessaddress.NotFindBusinessAddressException;
 import com.vtmer.yisanbang.domain.BusinessAddress;
 import com.vtmer.yisanbang.dto.insert.InsertBusinessAddressDTO;
 import com.vtmer.yisanbang.dto.update.UpdateBusinessAddressDTO;

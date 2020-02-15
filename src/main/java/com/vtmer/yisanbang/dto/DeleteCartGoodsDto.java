@@ -18,7 +18,7 @@ public class DeleteCartGoodsDto {
 
     @Valid
     @ApiModelProperty("商品列表")
-    private List<GoodsSkuDto> goodsDtoList;
+    private List<GoodsSkuDTO> goodsDtoList;
 
     public DeleteCartGoodsDto getDeleteCartGoodsDto() {
         return this;
@@ -32,11 +32,11 @@ public class DeleteCartGoodsDto {
         this.userId = userId;
     }
 
-    public List<GoodsSkuDto> getGoodsDtoList() {
+    public List<GoodsSkuDTO> getGoodsDtoList() {
         return goodsDtoList;
     }
 
-    public void setGoodsDtoList(List<GoodsSkuDto> goodsDtoList) {
+    public void setGoodsDtoList(List<GoodsSkuDTO> goodsDtoList) {
         this.goodsDtoList = goodsDtoList;
     }
 

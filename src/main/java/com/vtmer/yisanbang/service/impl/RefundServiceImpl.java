@@ -86,12 +86,12 @@ public class RefundServiceImpl implements RefundService {
         // 如果是已收货订单，部分部分退款；此时的退款金额不需要设置，前端传递
         refundMapper.insert(refund);
         // 插入退款商品数据
-        List<GoodsSkuDto> refundGoodsList = refundDto.getRefundGoodsList();
+        List<GoodsSkuDTO> refundGoodsList = refundDto.getRefundGoodsList();
         if (refundGoodsList != null && refundGoodsList.size()!=0) {
-            for (GoodsSkuDto goodsSkuDto : refundGoodsList) {
+            for (GoodsSkuDTO goodsSkuDto : refundGoodsList) {
                 RefundGoods refundGoods = new RefundGoods();
                 refundGoods.setRefundId(refund.getId());
-                refundGoods.setIsGoods(goodsSkuDto.getIsGoods());
+                refundGoods.setIsGoods(goodsSkuDto.getWhetherGoods());
                 refundGoods.setSizeId(goodsSkuDto.getColorSizeId());
                 refundGoodsMapper.insert(refundGoods);
             }
@@ -154,13 +154,13 @@ public class RefundServiceImpl implements RefundService {
             //refundVo.setRefundGoodsList(cartVo.getCartGoodsList());
 
         } else { // 如果是部分退
-            List<CartGoodsDto> refundGoodsList1 = new ArrayList<>();
+            List<CartGoodsDTO> refundGoodsList1 = new ArrayList<>();
             // 查询退款订单的商品详情
             List<OrderGoods> orderGoodsList = orderGoodsMapper.selectByOrderId(refund.getOrderId());
             // 查询退款商品详情
             List<RefundGoods> refundGoodsList = refundGoodsMapper.selectByRefundId(refund.getId());
             for (RefundGoods refundGoods : refundGoodsList) {
-                CartGoodsDto cartGoodsDto = new CartGoodsDto();
+                CartGoodsDTO cartGoodsDto = new CartGoodsDTO();
                 Integer sizeId = refundGoods.getSizeId();
                 Boolean isGoods = refundGoods.getIsGoods();
                 for (OrderGoods orderGoods : orderGoodsList) {

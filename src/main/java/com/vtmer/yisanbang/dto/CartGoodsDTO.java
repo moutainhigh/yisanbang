@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 
 @ApiModel
 @Data
-public class CartGoodsDto {
+public class CartGoodsDTO {
 
     @ApiModelProperty(value = "商品id",example = "2",readOnly = true)
     private Integer id;
@@ -26,7 +26,7 @@ public class CartGoodsDto {
 
     @NotNull(groups = {Insert.class,Update.class})
     @ApiModelProperty(value = "是否是普通商品",notes = "1代表是，0代表否",example = "false",required = true)
-    private Boolean isGoods;
+    private Boolean whetherGoods;
 
     @NotNull(groups = {Insert.class,Update.class},message = "amount is null")
     @Min(value = -1,groups = {Update.class},message = "修改最小值只能为-1")
@@ -39,7 +39,7 @@ public class CartGoodsDto {
     private long updateTime;
 
     @ApiModelProperty(readOnly = true,value = "是否勾选",example = "true")
-    private Boolean isChosen = true;
+    private Boolean whetherChosen = true;
 
     @ApiModelProperty(readOnly = true,value = "商品标题",example = "经典两粒扣男式西服套装")
     private String title;
@@ -62,13 +62,13 @@ public class CartGoodsDto {
     @ApiModelProperty(name ="totalPrice",value = "单项商品总价",readOnly = true,example = "100")
     private double totalPrice;
 
-    public CartGoodsDto() {
+    public CartGoodsDTO() {
 
     }
 
-    public CartGoodsDto(Integer colorSizeId, Boolean isGoods, Integer cartId) {
+    public CartGoodsDTO(Integer colorSizeId, Boolean whetherGoods, Integer cartId) {
         this.colorSizeId = colorSizeId;
-        this.isGoods = isGoods;
+        this.whetherGoods = whetherGoods;
     }
 
 

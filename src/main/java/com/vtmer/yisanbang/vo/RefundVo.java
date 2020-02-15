@@ -1,7 +1,7 @@
 package com.vtmer.yisanbang.vo;
 
 import com.vtmer.yisanbang.domain.Refund;
-import com.vtmer.yisanbang.dto.CartGoodsDto;
+import com.vtmer.yisanbang.dto.CartGoodsDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -23,6 +23,6 @@ public class RefundVo {
     // 退款商品列表
     @Valid
     @ApiModelProperty(value = "退款商品列表")
-    private List<CartGoodsDto> RefundGoodsList;
+    private List<CartGoodsDTO> RefundGoodsList;
 
 }

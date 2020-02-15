@@ -1,6 +1,6 @@
 package com.vtmer.yisanbang.service;
 
-import com.vtmer.yisanbang.dto.CartGoodsDto;
+import com.vtmer.yisanbang.dto.CartGoodsDTO;
 import com.vtmer.yisanbang.dto.ColorSizeDto;
 
 import java.util.List;
@@ -41,5 +41,5 @@ public interface ColorSizeService {
      * @param cartGoodsDto:colorSizeId
      * @return
      */
-    CartGoodsDto setSkuById(CartGoodsDto cartGoodsDto);
+    CartGoodsDTO setSkuById(CartGoodsDTO cartGoodsDto);
 }

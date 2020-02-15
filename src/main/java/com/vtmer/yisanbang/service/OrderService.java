@@ -1,7 +1,7 @@
 package com.vtmer.yisanbang.service;
 
 import com.vtmer.yisanbang.domain.Order;
-import com.vtmer.yisanbang.dto.CartGoodsDto;
+import com.vtmer.yisanbang.dto.CartGoodsDTO;
 import com.vtmer.yisanbang.vo.OrderVo;
 
 import java.util.List;
@@ -27,7 +27,7 @@ public interface OrderService {
 
     int setCourierNumber(Order order);
 
-    void setCartGoodsDto(CartGoodsDto cartGoodsDto, Integer sizeId, Boolean isGoods);
+    void setCartGoodsDto(CartGoodsDTO cartGoodsDto, Integer sizeId, Boolean isGoods);
 
     int updateAddress(OrderVo orderVo);
 

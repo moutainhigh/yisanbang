@@ -12,7 +12,7 @@ import com.vtmer.yisanbang.common.annotation.RequestLog;
 import com.vtmer.yisanbang.domain.Refund;
 import com.vtmer.yisanbang.domain.RefundExpress;
 import com.vtmer.yisanbang.dto.AgreeRefundDto;
-import com.vtmer.yisanbang.dto.GoodsSkuDto;
+import com.vtmer.yisanbang.dto.GoodsSkuDTO;
 import com.vtmer.yisanbang.dto.RefundDto;
 import com.vtmer.yisanbang.service.OrderService;
 import com.vtmer.yisanbang.service.RefundService;
@@ -360,7 +360,7 @@ public class RefundController {
     @PostMapping("/apply")
     public ResponseMessage apply(@RequestBody @Validated RefundDto refundDto) {
         Refund refund = refundDto.getRefund();
-        List<GoodsSkuDto> refundGoodsList = refundDto.getRefundGoodsList();
+        List<GoodsSkuDTO> refundGoodsList = refundDto.getRefundGoodsList();
         // 退款商品不为空
         if (refundGoodsList!=null && refundGoodsList.size()!=0) {
             // 设置为已收货类退款订单

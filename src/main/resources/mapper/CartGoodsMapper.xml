@@ -22,7 +22,7 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
-  <resultMap id="cartGoodsList" type="com.vtmer.yisanbang.dto.CartGoodsDto">
+  <resultMap id="cartGoodsList" type="com.vtmer.yisanbang.dto.CartGoodsDTO">
     <result column="id" jdbcType="INTEGER" property="id"/>
     <result column="color_size_id" jdbcType="INTEGER" property="colorSizeId" />
     <result column="amount" jdbcType="INTEGER" property="amount" />
@@ -35,7 +35,7 @@
     <result column="size" jdbcType="VARCHAR" property="size" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
-  <resultMap id="cartGoodsList1" type="com.vtmer.yisanbang.dto.CartGoodsDto">
+  <resultMap id="cartGoodsList1" type="com.vtmer.yisanbang.dto.CartGoodsDTO">
     <result column="id" jdbcType="INTEGER" property="id"/>
     <result column="color_size_id" jdbcType="INTEGER" property="colorSizeId" />
     <result column="amount" jdbcType="INTEGER" property="amount" />

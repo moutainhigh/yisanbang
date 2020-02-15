@@ -1,7 +1,7 @@
 package com.vtmer.yisanbang.mapper;
 
 import com.vtmer.yisanbang.domain.CartGoods;
-import com.vtmer.yisanbang.dto.CartGoodsDto;
+import com.vtmer.yisanbang.dto.CartGoodsDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -23,24 +23,24 @@ public interface CartGoodsMapper {
     int updateByPrimaryKey(CartGoods record);
 
     // 根据购物车id查询购物车中套装散件信息
-    List<CartGoodsDto> selectCartGoodsByCartId(Integer cartId);
+    List<CartGoodsDTO> selectCartGoodsByCartId(Integer cartId);
 
     // 根据购物车id查询购物车中普通商品信息
-    List<CartGoodsDto> selectCartGoodsByCartId1(Integer cartId);
+    List<CartGoodsDTO> selectCartGoodsByCartId1(Integer cartId);
 
-    boolean checkGoodsExist(CartGoodsDto cartGoodsDto);
+    boolean checkGoodsExist(CartGoodsDTO cartGoodsDto);
 
-    boolean addOrSubtractAmount(CartGoodsDto cartGoodsDto);
+    boolean addOrSubtractAmount(CartGoodsDTO cartGoodsDto);
 
-    boolean insertCartGoods(CartGoodsDto cartGoodsDto);
+    boolean insertCartGoods(CartGoodsDTO cartGoodsDto);
 
-    boolean updateAmount(CartGoodsDto cartGoodsDto);
+    boolean updateAmount(CartGoodsDTO cartGoodsDto);
 
-    Integer selectChosen(CartGoodsDto cartGoodsDto);
+    Integer selectChosen(CartGoodsDTO cartGoodsDto);
 
-    Boolean updateChosen(@Param("addGoodsDto") CartGoodsDto cartGoodsDto, @Param("isChosen") Integer isChosen);
+    Boolean updateChosen(@Param("addGoodsDto") CartGoodsDTO cartGoodsDto, @Param("isChosen") Integer isChosen);
 
-    Boolean deleteCartGoods(CartGoodsDto cartGoodsDto);
+    Boolean deleteCartGoods(CartGoodsDTO cartGoodsDto);
 
     void deleteCartGoodsByIsChosen(Integer cartId);
 

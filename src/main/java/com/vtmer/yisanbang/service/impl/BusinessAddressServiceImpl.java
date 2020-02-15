@@ -1,7 +1,7 @@
 package com.vtmer.yisanbang.service.impl;
 
-import com.vtmer.yisanbang.common.exception.serviceException.businessaddress.DefaultAddressYetException;
-import com.vtmer.yisanbang.common.exception.serviceException.businessaddress.NotFindBusinessAddressException;
+import com.vtmer.yisanbang.common.exception.service.businessaddress.DefaultAddressYetException;
+import com.vtmer.yisanbang.common.exception.service.businessaddress.NotFindBusinessAddressException;
 import com.vtmer.yisanbang.domain.BusinessAddress;
 import com.vtmer.yisanbang.mapper.BusinessAddressMapper;
 import com.vtmer.yisanbang.service.BusinessAddressService;

@@ -1,4 +1,4 @@
-package com.vtmer.yisanbang.common.exception.serviceException.businessaddress;
+package com.vtmer.yisanbang.common.exception.service.businessaddress;
 
 public class NotFindBusinessAddressException extends RuntimeException {
 

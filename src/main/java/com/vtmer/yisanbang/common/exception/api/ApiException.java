@@ -1,4 +1,4 @@
-package com.vtmer.yisanbang.common.exception.apiException;
+package com.vtmer.yisanbang.common.exception.api;
 
 public class ApiException extends RuntimeException {
     protected Long errorCode;

@@ -3,7 +3,7 @@ package com.vtmer.yisanbang.service.impl;
 import com.vtmer.yisanbang.common.OrderNumberUtil;
 import com.vtmer.yisanbang.common.TokenInterceptor;
 import com.vtmer.yisanbang.domain.*;
-import com.vtmer.yisanbang.dto.CartGoodsDto;
+import com.vtmer.yisanbang.dto.CartGoodsDTO;
 import com.vtmer.yisanbang.mapper.*;
 import com.vtmer.yisanbang.service.CartService;
 import com.vtmer.yisanbang.service.OrderService;
@@ -98,9 +98,9 @@ public class OrderServiceImpl implements OrderService {
         } else {  // 不包邮
             orderVo.setPostage(defaultPostage);
         }
-        List<CartGoodsDto> cartGoodsList = cartVo.getCartGoodsList();
+        List<CartGoodsDTO> cartGoodsList = cartVo.getCartGoodsList();
         // IDEA推荐方式
-        cartGoodsList.removeIf(cartGoodsDto -> cartGoodsDto.getIsChosen() == Boolean.FALSE);
+        cartGoodsList.removeIf(cartGoodsDto -> cartGoodsDto.getWhetherChosen() == Boolean.FALSE);
         /* 使用迭代器删除集合中的元素
         Iterator<CartGoodsDto> iterator = cartGoodsList.iterator();
         while (iterator.hasNext()) {
@@ -150,7 +150,7 @@ public class OrderServiceImpl implements OrderService {
         // 用户购物车
         CartVo cartVo = orderVo.getOrderGoodsList();
         // 购物车商品列表
-        List<CartGoodsDto> cartGoodsList = cartVo.getCartGoodsList();
+        List<CartGoodsDTO> cartGoodsList = cartVo.getCartGoodsList();
 
         // 生成order
         Order order = new Order();
@@ -166,10 +166,10 @@ public class OrderServiceImpl implements OrderService {
         }
         orderMapper.insert(order);
         logger.info("创建订单[{}]，订单状态[未支付]---用户openid[{}]",orderNumber,openId);
-        for (CartGoodsDto cartGoodsDto : cartGoodsList) {
+        for (CartGoodsDTO cartGoodsDto : cartGoodsList) {
             // 生成orderGoods
             OrderGoods orderGoods = new OrderGoods();
-            Boolean isGoods = cartGoodsDto.getIsGoods();
+            Boolean isGoods = cartGoodsDto.getWhetherGoods();
             Integer amount = cartGoodsDto.getAmount();
             Integer colorSizeId = cartGoodsDto.getColorSizeId();
             orderGoods.setOrderId(order.getId());
@@ -343,7 +343,7 @@ public class OrderServiceImpl implements OrderService {
         CartVo cartVo = new CartVo();
         OrderVo orderVo = new OrderVo();
         UserAddress userAddress = new UserAddress();
-        List<CartGoodsDto> cartGoodsList = new ArrayList<>();
+        List<CartGoodsDTO> cartGoodsList = new ArrayList<>();
 
         // 用户地址封装
         userAddress.setUserId(order.getUserId());
@@ -371,7 +371,7 @@ public class OrderServiceImpl implements OrderService {
         List<OrderGoods> orderGoodsList = orderGoodsMapper.selectByOrderId(order.getId());
 
         for (OrderGoods orderGoods : orderGoodsList) {
-            CartGoodsDto cartGoodsDto = new CartGoodsDto();
+            CartGoodsDTO cartGoodsDto = new CartGoodsDTO();
             // 商品单价
             double price = orderGoods.getTotalPrice()/orderGoods.getAmount();
 
@@ -392,9 +392,9 @@ public class OrderServiceImpl implements OrderService {
         return orderVo;
     }
 
-    public void setCartGoodsDto(CartGoodsDto cartGoodsDto, Integer sizeId, Boolean isGoods) {
+    public void setCartGoodsDto(CartGoodsDTO cartGoodsDto, Integer sizeId, Boolean isGoods) {
         cartGoodsDto.setColorSizeId(sizeId);
-        cartGoodsDto.setIsGoods(isGoods);
+        cartGoodsDto.setWhetherGoods(isGoods);
         // 如果是普通商品
         if (isGoods == Boolean.TRUE) {
             ColorSize colorSize = colorSizeMapper.selectByPrimaryKey(sizeId);

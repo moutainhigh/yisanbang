@@ -1,6 +1,6 @@
 package com.vtmer.yisanbang.service.impl;
 
-import com.vtmer.yisanbang.dto.CartGoodsDto;
+import com.vtmer.yisanbang.dto.CartGoodsDTO;
 import com.vtmer.yisanbang.dto.PartSizeDto;
 import com.vtmer.yisanbang.dto.SuitDto;
 import com.vtmer.yisanbang.mapper.PartSizeMapper;
@@ -20,7 +20,7 @@ public class PartSizeServiceImpl implements PartSizeService {
     @Autowired
     private SuitMapper suitMapper;
 
-    public CartGoodsDto setSkuById(CartGoodsDto cartGoodsDto) {
+    public CartGoodsDTO setSkuById(CartGoodsDTO cartGoodsDto) {
         PartSizeDto suitSku = partSizeMapper.selectDtoByPrimaryKey(cartGoodsDto.getColorSizeId());
         // 套装尺寸
         cartGoodsDto.setSize(suitSku.getSize());

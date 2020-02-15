@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @ApiModel
-public class GoodsSkuDto {
+public class GoodsSkuDTO {
 
     @NotNull(message = "colorSizeId is null")
     @ApiModelProperty(value = "颜色尺寸id",example = "1",required = true)
@@ -16,5 +16,7 @@ public class GoodsSkuDto {
 
     @NotNull(message = "isGoods is null")
     @ApiModelProperty(value = "是否是普通商品",example = "true",required = true)
-    private Boolean isGoods;
+    private Boolean whetherGoods;
+
+
 }

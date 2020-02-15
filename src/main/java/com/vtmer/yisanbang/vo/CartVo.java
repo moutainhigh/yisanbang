@@ -1,6 +1,6 @@
 package com.vtmer.yisanbang.vo;
 
-import com.vtmer.yisanbang.dto.CartGoodsDto;
+import com.vtmer.yisanbang.dto.CartGoodsDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -18,6 +18,6 @@ public class CartVo {
     private double beforeTotalPrice;
 
     @ApiModelProperty(value = "商品列表",name = "cartGoodsList",required = true)
-    private List<CartGoodsDto> cartGoodsList;
+    private List<CartGoodsDTO> cartGoodsList;
 
 }

@@ -1,7 +1,7 @@
 package com.vtmer.yisanbang.service;
 
-import com.vtmer.yisanbang.dto.CartGoodsDto;
-import com.vtmer.yisanbang.dto.GoodsSkuDto;
+import com.vtmer.yisanbang.dto.CartGoodsDTO;
+import com.vtmer.yisanbang.dto.GoodsSkuDTO;
 import com.vtmer.yisanbang.vo.CartVo;
 
 import java.util.List;
@@ -11,18 +11,18 @@ public interface CartService {
 
     CartVo selectCartVo();
 
-    void addCartGoods(List<CartGoodsDto> cartGoodsDtoList);
+    void addCartGoods(List<CartGoodsDTO> cartGoodsDTOList);
 
-    boolean updateChosen(GoodsSkuDto goodsSkuDto);
+    void updateChosen(GoodsSkuDTO goodsSkuDto);
 
-    boolean addOrSubtractAmount(CartGoodsDto cartGoodsDto);
+    void addOrSubtractAmount(CartGoodsDTO cartGoodsDto);
 
-    boolean updateAmount(CartGoodsDto cartGoodsDto);
+    void updateAmount(CartGoodsDTO cartGoodsDto);
 
-    Boolean deleteCartGoods(List<GoodsSkuDto> goodsSkuDtoList);
+    void deleteCartGoods(List<GoodsSkuDTO> goodsSkuDTOList);
 
     // 计算购物车总价并更新
-    Map<String,Double> calculateTotalPrice(List<CartGoodsDto> cartGoodsList);
+    Map<String,Double> calculateTotalPrice(List<CartGoodsDTO> cartGoodsList);
 
     // 根据用户id删除购物车勾选项
     boolean deleteCartGoodsByIsChosen();

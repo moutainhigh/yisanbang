@@ -1,6 +1,6 @@
 package com.vtmer.yisanbang.service.impl;
 
-import com.vtmer.yisanbang.dto.CartGoodsDto;
+import com.vtmer.yisanbang.dto.CartGoodsDTO;
 import com.vtmer.yisanbang.dto.ColorSizeDto;
 import com.vtmer.yisanbang.dto.GoodsDto;
 import com.vtmer.yisanbang.mapper.ColorSizeMapper;
@@ -119,7 +119,7 @@ public class ColorSizeServiceImpl implements ColorSizeService {
         return null;
     }
 
-    public CartGoodsDto setSkuById(CartGoodsDto cartGoodsDto) {
+    public CartGoodsDTO setSkuById(CartGoodsDTO cartGoodsDto) {
         ColorSizeDto goodsSku = colorSizeMapper.selectDtoByPrimaryKey(cartGoodsDto.getColorSizeId());
         // 商品尺寸
         cartGoodsDto.setSize(goodsSku.getSize());

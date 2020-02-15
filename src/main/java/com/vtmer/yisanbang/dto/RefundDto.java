@@ -18,5 +18,5 @@ public class RefundDto {
     // 退款商品列表
     @Valid
     @ApiModelProperty(value = "退款商品sku")
-    private List<GoodsSkuDto> RefundGoodsList;
+    private List<GoodsSkuDTO> RefundGoodsList;
 }

@@ -1,7 +1,7 @@
 package com.vtmer.yisanbang.common.exception;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
-import com.vtmer.yisanbang.common.exception.apiException.ApiException;
+import com.vtmer.yisanbang.common.exception.api.ApiException;
 import com.vtmer.yisanbang.dto.ErrorDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

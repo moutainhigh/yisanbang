@@ -1,3 +1,5 @@
 businessAddress:
-  NotFindBusinessAddressErrorCode: 10001L # 找不到此收货地址
-  DefaultAddressYetErrorCode: 10002L # 已是默认收货地址
+  notFindBusinessAddressErrorCode: 10001L # 找不到此收货地址
+  defaultAddressYetErrorCode: 10002L # 已是默认收货地址
+Cart:
+  cartGoodsNotExistErrorCode: 10001L # 购物车商品不存在

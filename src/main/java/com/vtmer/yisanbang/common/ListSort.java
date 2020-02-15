@@ -1,6 +1,6 @@
 package com.vtmer.yisanbang.common;
 
-import com.vtmer.yisanbang.dto.CartGoodsDto;
+import com.vtmer.yisanbang.dto.CartGoodsDTO;
 
 import java.util.Comparator;
 import java.util.List;
@@ -10,10 +10,10 @@ import java.util.List;
  */
 public class ListSort {
 
-    public static void listTimeSort(List<CartGoodsDto> list) {
-        list.sort(new Comparator<CartGoodsDto>() {
+    public static void listTimeSort(List<CartGoodsDTO> list) {
+        list.sort(new Comparator<CartGoodsDTO>() {
             @Override
-            public int compare(CartGoodsDto o1, CartGoodsDto o2) {
+            public int compare(CartGoodsDTO o1, CartGoodsDTO o2) {
                 try {
                     Long dt1 = o1.getUpdateTime();
                     Long dt2 = o2.getUpdateTime();
