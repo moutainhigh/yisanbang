@@ -49,7 +49,7 @@
     order by show_order asc
   </select>
   <insert id="insertSort" parameterType="com.vtmer.yisanbang.dto.SortDto">
-    insert into sort (name, is_suit, partent_id, level, show_order, is_show)
+    insert into sort (name, is_suit, parent_id, level, show_order, is_show)
     values (#{name}, #{isSuit}, #{parentId}, #{level}, #{showOrder}, #{isShow})
   </insert>
   <select id="selectAllUniformSort" resultMap="BaseResultMap">
