@@ -6,7 +6,7 @@ import com.vtmer.yisanbang.mapper.GoodsDetailMapper;
 import com.vtmer.yisanbang.service.GoodsDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.vtmer.yisanbang.common.Md5Util;
+import com.vtmer.yisanbang.common.util.Md5Util;
 
 import java.io.File;
 import java.util.List;

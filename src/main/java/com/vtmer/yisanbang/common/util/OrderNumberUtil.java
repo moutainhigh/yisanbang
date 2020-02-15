@@ -1,4 +1,4 @@
-package com.vtmer.yisanbang.common;
+package com.vtmer.yisanbang.common.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

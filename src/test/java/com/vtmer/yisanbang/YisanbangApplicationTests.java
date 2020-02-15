@@ -2,7 +2,7 @@ package com.vtmer.yisanbang;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.vtmer.yisanbang.common.JwtUtil;
+import com.vtmer.yisanbang.common.util.JwtUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

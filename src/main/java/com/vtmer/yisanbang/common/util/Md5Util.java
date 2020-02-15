@@ -1,4 +1,4 @@
-package com.vtmer.yisanbang.common;
+package com.vtmer.yisanbang.common.util;
 
 import java.io.*;
 import java.math.BigInteger;

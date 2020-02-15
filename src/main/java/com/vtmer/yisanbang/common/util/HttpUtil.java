@@ -1,4 +1,4 @@
-package com.vtmer.yisanbang.common;
+package com.vtmer.yisanbang.common.util;
 
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;

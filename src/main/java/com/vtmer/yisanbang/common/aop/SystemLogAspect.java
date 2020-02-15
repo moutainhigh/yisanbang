@@ -1,6 +1,6 @@
 package com.vtmer.yisanbang.common.aop;
 
-import com.vtmer.yisanbang.common.JwtUtil;
+import com.vtmer.yisanbang.common.util.JwtUtil;
 import com.vtmer.yisanbang.common.TokenInterceptor;
 import com.vtmer.yisanbang.common.annotation.RequestLog;
 import com.vtmer.yisanbang.domain.User;

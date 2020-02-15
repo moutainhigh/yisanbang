@@ -1,6 +1,6 @@
 package com.vtmer.yisanbang.service.impl;
 
-import com.vtmer.yisanbang.common.Md5Util;
+import com.vtmer.yisanbang.common.util.Md5Util;
 import com.vtmer.yisanbang.dto.SuitDetailDto;
 import com.vtmer.yisanbang.mapper.SuitDetailMapper;
 import com.vtmer.yisanbang.service.SuitDetailService;

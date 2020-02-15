@@ -1,4 +1,4 @@
-package com.vtmer.yisanbang.common;
+package com.vtmer.yisanbang.common.util;
 
 import com.vtmer.yisanbang.dto.CartGoodsDTO;
 

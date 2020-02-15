@@ -1,6 +1,7 @@
 package com.vtmer.yisanbang.common;
 
 import com.alibaba.fastjson.JSONObject;
+import com.vtmer.yisanbang.common.util.JwtUtil;
 import com.vtmer.yisanbang.domain.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,6 +1,6 @@
 package com.vtmer.yisanbang.service.impl;
 
-import com.vtmer.yisanbang.common.EncryptUtils;
+import com.vtmer.yisanbang.common.util.EncryptUtils;
 import com.vtmer.yisanbang.domain.Admin;
 import com.vtmer.yisanbang.mapper.AdminMapper;
 import com.vtmer.yisanbang.mapper.AdminRoleMapper;

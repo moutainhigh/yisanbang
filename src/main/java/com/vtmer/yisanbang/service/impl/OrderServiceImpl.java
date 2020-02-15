@@ -1,6 +1,6 @@
 package com.vtmer.yisanbang.service.impl;
 
-import com.vtmer.yisanbang.common.OrderNumberUtil;
+import com.vtmer.yisanbang.common.util.OrderNumberUtil;
 import com.vtmer.yisanbang.common.TokenInterceptor;
 import com.vtmer.yisanbang.domain.*;
 import com.vtmer.yisanbang.dto.CartGoodsDTO;

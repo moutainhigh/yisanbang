@@ -1,8 +1,8 @@
 package com.vtmer.yisanbang.service.impl;
 
-import com.vtmer.yisanbang.common.HttpUtil;
-import com.vtmer.yisanbang.common.JSONUtil;
-import com.vtmer.yisanbang.common.JwtUtil;
+import com.vtmer.yisanbang.common.util.HttpUtil;
+import com.vtmer.yisanbang.common.util.JSONUtil;
+import com.vtmer.yisanbang.common.util.JwtUtil;
 import com.vtmer.yisanbang.domain.User;
 import com.vtmer.yisanbang.mapper.UserMapper;
 import com.vtmer.yisanbang.service.UserService;
