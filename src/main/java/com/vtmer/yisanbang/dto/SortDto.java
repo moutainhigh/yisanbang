@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public class SortDto {
 
@@ -23,7 +24,7 @@ public class SortDto {
     private Integer level;
 
     @ApiModelProperty(value = "分类显示顺序(最小排序为1)", required = true, example = "1")
-    @NotBlank(message = "分类显示顺序不能为空")
+    @NotNull(message = "分类显示顺序不能为空")
     @Min(value = 1, message = "排序最小为1")
     private Integer showOrder;
 
