@@ -3,6 +3,7 @@ package com.vtmer.yisanbang.dto;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public class CarouselDto {
 
@@ -16,7 +17,7 @@ public class CarouselDto {
     private String url;
 
     @ApiModelProperty(value = "轮播图显示顺序", required = true, example = "1")
-    @NotBlank(message = "轮播图显示顺序不能为空")
+    @NotNull(message = "轮播图显示顺序不能为空")
     private Integer showOrder;
 
     @ApiModelProperty(value = "轮播图是否在首页显示")
