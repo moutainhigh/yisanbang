@@ -24,4 +24,5 @@ public interface CollectionMapper {
     Boolean deleteOne(Collection collection);
 
     List<Collection> selectAllByUserId(Integer userId);
+
 }

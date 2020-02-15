@@ -2,12 +2,23 @@ package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.common.annotation.RequestLog;
+import com.vtmer.yisanbang.common.exception.api.ApiException;
+import com.vtmer.yisanbang.common.exception.api.collection.ApiCollectionExistException;
+import com.vtmer.yisanbang.common.exception.api.collection.ApiCollectionNotFoundException;
+import com.vtmer.yisanbang.common.exception.api.collection.ApiCommodityNotExistException;
+import com.vtmer.yisanbang.common.exception.api.collection.ApiUserIdAndCollectionIdNotMatchException;
+import com.vtmer.yisanbang.common.exception.service.collection.CollectionExistException;
+import com.vtmer.yisanbang.common.exception.service.collection.CollectionNotFoundException;
+import com.vtmer.yisanbang.common.exception.service.collection.CommodityNotExistException;
+import com.vtmer.yisanbang.common.exception.service.collection.UserIdAndCollectionIdNotMatchException;
 import com.vtmer.yisanbang.domain.Collection;
+import com.vtmer.yisanbang.dto.insert.InsertCollectionDTO;
 import com.vtmer.yisanbang.service.CollectionService;
 import com.vtmer.yisanbang.vo.CollectionVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -23,66 +34,70 @@ public class CollectionController {
     private CollectionService collectionService;
 
     /**
-     * @param collection:userId、goodsId、isGoods
+     * @param insertCollectionDTO:goodsId、isGoods
      * @return
      */
-    @RequestLog(module = "收藏夹",operationDesc = "添加商品到收藏夹")
+    @RequestLog(module = "收藏夹", operationDesc = "添加商品到收藏夹")
     @ApiOperation(value = "添加商品到收藏夹")
     @PostMapping("/insert")
-    public ResponseMessage insert(@RequestBody @Validated Collection collection) {
-        Integer res = collectionService.insertOne(collection);
-        if (res == 1) {
-            return ResponseMessage.newSuccessInstance("添加收藏成功");
-        } else if (res == 0) {
-            return ResponseMessage.newSuccessInstance("该商品已经在收藏夹了");
-        } else if (res == -1) {
-            return ResponseMessage.newErrorInstance("添加收藏失败");
+    public ResponseMessage insert(@RequestBody @Validated InsertCollectionDTO insertCollectionDTO) {
+        Collection collection = new Collection();
+        BeanUtils.copyProperties(insertCollectionDTO, collection);
+        try {
+            collectionService.insertOne(collection);
+        } catch (CommodityNotExistException e) {
+            throw new ApiCommodityNotExistException(e.getMessage());
+        } catch (CollectionExistException e) {
+            throw new ApiCollectionExistException(e.getMessage());
+        } catch (Exception e) {
+            throw new ApiException(e);
         }
-        return ResponseMessage.newErrorInstance("未知错误~");
+        return ResponseMessage.newSuccessInstance("添加收藏成功");
     }
 
     /**
      * 删除收藏接口
+     *
      * @param collectionIdList：收藏id list集合
      * @return
      */
-    @RequestLog(module = "收藏夹",operationDesc = "批量删除收藏夹中的商品")
+    @RequestLog(module = "收藏夹", operationDesc = "批量删除收藏夹中的商品")
     @ApiOperation(value = "批量删除收藏商品")
     @DeleteMapping("/delete")
     public ResponseMessage delete(@RequestBody
-                                    @ApiParam(name = "collectionIdList",value = "收藏夹id列表",example = "[1,2,3]")
-                                  List<Integer> collectionIdList) {
-        if(collectionIdList!=null&&collectionIdList.size()!=0) {
-            int res = collectionService.delete(collectionIdList);
-            if (res == 1) {
-                return ResponseMessage.newSuccessInstance(collectionIdList,"删除收藏成功");
-            } else {
-                return ResponseMessage.newErrorInstance("删除收藏出错");
+                                  @ApiParam(name = "collectionIdList", value = "收藏夹id列表", example = "[1,2,3]")
+                                          List<Integer> collectionIdList) {
+        if (collectionIdList != null && collectionIdList.size() != 0) {
+            try {
+                collectionService.delete(collectionIdList);
+            } catch (CollectionNotFoundException e) {
+                throw new ApiCollectionNotFoundException(e.getMessage());
+            } catch (UserIdAndCollectionIdNotMatchException e) {
+                throw new ApiUserIdAndCollectionIdNotMatchException(e.getMessage());
+            } catch (Exception e) {
+                throw new ApiException(e);
             }
+            return ResponseMessage.newSuccessInstance(collectionIdList, "删除收藏成功");
         } else {
-            return ResponseMessage.newErrorInstance("收藏夹id列表为空");
+            return ResponseMessage.newErrorInstance("传入的收藏夹id集合为空");
         }
     }
 
     /**
      * 获取用户收藏列表接口
-     * @param userId：用户id
+     *
+     * @param
      * @return
      */
-    @RequestLog(module = "收藏夹",operationDesc = "获取用户收藏商品列表")
+    @RequestLog(module = "收藏夹", operationDesc = "获取用户收藏商品列表")
     @ApiOperation(value = "获取用户收藏商品列表")
-    @GetMapping("/get/{userId}")
-    public ResponseMessage<List<CollectionVo>> collectionList(@ApiParam(value = "用户id",name = "userId",example = "1",required = true)
-                                              @PathVariable Integer userId) {
-        if (userId!=null && userId>0) {
-            List<CollectionVo> collectionVoList = collectionService.selectAllByUserId(userId);
-            if (collectionVoList == null) {
-                return ResponseMessage.newSuccessInstance("收藏夹为空");
-            } else {
-                return ResponseMessage.newSuccessInstance(collectionVoList,"获取收藏夹列表成功");
-            }
+    @GetMapping("/get")
+    public ResponseMessage<List<CollectionVo>> collectionList() {
+        List<CollectionVo> collectionVoList = collectionService.selectAllByUserId();
+        if (collectionVoList == null) {
+            return ResponseMessage.newSuccessInstance("收藏夹为空");
         } else {
-            return ResponseMessage.newErrorInstance("传入的userId有误");
+            return ResponseMessage.newSuccessInstance(collectionVoList, "获取收藏夹列表成功");
         }
     }
 }

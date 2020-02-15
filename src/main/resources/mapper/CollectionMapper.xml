@@ -16,7 +16,7 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="goods_id" jdbcType="INTEGER" property="goodsId" />
-    <result column="is_goods" jdbcType="TINYINT" property="isGoods" />
+    <result column="is_goods" jdbcType="TINYINT" property="whetherGoods" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>

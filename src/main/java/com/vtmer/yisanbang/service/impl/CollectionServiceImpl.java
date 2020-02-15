@@ -1,5 +1,10 @@
 package com.vtmer.yisanbang.service.impl;
 
+import com.vtmer.yisanbang.common.TokenInterceptor;
+import com.vtmer.yisanbang.common.exception.service.collection.CollectionExistException;
+import com.vtmer.yisanbang.common.exception.service.collection.CollectionNotFoundException;
+import com.vtmer.yisanbang.common.exception.service.collection.CommodityNotExistException;
+import com.vtmer.yisanbang.common.exception.service.collection.UserIdAndCollectionIdNotMatchException;
 import com.vtmer.yisanbang.domain.Collection;
 import com.vtmer.yisanbang.domain.Goods;
 import com.vtmer.yisanbang.domain.Suit;
@@ -30,37 +35,55 @@ public class CollectionServiceImpl implements CollectionService {
         Param goodsId、isGoods
      */
     @Override
-    public int
-
-    delete(List<Integer> collectionIdList) {
+    public void delete(List<Integer> collectionIdList) {
+        Integer userId = TokenInterceptor.getLoginUser().getId();
         for (Integer collectionId : collectionIdList) {
-            int res = collectionMapper.deleteByPrimaryKey(collectionId);
-            if (res == 0) {
-                return 0;
+            Collection collection = collectionMapper.selectByPrimaryKey(collectionId);
+            if (collection == null) {
+                // 收藏夹id不存在
+                throw new CollectionNotFoundException("收藏夹商品不存在，collectionId：" + collectionId);
             }
+            if (!collection.getUserId().equals(userId)) {
+                // 如果userId和收藏夹id不匹对
+                throw new UserIdAndCollectionIdNotMatchException("用户id和收藏夹id不匹配,userId：" + userId + ",collectionId:" + collection.getId());
+            }
+            // 正确逻辑，执行删除操作
+            collectionMapper.deleteByPrimaryKey(collectionId);
         }
-        return 1;
     }
 
-    /*
-        Param goodsId、isGoods
-     */
+
     @Override
-    public Integer insertOne(Collection collection) {
+    public void insertOne(Collection collection) {
+        int userId = TokenInterceptor.getLoginUser().getId();
+        Integer goodsId = collection.getGoodsId();
+        Boolean whetherGoods = collection.getWhetherGoods();
+        Object checkExist;
+        if (whetherGoods) {
+            // 是普通商品
+            checkExist = goodsMapper.selectByPrimaryKey(goodsId);
+        } else {
+            // 是套装
+            checkExist = suitMapper.selectByPrimaryKey(goodsId);
+        }
+        if (checkExist == null) {
+            // 如果商品不存在
+            throw new CommodityNotExistException("用户["+ userId + "]欲收藏的商品不存在--商品id："+goodsId + "，是否是普通商品"+whetherGoods);
+        }
         Boolean checkRes = collectionMapper.checkExist(collection);
         // 如果记录存在
         if (checkRes) {
-            return 0;
+            throw new CollectionExistException("用户["+ userId + "]该商品已在收藏夹--商品id："+ goodsId + "，是否是普通商品"+ whetherGoods);
         } else {
-            int insertRes = collectionMapper.insert(collection);
-            if (insertRes!=0) return 1;
-            else return -1;
+            // 正常执行插入操作
+            collection.setUserId(userId);
+            collectionMapper.insert(collection);
         }
     }
 
     @Override
-    public List<CollectionVo> selectAllByUserId(Integer userId) {
-
+    public List<CollectionVo> selectAllByUserId() {
+        Integer userId = TokenInterceptor.getLoginUser().getId();
         // 查询出goodsId、isGoods 集合
         List<Collection> collectionList = collectionMapper.selectAllByUserId(userId);
 
@@ -69,7 +92,7 @@ public class CollectionServiceImpl implements CollectionService {
             List<CollectionVo> collectionVoList = new ArrayList<>();
             for (Collection collection : collectionList) {
                 int goodsId = collection.getGoodsId();
-                Boolean isGoods = collection.getIsGoods();
+                Boolean isGoods = collection.getWhetherGoods();
                 CollectionVo collectionVo = new CollectionVo();
                 collectionVo.setGoodsId(goodsId);
                 collectionVo.setIsGoods(isGoods);

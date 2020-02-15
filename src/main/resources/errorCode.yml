@@ -1,5 +1,10 @@
 businessAddress:
   notFindBusinessAddressErrorCode: 10001L # 找不到此收货地址
   defaultAddressYetErrorCode: 10002L # 已是默认收货地址
-Cart:
+cart:
   cartGoodsNotExistErrorCode: 10001L # 购物车商品不存在
+collection:
+  collectionExistErrorCode: 10001L # 商品已在收藏夹
+  commodityNotExistErrorCode: 10002L #添加到收藏夹的商品不存在
+  collectionNotFoundErrorCode: 10003L # 收藏夹id不存在
+  userIdAndCollectionIdNotMatchErrorCode: 10004L #用户和收藏夹商品不匹对
