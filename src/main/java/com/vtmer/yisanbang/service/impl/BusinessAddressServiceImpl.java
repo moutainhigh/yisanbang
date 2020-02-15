@@ -27,9 +27,9 @@ public class BusinessAddressServiceImpl implements BusinessAddressService {
         Integer checkEmpty = businessAddressMapper.checkEmpty();
         // 地址表为空则插入的地址为默认地址
         if (checkEmpty == 0) {
-            businessAddress.setIsDefault(true);
+            businessAddress.setWhetherDefault(true);
         } else {
-            businessAddress.setIsDefault(false);
+            businessAddress.setWhetherDefault(false);
         }
         businessAddressMapper.insert(businessAddress);
     }
@@ -48,7 +48,7 @@ public class BusinessAddressServiceImpl implements BusinessAddressService {
     public void updateDefault(Integer id) {
         BusinessAddress businessAddress = businessAddressMapper.selectByPrimaryKey(id);
         if (businessAddress != null) {
-            if (businessAddress.getIsDefault()) { // 如果欲修改的地址已为默认收货地址
+            if (businessAddress.getWhetherDefault()) { // 如果欲修改的地址已为默认收货地址
                 logger.info("商家收货地址[{}]已为为默认收货地址",id);
                 throw new DefaultAddressYetException();
             } else {
@@ -82,7 +82,7 @@ public class BusinessAddressServiceImpl implements BusinessAddressService {
         } else {
             businessAddressMapper.deleteByPrimaryKey(id);
             // 如果删除的是默认收货地址,设置最新修改的收货地址为默认地址
-            if (businessAddress.getIsDefault()) {
+            if (businessAddress.getWhetherDefault()) {
                 Integer businessAddressId = businessAddressMapper.selectLatestId();
                 if (businessAddressId != null) {
                     // 如果还有其他收货地址，设置其为默认收货地址
