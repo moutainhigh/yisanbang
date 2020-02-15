@@ -4,9 +4,9 @@ import com.vtmer.yisanbang.domain.Discount;
 
 public interface DiscountService {
 
-    int insert(Discount discount);
+    void insert(Discount discount);
 
-    int update(Discount discount);
+    void update(Discount discount);
 
     Discount selectDiscount();
 

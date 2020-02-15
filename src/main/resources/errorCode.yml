@@ -5,6 +5,10 @@ cart:
   cartGoodsNotExistErrorCode: 10001L # 购物车商品不存在
 collection:
   collectionExistErrorCode: 10001L # 商品已在收藏夹
-  commodityNotExistErrorCode: 10002L #添加到收藏夹的商品不存在
+  commodityNotExistErrorCode: 10002L # 添加到收藏夹的商品不存在
   collectionNotFoundErrorCode: 10003L # 收藏夹id不存在
-  userIdAndCollectionIdNotMatchErrorCode: 10004L #用户和收藏夹商品不匹对
+  userIdAndCollectionIdNotMatchErrorCode: 10004L # 用户和收藏夹商品不匹对
+discount:
+  discountExistErrorCode: 10001L # 打折优惠信息已设置，不可再插入
+  discountNotFoundErrorCode: 10002L # 打折优惠信息未设置，不可更新或删除
+
