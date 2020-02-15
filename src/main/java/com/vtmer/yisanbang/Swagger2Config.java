@@ -1,5 +1,6 @@
 package com.vtmer.yisanbang;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -21,6 +22,10 @@ import java.util.List;
 @EnableSwagger2
 public class Swagger2Config {
 
+    @Value("${swagger.show}")
+    private boolean swaggerShow;
+
+
     /**实现点：业务系统的token认证机制**/
     private List<Parameter> getTokenPar(){
         ParameterBuilder tokenPar = new ParameterBuilder();
@@ -35,6 +40,7 @@ public class Swagger2Config {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
+                .enable(swaggerShow)
                 .host("119.3.254.171:8089")
                 .apiInfo(getApiInfo())
                 .select()
