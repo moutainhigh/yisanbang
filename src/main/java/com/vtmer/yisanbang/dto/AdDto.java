@@ -3,6 +3,7 @@ package com.vtmer.yisanbang.dto;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public class AdDto {
 
@@ -17,7 +18,7 @@ public class AdDto {
     private String url;
 
     @ApiModelProperty(value = "广告图片在首页的显示顺序", required = true, example = "1")
-    @NotBlank(message = "显示顺序不能为空")
+    @NotNull(message = "显示顺序不能为空")
     private Integer showOrder;
 
     @ApiModelProperty(value = "广告图片是否在首页显示(1: 显示, 0: 不显示)", example = "0")
