@@ -1,8 +1,8 @@
 package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
-import com.vtmer.yisanbang.common.validGroup.Delete;
-import com.vtmer.yisanbang.common.validGroup.Update;
+import com.vtmer.yisanbang.common.valid.group.Delete;
+import com.vtmer.yisanbang.common.valid.group.Update;
 import com.vtmer.yisanbang.dto.ColorSizeDto;
 import com.vtmer.yisanbang.service.ColorSizeService;
 import io.swagger.annotations.Api;

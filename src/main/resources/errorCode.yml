@@ -1,0 +1,3 @@
+businessAddress:
+  NotFindBusinessAddressErrorCode: 10001L # 找不到此收货地址
+  DefaultAddressYetErrorCode: 10002L # 已是默认收货地址

@@ -1,8 +1,7 @@
 package com.vtmer.yisanbang.dto;
 
-import com.vtmer.yisanbang.common.validGroup.Delete;
-import com.vtmer.yisanbang.common.validGroup.Insert;
-import com.vtmer.yisanbang.common.validGroup.Update;
+import com.vtmer.yisanbang.common.valid.group.Delete;
+import com.vtmer.yisanbang.common.valid.group.Update;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 

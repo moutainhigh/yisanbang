@@ -1,7 +1,7 @@
 package com.vtmer.yisanbang.domain;
 
-import com.vtmer.yisanbang.common.validGroup.Insert;
-import com.vtmer.yisanbang.common.validGroup.Update;
+import com.vtmer.yisanbang.common.valid.group.Insert;
+import com.vtmer.yisanbang.common.valid.group.Update;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 

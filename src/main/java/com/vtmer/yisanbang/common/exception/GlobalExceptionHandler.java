@@ -1,6 +1,8 @@
 package com.vtmer.yisanbang.common.exception;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
+import com.vtmer.yisanbang.common.exception.apiException.ApiException;
+import com.vtmer.yisanbang.dto.ErrorDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.bind.BindException;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
 
@@ -23,11 +26,18 @@ public class GlobalExceptionHandler {
      * @ExceptionHandler 注解用来配置需要拦截的异常类型, 也可以是自定义异常
      */
     @ExceptionHandler(Exception.class)
-    public ResponseMessage runtimeExceptionHandler(Exception e) {
-        // 打印异常信息到控制台
-        e.printStackTrace();
-        logger.error("请求出现异常,异常信息为: {}", e.getMessage());
-        return ResponseMessage.newErrorInstance(e.getMessage());
+    public ResponseMessage<ErrorDTO> runtimeExceptionHandler(Exception exception, HttpServletResponse response) {
+        ErrorDTO errorDTO = new ErrorDTO();
+        if(exception instanceof ApiException){//api异常
+            logger.warn("api出现异常,异常信息为: {}", exception.getMessage());
+            ApiException apiException = (ApiException)exception;
+            errorDTO.setErrorCode(apiException.getErrorCode());
+        }else{//未知异常
+            logger.error("请求出现未知异常,异常信息为: {}", exception.getMessage());
+            errorDTO.setErrorCode(0L);
+        }
+        errorDTO.setTip(exception.getMessage());
+        return (ResponseMessage<ErrorDTO>) ResponseMessage.newErrorInstance(errorDTO,response.getStatus());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

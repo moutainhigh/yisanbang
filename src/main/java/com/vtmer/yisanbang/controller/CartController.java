@@ -2,8 +2,8 @@ package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.common.annotation.RequestLog;
-import com.vtmer.yisanbang.common.validGroup.Insert;
-import com.vtmer.yisanbang.common.validGroup.Update;
+import com.vtmer.yisanbang.common.valid.group.Insert;
+import com.vtmer.yisanbang.common.valid.group.Update;
 import com.vtmer.yisanbang.dto.CartGoodsDto;
 import com.vtmer.yisanbang.dto.GoodsSkuDto;
 import com.vtmer.yisanbang.service.CartService;

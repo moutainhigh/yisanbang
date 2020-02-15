@@ -65,6 +65,7 @@ public class AdController {
         } else {
             return ResponseMessage.newErrorInstance("请选择.jpg/.JPG/.jpeg/.JPEG/.png/.PNG图片文件");
         }
+
     }
 
     @ApiOperation("添加广告信息")

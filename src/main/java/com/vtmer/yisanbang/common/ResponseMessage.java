@@ -41,4 +41,8 @@ public class ResponseMessage<T> {
     public static ResponseMessage newErrorInstance(String message) {
         return new ResponseMessage(ResponseMessage.STATUS_ERROR, null, message);
     }
+
+    public static ResponseMessage newErrorInstance(Object data,int status) {
+        return new ResponseMessage(status, data, null);
+    }
 }

@@ -11,7 +11,7 @@ import com.github.binarywang.wxpay.util.SignUtils;
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.common.TokenInterceptor;
 import com.vtmer.yisanbang.common.annotation.RequestLog;
-import com.vtmer.yisanbang.common.validGroup.Insert;
+import com.vtmer.yisanbang.common.valid.group.Insert;
 import com.vtmer.yisanbang.domain.Order;
 import com.vtmer.yisanbang.service.OrderService;
 import com.vtmer.yisanbang.service.UserService;

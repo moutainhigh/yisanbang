@@ -6,15 +6,15 @@ import java.util.List;
 
 public interface BusinessAddressService {
 
-    int insert(BusinessAddress businessAddress);
+    void insert(BusinessAddress businessAddress);
 
-    int update(BusinessAddress businessAddress);
+    void update(BusinessAddress businessAddress);
 
-    int updateDefault(Integer id);
+    void updateDefault(Integer id);
 
     List<BusinessAddress> selectAll();
 
     BusinessAddress getDefault();
 
-    int deleteById(Integer id);
+    void deleteById(Integer id);
 }

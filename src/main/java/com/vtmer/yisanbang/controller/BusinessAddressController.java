@@ -2,13 +2,19 @@ package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.common.annotation.RequestLog;
+import com.vtmer.yisanbang.common.exception.apiException.ApiException;
+import com.vtmer.yisanbang.common.exception.apiException.businessaddress.ApiDefaultAddressYetException;
+import com.vtmer.yisanbang.common.exception.apiException.businessaddress.ApiNotFindBusinessAddressException;
+import com.vtmer.yisanbang.common.exception.serviceException.businessaddress.DefaultAddressYetException;
+import com.vtmer.yisanbang.common.exception.serviceException.businessaddress.NotFindBusinessAddressException;
 import com.vtmer.yisanbang.domain.BusinessAddress;
+import com.vtmer.yisanbang.dto.insert.InsertBusinessAddressDTO;
+import com.vtmer.yisanbang.dto.update.UpdateBusinessAddressDTO;
 import com.vtmer.yisanbang.service.BusinessAddressService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -29,28 +35,27 @@ public class BusinessAddressController {
     @RequestLog(module = "商家收货地址",operationDesc = "添加新的商家收货地址")
     @ApiOperation(value = "添加新的收货地址")
     @PostMapping("/insert")
-    public ResponseMessage insert(@RequestBody @Validated BusinessAddress businessAddress) {
-        int res = businessAddressService.insert(businessAddress);
-        if (res == 1) {
-            return ResponseMessage.newSuccessInstance("添加收货地址成功");
-        } else {
-            return ResponseMessage.newErrorInstance("添加收货地址失败");
-        }
+    public ResponseMessage insert(@RequestBody @Validated InsertBusinessAddressDTO insertBusinessAddressDTO) {
+        BusinessAddress businessAddress = new BusinessAddress();
+        BeanUtils.copyProperties(insertBusinessAddressDTO,businessAddress);
+        businessAddressService.insert(businessAddress);
+        return ResponseMessage.newSuccessInstance("添加收货地址成功");
     }
 
     @RequestLog(module = "商家收货地址",operationDesc = "更新商家收货地址")
     @ApiOperation(value = "更新收货地址")
     @PutMapping("/update")
-    public ResponseMessage update(@RequestBody @Validated BusinessAddress businessAddress) {
-        if (businessAddress.getId() == null) {
-            return ResponseMessage.newErrorInstance("收货地址id为空");
+    public ResponseMessage update(@RequestBody @Validated UpdateBusinessAddressDTO updateBusinessAddressDTO) {
+        BusinessAddress businessAddress = new BusinessAddress();
+        BeanUtils.copyProperties(updateBusinessAddressDTO,businessAddress);
+        try {
+            businessAddressService.update(businessAddress);
+        } catch (NotFindBusinessAddressException e) {
+            throw new ApiNotFindBusinessAddressException("找不到该收货地址");
+        } catch (Exception e) { // 未知错误
+            throw new ApiException(e);
         }
-        int res = businessAddressService.update(businessAddress);
-        if (res == 1) {
-            return ResponseMessage.newSuccessInstance("修改收货地址成功");
-        } else {
-            return ResponseMessage.newErrorInstance("修改收货地址失败");
-        }
+        return ResponseMessage.newSuccessInstance("修改收货地址成功");
     }
 
     @RequestLog(module = "商家收货地址",operationDesc = "更新某一地址为默认收货地址")
@@ -58,14 +63,16 @@ public class BusinessAddressController {
     @PutMapping("/updateDefault/{id}")
     public ResponseMessage updateDefault(@ApiParam(name = "id",value = "商家收货地址信息id",example = "1",type = "int")
                                              @PathVariable Integer id) {
-        int res = businessAddressService.updateDefault(id);
-        if (res == 1) {
-            return ResponseMessage.newSuccessInstance("修改默认收货地址成功");
-        } else if (res == -1){
-            return ResponseMessage.newErrorInstance("收货地址id不存在");
-        } else {
-            return ResponseMessage.newErrorInstance("修改默认收货地址失败");
+        try {
+            businessAddressService.updateDefault(id);
+        } catch (NotFindBusinessAddressException e) {
+            throw new ApiNotFindBusinessAddressException("找不到该收货地址");
+        } catch (DefaultAddressYetException e) {
+            throw new ApiDefaultAddressYetException("该收货地址已经是默认收货地址");
+        } catch (Exception e) { // 未知错误
+            throw new ApiException(e);
         }
+        return ResponseMessage.newSuccessInstance("修改默认收货地址成功");
     }
 
     @RequestLog(module = "商家收货地址",operationDesc = "获取商家的所有收货地址")
@@ -98,14 +105,13 @@ public class BusinessAddressController {
     @DeleteMapping("/delete/{id}")
     public ResponseMessage delete(@ApiParam(name = "id",value = "商家收货地址id",example = "1",type = "int")
                                       @PathVariable Integer id) {
-        logger.info("删除商家收货地址信息,地址id[{}]",id);
-        int res = businessAddressService.deleteById(id);
-        if (res == -1) {
-            return ResponseMessage.newErrorInstance("地址id不存在");
-        } else if (res == 1) {
-            return ResponseMessage.newSuccessInstance("删除收货地址成功");
-        } else {
-            return ResponseMessage.newErrorInstance("删除收货地址失败");
+        try {
+            businessAddressService.deleteById(id);
+        } catch (NotFindBusinessAddressException e) {
+            throw new ApiNotFindBusinessAddressException("找不到该收货地址");
+        } catch (Exception e) { // 未知错误
+            throw new ApiException(e);
         }
+        return ResponseMessage.newSuccessInstance("删除收货地址成功");
     }
 }
