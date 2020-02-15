@@ -11,4 +11,10 @@ collection:
 discount:
   discountExistErrorCode: 10001L # 打折优惠信息已设置，不可再插入
   discountNotFoundErrorCode: 10002L # 打折优惠信息未设置，不可更新或删除
+order:
+  cartEmptyErrorCode: 10001L # 购物车勾选商品为空
+  inventoryNotEnoughErrorCode: 10002L # 下单商品库存不足
+  OrderNotFoundErrorCode: 10003L # 订单未找到
+  OrderAndUserNotMatchErrorCode: 10004L # 订单和用户不匹配
+  OrderStatusNotFitErrorCode: 10005L # 该订单不适合修改对应状态
 

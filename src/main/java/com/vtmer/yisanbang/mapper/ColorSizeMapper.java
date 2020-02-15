@@ -21,7 +21,7 @@ public interface ColorSizeMapper {
 
     int updateByPrimaryKey(ColorSize record);
 
-    void updateInventoryByPrimaryKey(Map<String,Integer> inventoryMap);
+    int updateInventoryByPrimaryKey(Map<String,Integer> inventoryMap);
 
     // Dto
     int insertDto(ColorSizeDto record);

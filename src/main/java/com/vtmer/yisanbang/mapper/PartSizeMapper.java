@@ -21,7 +21,7 @@ public interface PartSizeMapper {
 
     int updateByPrimaryKey(PartSize record);
 
-    void updateInventoryByPrimaryKey(Map<String,Integer> inventoryMap);
+    int updateInventoryByPrimaryKey(Map<String,Integer> inventoryMap);
 
     // Dto
     int insertDto(PartSizeDto record);

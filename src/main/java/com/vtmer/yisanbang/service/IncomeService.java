@@ -3,6 +3,7 @@ package com.vtmer.yisanbang.service;
 import com.vtmer.yisanbang.domain.Income;
 import com.vtmer.yisanbang.vo.IncomeVo;
 
+import java.util.Date;
 import java.util.List;
 
 public interface IncomeService {
@@ -13,5 +14,5 @@ public interface IncomeService {
 
     IncomeVo getAll();
 
-    Income getByTime(Long timestamp);
+    Income getByTime(Date date);
 }

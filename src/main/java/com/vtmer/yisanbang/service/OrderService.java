@@ -1,37 +1,38 @@
 package com.vtmer.yisanbang.service;
 
 import com.vtmer.yisanbang.domain.Order;
-import com.vtmer.yisanbang.dto.CartGoodsDTO;
-import com.vtmer.yisanbang.vo.OrderVo;
+import com.vtmer.yisanbang.dto.CartOrderDTO;
+import com.vtmer.yisanbang.dto.OrderDTO;
+import com.vtmer.yisanbang.dto.OrderGoodsDTO;
 
 import java.util.List;
 import java.util.Map;
 
 public interface OrderService {
 
-    OrderVo confirmCartOrder();
+    OrderDTO confirmCartOrder();
 
-    Map<String,String> createCartOrder(OrderVo orderVo);
+    Map<String,String> createCartOrder(CartOrderDTO cartOrderDTO);
 
-    List<OrderVo> listOrder(Map<String,Integer> orderMap);
+    List<OrderDTO> getOrderList(Map<String,Integer> orderMap);
 
     int updateOrderStatus(String orderNumber);
 
-    int setOrderStatus(Map<String,Integer> orderMap);
+    void setOrderStatus(Map<String,Integer> orderMap);
 
-    int deleteOrder(Integer orderId);
+    void deleteOrder(Integer orderId);
 
-    OrderVo selectOrderVoByOrderNumber(String orderNumber);
+    OrderDTO selectOrderDTOByOrderNumber(String orderNumber);
 
     Order selectOrderByOrderNumber(String orderNumber);
 
-    int setCourierNumber(Order order);
+    void setCourierNumber(Order order);
 
-    void setCartGoodsDto(CartGoodsDTO cartGoodsDto, Integer sizeId, Boolean isGoods);
+    void setOrderGoodsDTO(OrderGoodsDTO orderGoodsDTO, Integer sizeId, Boolean isGoods);
 
-    int updateAddress(OrderVo orderVo);
+    void updateAddress(OrderDTO orderDTO);
 
-    int cancelOrder(Integer orderId);
+    void cancelOrder(String orderNumber);
 
     void updateInventory(String orderNumber,Integer flag);
 

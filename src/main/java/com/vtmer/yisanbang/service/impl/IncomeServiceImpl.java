@@ -7,7 +7,6 @@ import com.vtmer.yisanbang.vo.IncomeVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -48,15 +47,7 @@ public class IncomeServiceImpl implements IncomeService {
     }
 
     @Override
-    public Income getByTime(Long timestamp) {
-        Timestamp ts = new Timestamp(timestamp);
-        Date date = null;
-        try {
-            date = ts;
-            System.out.println(date);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public Income getByTime(Date date) {
         return incomeMapper.getByTime(date);
     }
 }
