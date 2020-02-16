@@ -1,10 +1,14 @@
 package com.vtmer.yisanbang.service.impl;
 
+import com.vtmer.yisanbang.common.TokenInterceptor;
+import com.vtmer.yisanbang.common.exception.service.order.OrderAndUserNotMatchException;
+import com.vtmer.yisanbang.common.exception.service.order.OrderNotFoundException;
+import com.vtmer.yisanbang.common.exception.service.refund.DuplicateApplyRefundException;
+import com.vtmer.yisanbang.common.exception.service.refund.RefundNotFoundException;
+import com.vtmer.yisanbang.common.exception.service.refund.RefundNotMatchUserException;
+import com.vtmer.yisanbang.common.exception.service.refund.RefundStatusNotFitException;
 import com.vtmer.yisanbang.common.util.OrderNumberUtil;
-import com.vtmer.yisanbang.domain.Order;
-import com.vtmer.yisanbang.domain.OrderGoods;
-import com.vtmer.yisanbang.domain.Refund;
-import com.vtmer.yisanbang.domain.RefundGoods;
+import com.vtmer.yisanbang.domain.*;
 import com.vtmer.yisanbang.dto.*;
 import com.vtmer.yisanbang.mapper.OrderGoodsMapper;
 import com.vtmer.yisanbang.mapper.OrderMapper;
@@ -12,9 +16,9 @@ import com.vtmer.yisanbang.mapper.RefundGoodsMapper;
 import com.vtmer.yisanbang.mapper.RefundMapper;
 import com.vtmer.yisanbang.service.OrderService;
 import com.vtmer.yisanbang.service.RefundService;
-import com.vtmer.yisanbang.vo.CartVo;
-import com.vtmer.yisanbang.vo.OrderVo;
 import com.vtmer.yisanbang.vo.RefundVo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +27,8 @@ import java.util.*;
 
 @Service
 public class RefundServiceImpl implements RefundService {
+
+    private final Logger logger = LoggerFactory.getLogger(RefundServiceImpl.class);
 
     @Autowired
     private OrderMapper orderMapper;
@@ -42,31 +48,42 @@ public class RefundServiceImpl implements RefundService {
     /**
      * 申请退款,同时修改订单表状态，因此开启事务
      * 当该订单申请过退款，再次发起申请时，更新该订单退款信息，因此退款信息表中orderId唯一
-     * @param refundDto：orderId,reason,refundGoodsList
+     * @param refundDTO：orderId,reason,refundGoodsList
      * @return
      */
+    @Override
     @Transactional
-    public int applyForRefund(RefundDto refundDto) {
-        Refund refund = refundDto.getRefund();
+    public void applyForRefund(RefundDTO refundDTO) {
+        Integer userId = TokenInterceptor.getLoginUser().getId();
+        Refund refund = refundDTO.getRefund();
         Integer orderId = refund.getOrderId();
         Order order = orderMapper.selectByPrimaryKey(orderId);
         if (order == null) {  // 该订单不存在
-            return -1;
+            throw new OrderNotFoundException();
+        } else if (!order.getUserId().equals(userId)) {
+            throw new OrderAndUserNotMatchException("订单["+order.getOrderNumber()+"]不属于用户["+userId+"]");
         }
-        // 查询退款基础信息
+        // 查询原退款基础信息
         Refund refund1 = refundMapper.selectByOrderId(orderId);
-        HashMap<String, Integer> orderMap = new HashMap<>();
         // 如果该orderId在退款信息表中存在，说明之前申请过退款并被商家拒绝了或是重复申请
         if (refund1 != null) {
             if (refund1.getStatus() == 0) {  // 重复申请
-                return -2;
+                throw new DuplicateApplyRefundException();
             } else if (refund1.getStatus() == 4){ // 之前申请过退款并被商家拒绝了
                 // 删除之前的退款信息，再插入新的退款基础信息
                 refundMapper.deleteByOrderId(orderId);
                 refundGoodsMapper.deleteByRefundId(refund1.getId());
             }
         }
-        Integer userId = order.getUserId();
+        List<GoodsSkuDTO> refundGoodsList = refundDTO.getRefundGoodsList();
+        // 退款商品不为空
+        if (refundGoodsList != null && refundGoodsList.size() != 0) {
+            // 设置为已收货类退款订单
+            refund.setIsReceived(1);
+        } else {
+            // 未传退款商品，说明是未收货，全退
+            refund.setIsReceived(0);
+        }
         refund.setUserId(userId);
         String refundNumber;
         Refund checkRefundNumberExist;
@@ -86,7 +103,6 @@ public class RefundServiceImpl implements RefundService {
         // 如果是已收货订单，部分部分退款；此时的退款金额不需要设置，前端传递
         refundMapper.insert(refund);
         // 插入退款商品数据
-        List<GoodsSkuDTO> refundGoodsList = refundDto.getRefundGoodsList();
         if (refundGoodsList != null && refundGoodsList.size()!=0) {
             for (GoodsSkuDTO goodsSkuDto : refundGoodsList) {
                 RefundGoods refundGoods = new RefundGoods();
@@ -96,7 +112,6 @@ public class RefundServiceImpl implements RefundService {
                 refundGoodsMapper.insert(refundGoods);
             }
         }
-        return 1;
     }
 
     /**
@@ -105,10 +120,9 @@ public class RefundServiceImpl implements RefundService {
      * @return RefundVo:退款详情
      */
     public RefundVo getRefundVoByOrderId(Integer orderId) {
-
         Refund refund = refundMapper.selectByOrderId(orderId);
         if (refund == null) {
-            return null;
+            throw new RefundNotFoundException();
         }
         return getRefundVoByRefund(refund);
     }
@@ -122,6 +136,9 @@ public class RefundServiceImpl implements RefundService {
      * @return List<RefundVo>
      */
     public List<RefundVo> getRefundVoListByStatus(Integer status) {
+        if (!(status >= 0 && status <= 5)) {
+            throw new RefundStatusNotFitException("传入退款状态参数超过范围");
+        }
         List<Refund> refundList = refundMapper.selectByStatus(status);
         if (refundList == null) {
             return null;
@@ -149,33 +166,33 @@ public class RefundServiceImpl implements RefundService {
             Integer orderId = refund.getOrderId();
             Order order = orderMapper.selectByPrimaryKey(orderId);
             // 封装退款商品详情
-            OrderVo orderVo = orderService.selectOrderVoByOrderNumber(order.getOrderNumber());
-            CartVo cartVo = orderVo.getOrderGoodsList();
-            //refundVo.setRefundGoodsList(cartVo.getCartGoodsList());
-
-        } else { // 如果是部分退
-            List<CartGoodsDTO> refundGoodsList1 = new ArrayList<>();
+            OrderDTO orderDTO = orderService.selectOrderDTOByOrderNumber(order.getOrderNumber());
+            List<OrderGoodsDTO> orderGoodsDTOList = orderDTO.getOrderGoodsDTOList();
+            refundVo.setRefundGoodsList(orderGoodsDTOList);
+        } else {
+            // 如果是部分退
+            List<OrderGoodsDTO> refundGoodsList1 = new ArrayList<>();
             // 查询退款订单的商品详情
             List<OrderGoods> orderGoodsList = orderGoodsMapper.selectByOrderId(refund.getOrderId());
             // 查询退款商品详情
             List<RefundGoods> refundGoodsList = refundGoodsMapper.selectByRefundId(refund.getId());
             for (RefundGoods refundGoods : refundGoodsList) {
-                CartGoodsDTO cartGoodsDto = new CartGoodsDTO();
+                OrderGoodsDTO orderGoodsDTO = new OrderGoodsDTO();
                 Integer sizeId = refundGoods.getSizeId();
                 Boolean isGoods = refundGoods.getIsGoods();
                 for (OrderGoods orderGoods : orderGoodsList) {
                     // 由订单表设置退款商品的价格
-                    if (isGoods == orderGoods.getIsGoods() && sizeId.equals(orderGoods.getSizeId())) {
+                    if (isGoods == orderGoods.getWhetherGoods() && sizeId.equals(orderGoods.getSizeId())) {
                         // 商品单价
                         double price = orderGoods.getTotalPrice()/orderGoods.getAmount();
-                        cartGoodsDto.setPrice(price);
-                        cartGoodsDto.setAmount(orderGoods.getAmount());
-                        cartGoodsDto.setAfterTotalPrice(orderGoods.getTotalPrice());
+                        orderGoodsDTO.setPrice(price);
+                        orderGoodsDTO.setAmount(orderGoods.getAmount());
+                        orderGoodsDTO.setAfterTotalPrice(orderGoods.getTotalPrice());
                     }
                 } // end for orderGoodsList
                 // 设置退款商品基础信息
-                orderService.setCartGoodsDto(cartGoodsDto,sizeId,isGoods);
-                refundGoodsList1.add(cartGoodsDto);
+                orderService.setOrderGoodsDTO(orderGoodsDTO,sizeId,isGoods);
+                refundGoodsList1.add(orderGoodsDTO);
             } // end for refundGoodsList
             refundVo.setRefundGoodsList(refundGoodsList1);
         }
@@ -184,26 +201,26 @@ public class RefundServiceImpl implements RefundService {
 
     /**
      * 根据退款编号获取申请退款所需参数
-     * @param refundNumber：退款编号
+     * @param agreeRefundDTO：退款编号
      * @return
      */
-    public AgreeRefundDto getAgreeRefundDtoByRefundNumber(String refundNumber) {
-        AgreeRefundDto agreeRefundDto = new AgreeRefundDto();
-        Refund refund = refundMapper.selectByRefundNumber(refundNumber);
+    public void setAgreeRefundDTOByRefundNumber(AgreeRefundDTO agreeRefundDTO) {
+        String refundNumber = agreeRefundDTO.getRefundNumber();
+        Refund refund = selectByRefundNumber(refundNumber);
         if (refund == null) {
-            return null;
+            throw new RefundNotFoundException();
+        } else if (refund.getStatus() != 2 && refund.getIsReceived() == 1) {
+            throw new RefundStatusNotFitException();
         }
         //订单id
         Integer orderId = refund.getOrderId();
+        Order order = orderMapper.selectByPrimaryKey(orderId);
         // 退款金额
         Double refundPrice = refund.getRefundPrice();
-        agreeRefundDto.setRefundFee(Double.toString(refundPrice));
-        Order order = orderMapper.selectByPrimaryKey(orderId);
+        agreeRefundDTO.setRefundFee(Double.toString(refundPrice));
         // 订单金额和订单编号
-        agreeRefundDto.setTotalFee(order.getTotalPrice().toString());
-        agreeRefundDto.setOrderNumber(order.getOrderNumber());
-
-        return agreeRefundDto;
+        agreeRefundDTO.setTotalFee(order.getTotalPrice().toString());
+        agreeRefundDTO.setOrderNumber(order.getOrderNumber());
     }
 
     /**
@@ -232,10 +249,9 @@ public class RefundServiceImpl implements RefundService {
         // 更新订单表状态 —— 只有更新为退款成功，才需要更新订单表状态为已完成
         if (status == 3) {
             refundMap.put("status",3);
-            return orderService.setOrderStatus(refundMap);
-        } else {
-            return 1;
+            orderService.setOrderStatus(refundMap);
         }
+        return 1;
     }
 
     /**
@@ -253,14 +269,23 @@ public class RefundServiceImpl implements RefundService {
      * @return
      */
     @Transactional
-    public int deleteByRefundNumber(String refundNumber) {
+    public void deleteByRefundNumber(String refundNumber) {
+        Integer userId = TokenInterceptor.getLoginUser().getId();
         Refund refund = refundMapper.selectByRefundNumber(refundNumber);
         if (refund == null) {
-            return -1;
-        } else if (refund.getIsReceived() == 1) { // 如果是已收到货的部分退款,删除该退款编号下的所有退款商品
+            throw new RefundNotFoundException();
+        } else if (refund.getStatus()!=0 || refund.getStatus()!=1) {
+            // 如果退款状态不为[待商家处理]、[待用户发货]，则不可撤销退款申请
+            throw new RefundStatusNotFitException("退款状态不为[待商家处理]、[待用户发货]，不可撤销退款申请");
+        } else if(!refund.getUserId().equals(userId)) {
+            // 检验是否是该用户的退款单
+            throw new RefundNotMatchUserException("退款单["+refundNumber+"]不属于用户["+userId+"]");
+        }
+        // 开始撤销退款逻辑
+        if (refund.getIsReceived() == 1) { // 如果是已收到货的部分退款,删除该退款编号下的所有退款商品
             refundGoodsMapper.deleteByRefundId(refund.getId());
         }
-        return refundMapper.deleteByRefundNumber(refundNumber);
+        refundMapper.deleteByRefundNumber(refundNumber);
     }
 
     @Override
@@ -280,5 +305,56 @@ public class RefundServiceImpl implements RefundService {
             }
         }
         return orderList;
+    }
+
+    @Override
+    public void agreeRefundApply(String refundNumber) {
+        Refund refund = selectByRefundNumber(refundNumber);
+        if (refund == null) {
+            throw new RefundNotFoundException();
+        } else if (refund.getStatus() != 0) {
+            throw new RefundStatusNotFitException("该退款单的状态不为[待商家处理]，不能调用该接口");
+        }
+        // 更新退款状态为待用户发货
+        HashMap<String, Integer> refundMap = new HashMap<>();
+        refundMap.put("orderId", refund.getOrderId());
+        refundMap.put("status", 1);
+        updateRefundStatus(refundMap);
+        logger.info("退款单[{}]状态更新：[待商家处理]-->[待用户发货]",refundNumber);
+    }
+
+    @Override
+    public void refuseRefundApply(String refundNumber) {
+        Refund refund = selectByRefundNumber(refundNumber);
+        if (refund == null) {
+            throw new RefundNotFoundException();
+        } else if (refund.getStatus() != 0) {
+            // 如果退款状态不为“待商家处理”
+            throw new RefundStatusNotFitException("该退款单["+refundNumber+"]的退款状态不为[待商家处理]，不可进行[拒绝退款申请]操作");
+        }
+        // 更改退款状态
+        HashMap<String, Integer> refundMap = new HashMap<>();
+        refundMap.put("orderId", refund.getOrderId());
+        refundMap.put("status", 4);
+        updateRefundStatus(refundMap);
+        logger.info("退款单[{}]状态更新：[待商家处理]-->[退款失败]",refundNumber);
+    }
+
+    @Override
+    public void insertRefundExpress(RefundExpress refundExpress) {
+        Integer userId = TokenInterceptor.getLoginUser().getId();
+        Refund refund = selectByPrimaryKey(refundExpress.getRefundId());
+        if (refund == null) {
+            throw new RefundNotFoundException();
+        } else if (refund.getStatus() != 1) {
+            throw new RefundStatusNotFitException("该退款单退款状态不为[待用户发货],不可填写退货单号");
+        } else if (refund.getUserId().equals(userId)) {
+            throw new RefundNotMatchUserException("退款单["+refund.getRefundNumber()+"]不属于用户["+userId+"]");
+        }
+        HashMap<String, Integer> refundMap = new HashMap<>();
+        refundMap.put("orderId", refund.getOrderId());
+        refundMap.put("status", 1);
+        updateRefundStatus(refundMap);
+        logger.info("退款单[{}]状态更新：[待用户发货]-->[待商家收货]",refund.getRefundNumber());
     }
 }

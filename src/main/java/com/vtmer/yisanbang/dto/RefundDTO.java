@@ -9,7 +9,7 @@ import javax.validation.Valid;
 import java.util.List;
 @Data
 @ApiModel
-public class RefundDto {
+public class RefundDTO {
 
     @Valid
     @ApiModelProperty(value = "退款基础信息")

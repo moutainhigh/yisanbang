@@ -5,14 +5,9 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
-
-/**
- * 同意退款申请需要的数据
- */
-@Data
 @ApiModel
-public class AgreeRefundDto {
-
+@Data
+public class AgreeRefundDTO {
     // 退款编号
     @NotBlank(message = "refundNumber is null")
     @ApiModelProperty(value = "退款编号",example = "12345678998765432110",required = true)

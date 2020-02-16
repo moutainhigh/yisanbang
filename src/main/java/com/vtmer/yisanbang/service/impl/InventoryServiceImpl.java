@@ -29,7 +29,7 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     // 判断库存是否足够
     public boolean JudgeInventory(OrderGoods orderGoods) {
-        Boolean isGoods = orderGoods.getIsGoods();
+        Boolean isGoods = orderGoods.getWhetherGoods();
         if (isGoods) {
             ColorSizeDto colorSizeDto = colorSizeMapper.selectDtoByPrimaryKey(orderGoods.getSizeId());
             if (colorSizeDto.getInventory() < orderGoods.getAmount())
@@ -48,7 +48,7 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     // 交易成功后减去库存
     public boolean minusInventory(OrderGoods orderGoods) {
-        Boolean isGoods = orderGoods.getIsGoods();
+        Boolean isGoods = orderGoods.getWhetherGoods();
         if (isGoods) {
             ColorSizeDto colorSizeDto = colorSizeMapper.selectDtoByPrimaryKey(orderGoods.getSizeId());
             Integer amount = colorSizeDto.getInventory() - orderGoods.getAmount();

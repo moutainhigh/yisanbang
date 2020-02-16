@@ -2,8 +2,9 @@ package com.vtmer.yisanbang.service;
 
 import com.vtmer.yisanbang.domain.Order;
 import com.vtmer.yisanbang.domain.Refund;
-import com.vtmer.yisanbang.dto.AgreeRefundDto;
-import com.vtmer.yisanbang.dto.RefundDto;
+import com.vtmer.yisanbang.domain.RefundExpress;
+import com.vtmer.yisanbang.dto.AgreeRefundDTO;
+import com.vtmer.yisanbang.dto.RefundDTO;
 import com.vtmer.yisanbang.vo.RefundVo;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public interface RefundService {
      * @param refundDto：orderId，reason（订单id、退款原因） 退款商品
      * @return
      */
-    int applyForRefund(RefundDto refundDto);
+    void applyForRefund(RefundDTO refundDto);
 
     /**
      * 获取退款详情
@@ -29,10 +30,10 @@ public interface RefundService {
 
     /**
      * 由退款编号获取退款所需的参数
-     * @param refundNumber
+     * @param agreeRefundDTO
      * @return
      */
-    AgreeRefundDto getAgreeRefundDtoByRefundNumber(String refundNumber);
+    void setAgreeRefundDTOByRefundNumber(AgreeRefundDTO agreeRefundDTO);
 
     /**
      *
@@ -48,7 +49,7 @@ public interface RefundService {
 
     Refund selectByRefundNumber(String refundNumber);
 
-    int deleteByRefundNumber(String refundNumber);
+    void deleteByRefundNumber(String refundNumber);
 
     Refund selectByPrimaryKey(Integer refundId);
 
@@ -58,4 +59,22 @@ public interface RefundService {
      * @return:未退款的已付款订单
      */
     List<Order> getUnRefundOrder(List<Order> orderList);
+
+    /**
+     * 商家同意退款申请
+     * @param refundNumber：退款编号
+     */
+    void agreeRefundApply(String refundNumber);
+
+    /**
+     * 商家拒绝退款申请
+     * @param refundNumber
+     */
+    void refuseRefundApply(String refundNumber);
+
+    /**
+     * 用户填写退货单
+     * @param refundExpress
+     */
+    void insertRefundExpress(RefundExpress refundExpress);
 }
