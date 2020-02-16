@@ -1,7 +1,10 @@
 package com.vtmer.yisanbang.domain;
 
+import lombok.Data;
+
 import java.util.Date;
 
+@Data
 public class OrderGoods {
     private Integer id;
 
@@ -9,7 +12,7 @@ public class OrderGoods {
 
     private Integer sizeId;
 
-    private Boolean isGoods;
+    private Boolean whetherGoods;
 
     private Integer amount;
 
@@ -19,68 +22,4 @@ public class OrderGoods {
 
     private Date updateTime;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(Integer orderId) {
-        this.orderId = orderId;
-    }
-
-    public Integer getSizeId() {
-        return sizeId;
-    }
-
-    public void setSizeId(Integer sizeId) {
-        this.sizeId = sizeId;
-    }
-
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public Boolean getIsGoods() {
-        return isGoods;
-    }
-
-    public void setIsGoods(Boolean goods) {
-        isGoods = goods;
-    }
-
-    public Integer getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Integer amount) {
-        this.amount = amount;
-    }
-
-    public Double getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(Double totalPrice) {
-        this.totalPrice = totalPrice;
-    }
 }

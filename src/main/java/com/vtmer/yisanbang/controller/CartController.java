@@ -12,6 +12,8 @@ import com.vtmer.yisanbang.dto.GoodsSkuDTO;
 import com.vtmer.yisanbang.service.CartService;
 import com.vtmer.yisanbang.vo.CartVo;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Api(tags = "购物车接口")
+@Api(tags = "购物车接口",value = "用户部分")
 @RestController
 @RequestMapping("/cart")
 public class CartController {
@@ -37,6 +39,9 @@ public class CartController {
      * @return
      */
     @RequestLog(module = "购物车",operationDesc = "获取用户购物车商品列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+    })
     @ApiOperation(value = "获取用户的购物车商品列表")
     @GetMapping("/listCartGoods")
     public ResponseMessage<CartVo> listCartGoods() {
@@ -54,6 +59,9 @@ public class CartController {
      * @return
      */
     @RequestLog(module = "购物车",operationDesc = "添加商品进入购物车")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+    })
     @ApiOperation(value = "添加商品进入购物车")
     @PostMapping("/addCartGoods")
     public ResponseMessage addCartGoods(@RequestBody @Validated({Insert.class}) List<CartGoodsDTO> cartGoodsDTOList) {
@@ -67,6 +75,9 @@ public class CartController {
      * @return
      */
     @RequestLog(module = "购物车",operationDesc = "更新购物车商品勾选")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+    })
     @ApiOperation(value = "更新购物车勾选",notes = "每次用户(取消)勾选请求该接口")
     @PutMapping("/updateChosen")
     public ResponseMessage updateChosen(@RequestBody @Validated GoodsSkuDTO goodsSkuDTO) {
@@ -86,6 +97,9 @@ public class CartController {
      * @return
      */
     @RequestLog(module = "购物车",operationDesc = "购物车商品增加1或删减1")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+    })
     @ApiOperation(value = "购物车商品增加1或删减1",notes = "用于购物车中+ -按钮，+ amount传1，- amount传-1")
     @PutMapping("/addOrSubtractAmount")
     public ResponseMessage addOrSubtractAmount(@RequestBody @Validated({Update.class}) CartGoodsDTO cartGoodsDto) {
@@ -105,6 +119,9 @@ public class CartController {
      * @return
      */
     @RequestLog(module = "购物车",operationDesc = "购物车修改商品数量")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+    })
     @ApiOperation(value = "直接修改购物车某件商品的数量",notes = "amount传修改数量")
     @PutMapping("/updateAmount")
     public ResponseMessage updateAmount(@RequestBody @Validated({Insert.class}) CartGoodsDTO cartGoodsDto) {
@@ -124,6 +141,9 @@ public class CartController {
      * @return
      */
     @RequestLog(module = "购物车",operationDesc = "批量删除购物车商品")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+    })
     @ApiOperation(value = "批量删除购物车商品")
     @DeleteMapping("/deleteCartGoods")
     public ResponseMessage deleteCartGoods(@RequestBody @Validated List<GoodsSkuDTO> goodsSkuDTOList) {

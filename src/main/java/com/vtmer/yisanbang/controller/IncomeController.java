@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.constraints.Past;
 import java.util.Date;
 
-@Api(tags = "收益信息接口")
+@Api(tags = "收益信息接口",value = "后台管理部分")
 @RestController
 @RequestMapping("/income")
 public class IncomeController {

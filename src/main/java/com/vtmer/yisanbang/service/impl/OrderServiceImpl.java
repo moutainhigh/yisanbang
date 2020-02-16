@@ -206,7 +206,7 @@ public class OrderServiceImpl implements OrderService {
             Integer amount = cartGoodsDTO.getAmount();
             Integer colorSizeId = cartGoodsDTO.getColorSizeId();
             orderGoods.setOrderId(order.getId());
-            orderGoods.setIsGoods(whetherGoods);
+            orderGoods.setWhetherGoods(whetherGoods);
             orderGoods.setAmount(amount);
             orderGoods.setTotalPrice(cartGoodsDTO.getAfterTotalPrice());
             orderGoods.setSizeId(colorSizeId);
@@ -454,7 +454,7 @@ public class OrderServiceImpl implements OrderService {
 
             // 设置商品基础信息
             Integer sizeId = orderGoods.getSizeId();
-            Boolean isGoods = orderGoods.getIsGoods();
+            Boolean isGoods = orderGoods.getWhetherGoods();
             setOrderGoodsDTO(orderGoodsDTO,sizeId,isGoods);
 
             orderGoodsDTOList.add(orderGoodsDTO);
@@ -554,7 +554,7 @@ public class OrderServiceImpl implements OrderService {
         // 库存归位
         List<OrderGoods> orderGoodsList = orderGoodsMapper.selectByOrderId(order.getId());
         for (OrderGoods orderGoods : orderGoodsList) {
-            Boolean isGoods = orderGoods.getIsGoods();
+            Boolean isGoods = orderGoods.getWhetherGoods();
             Integer sizeId = orderGoods.getSizeId();
             Integer amount = orderGoods.getAmount();
             HashMap<String, Integer> inventoryMap = new HashMap<>();

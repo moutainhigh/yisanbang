@@ -17,9 +17,7 @@ import com.vtmer.yisanbang.dto.RefundDto;
 import com.vtmer.yisanbang.service.OrderService;
 import com.vtmer.yisanbang.service.RefundService;
 import com.vtmer.yisanbang.vo.RefundVo;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 
-@Api(tags = "退款接口")
+@Api(tags = "退款接口",value = "用户部分&后台管理部分")
 @RestController
 @RequestMapping("/refund")
 public class RefundController {
@@ -86,7 +84,7 @@ public class RefundController {
     }
 
     /**
-     * 退款接口 —— 商家同意退款则调用该接口
+     * 商家同意退款则调用该接口
      * status 2-->3 0-->3使用
      * 两种情况可调用该接口：1.未发货的情况下，用户申请退款； 2. 已发货的情况下，商家收到退货商品.(商家待收货)
      * 申请退款成功会更新订单表、退款表的状态，失败则返回相关信息
@@ -95,7 +93,7 @@ public class RefundController {
      * @param agreeRefundDto:退款编号（必填）、退款原因（商家选填，如无货）
      * @return
      */
-    @RequestLog(module = "退款",operationDesc = "商家同意退款")
+    @RequestLog(module = "商家同意退款",operationDesc = "商家同意退款")
     @ApiOperation(value = "退款接口",notes = "商家同意退款则调用该接口，" +
             "只有在【待商家处理】或【待商家收货】的退款状态下可调用，调用成功后退款金额将原路退回给用户\n" +
             "退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败")
@@ -161,7 +159,7 @@ public class RefundController {
     }
 
     /**
-     * 更新退款订单状态接口，status0-->1
+     * 更新退款退货订单状态接口，status0-->1
      * 使用，待商家处理-->待用户发货 0 --> 1
      *      * status全改变： 0 --> 1 or 3 or 4  and  1 --> 2   and  2 --> 3  and 0 1 2-->删除
      *      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
@@ -169,7 +167,7 @@ public class RefundController {
      * @param refundNumber:退款编号
      * @return
      */
-    @RequestLog(module = "退款",operationDesc = "【待商家处理】-->【待用户发货】")
+    @RequestLog(module = "商家同意退款退货申请",operationDesc = "【待商家处理】-->【待用户发货】")
     @ApiOperation(value = "同意退款之【待商家处理】-->【待用户发货】",
             notes = "更新退款订单状态，【待商家处理】-->【待用户发货】")
     @PutMapping("/update/{refundNumber}")
@@ -194,12 +192,12 @@ public class RefundController {
     }
 
     /**
-     * 查询成功申请了退款(退款成功)的订单的退款状态
+     * 商家查询成功申请了退款(退款成功)的订单的退款状态
      * @param refundNumber：退款编号
      * @return
      */
     @RequestLog(module = "退款",operationDesc = "查询成功申请了退款(退款成功)的订单的退款状态")
-    @ApiOperation(value = "查询成功申请了退款(退款成功)的订单的退款状态",
+    @ApiOperation(value = "商家查询成功申请了退款(退款成功)的订单的退款状态",
             notes = "调用该接口的前提是商家已同意退款，查询微信端退款情况（受理中、退款成功、退款失败）")
     @GetMapping("/refundQuery/{refundNumber}")
     public ResponseMessage refundQuery(@ApiParam(name = "refundNumber",value = "退款编号",example = "12345678998765432110",required = true)
@@ -248,14 +246,14 @@ public class RefundController {
 
 
     /**
-     * 获取相应状态的退款订单
+     * 商家获取相应状态的退款订单
      * 退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败
      * 5 -- 获取所有退款订单
      * @param status：退款状态
      * @return List<RefundVo>
      */
     @RequestLog(module = "退款",operationDesc = "获取相应状态的退款订单")
-    @ApiOperation(value = "获取相应状态的退款订单详情",notes = "该接口可在后台管理系统中调用，方便商家查看\n" +
+    @ApiOperation(value = "商家获取相应状态的退款订单详情",notes = "该接口可在后台管理系统中调用，方便商家查看\n" +
             "退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败")
     @GetMapping("/getByStatus/{status}")
     public ResponseMessage<List<RefundVo>> getByStatus(@ApiParam(value = "退款状态",example = "3",required = true)
@@ -272,13 +270,16 @@ public class RefundController {
     }
 
     /**
-     * 根据退款编号删除退款订单接口,用户撤销退款使用
+     * 用户撤销退款，根据退款编号删除退款订单接口
      * 该接口应该由用户调用，商家不应该动客户的退款信息
      * @param refundNumber:退款编号
      * @return
      */
     @RequestLog(module = "退款",operationDesc = "撤销退款申请")
-    @ApiOperation(value = "撤销退款申请",notes = "根据退款编号删除退款订单接口,用户撤销退款使用")
+    @ApiOperation(value = "用户撤销退款申请",notes = "根据退款编号删除退款订单接口,用户撤销退款使用")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+    })
     @DeleteMapping("/delete")
     public ResponseMessage delete(@ApiParam(name = "refundNumber",value = "退款编号",example = "12345678998765432110",required = true)
                                       @PathVariable String refundNumber) {
@@ -329,6 +330,9 @@ public class RefundController {
     @RequestLog(module = "退款",operationDesc = "用户填写退款发货单")
     @ApiOperation(value = "用户填写退款发货单",
             notes = "用户填写退款发货单,退款状态【待用户发货】-->【待商家收货】")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+    })
     @PostMapping("/express")
     public ResponseMessage insertExpress(@RequestBody @Validated RefundExpress refundExpress) {
         Refund refund = refundService.selectByPrimaryKey(refundExpress.getRefundId());
@@ -356,7 +360,10 @@ public class RefundController {
      * @return
      */
     @RequestLog(module = "退款",operationDesc = "申请退款")
-    @ApiOperation(value = "申请退款",notes = "用户申请退款接口;退款商品传null代表全退，退款原因非必需")
+    @ApiOperation(value = "用户申请退款",notes = "用户申请退款接口;退款商品传null代表全退，退款原因非必需")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+    })
     @PostMapping("/apply")
     public ResponseMessage apply(@RequestBody @Validated RefundDto refundDto) {
         Refund refund = refundDto.getRefund();

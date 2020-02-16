@@ -21,7 +21,6 @@ import com.vtmer.yisanbang.dto.CartOrderDTO;
 import com.vtmer.yisanbang.dto.DeliverGoodsDTO;
 import com.vtmer.yisanbang.dto.OrderDTO;
 import com.vtmer.yisanbang.service.OrderService;
-import com.vtmer.yisanbang.service.UserService;
 import com.vtmer.yisanbang.vo.UpdateUserAddressVo;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
@@ -38,7 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Api(tags = "订单接口")
+@Api(tags = "订单接口",value = "用户部分")
 @RestController
 @RequestMapping("/order")
 public class OrderController {
@@ -50,9 +49,6 @@ public class OrderController {
 
     @Autowired
     private WxPayService wxPayService;
-
-    @Autowired
-    private UserService userService;
 
     @Value("${wx.pay.spbillCreateIp}")
     private String spbillCreateIp;

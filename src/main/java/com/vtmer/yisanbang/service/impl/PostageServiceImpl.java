@@ -1,5 +1,7 @@
 package com.vtmer.yisanbang.service.impl;
 
+import com.vtmer.yisanbang.common.exception.service.postage.PostageSettingsExistException;
+import com.vtmer.yisanbang.common.exception.service.postage.PostageSettingsNotFoundException;
 import com.vtmer.yisanbang.domain.Postage;
 import com.vtmer.yisanbang.mapper.PostageMapper;
 import com.vtmer.yisanbang.service.PostageService;
@@ -25,34 +27,39 @@ public class PostageServiceImpl implements PostageService {
      * @param postage
      * @return
      */
-    public int update(Postage postage) {
-        Postage postage1 = get();
-        if (postage1 == null) return -1;
-        return postageMapper.update(postage);
+    public void update(Postage postage) {
+        Postage checkExist = get();
+        if (checkExist == null) {
+            throw new PostageSettingsNotFoundException();
+        }
+        postageMapper.update(postage);
     }
 
     /**
      * delete the postage
      * @return
      */
-    public int delete() {
+    public void delete() {
         Postage postage = get();
-        if (postage == null) return -1;
-        return postageMapper.delete();
+        if (postage == null) {
+            throw new PostageSettingsNotFoundException();
+        }
+        postageMapper.delete();
     }
 
     /**
      * insert the postage
-     * if there is a postage,return -1(error)
+     * if there is a postage,throw Exception
      * @param postage
      * @return
      */
-    public int insert(Postage postage) {
-        Postage postage1 = get();
-        if (postage1 != null) {
-            return -1;
+    public void insert(Postage postage) {
+        Postage checkExist = get();
+        if (checkExist != null) {
+            // 邮费设置已存在
+            throw new PostageSettingsExistException();
         } else {
-            return postageMapper.insert(postage);
+            postageMapper.insert(postage);
         }
     }
 }

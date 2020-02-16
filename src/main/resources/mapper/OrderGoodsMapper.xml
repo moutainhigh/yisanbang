@@ -5,7 +5,7 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="order_id" jdbcType="INTEGER" property="orderId" />
     <result column="size_id" jdbcType="INTEGER" property="sizeId" />
-    <result column="is_goods" jdbcType="BIT" property="isGoods" />
+    <result column="is_goods" jdbcType="BIT" property="whetherGoods" />
     <result column="amount" jdbcType="INTEGER" property="amount" />
     <result column="total_price" jdbcType="DOUBLE" property="totalPrice" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -16,18 +16,17 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.vtmer.yisanbang.domain.OrderGoods">
-    insert into order_goods (id, order_id, size_id, 
+    insert into order_goods (order_id, size_id,
       is_goods, amount, total_price, 
       create_time, update_time)
-    values (#{id,jdbcType=INTEGER}, #{orderId,jdbcType=INTEGER}, #{sizeId,jdbcType=INTEGER}, 
-      #{isGoods,jdbcType=BIT}, #{amount,jdbcType=INTEGER}, #{totalPrice,jdbcType=DOUBLE}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+    values (#{orderId,jdbcType=INTEGER}, #{sizeId,jdbcType=INTEGER},
+      #{whetherGoods,jdbcType=BIT}, #{amount,jdbcType=INTEGER}, #{totalPrice,jdbcType=DOUBLE})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.vtmer.yisanbang.domain.OrderGoods">
     update order_goods
     set order_id = #{orderId,jdbcType=INTEGER},
       size_id = #{sizeId,jdbcType=INTEGER},
-      is_goods = #{isGoods,jdbcType=BIT},
+      is_goods = #{whetherGoods,jdbcType=BIT},
       amount = #{amount,jdbcType=INTEGER},
       total_price = #{totalPrice,jdbcType=DOUBLE},
       create_time = #{createTime,jdbcType=TIMESTAMP},

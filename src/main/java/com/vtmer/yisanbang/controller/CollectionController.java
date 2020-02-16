@@ -15,9 +15,7 @@ import com.vtmer.yisanbang.domain.Collection;
 import com.vtmer.yisanbang.dto.insert.InsertCollectionDTO;
 import com.vtmer.yisanbang.service.CollectionService;
 import com.vtmer.yisanbang.vo.CollectionVo;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -25,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Api(tags = "用户收藏夹接口")
+@Api(tags = "用户收藏夹接口",value = "用户部分")
 @RestController
 @RequestMapping("/collection")
 public class CollectionController {
@@ -38,6 +36,9 @@ public class CollectionController {
      * @return
      */
     @RequestLog(module = "收藏夹", operationDesc = "添加商品到收藏夹")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+    })
     @ApiOperation(value = "添加商品到收藏夹")
     @PostMapping("/insert")
     public ResponseMessage insert(@RequestBody @Validated InsertCollectionDTO insertCollectionDTO) {
@@ -62,6 +63,9 @@ public class CollectionController {
      * @return
      */
     @RequestLog(module = "收藏夹", operationDesc = "批量删除收藏夹中的商品")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+    })
     @ApiOperation(value = "批量删除收藏商品")
     @DeleteMapping("/delete")
     public ResponseMessage delete(@RequestBody
@@ -90,6 +94,9 @@ public class CollectionController {
      * @return
      */
     @RequestLog(module = "收藏夹", operationDesc = "获取用户收藏商品列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+    })
     @ApiOperation(value = "获取用户收藏商品列表")
     @GetMapping("/get")
     public ResponseMessage<List<CollectionVo>> collectionList() {

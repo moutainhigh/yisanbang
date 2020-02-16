@@ -2,6 +2,11 @@ package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.common.annotation.RequestLog;
+import com.vtmer.yisanbang.common.exception.api.ApiException;
+import com.vtmer.yisanbang.common.exception.api.postage.ApiPostageSettingsExistException;
+import com.vtmer.yisanbang.common.exception.api.postage.ApiPostageSettingsNotFoundException;
+import com.vtmer.yisanbang.common.exception.service.postage.PostageSettingsExistException;
+import com.vtmer.yisanbang.common.exception.service.postage.PostageSettingsNotFoundException;
 import com.vtmer.yisanbang.domain.Postage;
 import com.vtmer.yisanbang.service.PostageService;
 import io.swagger.annotations.Api;
@@ -10,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@Api(tags = "邮费设置接口")
+@Api(tags = "邮费设置接口",value = "后台管理部分")
 @RestController
 @RequestMapping("/postage")
 public class PostageController {
@@ -35,41 +40,41 @@ public class PostageController {
             "若不存在邮费设置，则默认满0元包邮")
     @PostMapping("/insert")
     public ResponseMessage insert(@RequestBody @Validated Postage postage) {
-        int res = postageService.insert(postage);
-        if (res == -1) {
-            return ResponseMessage.newErrorInstance("已经设置了邮费计算规则");
-        } else if (res == 1) {
-            return ResponseMessage.newSuccessInstance("存入邮费计算规则成功");
-        } else {
-            return ResponseMessage.newErrorInstance("存入邮费计算规则失败");
+        try {
+            postageService.insert(postage);
+        } catch (PostageSettingsExistException e) {
+            throw new ApiPostageSettingsExistException(e.getMessage());
+        } catch (Exception e) {
+            throw new ApiException(e);
         }
+        return ResponseMessage.newSuccessInstance("存入邮费计算规则成功");
     }
 
     @RequestLog(module = "邮费设置",operationDesc = "删除邮费设置")
     @ApiOperation(value = "删除邮费设置")
     @DeleteMapping("/delete")
     public ResponseMessage delete() {
-        int res = postageService.delete();
-        if (res == -1) {
-            return ResponseMessage.newErrorInstance("目前暂无邮费计算规则可删除");
-        } else if (res == 1) {
-            return ResponseMessage.newSuccessInstance("删除当前邮费计算规则成功");
-        } else {
-            return ResponseMessage.newErrorInstance("删除邮费计算规则失败");
+        try {
+            postageService.delete();
+        } catch (PostageSettingsNotFoundException e) {
+            throw new ApiPostageSettingsNotFoundException(e.getMessage());
+        } catch (Exception e) {
+            throw new ApiException(e);
         }
+        return ResponseMessage.newSuccessInstance("删除当前邮费计算规则成功");
     }
 
     @RequestLog(module = "邮费设置",operationDesc = "更新邮费设置")
     @ApiOperation("更新邮费设置")
     @PutMapping("/update")
     public ResponseMessage update(@RequestBody @Validated Postage postage) {
-        int res = postageService.update(postage);
-        if (res == -1) {
-            return ResponseMessage.newErrorInstance("目前暂无邮费计算规则可更新");
-        } else if (res == 1) {
-            return ResponseMessage.newSuccessInstance("更新邮费计算规则成功");
-        } else {
-            return ResponseMessage.newErrorInstance("更新邮费计算规则失败");
+        try {
+            postageService.update(postage);
+        } catch (PostageSettingsNotFoundException e) {
+            throw new ApiPostageSettingsNotFoundException(e.getMessage());
+        } catch (Exception e) {
+            throw new ApiException(e);
         }
+        return ResponseMessage.newSuccessInstance("更新邮费计算规则成功");
     }
 }

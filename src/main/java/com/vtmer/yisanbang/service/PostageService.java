@@ -6,9 +6,9 @@ public interface PostageService {
 
     Postage get();
 
-    int update(Postage postage);
+    void update(Postage postage);
 
-    int delete();
+    void delete();
 
-    int insert(Postage postage);
+    void insert(Postage postage);
 }
