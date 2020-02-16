@@ -6,7 +6,6 @@ import com.vtmer.yisanbang.dto.ErrorDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.bind.BindException;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -70,11 +69,5 @@ public class GlobalExceptionHandler {
         logger.info("参数校验异常:{}", ex.getMessage());
         return ResponseMessage.newErrorInstance(ex.getMessage());
     }
-
-
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseMessage handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
-        logger.info("库存不足:{}", ex.getMessage());
-        return ResponseMessage.newErrorInstance("商品库存不足，请稍后重试！");
-    }
+    
 }
