@@ -21,9 +21,21 @@ public interface CartService {
 
     void deleteCartGoods(List<GoodsSkuDTO> goodsSkuDTOList);
 
-    // 计算购物车总价并更新
+    /**
+     * 计算购物车总价并更新
+     * @param cartGoodsList：购物车商品列表
+     * @return Map:totalPrice、beforeTotalPrice，优惠前总价，优惠后总价
+     */
     Map<String,Double> calculateTotalPrice(List<CartGoodsDTO> cartGoodsList);
 
-    // 根据用户id删除购物车勾选项
+    /**
+     * 删除某用户的购物车商品
+     * @return
+     */
     boolean deleteCartGoodsByIsChosen();
+
+    /**
+     * 购物车数据持久化到数据库
+     */
+    void cartDataPersistence();
 }

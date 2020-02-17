@@ -17,99 +17,21 @@
     <result column="cart_id" jdbcType="INTEGER" property="cartId" />
     <result column="color_size_id" jdbcType="INTEGER" property="colorSizeId" />
     <result column="amount" jdbcType="INTEGER" property="amount" />
-    <result column="is_goods" jdbcType="TINYINT" property="isGoods" />
-    <result column="is_chosen" jdbcType="TINYINT" property="isChosen" />
+    <result column="is_goods" jdbcType="TINYINT" property="whetherGoods" />
+    <result column="is_chosen" jdbcType="TINYINT" property="whetherChosen" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-  </resultMap>
-  <resultMap id="cartGoodsList" type="com.vtmer.yisanbang.dto.CartGoodsDTO">
-    <result column="id" jdbcType="INTEGER" property="id"/>
-    <result column="color_size_id" jdbcType="INTEGER" property="colorSizeId" />
-    <result column="amount" jdbcType="INTEGER" property="amount" />
-    <result column="is_chosen" jdbcType="TINYINT" property="isChosen" />
-    <result column="is_goods" jdbcType="TINYINT" property="isGoods" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="picture" jdbcType="VARCHAR" property="picture" />
-    <result column="price" jdbcType="DOUBLE" property="price" />
-    <result column="part" jdbcType="VARCHAR" property="partOrColor" />
-    <result column="size" jdbcType="VARCHAR" property="size" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-  </resultMap>
-  <resultMap id="cartGoodsList1" type="com.vtmer.yisanbang.dto.CartGoodsDTO">
-    <result column="id" jdbcType="INTEGER" property="id"/>
-    <result column="color_size_id" jdbcType="INTEGER" property="colorSizeId" />
-    <result column="amount" jdbcType="INTEGER" property="amount" />
-    <result column="is_chosen" jdbcType="TINYINT" property="isChosen" />
-    <result column="is_goods" jdbcType="TINYINT" property="isGoods" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="picture" jdbcType="VARCHAR" property="picture" />
-    <result column="price" jdbcType="DOUBLE" property="price" />
-    <result column="color" jdbcType="VARCHAR" property="partOrColor" />
-    <result column="size" jdbcType="VARCHAR" property="size" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from cart_goods
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteCartGoods">
-      delete from cart_goods
-      where 1=1
-    <include refid="baseCondition"/>
-  </delete>
-  <delete id="deleteCartGoodsByIsChosen">
-    delete from cart_goods
-    where cart_id = #{cartId}
-    and is_chosen = 1
-  </delete>
   <insert id="insert" parameterType="com.vtmer.yisanbang.domain.CartGoods">
-    insert into cart_goods (id, cart_id, color_size_id, 
-      amount, is_goods, is_chosen, 
-      create_time, update_time)
-    values (#{id,jdbcType=INTEGER}, #{cartId,jdbcType=INTEGER}, #{colorSizeId,jdbcType=INTEGER}, 
-      #{amount,jdbcType=INTEGER}, #{isGoods,jdbcType=TINYINT}, #{isChosen,jdbcType=TINYINT}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+    replace into cart_goods (cart_id, color_size_id,
+      amount, is_goods, is_chosen)
+    values (#{cartId,jdbcType=INTEGER}, #{colorSizeId,jdbcType=INTEGER},
+      #{amount,jdbcType=INTEGER}, #{whetherGoods,jdbcType=TINYINT}, #{whetherChosen,jdbcType=TINYINT})
   </insert>
-  <insert id="insertCartGoods">
-    insert into cart_goods (color_size_id, amount, cart_id,is_goods)
-    values (#{colorSizeId,jdbcType=INTEGER}, #{amount,jdbcType=INTEGER},
-      #{cartId,jdbcType=INTEGER},#{isGoods,jdbcType=TINYINT} )
-  </insert>
-  <update id="updateByPrimaryKey" parameterType="com.vtmer.yisanbang.domain.CartGoods">
-    update cart_goods
-    set cart_id = #{cartId,jdbcType=INTEGER},
-      color_size_id = #{colorSizeId,jdbcType=INTEGER},
-      amount = #{amount,jdbcType=INTEGER},
-      is_goods = #{isGoods,jdbcType=TINYINT},
-      is_chosen = #{isChosen,jdbcType=TINYINT},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="addOrSubtractAmount">
-    update cart_goods
-    set amount = amount + #{amount,jdbcType=INTEGER}
-    where 1=1
-    <include refid="baseCondition"/>
-  </update>
-  <update id="updateAmount">
-    update cart_goods
-    set amount = #{amount,jdbcType=INTEGER}
-    where 1=1
-    <include refid="baseCondition"/>
-  </update>
-  <update id="updateChosen">
-    update cart_goods
-    <if test="isChosen == 1">
-      set is_chosen = 0
-    </if>
-    <if test="isChosen == 0">
-      set is_chosen = 1
-    </if>
-    where cart_id = #{cartGoodsDto.cartId}
-    and is_goods = #{cartGoodsDto.isGoods}
-    and color_size_id = #{cartGoodsDto.colorSizeId}
-  </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select id, cart_id, color_size_id, amount, is_goods, is_chosen, create_time, update_time
     from cart_goods
@@ -118,35 +40,5 @@
   <select id="selectAll" resultMap="BaseResultMap">
     select id, cart_id, color_size_id, amount, is_goods, is_chosen, create_time, update_time
     from cart_goods
-  </select>
-  <select id="selectCartGoodsByCartId" parameterType="java.lang.Integer" resultMap="cartGoodsList">
-    select cg.color_size_id, cg.amount, cg.`is_goods`,cg.is_chosen,cg.`update_time`,
-    ps.price,ps.part, ps.size,s.picture,s.name,s.id
-    from cart_goods cg,part_size ps,suit s
-    where
-    is_goods = 0
-    and ps.suit_id = s.id
-    and cg.`color_size_id` = ps.`id`
-    and cg.cart_id = #{id}
-  </select>
-  <select id="selectCartGoodsByCartId1" parameterType="java.lang.Integer" resultMap="cartGoodsList1">
-      select cg.color_size_id, cg.amount, cg.`is_goods`,cg.is_chosen,cg.`update_time`,
-      cs.color,cs.size,g.name,g.price,g.picture,g.id
-      from cart_goods cg,color_size cs,goods g
-      where
-      is_goods = 1
-      and cs.goods_id = g.id
-      and cg.`color_size_id` = cs.`id`
-      and cg.cart_id = #{id}
-    </select>
-  <select id="checkGoodsExist" resultType="java.lang.Boolean">
-    select count(DISTINCT id) from cart_goods
-    where 1=1
-    <include refid="baseCondition"/>
-  </select>
-  <select id="selectChosen" resultType="java.lang.Integer">
-    select is_chosen from cart_goods
-    where 1=1
-    <include refid="baseCondition"/>
   </select>
 </mapper>

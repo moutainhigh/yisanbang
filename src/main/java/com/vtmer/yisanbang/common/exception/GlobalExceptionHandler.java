@@ -69,5 +69,5 @@ public class GlobalExceptionHandler {
         logger.info("参数校验异常:{}", ex.getMessage());
         return ResponseMessage.newErrorInstance(ex.getMessage());
     }
-    
+
 }

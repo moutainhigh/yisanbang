@@ -1,19 +1,26 @@
 package com.vtmer.yisanbang.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.vtmer.yisanbang.common.util.ListSort;
 import com.vtmer.yisanbang.common.TokenInterceptor;
 import com.vtmer.yisanbang.common.exception.service.cart.CartGoodsNotExistException;
+import com.vtmer.yisanbang.common.util.ListSort;
+import com.vtmer.yisanbang.domain.Cart;
+import com.vtmer.yisanbang.domain.CartGoods;
 import com.vtmer.yisanbang.domain.Discount;
+import com.vtmer.yisanbang.domain.User;
 import com.vtmer.yisanbang.dto.CartGoodsDTO;
 import com.vtmer.yisanbang.dto.GoodsSkuDTO;
+import com.vtmer.yisanbang.mapper.CartGoodsMapper;
+import com.vtmer.yisanbang.mapper.CartMapper;
 import com.vtmer.yisanbang.mapper.DiscountMapper;
+import com.vtmer.yisanbang.mapper.UserMapper;
 import com.vtmer.yisanbang.service.CartService;
 import com.vtmer.yisanbang.service.ColorSizeService;
 import com.vtmer.yisanbang.service.PartSizeService;
 import com.vtmer.yisanbang.vo.CartVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -38,10 +45,17 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private ColorSizeService colorSizeService;
 
-
     @Autowired
     private DiscountMapper discountMapper;
 
+    @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
+    private CartMapper cartMapper;
+
+    @Autowired
+    private CartGoodsMapper cartGoodsMapper;
 
     @Autowired
     private RedisTemplate<String,Object> stringRedisTemplate;
@@ -94,19 +108,7 @@ public class CartServiceImpl implements CartService {
         if (CollectionUtils.isEmpty(ObjectList)) {
             return null;
         }
-        // 查询购物车数据
-        List<CartGoodsDTO> cartGoodsList;
-        cartGoodsList = ObjectList.stream().map(o -> JSON.parseObject(o.toString(), CartGoodsDTO.class)).collect(Collectors.toList());
-        // 计算总价
-        Map<String, Double> priceMap = calculateTotalPrice(cartGoodsList);
-        CartVo cartVo = new CartVo();
-        // 设置总价
-        cartVo.setTotalPrice(priceMap.get("totalPrice"));
-        cartVo.setBeforeTotalPrice(priceMap.get("beforeTotalPrice"));
-        // 根据时间排序
-        ListSort.listTimeSort(cartGoodsList);
-        cartVo.setCartGoodsList(cartGoodsList);
-        return cartVo;
+        return convertObjectListToCartVo(ObjectList);
     }
 
     public void addCartGoods(List<CartGoodsDTO> cartGoodsDTOList) {
@@ -289,5 +291,60 @@ public class CartServiceImpl implements CartService {
             }
         }
         return true;
+    }
+
+    @Override
+    @Transactional
+    public void cartDataPersistence() {
+        List<User> userList = userMapper.selectAll();
+        for (User user : userList) {
+            int userId = user.getId();
+            key = REDIS_CART + ":" + userId;
+            hashOperations = stringRedisTemplate.boundHashOps(key);
+            if (stringRedisTemplate.hasKey(key)) {
+                // 存在key
+                // 获取所有数据
+                List<Object> ObjectList = hashOperations.values();
+                // 判断是否有数据
+                if (!CollectionUtils.isEmpty(ObjectList)) {
+                    // 有数据
+                    CartVo cartVo = convertObjectListToCartVo(ObjectList);
+                    // 封装cart并插入
+                    Cart cart = new Cart();
+                    cart.setUserId(userId);
+                    cart.setTotalPrice(cartVo.getTotalPrice());
+                    cartMapper.insert(cart);
+                    List<CartGoodsDTO> cartGoodsList = cartVo.getCartGoodsList();
+                    for (CartGoodsDTO cartGoodsDTO : cartGoodsList) {
+                        CartGoods cartGoods = new CartGoods();
+                        cartGoods.setCartId(cart.getId());
+                        BeanUtils.copyProperties(cartGoodsDTO,cartGoods);
+                        // 插入购物车商品列表
+                        cartGoodsMapper.insert(cartGoods);
+                    }
+                } // end if 有无数据
+            } // end if 是否存在key
+        } // end for
+    }
+
+    /**
+     * 由redis获取到某用户的所有购物车商品Object列表转换为CartVo
+     * @param ObjectList
+     * @return
+     */
+    private CartVo convertObjectListToCartVo(List<Object> ObjectList) {
+        // 查询购物车数据
+        List<CartGoodsDTO> cartGoodsList;
+        cartGoodsList = ObjectList.stream().map(o -> JSON.parseObject(o.toString(), CartGoodsDTO.class)).collect(Collectors.toList());
+        // 计算总价
+        Map<String, Double> priceMap = calculateTotalPrice(cartGoodsList);
+        CartVo cartVo = new CartVo();
+        // 设置总价
+        cartVo.setTotalPrice(priceMap.get("totalPrice"));
+        cartVo.setBeforeTotalPrice(priceMap.get("beforeTotalPrice"));
+        // 根据时间排序
+        ListSort.listTimeSort(cartGoodsList);
+        cartVo.setCartGoodsList(cartGoodsList);
+        return cartVo;
     }
 }
