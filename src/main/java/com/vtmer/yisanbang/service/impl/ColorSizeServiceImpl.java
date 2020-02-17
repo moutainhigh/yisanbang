@@ -119,23 +119,23 @@ public class ColorSizeServiceImpl implements ColorSizeService {
         return null;
     }
 
-    public CartGoodsDTO setSkuById(CartGoodsDTO cartGoodsDto) {
-        ColorSizeDto goodsSku = colorSizeMapper.selectDtoByPrimaryKey(cartGoodsDto.getColorSizeId());
+    public CartGoodsDTO setSkuById(CartGoodsDTO cartGoodsDTO) {
+        ColorSizeDto goodsSku = colorSizeMapper.selectDtoByPrimaryKey(cartGoodsDTO.getColorSizeId());
         // 商品尺寸
-        cartGoodsDto.setSize(goodsSku.getSize());
+        cartGoodsDTO.setSize(goodsSku.getSize());
         // 商品颜色
-        cartGoodsDto.setPartOrColor(goodsSku.getColor());
+        cartGoodsDTO.setPartOrColor(goodsSku.getColor());
         // 查询商品信息
         GoodsDto goodsDto = goodsMapper.selectDtoByPrimaryKey(goodsSku.getGoodsId());
         // 商品标题
-        cartGoodsDto.setTitle(goodsDto.getName());
+        cartGoodsDTO.setTitle(goodsDto.getName());
         // 商品价格
-        cartGoodsDto.setPrice(goodsDto.getPrice());
+        cartGoodsDTO.setPrice(goodsDto.getPrice());
         // 设置商品id
-        cartGoodsDto.setId(goodsDto.getId());
+        cartGoodsDTO.setId(goodsDto.getId());
         // 商品图片
-        cartGoodsDto.setPicture(goodsDto.getPicture());
-        return cartGoodsDto;
+        cartGoodsDTO.setPicture(goodsDto.getPicture());
+        return cartGoodsDTO;
     }
 
 }

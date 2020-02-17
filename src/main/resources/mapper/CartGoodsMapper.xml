@@ -41,4 +41,8 @@
     select id, cart_id, color_size_id, amount, is_goods, is_chosen, create_time, update_time
     from cart_goods
   </select>
+  <select id="selectCartGoodsByCartId" resultMap="BaseResultMap">
+    select id, cart_id, color_size_id, amount, is_goods, is_chosen from cart_goods
+    where cart_id = #{cartId}
+  </select>
 </mapper>

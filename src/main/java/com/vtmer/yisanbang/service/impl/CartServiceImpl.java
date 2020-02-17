@@ -147,6 +147,36 @@ public class CartServiceImpl implements CartService {
         } // end for
     }
 
+    @Override
+    public void recoveryCartData() {
+        List<Cart> cartList = cartMapper.selectAll();
+        if (cartList != null) {
+            for (Cart cart : cartList) {
+                int userId = cart.getUserId();
+                key = REDIS_CART + ":" + userId;
+                hashOperations = stringRedisTemplate.boundHashOps(key);
+                List<CartGoods> cartGoodsDTOList = cartGoodsMapper.selectCartGoodsByCartId(cart.getId());
+                for (CartGoods cartGoods : cartGoodsDTOList) {
+                    CartGoodsDTO cartGoodsDTO = new CartGoodsDTO();
+                    // 复制amount、colorSizeId、whetherGoods、whetherChosen进cartGoodsDTO
+                    BeanUtils.copyProperties(cartGoods,cartGoodsDTO);
+                    Integer colorSizeId = cartGoods.getColorSizeId();
+                    Boolean whetherGoods = cartGoods.getWhetherGoods();
+                    // 设置商品信息
+                    if (whetherGoods) {
+                        // 如果是普通商品
+                        colorSizeService.setSkuById(cartGoodsDTO);
+                    } else {
+                        // 如果是套装商品
+                        partSizeService.setSkuById(cartGoodsDTO);
+                    }
+                    // 将购物车数据写入redis
+                    hashOperations.put(colorSizeId.toString() + whetherGoods.toString(),JSON.toJSONString(cartGoodsDTO));
+                } // end 内层for
+            } // end 外层for
+        }
+
+    }
 
     @Transactional
     public void updateChosen(GoodsSkuDTO goodsSkuDto) {
@@ -326,6 +356,7 @@ public class CartServiceImpl implements CartService {
             } // end if 是否存在key
         } // end for
     }
+
 
     /**
      * 由redis获取到某用户的所有购物车商品Object列表转换为CartVo

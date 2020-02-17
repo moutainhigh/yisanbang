@@ -38,4 +38,6 @@ public interface CartService {
      * 购物车数据持久化到数据库
      */
     void cartDataPersistence();
+
+    void recoveryCartData();
 }
