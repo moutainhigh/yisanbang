@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
-public class AddAdminDto {
+public class AddAdminDTO {
     @ApiModelProperty(value = "管理员用户名(管理员用户名必须以小写字母开头，包含6-12位小写字母和数字)", required = true, example = "abc123456")
     @Pattern(regexp = "^[a-z][a-z0-9]{5,11}$", message = "管理员用户名必须以小写字母开头，包含6-12位小写字母和数字")
     private String name;

@@ -1,7 +1,7 @@
 package com.vtmer.yisanbang.service;
 
 import com.vtmer.yisanbang.domain.Sort;
-import com.vtmer.yisanbang.dto.SortDto;
+import com.vtmer.yisanbang.dto.SortDTO;
 import com.vtmer.yisanbang.dto.SuitSortWithChildrenSort;
 
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
 public interface SortService {
 
     // 新建分类信息
-    int addSortInfo(SortDto sortDto);
+    int addSortInfo(SortDTO sortDto);
 
     // 查询指定分类信息
     Sort listSortInfoById(Integer sortId);
@@ -24,7 +24,7 @@ public interface SortService {
     List<SuitSortWithChildrenSort> listAllSuitSortWithChildren();
 
     // 修改指定分类信息
-    int updateSortInfo(Integer sortId, SortDto sortDto);
+    int updateSortInfo(Integer sortId, SortDTO sortDto);
 
     // 修改分类是否显示
     boolean updateIsShowed(Integer sortId);

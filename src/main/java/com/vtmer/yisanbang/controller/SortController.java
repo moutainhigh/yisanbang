@@ -4,7 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.vtmer.yisanbang.common.PageResponseMessage;
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.domain.Sort;
-import com.vtmer.yisanbang.dto.SortDto;
+import com.vtmer.yisanbang.dto.SortDTO;
 import com.vtmer.yisanbang.service.SortService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,7 +25,7 @@ public class SortController {
 
     @ApiOperation("添加分类信息")
     @PostMapping("/add")
-    public ResponseMessage addSortInfo(@Validated @RequestBody SortDto sortDto) {
+    public ResponseMessage addSortInfo(@Validated @RequestBody SortDTO sortDto) {
         if (sortService.isShowOrderExisted(sortDto.getShowOrder(), sortDto.getIsSuit(), sortDto.getParentId())) {
             return ResponseMessage.newErrorInstance("显示顺序已存在，分类信息添加失败");
         }
@@ -85,7 +85,7 @@ public class SortController {
 
     @ApiOperation("根据id修改分类信息")
     @PutMapping("/{sortId}")
-    public ResponseMessage updateSortInfo(@PathVariable("sortId") Integer sortId, @Validated @RequestBody SortDto sortDto){
+    public ResponseMessage updateSortInfo(@PathVariable("sortId") Integer sortId, @Validated @RequestBody SortDTO sortDto){
         if (!sortDto.getShowOrder().equals(sortService.listSortInfoById(sortId).getShowOrder()) && sortService.isShowOrderExisted(sortDto.getShowOrder(), sortDto.getIsSuit(), sortDto.getParentId())) {
             return ResponseMessage.newErrorInstance("显示顺序已存在，分类信息修改失败");
         }

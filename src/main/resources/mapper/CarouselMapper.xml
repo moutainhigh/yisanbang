@@ -52,7 +52,7 @@
     set is_show = 0
     where id = #{carouselId}
   </update>
-  <insert id="insertCarouselInfo" parameterType="com.vtmer.yisanbang.dto.CarouselDto">
+  <insert id="insertCarouselInfo" parameterType="com.vtmer.yisanbang.dto.CarouselDTO">
     insert into carousel (picture_path, url, show_order, is_show)
     values (#{picturePath}, #{url}, #{showOrder}, #{isShow})
   </insert>
@@ -60,7 +60,7 @@
     select show_order
     from carousel
   </select>
-  <update id="updateCarouselInfoSelective" parameterType="com.vtmer.yisanbang.dto.CarouselDto">
+  <update id="updateCarouselInfoSelective" parameterType="com.vtmer.yisanbang.dto.CarouselDTO">
     update carousel
     <set>
       <if test="picturePath != null">

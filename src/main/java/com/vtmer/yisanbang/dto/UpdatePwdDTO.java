@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
-public class UpdatePwdDto {
+public class UpdatePwdDTO {
     // 旧密码
     @ApiModelProperty(value = "旧密码", required = true, example = "a123456")
     @NotBlank(message = "旧密码不能为空")

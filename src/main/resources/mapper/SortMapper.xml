@@ -48,7 +48,7 @@
     from sort
     order by show_order asc
   </select>
-  <insert id="insertSort" parameterType="com.vtmer.yisanbang.dto.SortDto">
+  <insert id="insertSort" parameterType="com.vtmer.yisanbang.dto.SortDTO">
     insert into sort (name, is_suit, parent_id, level, show_order, is_show)
     values (#{name}, #{isSuit}, #{parentId}, #{level}, #{showOrder}, #{isShow})
   </insert>
@@ -83,7 +83,7 @@
     set is_show = 0
     where id = #{sortId}
   </update>
-  <update id="updateSortInfoSelective" parameterType="com.vtmer.yisanbang.dto.SortDto">
+  <update id="updateSortInfoSelective" parameterType="com.vtmer.yisanbang.dto.SortDTO">
     update sort
     <set>
       <if test="name != null">

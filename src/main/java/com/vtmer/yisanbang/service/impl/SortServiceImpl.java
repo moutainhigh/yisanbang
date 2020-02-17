@@ -1,7 +1,7 @@
 package com.vtmer.yisanbang.service.impl;
 
 import com.vtmer.yisanbang.domain.Sort;
-import com.vtmer.yisanbang.dto.SortDto;
+import com.vtmer.yisanbang.dto.SortDTO;
 import com.vtmer.yisanbang.dto.SuitSortWithChildrenSort;
 import com.vtmer.yisanbang.mapper.SortMapper;
 import com.vtmer.yisanbang.service.SortService;
@@ -17,7 +17,7 @@ public class SortServiceImpl implements SortService {
     private SortMapper sortMapper;
 
     @Override
-    public int addSortInfo(SortDto sortDto) {
+    public int addSortInfo(SortDTO sortDto) {
         setSortLevel(sortDto);
         return sortMapper.insertSort(sortDto);
     }
@@ -43,7 +43,7 @@ public class SortServiceImpl implements SortService {
     }
 
     @Override
-    public int updateSortInfo(Integer sortId, SortDto sortDto) {
+    public int updateSortInfo(Integer sortId, SortDTO sortDto) {
         sortDto.setId(sortId);
         setSortLevel(sortDto);
         return sortMapper.updateSortInfoSelective(sortDto);
@@ -86,7 +86,7 @@ public class SortServiceImpl implements SortService {
     /**
      * 根据分类的parentId设置分类的level
      */
-    private void setSortLevel(SortDto sortDto) {
+    private void setSortLevel(SortDTO sortDto) {
         // 没有父分类时为一级分类
         if (sortDto.getParentId() == 0) {
             sortDto.setLevel(0);

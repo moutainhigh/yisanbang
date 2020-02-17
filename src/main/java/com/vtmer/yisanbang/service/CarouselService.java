@@ -1,7 +1,7 @@
 package com.vtmer.yisanbang.service;
 
 import com.vtmer.yisanbang.domain.Carousel;
-import com.vtmer.yisanbang.dto.CarouselDto;
+import com.vtmer.yisanbang.dto.CarouselDTO;
 
 import java.util.List;
 
@@ -19,11 +19,11 @@ public interface CarouselService {
     boolean updateIsShowed(Integer carouselId);
 
     // 新建轮播图信息
-    int addInfo(CarouselDto carouselDto);
+    int addInfo(CarouselDTO carouselDto);
 
     // 判断轮播图显示顺序是否已经存在
     boolean isShowOrderExisted(Integer order);
 
     // 修改轮播图信息
-    int updateInfo(Integer carouselId, CarouselDto carouselDto);
+    int updateInfo(Integer carouselId, CarouselDTO carouselDto);
 }

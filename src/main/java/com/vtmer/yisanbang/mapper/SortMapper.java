@@ -1,7 +1,7 @@
 package com.vtmer.yisanbang.mapper;
 
 import com.vtmer.yisanbang.domain.Sort;
-import com.vtmer.yisanbang.dto.SortDto;
+import com.vtmer.yisanbang.dto.SortDTO;
 import com.vtmer.yisanbang.dto.SuitSortWithChildrenSort;
 import org.springframework.stereotype.Repository;
 
@@ -20,7 +20,7 @@ public interface SortMapper {
     int updateByPrimaryKey(Sort record);
 
     // 新增分类信息
-    int insertSort(SortDto sortDto);
+    int insertSort(SortDTO sortDto);
 
     // 查询所有校服分类
     List<Sort> selectAllUniformSort();
@@ -38,7 +38,7 @@ public interface SortMapper {
     int updateSort2UnShow(Integer sortId);
 
     // 修改分类信息
-    int updateSortInfoSelective(SortDto sortDto);
+    int updateSortInfoSelective(SortDTO sortDto);
 
     // 查询已存在的显示排序
     List<Integer> selectExitedOrder(Integer isSuit, Integer parentId);

@@ -1,6 +1,6 @@
 package com.vtmer.yisanbang.dto;
 
-public class ShowAdDto {
+public class ShowAdDTO {
 
     private String picturePath;
 

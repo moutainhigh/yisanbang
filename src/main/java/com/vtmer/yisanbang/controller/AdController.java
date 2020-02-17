@@ -5,7 +5,7 @@ import com.vtmer.yisanbang.common.PageResponseMessage;
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.common.qiniu.QiniuUpload;
 import com.vtmer.yisanbang.domain.Ad;
-import com.vtmer.yisanbang.dto.AdDto;
+import com.vtmer.yisanbang.dto.AdDTO;
 import com.vtmer.yisanbang.service.AdService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -70,7 +70,7 @@ public class AdController {
 
     @ApiOperation("添加广告信息")
     @PostMapping("/add")
-    public ResponseMessage addAdInfo(@Validated @RequestBody AdDto adDto) {
+    public ResponseMessage addAdInfo(@Validated @RequestBody AdDTO adDto) {
         if (adService.isShowOrderExisted(adDto.getShowOrder())) {
             return ResponseMessage.newErrorInstance("显示顺序已存在，广告信息添加失败");
         }
@@ -83,7 +83,7 @@ public class AdController {
 
     @ApiOperation("根据id修改广告信息")
     @PutMapping("/{adId}")
-    public ResponseMessage updateAdInfo(@PathVariable("adId") Integer adId, @Validated @RequestBody AdDto adDto) {
+    public ResponseMessage updateAdInfo(@PathVariable("adId") Integer adId, @Validated @RequestBody AdDTO adDto) {
         if (!adDto.getShowOrder().equals(adService.listAdInfoByAdId(adId).getShowOrder()) && adService.isShowOrderExisted(adDto.getShowOrder())) {
             return ResponseMessage.newErrorInstance("显示顺序已存在，广告信息修改失败");
         }
@@ -115,7 +115,7 @@ public class AdController {
     /*
     @GetMapping("/showedAds")
     public ResponseMessage getShowedAd() {
-        List<ShowAdDto> ads = adService.listShowedAd();
+        List<ShowAdDTO> ads = adService.listShowedAd();
         if (ads != null) {
             return ResponseMessage.newSuccessInstance(ads, "获取前台展示广告成功");
         }

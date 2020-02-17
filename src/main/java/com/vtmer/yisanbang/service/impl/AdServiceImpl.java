@@ -1,8 +1,8 @@
 package com.vtmer.yisanbang.service.impl;
 
 import com.vtmer.yisanbang.domain.Ad;
-import com.vtmer.yisanbang.dto.AdDto;
-import com.vtmer.yisanbang.dto.ShowAdDto;
+import com.vtmer.yisanbang.dto.AdDTO;
+import com.vtmer.yisanbang.dto.ShowAdDTO;
 import com.vtmer.yisanbang.mapper.AdMapper;
 import com.vtmer.yisanbang.service.AdService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +22,8 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public List<ShowAdDto> listShowedAd() {
-        List<ShowAdDto> ads = adMapper.selectShowedAd();
+    public List<ShowAdDTO> listShowedAd() {
+        List<ShowAdDTO> ads = adMapper.selectShowedAd();
         if (ads != null && !ads.isEmpty()) {
             return ads;
         }
@@ -84,7 +84,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public int addAdInfo(AdDto adDto) {
+    public int addAdInfo(AdDTO adDto) {
         return adMapper.insertAdInfo(adDto);
     }
 
@@ -95,7 +95,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public int updateAdInfo(Integer adId, AdDto adDto) {
+    public int updateAdInfo(Integer adId, AdDTO adDto) {
         adDto.setId(adId);
         return adMapper.updateAdInfoSelective(adDto);
     }
