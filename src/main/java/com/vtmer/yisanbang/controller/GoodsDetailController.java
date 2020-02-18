@@ -2,15 +2,12 @@ package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.common.qiniu.QiniuUpload;
-import com.vtmer.yisanbang.domain.GoodsDetail;
-import com.vtmer.yisanbang.dto.GoodsDetailDto;
-import com.vtmer.yisanbang.mapper.GoodsDetailMapper;
+import com.vtmer.yisanbang.dto.GoodsDetailDTO;
 import com.vtmer.yisanbang.service.GoodsDetailService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,7 +25,7 @@ public class GoodsDetailController {
     @ApiOperation(value = "查找所有商品详情信息")
     // 查找所有商品详情信息
     public ResponseMessage selectAllGoodsDetail() {
-        List<GoodsDetailDto> goodsDetailDtos = goodsDetailService.selectAllDto();
+        List<GoodsDetailDTO> goodsDetailDtos = goodsDetailService.selectAllDto();
         if (goodsDetailDtos != null && !goodsDetailDtos.isEmpty())
             return ResponseMessage.newSuccessInstance(goodsDetailDtos, "查找成功");
         else return ResponseMessage.newErrorInstance("查找失败");
@@ -38,7 +35,7 @@ public class GoodsDetailController {
     @ApiOperation(value = "根据商品id查找该商品的所有商品详情信息")
     // 根据商品id查找该商品的所有商品详情信息
     public ResponseMessage selectAllGoodsDetailByGoodsId(@PathVariable("id") Integer goodsId) {
-        List<GoodsDetailDto> goodsDetailDtos = goodsDetailService.selectAllDtoByGoodsId(goodsId);
+        List<GoodsDetailDTO> goodsDetailDtos = goodsDetailService.selectAllDtoByGoodsId(goodsId);
         if (goodsDetailDtos != null && !goodsDetailDtos.isEmpty())
             return ResponseMessage.newSuccessInstance(goodsDetailDtos, "查找成功");
         else return ResponseMessage.newErrorInstance("查找失败");
@@ -47,8 +44,8 @@ public class GoodsDetailController {
     @PostMapping("/addGoodsDetail")
     @ApiOperation(value = "添加商品详情信息")
     // 添加商品详情信息
-    public ResponseMessage addGoodsDetail(@RequestBody GoodsDetailDto goodsDetail) {
-        List<GoodsDetailDto> goodsDetailDtos = goodsDetailService.selectAllDtoByGoodsId(goodsDetail.getGoodsId());
+    public ResponseMessage addGoodsDetail(@RequestBody GoodsDetailDTO goodsDetail) {
+        List<GoodsDetailDTO> goodsDetailDtos = goodsDetailService.selectAllDtoByGoodsId(goodsDetail.getGoodsId());
         if (goodsDetailDtos != null && !goodsDetailDtos.isEmpty()) {
             boolean judgeFlag = goodsDetailService.judgeGoodsDetail(goodsDetail, goodsDetailDtos);
             if (judgeFlag) return ResponseMessage.newErrorInstance("该商品详细信息内容已经存在");
@@ -61,11 +58,11 @@ public class GoodsDetailController {
     @PutMapping("/updateGoodsDetail")
     @ApiOperation(value = "更新商品详情信息")
     // 更新商品详情信息
-    public ResponseMessage updateGoodsDetail(@RequestBody GoodsDetailDto goodsDetail) {
-        List<GoodsDetailDto> goodsDetailDtos = goodsDetailService.selectAllDtoByGoodsId(goodsDetail.getGoodsId());
+    public ResponseMessage updateGoodsDetail(@RequestBody GoodsDetailDTO goodsDetail) {
+        List<GoodsDetailDTO> goodsDetailDtos = goodsDetailService.selectAllDtoByGoodsId(goodsDetail.getGoodsId());
         boolean judgeFlag = goodsDetailService.judgeGoodsDetail(goodsDetail, goodsDetailDtos);
         if (judgeFlag) return ResponseMessage.newErrorInstance("该商品详细信息内容已经存在");
-        GoodsDetailDto goodsDetailDto = goodsDetailService.selectGoodsDetailByID(goodsDetail.getId());
+        GoodsDetailDTO goodsDetailDto = goodsDetailService.selectGoodsDetailByID(goodsDetail.getId());
         if (goodsDetailDto != null) {
             boolean updateFlag = goodsDetailService.updateGoodsDetail(goodsDetail);
             if (updateFlag) return ResponseMessage.newSuccessInstance("更新成功");
@@ -76,8 +73,8 @@ public class GoodsDetailController {
     @DeleteMapping("/deleteGoodsDetail")
     @ApiOperation(value = "删除商品详情信息")
     // 删除商品详情信息
-    public ResponseMessage deleteGoodsDetail(@RequestBody GoodsDetailDto goodsDetail) {
-        GoodsDetailDto goodsDetailDto = goodsDetailService.selectGoodsDetailByID(goodsDetail.getId());
+    public ResponseMessage deleteGoodsDetail(@RequestBody GoodsDetailDTO goodsDetail) {
+        GoodsDetailDTO goodsDetailDto = goodsDetailService.selectGoodsDetailByID(goodsDetail.getId());
         if (goodsDetailDto != null) {
             boolean deleteFlag = goodsDetailService.deleteGoodsDetail(goodsDetail.getId());
             if (deleteFlag) return ResponseMessage.newSuccessInstance("删除成功");

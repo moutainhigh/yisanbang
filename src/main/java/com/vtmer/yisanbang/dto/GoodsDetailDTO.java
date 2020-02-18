@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @ApiModel(value = "goodsDetail对象", description = "商品对象goodsDetail")
-public class GoodsDetailDto {
+public class GoodsDetailDTO {
     @NotNull(groups = {Update.class, Delete.class}, message = "商品详情id不可为空")
     @ApiModelProperty(value = "商品详情id", example = "1")
     private Integer id;
@@ -58,7 +58,7 @@ public class GoodsDetailDto {
         this.showOrder = showOrder;
     }
 
-    public GoodsDetailDto(Integer id, Integer goodsId, String pirtucePath, Integer showOrder) {
+    public GoodsDetailDTO(Integer id, Integer goodsId, String pirtucePath, Integer showOrder) {
         this.id = id;
         this.goodsId = goodsId;
         this.pirtucePath = pirtucePath;

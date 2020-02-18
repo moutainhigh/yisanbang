@@ -1,7 +1,7 @@
 package com.vtmer.yisanbang.mapper;
 
 import com.vtmer.yisanbang.domain.GoodsDetail;
-import com.vtmer.yisanbang.dto.GoodsDetailDto;
+import com.vtmer.yisanbang.dto.GoodsDetailDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -20,18 +20,18 @@ public interface GoodsDetailMapper {
     int updateByPrimaryKey(GoodsDetail record);
 
     // Dto
-    int insertDto(GoodsDetailDto record);
+    int insertDto(GoodsDetailDTO record);
 
     // Dto
-    GoodsDetailDto selectDtoByPrimaryKey(Integer id);
+    GoodsDetailDTO selectDtoByPrimaryKey(Integer id);
 
     // Dto
-    List<GoodsDetailDto> selectAllDto();
+    List<GoodsDetailDTO> selectAllDto();
 
     // Dto
-    List<GoodsDetailDto> selectAllDtoByGoodsId(Integer goodsId);
+    List<GoodsDetailDTO> selectAllDtoByGoodsId(Integer goodsId);
 
     // Dto
-    int updateDtoByPrimaryKey(GoodsDetailDto record);
+    int updateDtoByPrimaryKey(GoodsDetailDTO record);
 
 }
