@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 @ApiModel(value = "userAddress对象", description = "用户地址Dto对象")
-public class UserAddressDto {
+public class UserAddressDTO {
     @NotNull(groups = {Update.class, Delete.class}, message = "收货人id不可为空")
     @ApiModelProperty(value = "用户地址id", example = "1")
     private Integer id;
@@ -86,7 +86,7 @@ public class UserAddressDto {
         this.userName = userName;
     }
 
-    public UserAddressDto(Integer id, @NotBlank(groups = {Insert.class, Update.class}, message = "收货人id不可为空") Integer userId, @NotBlank(groups = {Insert.class, Update.class}, message = "收货人姓名不可为空") String userName, @NotBlank(groups = {Insert.class, Update.class}, message = "收货地址不可为空") String addressName, @NotBlank(groups = {Insert.class, Update.class}, message = "联系号码不可为空") @Pattern(groups = {Insert.class, Update.class}, regexp = "^1([34578])\\d{9}$", message = "手机号码格式不正确") String phoneNumber, Boolean isDefault) {
+    public UserAddressDTO(Integer id, @NotBlank(groups = {Insert.class, Update.class}, message = "收货人id不可为空") Integer userId, @NotBlank(groups = {Insert.class, Update.class}, message = "收货人姓名不可为空") String userName, @NotBlank(groups = {Insert.class, Update.class}, message = "收货地址不可为空") String addressName, @NotBlank(groups = {Insert.class, Update.class}, message = "联系号码不可为空") @Pattern(groups = {Insert.class, Update.class}, regexp = "^1([34578])\\d{9}$", message = "手机号码格式不正确") String phoneNumber, Boolean isDefault) {
         this.id = id;
         this.userId = userId;
         this.userName = userName;
