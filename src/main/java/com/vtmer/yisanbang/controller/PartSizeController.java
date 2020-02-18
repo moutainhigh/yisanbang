@@ -3,7 +3,7 @@ package com.vtmer.yisanbang.controller;
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.common.valid.group.Delete;
 import com.vtmer.yisanbang.common.valid.group.Update;
-import com.vtmer.yisanbang.dto.PartSizeDto;
+import com.vtmer.yisanbang.dto.PartSizeDTO;
 import com.vtmer.yisanbang.service.PartSizeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,7 +26,7 @@ public class PartSizeController {
     @ApiOperation(value = "查找所有部件尺寸")
     // 查找所有部件尺寸
     public ResponseMessage selectAll() {
-        List<PartSizeDto> partSizeDtos = partSizeService.selectAll();
+        List<PartSizeDTO> partSizeDtos = partSizeService.selectAll();
         if (partSizeDtos != null && !partSizeDtos.isEmpty())
             return ResponseMessage.newSuccessInstance(partSizeDtos, "查找成功");
         else return ResponseMessage.newErrorInstance("查找失败");
@@ -37,7 +37,7 @@ public class PartSizeController {
     // 根据套装id查找所有该套装的部件尺寸
     public ResponseMessage selectPartBySuitId(@ApiParam(name = "suitId", value = "套装Id", required = true)
                                               @PathVariable("id") Integer suitId) {
-        List<PartSizeDto> partSizeDtos = partSizeService.selectAllBySuitId(suitId);
+        List<PartSizeDTO> partSizeDtos = partSizeService.selectAllBySuitId(suitId);
         if (partSizeDtos != null && !partSizeDtos.isEmpty())
             return ResponseMessage.newSuccessInstance(partSizeDtos, "查找成功");
         else return ResponseMessage.newErrorInstance("查找失败");
@@ -48,7 +48,7 @@ public class PartSizeController {
     // 根据部件尺寸id查找部件尺寸
     public ResponseMessage selectPartById(@ApiParam(name = "partSizeId", value = "部件尺寸Id", required = true)
                                           @PathVariable("id") Integer partSizeId) {
-        PartSizeDto partSizeDto = partSizeService.selectPartSizeById(partSizeId);
+        PartSizeDTO partSizeDto = partSizeService.selectPartSizeById(partSizeId);
         if (partSizeDto != null)
             return ResponseMessage.newSuccessInstance(partSizeDto, "查找成功");
         else return ResponseMessage.newErrorInstance("查找失败，该套装id不存在");
@@ -58,8 +58,8 @@ public class PartSizeController {
     // 添加套装部件尺寸
     public ResponseMessage addPartSize(@ApiParam(name = "部件尺寸Dto实体类", value = "传入Json格式", required = true)
                                            @RequestBody
-                                           @Validated PartSizeDto partSizeDto) {
-        PartSizeDto partSize = partSizeService.selectPartSizeById(partSizeDto.getId());
+                                           @Validated PartSizeDTO partSizeDto) {
+        PartSizeDTO partSize = partSizeService.selectPartSizeById(partSizeDto.getId());
         if (partSize != null) {
             return ResponseMessage.newErrorInstance("该套装部件尺寸id已经存在");
         }
@@ -75,8 +75,8 @@ public class PartSizeController {
     // 删除部件尺寸
     public ResponseMessage deletePartSize(@ApiParam(name = "部件尺寸Dto实体类", value = "传入Json格式", required = true)
                                           @RequestBody
-                                          @Validated(Delete.class) PartSizeDto partSizeDto) {
-        PartSizeDto partSize = partSizeService.selectPartSizeById(partSizeDto.getId());
+                                          @Validated(Delete.class) PartSizeDTO partSizeDto) {
+        PartSizeDTO partSize = partSizeService.selectPartSizeById(partSizeDto.getId());
         if (partSize != null) {
             boolean deleteFlag = partSizeService.deletePartSize(partSizeDto.getId());
             if (deleteFlag) return ResponseMessage.newSuccessInstance("删除成功");
@@ -89,10 +89,10 @@ public class PartSizeController {
     // 更新部件尺寸
     public ResponseMessage updatePartSize(@ApiParam(name = "部件尺寸Dto实体类", value = "传入Json格式", required = true)
                                           @RequestBody
-                                          @Validated(Update.class) PartSizeDto partSizeDto) {
+                                          @Validated(Update.class) PartSizeDTO partSizeDto) {
         boolean judgeFlag = partSizeService.judgePartSize(partSizeDto);
         if (judgeFlag) return ResponseMessage.newErrorInstance("该套装部件尺寸已经存在");
-        PartSizeDto partSize = partSizeService.selectPartSizeById(partSizeDto.getId());
+        PartSizeDTO partSize = partSizeService.selectPartSizeById(partSizeDto.getId());
         if (partSize != null) {
             boolean updateFlag = partSizeService.updatePartSize(partSizeDto);
             if (updateFlag) return ResponseMessage.newSuccessInstance("更新成功");
@@ -105,7 +105,7 @@ public class PartSizeController {
     // 根据套装id查找该套装的所有部件
     public ResponseMessage selectAllPartById(@ApiParam(name = "suitId", value = "套装Id", required = true)
                                              @PathVariable("id") Integer suitId) {
-        List<PartSizeDto> partSizeDtos = partSizeService.selectAllBySuitId(suitId);
+        List<PartSizeDTO> partSizeDtos = partSizeService.selectAllBySuitId(suitId);
         if (partSizeDtos != null) {
             List<String> list = partSizeService.selectAllPartById(suitId);
             if (list != null && !list.isEmpty()) {
@@ -124,7 +124,7 @@ public class PartSizeController {
     // 根据套装id查找该套装的所有尺寸
     public ResponseMessage selectAllSizeById(@ApiParam(name = "suitId", value = "套装Id", required = true)
                                              @PathVariable("id") Integer suitId) {
-        List<PartSizeDto> partSizeDtos = partSizeService.selectAllBySuitId(suitId);
+        List<PartSizeDTO> partSizeDtos = partSizeService.selectAllBySuitId(suitId);
         if (partSizeDtos != null) {
             List<String> list = partSizeService.selectAllSizeById(suitId);
             if (list != null && !list.isEmpty()) {
@@ -147,7 +147,7 @@ public class PartSizeController {
                                                      @PathVariable("part") String part,
                                                      @ApiParam(name = "size", value = "套装价格", required = true)
                                                      @PathVariable("size") String size) {
-        List<PartSizeDto> partSizeDtos = partSizeService.selectAllBySuitId(suitId);
+        List<PartSizeDTO> partSizeDtos = partSizeService.selectAllBySuitId(suitId);
         if (partSizeDtos != null && !partSizeDtos.isEmpty()) {
             Integer inventory = partSizeService.selectInventoryByPartSize(suitId, part, size);
             if (inventory != null)
@@ -166,7 +166,7 @@ public class PartSizeController {
                                                  @PathVariable("part") String part,
                                                  @ApiParam(name = "size", value = "套装价格", required = true)
                                                  @PathVariable("size") String size) {
-        List<PartSizeDto> partSizeDtos = partSizeService.selectAllBySuitId(suitId);
+        List<PartSizeDTO> partSizeDtos = partSizeService.selectAllBySuitId(suitId);
         if (partSizeDtos != null && !partSizeDtos.isEmpty()) {
             Double price = partSizeService.selectPriceByPartSize(suitId, part, size);
             if (price != null)
@@ -181,7 +181,7 @@ public class PartSizeController {
     // 返回套装内部件的最低价
     public ResponseMessage selectLowPriceById(@ApiParam(name = "suitId", value = "套装Id", required = true)
                                               @PathVariable("id") Integer suitId) {
-        List<PartSizeDto> partSizeDtos = partSizeService.selectAllBySuitId(suitId);
+        List<PartSizeDTO> partSizeDtos = partSizeService.selectAllBySuitId(suitId);
         if (partSizeDtos != null && !partSizeDtos.isEmpty()) {
             Double lowPrice = partSizeService.selectLowPriceBySuitId(suitId);
             if (lowPrice != null)
@@ -196,7 +196,7 @@ public class PartSizeController {
     // 返回套装内部件的最高价
     public ResponseMessage selectHighPriceById(@ApiParam(name = "suitId", value = "套装Id", required = true)
                                                @PathVariable("id") Integer suitId) {
-        List<PartSizeDto> partSizeDtos = partSizeService.selectAllBySuitId(suitId);
+        List<PartSizeDTO> partSizeDtos = partSizeService.selectAllBySuitId(suitId);
         if (partSizeDtos != null && !partSizeDtos.isEmpty()) {
             Double highPrice = partSizeService.selecgHighPriceBySuitId(suitId);
             if (highPrice != null)

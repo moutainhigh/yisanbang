@@ -12,7 +12,7 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
-  <resultMap id="PartSizeMap" type="com.vtmer.yisanbang.dto.PartSizeDto">
+  <resultMap id="PartSizeMap" type="com.vtmer.yisanbang.dto.PartSizeDTO">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="suit_id" jdbcType="INTEGER" property="suitId" />
     <result column="price" jdbcType="DOUBLE" property="price" />
@@ -67,7 +67,7 @@
     select id, suit_id, price, part, size, inventory, model, create_time, update_time
     from part_size
   </select>
-  <insert id="insertDto" parameterType="com.vtmer.yisanbang.dto.PartSizeDto">
+  <insert id="insertDto" parameterType="com.vtmer.yisanbang.dto.PartSizeDTO">
     insert into part_size (id, suit_id, price,
       part, size, inventory,
       model
@@ -77,7 +77,7 @@
       #{model,jdbcType=VARCHAR}
       )
   </insert>
-  <update id="updateDtoByPrimaryKey" parameterType="com.vtmer.yisanbang.dto.PartSizeDto">
+  <update id="updateDtoByPrimaryKey" parameterType="com.vtmer.yisanbang.dto.PartSizeDTO">
     update part_size
     set suit_id = #{suitId,jdbcType=INTEGER},
       price = #{price,jdbcType=DOUBLE},

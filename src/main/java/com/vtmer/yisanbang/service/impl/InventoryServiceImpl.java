@@ -2,7 +2,7 @@ package com.vtmer.yisanbang.service.impl;
 
 import com.vtmer.yisanbang.domain.*;
 import com.vtmer.yisanbang.dto.ColorSizeDTO;
-import com.vtmer.yisanbang.dto.PartSizeDto;
+import com.vtmer.yisanbang.dto.PartSizeDTO;
 import com.vtmer.yisanbang.mapper.*;
 import com.vtmer.yisanbang.service.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,7 @@ public class InventoryServiceImpl implements InventoryService {
             else
                 return true;
         } else {
-            PartSizeDto partSizeDto = partSizeMapper.selectDtoByPrimaryKey(orderGoods.getSizeId());
+            PartSizeDTO partSizeDto = partSizeMapper.selectDtoByPrimaryKey(orderGoods.getSizeId());
             if (partSizeDto.getInventory() < orderGoods.getAmount())
                 return false;
             else
@@ -57,7 +57,7 @@ public class InventoryServiceImpl implements InventoryService {
             if (updateFlag > 0) return true;
             else return false;
         } else {
-            PartSizeDto partSizeDto = partSizeMapper.selectDtoByPrimaryKey(orderGoods.getSizeId());
+            PartSizeDTO partSizeDto = partSizeMapper.selectDtoByPrimaryKey(orderGoods.getSizeId());
             Integer amount = partSizeDto.getInventory() - orderGoods.getAmount();
             partSizeDto.setInventory(amount);
             int updateFlag = partSizeMapper.updateDtoByPrimaryKey(partSizeDto);
@@ -86,7 +86,7 @@ public class InventoryServiceImpl implements InventoryService {
                 }
             }
         } else {
-            PartSizeDto partSizeDto = partSizeMapper.selectDtoByPrimaryKey(refundGoods.getSizeId());
+            PartSizeDTO partSizeDto = partSizeMapper.selectDtoByPrimaryKey(refundGoods.getSizeId());
             for (OrderGoods orderGoods1 : orderGoodsList) {
                 if (partSizeDto.getId() == orderGoods1.getSizeId()) {
                     Integer amount = partSizeDto.getInventory() + orderGoods1.getAmount();
