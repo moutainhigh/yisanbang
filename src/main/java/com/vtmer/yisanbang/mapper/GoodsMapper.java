@@ -1,7 +1,7 @@
 package com.vtmer.yisanbang.mapper;
 
 import com.vtmer.yisanbang.domain.Goods;
-import com.vtmer.yisanbang.dto.GoodsDto;
+import com.vtmer.yisanbang.dto.GoodsDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -21,32 +21,32 @@ public interface GoodsMapper {
     int updateByPrimaryKey(Goods record);
 
     // Dto
-    int insertDto(GoodsDto record);
+    int insertDto(GoodsDTO record);
 
     // Dto
-    GoodsDto selectDtoByPrimaryKey(Integer goodsId);
+    GoodsDTO selectDtoByPrimaryKey(Integer goodsId);
 
     // Dto
-    GoodsDto selectDtoByGoodsName(String goodsName);
+    GoodsDTO selectDtoByGoodsName(String goodsName);
 
     // Dto
-    List<GoodsDto> selectAllDto();
+    List<GoodsDTO> selectAllDto();
 
     // Dto
-    int updateDtoByPrimaryKey(GoodsDto record);
+    int updateDtoByPrimaryKey(GoodsDTO record);
 
     // Dto
-    List<GoodsDto> selectAllDtoBySort(Integer sortId);
+    List<GoodsDTO> selectAllDtoBySort(Integer sortId);
 
     // Dto
-    List<GoodsDto> selectAllDtoBySortOrderByPrice(Integer sortId);
+    List<GoodsDTO> selectAllDtoBySortOrderByPrice(Integer sortId);
 
     // Dto
-    List<GoodsDto> selectAllDtoBySortOrderByTime(Integer sortId);
+    List<GoodsDTO> selectAllDtoBySortOrderByTime(Integer sortId);
 
     // Dto
-    List<GoodsDto> selectAllDtoOrderByPrice();
+    List<GoodsDTO> selectAllDtoOrderByPrice();
 
     // Dto
-    List<GoodsDto> selectAllDtoOrderByTime();
+    List<GoodsDTO> selectAllDtoOrderByTime();
 }

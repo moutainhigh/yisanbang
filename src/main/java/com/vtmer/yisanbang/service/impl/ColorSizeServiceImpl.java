@@ -2,7 +2,7 @@ package com.vtmer.yisanbang.service.impl;
 
 import com.vtmer.yisanbang.dto.CartGoodsDTO;
 import com.vtmer.yisanbang.dto.ColorSizeDto;
-import com.vtmer.yisanbang.dto.GoodsDto;
+import com.vtmer.yisanbang.dto.GoodsDTO;
 import com.vtmer.yisanbang.mapper.ColorSizeMapper;
 import com.vtmer.yisanbang.mapper.GoodsMapper;
 import com.vtmer.yisanbang.service.ColorSizeService;
@@ -126,7 +126,7 @@ public class ColorSizeServiceImpl implements ColorSizeService {
         // 商品颜色
         cartGoodsDTO.setPartOrColor(goodsSku.getColor());
         // 查询商品信息
-        GoodsDto goodsDto = goodsMapper.selectDtoByPrimaryKey(goodsSku.getGoodsId());
+        GoodsDTO goodsDto = goodsMapper.selectDtoByPrimaryKey(goodsSku.getGoodsId());
         // 商品标题
         cartGoodsDTO.setTitle(goodsDto.getName());
         // 商品价格
