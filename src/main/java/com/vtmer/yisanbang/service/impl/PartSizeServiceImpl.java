@@ -2,7 +2,7 @@ package com.vtmer.yisanbang.service.impl;
 
 import com.vtmer.yisanbang.dto.CartGoodsDTO;
 import com.vtmer.yisanbang.dto.PartSizeDto;
-import com.vtmer.yisanbang.dto.SuitDto;
+import com.vtmer.yisanbang.dto.SuitDTO;
 import com.vtmer.yisanbang.mapper.PartSizeMapper;
 import com.vtmer.yisanbang.mapper.SuitMapper;
 import com.vtmer.yisanbang.service.PartSizeService;
@@ -27,7 +27,7 @@ public class PartSizeServiceImpl implements PartSizeService {
         // 套装部件
         cartGoodsDto.setPartOrColor(suitSku.getPart());
         // 查询商品信息
-        SuitDto suitDto = suitMapper.selectDtoByPrimaryKey(suitSku.getSuitId());
+        SuitDTO suitDto = suitMapper.selectDtoByPrimaryKey(suitSku.getSuitId());
         // 套装标题
         cartGoodsDto.setTitle(suitDto.getName());
         // 套装价格（最低价）

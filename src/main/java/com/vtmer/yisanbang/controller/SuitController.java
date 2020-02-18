@@ -4,7 +4,7 @@ import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.common.qiniu.QiniuUpload;
 import com.vtmer.yisanbang.common.valid.group.Delete;
 import com.vtmer.yisanbang.common.valid.group.Update;
-import com.vtmer.yisanbang.dto.SuitDto;
+import com.vtmer.yisanbang.dto.SuitDTO;
 import com.vtmer.yisanbang.service.SuitService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,7 +28,7 @@ public class SuitController {
     @ApiOperation(value = "查找显示所有套装")
     // 查找所有套装
     public ResponseMessage selectAllSuit() {
-        List<SuitDto> suitDtoList = suitService.selectAll();
+        List<SuitDTO> suitDtoList = suitService.selectAll();
         if (suitDtoList != null && !suitDtoList.isEmpty())
             return ResponseMessage.newSuccessInstance(suitDtoList, "查找成功");
         else
@@ -39,7 +39,7 @@ public class SuitController {
     @ApiOperation(value = "根据套装更新时间顺序查找显示套装")
     // 根据套装更新时间顺序显示套装
     public ResponseMessage selectAllSuitOrderByTime() {
-        List<SuitDto> suitDtoList = suitService.selectSuitOrderByTime();
+        List<SuitDTO> suitDtoList = suitService.selectSuitOrderByTime();
         if (suitDtoList != null && !suitDtoList.isEmpty())
             return ResponseMessage.newSuccessInstance(suitDtoList, "查找成功");
         else
@@ -50,7 +50,7 @@ public class SuitController {
     @ApiOperation(value = "根据套装价格顺序查找显示套装")
     // 根据套装价格顺序显示套装
     public ResponseMessage selectAllGoodsOrderByPrice() {
-        List<SuitDto> suitDtoList = suitService.selectSuitOrderByPrice();
+        List<SuitDTO> suitDtoList = suitService.selectSuitOrderByPrice();
         if (suitDtoList != null && !suitDtoList.isEmpty())
             return ResponseMessage.newSuccessInstance(suitDtoList, "查找成功");
         else
@@ -62,7 +62,7 @@ public class SuitController {
     // 根据套装分类查找套装
     public ResponseMessage selectAllSuitBySortId(@ApiParam(name = "sortId", value = "分类Id", required = true)
                                                  @PathVariable("id") Integer sortId) {
-        List<SuitDto> suitDtoList = suitService.selectSuitBySort(sortId);
+        List<SuitDTO> suitDtoList = suitService.selectSuitBySort(sortId);
         if (suitDtoList != null && !suitDtoList.isEmpty())
             return ResponseMessage.newSuccessInstance(suitDtoList, "查找成功");
         else
@@ -74,7 +74,7 @@ public class SuitController {
     // 根据套装id查找套装
     public ResponseMessage selectSuitById(@ApiParam(name = "goodsId", value = "商品Id", required = true)
                                           @PathVariable("id") Integer goodsId) {
-        SuitDto suitDto = suitService.selectSuitById(goodsId);
+        SuitDTO suitDto = suitService.selectSuitById(goodsId);
         if (suitDto != null)
             return ResponseMessage.newSuccessInstance(suitDto, "查找成功");
         else return ResponseMessage.newErrorInstance("该套装id错误");
@@ -85,7 +85,7 @@ public class SuitController {
     // 根据套装名称查找套装
     public ResponseMessage selectSuitByName(@ApiParam(name = "goodsName", value = "商品名称", required = true)
                                             @PathVariable("name") String goodsName) {
-        SuitDto suit = suitService.selectSuitByName(goodsName);
+        SuitDTO suit = suitService.selectSuitByName(goodsName);
         if (suit != null)
             return ResponseMessage.newSuccessInstance(suit, "查找成功");
         else return ResponseMessage.newErrorInstance("该套装名称不存在");
@@ -96,8 +96,8 @@ public class SuitController {
     // 添加套装
     public ResponseMessage addGoods(@ApiParam(name = "套装Dto实体类", value = "传入Json格式", required = true)
                                     @RequestBody
-                                    @Validated SuitDto suitDto) {
-        List<SuitDto> suitDtoList = suitService.selectAll();
+                                    @Validated SuitDTO suitDto) {
+        List<SuitDTO> suitDtoList = suitService.selectAll();
         if (suitDtoList != null && !suitDtoList.isEmpty()) {
             boolean judgeFlag = suitService.judgeSuit(suitDto, suitDtoList);
             if (judgeFlag) return ResponseMessage.newErrorInstance("该套装名称已经存在");
@@ -112,8 +112,8 @@ public class SuitController {
     // 删除套装
     public ResponseMessage deleteGoods(@ApiParam(name = "套装Dto实体类", value = "传入Json格式", required = true)
                                        @RequestBody
-                                       @Validated(Delete.class) SuitDto suitDto) {
-        SuitDto suit = suitService.selectSuitById(suitDto.getId());
+                                       @Validated(Delete.class) SuitDTO suitDto) {
+        SuitDTO suit = suitService.selectSuitById(suitDto.getId());
         if (suit != null) {
             boolean deleteFlag = suitService.deleteSuitById(suitDto.getId());
             if (deleteFlag) return ResponseMessage.newSuccessInstance("删除成功");
@@ -126,11 +126,11 @@ public class SuitController {
     // 更新套装
     public ResponseMessage updateSuit(@ApiParam(name = "套装Dto实体类", value = "传入Json格式", required = true)
                                       @RequestBody
-                                      @Validated(Update.class) SuitDto suitDto) {
-        List<SuitDto> suitDtoList = suitService.selectAll();
+                                      @Validated(Update.class) SuitDTO suitDto) {
+        List<SuitDTO> suitDtoList = suitService.selectAll();
         boolean judgeFlag = suitService.judgeSuit(suitDto, suitDtoList);
         if (judgeFlag) return ResponseMessage.newErrorInstance("该套装名称已经存在");
-        SuitDto suit = suitService.selectSuitById(suitDto.getId());
+        SuitDTO suit = suitService.selectSuitById(suitDto.getId());
         if (suit != null) {
             boolean updateFlag = suitService.updateSuitById(suitDto);
             if (updateFlag) return ResponseMessage.newSuccessInstance("更新成功");
@@ -143,8 +143,8 @@ public class SuitController {
     // 隐藏套装
     public ResponseMessage hideSuit(@ApiParam(name = "套装Dto实体类", value = "传入Json格式", required = true)
                                     @RequestBody
-                                    @Validated(Update.class) SuitDto suitDto) {
-        SuitDto suit = suitService.selectSuitById(suitDto.getId());
+                                    @Validated(Update.class) SuitDTO suitDto) {
+        SuitDTO suit = suitService.selectSuitById(suitDto.getId());
         if (suit != null) {
             boolean hideFlag = suitService.hideSuit(suitDto);
             if (hideFlag) return ResponseMessage.newSuccessInstance("隐藏成功");
