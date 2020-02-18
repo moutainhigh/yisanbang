@@ -25,8 +25,14 @@ public class Swagger2Config {
     @Value("${swagger.show}")
     private boolean swaggerShow;
 
+    @Value("${swagger.host}")
+    private String host;
 
-    /**实现点：业务系统的token认证机制**/
+
+
+    /**
+     * 业务系统的token认证机制
+     */
     private List<Parameter> getTokenPar(){
         ParameterBuilder tokenPar = new ParameterBuilder();
         List<Parameter> pars = new ArrayList<Parameter>();
@@ -41,15 +47,15 @@ public class Swagger2Config {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .enable(swaggerShow)
-                .host("119.3.254.171:8089")
+                .host(host)
                 .apiInfo(getApiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.vtmer.yisanbang.controller")) // 过滤的接口
                 //.apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
                 //.apis(RequestHandlerSelectors.withMethodAnnotation(Api.class))
                 .paths(PathSelectors.any())
-                .build()
-                .globalOperationParameters(getTokenPar());
+                .build();
+                //.globalOperationParameters(getTokenPar());
     }
 
     private ApiInfo getApiInfo() {
@@ -57,7 +63,7 @@ public class Swagger2Config {
         return new ApiInfoBuilder()
                 .title("【衣仨邦】微信小程序")
                 .description("项目描述：服饰电商小程序")
-                .version("版本1.1")
+                .version("版本1.2")
                 .contact(contact)
                 .build();
     }
