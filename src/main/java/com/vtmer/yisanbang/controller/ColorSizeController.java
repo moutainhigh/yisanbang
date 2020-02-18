@@ -3,7 +3,7 @@ package com.vtmer.yisanbang.controller;
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.common.valid.group.Delete;
 import com.vtmer.yisanbang.common.valid.group.Update;
-import com.vtmer.yisanbang.dto.ColorSizeDto;
+import com.vtmer.yisanbang.dto.ColorSizeDTO;
 import com.vtmer.yisanbang.service.ColorSizeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,7 +26,7 @@ public class ColorSizeController {
     @ApiOperation(value = "根据商品id查找该商品的所有颜色尺寸")
     // 查找所有颜色尺寸通过商品id
     public ResponseMessage selectAllColorSizeByGoodsId(@ApiParam(name = "goodsId", value = "商品Id", required = true) @PathVariable("id") Integer goodsId) {
-        List<ColorSizeDto> colorSizeDtos = colorSizeService.selectAllByGoodsId(goodsId);
+        List<ColorSizeDTO> colorSizeDtos = colorSizeService.selectAllByGoodsId(goodsId);
         if (colorSizeDtos != null && !colorSizeDtos.isEmpty())
             return ResponseMessage.newSuccessInstance(colorSizeDtos, "查找成功");
         else
@@ -38,8 +38,8 @@ public class ColorSizeController {
     // 添加商品颜色尺寸
     public ResponseMessage addColorSize(@ApiParam(name = "颜色尺寸Dto实体类", value = "传入Json格式", required = true)
                                             @RequestBody
-                                                    @Validated ColorSizeDto colorSizeDto) {
-        ColorSizeDto colorSize = colorSizeService.selectColorSizeById(colorSizeDto.getId());
+                                                    @Validated ColorSizeDTO colorSizeDto) {
+        ColorSizeDTO colorSize = colorSizeService.selectColorSizeById(colorSizeDto.getId());
         if (colorSize != null) {
             return ResponseMessage.newErrorInstance("该商品颜色尺寸id已经存在");
         }
@@ -55,8 +55,8 @@ public class ColorSizeController {
     // 更新商品颜色尺寸
     public ResponseMessage updateColorSize(@ApiParam(name = "颜色尺寸Dto实体类", value = "传入Json格式", required = true)
                                                @RequestBody
-                                               @Validated(Update.class) ColorSizeDto colorSizeDto) {
-        ColorSizeDto colorSize = colorSizeService.selectColorSizeById(colorSizeDto.getId());
+                                               @Validated(Update.class) ColorSizeDTO colorSizeDto) {
+        ColorSizeDTO colorSize = colorSizeService.selectColorSizeById(colorSizeDto.getId());
         if (colorSize != null) {
             boolean updateFlag = colorSizeService.updateColorSize(colorSizeDto);
             if (updateFlag) return ResponseMessage.newSuccessInstance("更新成功");
@@ -69,8 +69,8 @@ public class ColorSizeController {
     // 删除商品颜色尺寸
     public ResponseMessage deleteColorSize(@ApiParam(name = "颜色尺寸Dto实体类", value = "传入Json格式", required = true)
                                                @RequestBody
-                                               @Validated(Delete.class) ColorSizeDto colorSizeDto) {
-        ColorSizeDto colorSize = colorSizeService.selectColorSizeById(colorSizeDto.getId());
+                                               @Validated(Delete.class) ColorSizeDTO colorSizeDto) {
+        ColorSizeDTO colorSize = colorSizeService.selectColorSizeById(colorSizeDto.getId());
         if (colorSize != null) {
             boolean deleteFlag = colorSizeService.deleteColorSize(colorSizeDto.getId());
             if (deleteFlag) return ResponseMessage.newSuccessInstance("删除成功");
@@ -82,7 +82,7 @@ public class ColorSizeController {
     @ApiOperation(value = "根据商品id查找该商品的所有颜色")
     // 查找所有颜色
     public ResponseMessage selectAllColorById(@ApiParam(name = "goodsId", value = "商品Id", required = true) @PathVariable("id") Integer goodsId) {
-        List<ColorSizeDto> colorSizeDtos = colorSizeService.selectAllByGoodsId(goodsId);
+        List<ColorSizeDTO> colorSizeDtos = colorSizeService.selectAllByGoodsId(goodsId);
         if (colorSizeDtos != null) {
             List<String> list = colorSizeService.selectAllColorById(goodsId);
             if (list != null && !list.isEmpty()) {
@@ -100,7 +100,7 @@ public class ColorSizeController {
     @ApiOperation(value = "根据商品id查找该商品的所有尺寸")
     // 查找所有尺寸
     public ResponseMessage selectAllSizeById(@ApiParam(name = "goodsId", value = "商品Id", required = true) @PathVariable("id") Integer goodsId) {
-        List<ColorSizeDto> colorSizeDtos = colorSizeService.selectAllByGoodsId(goodsId);
+        List<ColorSizeDTO> colorSizeDtos = colorSizeService.selectAllByGoodsId(goodsId);
         if (colorSizeDtos != null) {
             List<String> list = colorSizeService.selectAllSizeById(goodsId);
             if (list != null && !list.isEmpty()) {
@@ -123,7 +123,7 @@ public class ColorSizeController {
         System.out.println(goodsId);
         System.out.println(color);
         System.out.println(size);
-        ColorSizeDto colorSizeDto = colorSizeService.selectColorSizeById(goodsId);
+        ColorSizeDTO colorSizeDto = colorSizeService.selectColorSizeById(goodsId);
         if (colorSizeDto != null) {
             Integer inventory = colorSizeService.selectInventoryByColorSize(goodsId, color, size);
             if (inventory != null)

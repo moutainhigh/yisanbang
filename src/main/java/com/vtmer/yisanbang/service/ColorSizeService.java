@@ -1,31 +1,31 @@
 package com.vtmer.yisanbang.service;
 
 import com.vtmer.yisanbang.dto.CartGoodsDTO;
-import com.vtmer.yisanbang.dto.ColorSizeDto;
+import com.vtmer.yisanbang.dto.ColorSizeDTO;
 
 import java.util.List;
 
 public interface ColorSizeService {
     // 查找所有颜色尺寸
-    public List<ColorSizeDto> selectALL();
+    public List<ColorSizeDTO> selectALL();
 
     // 添加颜色尺寸
-    public boolean addColorSize(ColorSizeDto colorSizeDto);
+    public boolean addColorSize(ColorSizeDTO colorSizeDto);
 
     // 删除颜色尺寸
     public boolean deleteColorSize(Integer colorSizeId);
 
     // 更新颜色尺寸
-    public boolean updateColorSize(ColorSizeDto colorSizeDto);
+    public boolean updateColorSize(ColorSizeDTO colorSizeDto);
 
     // 根据颜色尺寸id查找颜色尺寸
-    public ColorSizeDto selectColorSizeById(Integer colorSizeId);
+    public ColorSizeDTO selectColorSizeById(Integer colorSizeId);
 
     // 根据商品id查找所有该商品的颜色尺寸
-    public List<ColorSizeDto> selectAllByGoodsId(Integer goodsId);
+    public List<ColorSizeDTO> selectAllByGoodsId(Integer goodsId);
 
     // 判断颜色尺寸是否存在
-    public boolean judgeColorSize(ColorSizeDto colorSizeDto);
+    public boolean judgeColorSize(ColorSizeDTO colorSizeDto);
 
     // 查找所有颜色
     public List<String> selectAllColorById(Integer goodsId);

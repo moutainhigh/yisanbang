@@ -1,7 +1,7 @@
 package com.vtmer.yisanbang.mapper;
 
 import com.vtmer.yisanbang.domain.ColorSize;
-import com.vtmer.yisanbang.dto.ColorSizeDto;
+import com.vtmer.yisanbang.dto.ColorSizeDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -24,17 +24,17 @@ public interface ColorSizeMapper {
     int updateInventoryByPrimaryKey(Map<String,Integer> inventoryMap);
 
     // Dto
-    int insertDto(ColorSizeDto record);
+    int insertDto(ColorSizeDTO record);
 
     // Dto
-    ColorSizeDto selectDtoByPrimaryKey(Integer id);
+    ColorSizeDTO selectDtoByPrimaryKey(Integer id);
 
     // Dto
-    List<ColorSizeDto> selectAllDto();
+    List<ColorSizeDTO> selectAllDto();
 
     // Dto
-    int updateDtoByPrimaryKey(ColorSizeDto record);
+    int updateDtoByPrimaryKey(ColorSizeDTO record);
 
     // Dto
-    List<ColorSizeDto> selectAllDtoByGoodsId(Integer goodsId);
+    List<ColorSizeDTO> selectAllDtoByGoodsId(Integer goodsId);
 }
