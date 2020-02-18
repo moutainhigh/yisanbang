@@ -1,8 +1,8 @@
 package com.vtmer.yisanbang.mapper;
 
 import com.vtmer.yisanbang.domain.Ad;
-import com.vtmer.yisanbang.dto.AdDto;
-import com.vtmer.yisanbang.dto.ShowAdDto;
+import com.vtmer.yisanbang.dto.AdDTO;
+import com.vtmer.yisanbang.dto.ShowAdDTO;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,7 +20,7 @@ public interface AdMapper {
     int updateByPrimaryKey(Ad record);
 
     // 返回按升序排列的所有用于展示图片及其url
-    List<ShowAdDto> selectShowedAd();
+    List<ShowAdDTO> selectShowedAd();
 
     // 修改点击广告跳转的url
     int updateUrl(String url, Integer adId);
@@ -35,12 +35,12 @@ public interface AdMapper {
     int updateAd2UnShow(Integer adId);
 
     // 新增广告信息
-    int insertAdInfo(AdDto adDto);
+    int insertAdInfo(AdDTO adDto);
 
     // 查询已存在的显示排序
     List<Integer> selectExitedOrder();
 
     // 修改广告信息
-    int updateAdInfoSelective(AdDto adDto);
+    int updateAdInfoSelective(AdDTO adDto);
 
 }

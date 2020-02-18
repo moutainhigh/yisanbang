@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotBlank;
 
-public class LoginDto {
+public class LoginDTO {
     @ApiModelProperty(value = "管理员用户名", required = true, example = "admin")
     @NotBlank(message = "用户名不能为空")
     private String adminName;

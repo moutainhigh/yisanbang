@@ -42,7 +42,7 @@
     from ad
     order by show_order asc
   </select>
-  <select id="selectShowedAd" resultType="com.vtmer.yisanbang.dto.ShowAdDto">
+  <select id="selectShowedAd" resultType="com.vtmer.yisanbang.dto.ShowAdDTO">
     select picture_path, url
     from ad
     where is_show = 1
@@ -68,7 +68,7 @@
     set is_show = 0
     where id = #{adId}
   </update>
-  <insert id="insertAdInfo" parameterType="com.vtmer.yisanbang.dto.AdDto">
+  <insert id="insertAdInfo" parameterType="com.vtmer.yisanbang.dto.AdDTO">
     insert into ad (picture_path, url, show_order, is_show)
     values (#{picturePath}, #{url}, #{showOrder}, #{isShow})
   </insert>
@@ -76,7 +76,7 @@
     select show_order
     from ad
   </select>
-  <update id="updateAdInfoSelective" parameterType="com.vtmer.yisanbang.dto.AdDto">
+  <update id="updateAdInfoSelective" parameterType="com.vtmer.yisanbang.dto.AdDTO">
     update ad
     <set>
       <if test="picturePath != null">

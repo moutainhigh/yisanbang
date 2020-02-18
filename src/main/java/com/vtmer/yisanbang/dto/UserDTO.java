@@ -1,6 +1,6 @@
 package com.vtmer.yisanbang.dto;
 
-public class UserDto {
+public class UserDTO {
     private Integer id;
 
     private String openId;
@@ -23,13 +23,13 @@ public class UserDto {
 
     @Override
     public String toString() {
-        return "UserDto{" +
+        return "UserDTO{" +
                 "id=" + id +
                 ", openId='" + openId + '\'' +
                 '}';
     }
 
-    public UserDto(Integer id, String openId) {
+    public UserDTO(Integer id, String openId) {
         this.id = id;
         this.openId = openId;
     }

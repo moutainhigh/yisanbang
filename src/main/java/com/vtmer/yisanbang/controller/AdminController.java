@@ -2,9 +2,9 @@ package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.domain.Admin;
-import com.vtmer.yisanbang.dto.AddAdminDto;
-import com.vtmer.yisanbang.dto.LoginDto;
-import com.vtmer.yisanbang.dto.UpdatePwdDto;
+import com.vtmer.yisanbang.dto.AddAdminDTO;
+import com.vtmer.yisanbang.dto.LoginDTO;
+import com.vtmer.yisanbang.dto.UpdatePwdDTO;
 import com.vtmer.yisanbang.service.AdminRoleService;
 import com.vtmer.yisanbang.service.AdminService;
 import io.swagger.annotations.Api;
@@ -39,7 +39,7 @@ public class AdminController {
      */
     @ApiOperation("添加普通管理员")
     @PostMapping("/addAdmin")
-    public ResponseMessage addAdmin(@Validated @RequestBody AddAdminDto addAdminDto) {
+    public ResponseMessage addAdmin(@Validated @RequestBody AddAdminDTO addAdminDto) {
         if (!addAdminDto.getPassword().equals(addAdminDto.getPasswordConfirm())) {
             return ResponseMessage.newErrorInstance("新增管理员失败，两次密码输入不一致");
         }
@@ -64,7 +64,7 @@ public class AdminController {
      */
     @ApiOperation("管理员登录")
     @PostMapping("/login")
-    public ResponseMessage login(@Validated @RequestBody LoginDto loginDto) {
+    public ResponseMessage login(@Validated @RequestBody LoginDTO loginDto) {
         /**
          * 使用Shiro编写认证操作
          */
@@ -112,7 +112,7 @@ public class AdminController {
      */
     @ApiOperation("根据id修改管理员密码")
     @PutMapping("/updatePwd/{id}")
-    public ResponseMessage updatePwd(@PathVariable("id") Integer adminId,@Validated @RequestBody UpdatePwdDto updatePwdDto) {
+    public ResponseMessage updatePwd(@PathVariable("id") Integer adminId,@Validated @RequestBody UpdatePwdDTO updatePwdDto) {
         if (!adminService.isPasswordCorrect(adminId, updatePwdDto.getOldPassword())) {
             return ResponseMessage.newErrorInstance("旧密码输入错误");
         } else {

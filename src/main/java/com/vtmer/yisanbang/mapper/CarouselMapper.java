@@ -1,7 +1,7 @@
 package com.vtmer.yisanbang.mapper;
 
 import com.vtmer.yisanbang.domain.Carousel;
-import com.vtmer.yisanbang.dto.CarouselDto;
+import com.vtmer.yisanbang.dto.CarouselDTO;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -25,11 +25,11 @@ public interface CarouselMapper {
     int updateCarousel2UnShow(Integer carouselId);
 
     // 新增轮播图信息
-    int insertCarouselInfo(CarouselDto carouselDto);
+    int insertCarouselInfo(CarouselDTO carouselDto);
 
     // 查询已存在的显示排序
     List<Integer> selectExitedOrder();
 
     // 修改轮播图信息
-    int updateCarouselInfoSelective(CarouselDto carouselDto);
+    int updateCarouselInfoSelective(CarouselDTO carouselDto);
 }

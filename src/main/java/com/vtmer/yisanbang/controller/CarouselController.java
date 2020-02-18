@@ -5,7 +5,7 @@ import com.vtmer.yisanbang.common.PageResponseMessage;
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.common.qiniu.QiniuUpload;
 import com.vtmer.yisanbang.domain.Carousel;
-import com.vtmer.yisanbang.dto.CarouselDto;
+import com.vtmer.yisanbang.dto.CarouselDTO;
 import com.vtmer.yisanbang.service.CarouselService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -47,7 +47,7 @@ public class CarouselController {
 
     @ApiOperation("添加轮播图信息")
     @PostMapping("/add")
-    public ResponseMessage addCarouselInfo(@Validated @RequestBody CarouselDto carouselDto) {
+    public ResponseMessage addCarouselInfo(@Validated @RequestBody CarouselDTO carouselDto) {
         if (carouselService.isShowOrderExisted(carouselDto.getShowOrder())) {
             return ResponseMessage.newErrorInstance("显示顺序已存在，轮播图信息添加失败");
         }
@@ -60,7 +60,7 @@ public class CarouselController {
 
     @ApiOperation("根据id修改轮播图信息")
     @PutMapping("/{carouselId}")
-    public ResponseMessage updateCarouselInfo(@PathVariable("carouselId") Integer carouselId,@Validated @RequestBody CarouselDto carouselDto) {
+    public ResponseMessage updateCarouselInfo(@PathVariable("carouselId") Integer carouselId,@Validated @RequestBody CarouselDTO carouselDto) {
         if (!carouselDto.getShowOrder().equals(carouselService.listInfoById(carouselId).getShowOrder()) && carouselService.isShowOrderExisted(carouselDto.getShowOrder())) {
             return ResponseMessage.newErrorInstance("显示顺序已存在，广告信息修改失败");
         }

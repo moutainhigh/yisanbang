@@ -1,7 +1,7 @@
 package com.vtmer.yisanbang.service.impl;
 
 import com.vtmer.yisanbang.domain.Carousel;
-import com.vtmer.yisanbang.dto.CarouselDto;
+import com.vtmer.yisanbang.dto.CarouselDTO;
 import com.vtmer.yisanbang.mapper.CarouselMapper;
 import com.vtmer.yisanbang.service.CarouselService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +56,7 @@ public class CarouselServiceImpl implements CarouselService {
     }
 
     @Override
-    public int addInfo(CarouselDto carouselDto) {
+    public int addInfo(CarouselDTO carouselDto) {
         return carouselMapper.insertCarouselInfo(carouselDto);
     }
 
@@ -67,7 +67,7 @@ public class CarouselServiceImpl implements CarouselService {
     }
 
     @Override
-    public int updateInfo(Integer carouselId, CarouselDto carouselDto) {
+    public int updateInfo(Integer carouselId, CarouselDTO carouselDto) {
         carouselDto.setId(carouselId);
         return carouselMapper.updateCarouselInfoSelective(carouselDto);
     }

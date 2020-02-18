@@ -1,8 +1,8 @@
 package com.vtmer.yisanbang.service;
 
 import com.vtmer.yisanbang.domain.Ad;
-import com.vtmer.yisanbang.dto.AdDto;
-import com.vtmer.yisanbang.dto.ShowAdDto;
+import com.vtmer.yisanbang.dto.AdDTO;
+import com.vtmer.yisanbang.dto.ShowAdDTO;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ public interface AdService {
     List<Ad> listAllAdInfo();
 
     // 返回所有展示的广告(前台展示)
-    List<ShowAdDto> listShowedAd();
+    List<ShowAdDTO> listShowedAd();
 
     // 获取指定广告信息
     Ad listAdInfoByAdId(Integer adId);
@@ -30,11 +30,11 @@ public interface AdService {
     boolean updateAdIsShowed(Integer adId);
 
     // 新建广告信息
-    int addAdInfo(AdDto adDto);
+    int addAdInfo(AdDTO adDto);
 
     // 判断广告显示顺序是否已经存在
     boolean isShowOrderExisted(Integer order);
 
     // 修改广告信息
-    int updateAdInfo(Integer adId, AdDto adDto);
+    int updateAdInfo(Integer adId, AdDTO adDto);
 }

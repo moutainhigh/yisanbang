@@ -5,23 +5,22 @@ import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-public class AdDto {
+public class CarouselDTO {
 
-    @ApiModelProperty(value = "广告id", example = "1")
     private Integer id;
 
-    @ApiModelProperty(value = "图片路径", required = true, example = "img.yisanbang.com/ad/图片名称")
+    @ApiModelProperty(value = "图片路径", required = true, example = "img.yisanbang.com/carousel/图片名称")
     @NotBlank(message = "图片路径不能为空")
     private String picturePath;
 
-    @ApiModelProperty(value = "点击广告图片后的跳转路径", example = "/goods/selectGoodsById/1")
+    @ApiModelProperty(value = "点击轮播图后跳转的路径", example = "goods/selectGoodsById/1")
     private String url;
 
-    @ApiModelProperty(value = "广告图片在首页的显示顺序", required = true, example = "1")
-    @NotNull(message = "显示顺序不能为空")
+    @ApiModelProperty(value = "轮播图显示顺序", required = true, example = "1")
+    @NotNull(message = "轮播图显示顺序不能为空")
     private Integer showOrder;
 
-    @ApiModelProperty(value = "广告图片是否在首页显示(1: 显示, 0: 不显示)", example = "0")
+    @ApiModelProperty(value = "轮播图是否在首页显示")
     private boolean isShow;
 
     public String getPicturePath() {
@@ -63,4 +62,5 @@ public class AdDto {
     public void setIsShow(boolean show) {
         isShow = show;
     }
+
 }

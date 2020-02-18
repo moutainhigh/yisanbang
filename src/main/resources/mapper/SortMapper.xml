@@ -48,7 +48,7 @@
     from sort
     order by show_order asc
   </select>
-  <insert id="insertSort" parameterType="com.vtmer.yisanbang.dto.SortDto">
+  <insert id="insertSort" parameterType="com.vtmer.yisanbang.dto.SortDTO">
     insert into sort (name, is_suit, parent_id, level, show_order, is_show)
     values (#{name}, #{isSuit}, #{parentId}, #{level}, #{showOrder}, #{isShow})
   </insert>
@@ -61,7 +61,7 @@
   <select id="selectSuitSort" resultMap="BaseResultMap">
      select id, name, is_suit, parent_id, level, show_order, is_show, create_time, update_time
     from sort
-    where is_suit = #{isSuit} and parent_id = #{parentId}
+    where is_suit = 1 and parent_id = #{parentId}
     order by show_order asc
   </select>
   <select id="selectAllSuitSortWithChildren" resultType="com.vtmer.yisanbang.dto.SuitSortWithChildrenSort">
@@ -83,7 +83,7 @@
     set is_show = 0
     where id = #{sortId}
   </update>
-  <update id="updateSortInfoSelective" parameterType="com.vtmer.yisanbang.dto.SortDto">
+  <update id="updateSortInfoSelective" parameterType="com.vtmer.yisanbang.dto.SortDTO">
     update sort
     <set>
       <if test="name != null">
