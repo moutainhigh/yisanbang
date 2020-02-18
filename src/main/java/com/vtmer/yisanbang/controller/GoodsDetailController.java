@@ -8,6 +8,7 @@ import com.vtmer.yisanbang.mapper.GoodsDetailMapper;
 import com.vtmer.yisanbang.service.GoodsDetailService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -84,17 +85,23 @@ public class GoodsDetailController {
         } else return ResponseMessage.newErrorInstance("该商品详细id错误，无该商品详细信息");
     }
 
-    @GetMapping("/uploadGoodsDetailPic")
-    @ApiOperation(value = "上传商品详情信息图片")
+    @PostMapping("/uploadGoodsDetailPic")
+    @ApiOperation(value = "上传商品详情信息图片", notes = "执行成功后返回图片路径(img.yisanbang.com/goodsDetail/图片名称)")
     // 上传商品详情信息图片
-    public ResponseMessage uploadGoodsDetailPic(MultipartFile pic) {
-        String picName = UUID.randomUUID().toString();
-        try {
-            String picPath = QiniuUpload.updateFile(pic, "goodsDetail/" + picName);
-            return ResponseMessage.newSuccessInstance(picPath, "商品详细信息图片上传成功");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseMessage.newErrorInstance("商品详细信息图片上传失败");
+    public ResponseMessage uploadGoodsDetailPic(@ApiParam("选择上传图片") MultipartFile pic) {
+        String picType = pic.getOriginalFilename().substring(pic.getOriginalFilename().lastIndexOf(".") + 1);
+        System.out.println(picType);
+        if (picType.equals("jpg") || picType.equals("JPG") || picType.equals("jpeg") || picType.equals("JPEG") || picType.equals("png") || picType.equals("PNG")) {
+            String picName = UUID.randomUUID().toString();
+            try {
+                String picPath = QiniuUpload.updateFile(pic, "goodsDetail/" + picName);
+                return ResponseMessage.newSuccessInstance(picPath, "广告图片上传成功");
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseMessage.newErrorInstance("广告图片上传失败");
+            }
+        } else {
+            return ResponseMessage.newErrorInstance("请选择.jpg/.JPG/.jpeg/.JPEG/.png/.PNG图片文件");
         }
     }
 }

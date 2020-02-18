@@ -100,17 +100,23 @@ public class SuitDetailController {
         } else return ResponseMessage.newErrorInstance("该套装详情id错误");
     }
 
-    @GetMapping("/uploadSuitDetailPic")
-    @ApiOperation(value = "上传套装详情图片至服务器")
+    @PostMapping("/uploadSuitDetailPic")
+    @ApiOperation(value = "上传套装详情图片至服务器", notes = "执行成功后返回图片路径(img.yisanbang.com/suitDetail/图片名称)")
     // 上传套装详情图片至服务器
-    public ResponseMessage uploadSuitDetailPic(MultipartFile pic) {
-        String picName = UUID.randomUUID().toString();
-        try {
-            String picPath = QiniuUpload.updateFile(pic, "suitDetail/" + picName);
-            return ResponseMessage.newSuccessInstance(picPath, "套装详细信息图片上传成功");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseMessage.newErrorInstance("套装详细信息图片上传失败");
+    public ResponseMessage uploadSuitDetailPic(@ApiParam("选择上传图片") MultipartFile pic) {
+        String picType = pic.getOriginalFilename().substring(pic.getOriginalFilename().lastIndexOf(".") + 1);
+        System.out.println(picType);
+        if (picType.equals("jpg") || picType.equals("JPG") || picType.equals("jpeg") || picType.equals("JPEG") || picType.equals("png") || picType.equals("PNG")) {
+            String picName = UUID.randomUUID().toString();
+            try {
+                String picPath = QiniuUpload.updateFile(pic, "suitDetail/" + picName);
+                return ResponseMessage.newSuccessInstance(picPath, "广告图片上传成功");
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseMessage.newErrorInstance("广告图片上传失败");
+            }
+        } else {
+            return ResponseMessage.newErrorInstance("请选择.jpg/.JPG/.jpeg/.JPEG/.png/.PNG图片文件");
         }
     }
 }

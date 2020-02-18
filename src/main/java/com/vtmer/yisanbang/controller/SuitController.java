@@ -1,6 +1,7 @@
 package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
+import com.vtmer.yisanbang.common.qiniu.QiniuUpload;
 import com.vtmer.yisanbang.common.valid.group.Delete;
 import com.vtmer.yisanbang.common.valid.group.Update;
 import com.vtmer.yisanbang.dto.SuitDto;
@@ -11,8 +12,10 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.UUID;
 
 @Api(tags = "套装管理接口")
 @RestController
@@ -147,5 +150,24 @@ public class SuitController {
             if (hideFlag) return ResponseMessage.newSuccessInstance("隐藏成功");
             else return ResponseMessage.newErrorInstance("隐藏失败");
         } else return ResponseMessage.newErrorInstance("该商品不存在");
+    }
+
+    @PostMapping("/uploadGoodsPic")
+    @ApiOperation(value = "上传商品图片", notes = "执行成功后返回图片路径(img.yisanbang.com/suit/图片名称)")
+    public ResponseMessage uploadGoodsPic(@ApiParam("选择上传图片") MultipartFile pic) {
+        String picType = pic.getOriginalFilename().substring(pic.getOriginalFilename().lastIndexOf(".") + 1);
+        System.out.println(picType);
+        if (picType.equals("jpg") || picType.equals("JPG") || picType.equals("jpeg") || picType.equals("JPEG") || picType.equals("png") || picType.equals("PNG")) {
+            String picName = UUID.randomUUID().toString();
+            try {
+                String picPath = QiniuUpload.updateFile(pic, "suit/" + picName);
+                return ResponseMessage.newSuccessInstance(picPath, "广告图片上传成功");
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseMessage.newErrorInstance("广告图片上传失败");
+            }
+        } else {
+            return ResponseMessage.newErrorInstance("请选择.jpg/.JPG/.jpeg/.JPEG/.png/.PNG图片文件");
+        }
     }
 }
