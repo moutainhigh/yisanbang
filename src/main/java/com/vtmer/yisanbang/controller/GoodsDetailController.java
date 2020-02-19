@@ -40,7 +40,7 @@ public class GoodsDetailController {
     @GetMapping("/selectAllGoodsDetailByGoodsId")
     @ApiOperation(value = "根据商品id查找该商品的所有商品详情信息")
     // 根据商品id查找该商品的所有商品详情信息
-    public ResponseMessage selectAllGoodsDetailByGoodsId(@ApiParam(name = "goodsId", value = "商品Id")
+    public ResponseMessage selectAllGoodsDetailByGoodsId(@ApiParam(name = "goodsId", value = "商品Id", required = true)
                                                          @RequestParam(value = "goodsId", defaultValue = "5") Integer goodsId,
                                                          @ApiParam("查询页数(第几页)")
                                                          @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
