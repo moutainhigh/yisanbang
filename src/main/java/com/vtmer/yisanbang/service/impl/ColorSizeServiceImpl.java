@@ -75,8 +75,8 @@ public class ColorSizeServiceImpl implements ColorSizeService {
         for (ColorSizeDTO colorSize : colorSizeDtoList) {
             if (colorSize.getGoodsId() == colorSizeDto.getGoodsId())
                 if (colorSize.getSize().equals(colorSizeDto.getSize()))
-                        if (colorSize.getColor().equals(colorSizeDto.getColor()))
-                            return true;
+                    if (colorSize.getColor().equals(colorSizeDto.getColor()))
+                        return true;
         }
         return false;
     }
@@ -90,8 +90,7 @@ public class ColorSizeServiceImpl implements ColorSizeService {
             String color = colorSize.getColor();
             colorList.add(color);
         }
-        if (colorList != null) return colorList;
-        return null;
+        return colorList;
     }
 
     @Override
@@ -103,8 +102,7 @@ public class ColorSizeServiceImpl implements ColorSizeService {
             String size = colorSize.getSize();
             sizeList.add(size);
         }
-        if (sizeList != null) return sizeList;
-        return null;
+        return sizeList;
     }
 
     @Override
