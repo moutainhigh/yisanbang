@@ -11,17 +11,14 @@ public class Md5Util {
         }
         // 创建MessageDigest对象，添加MD5处理
         MessageDigest digest = null;
-        FileInputStream in = null;
         byte buffer[] = new byte[1024];
         int len;
-        try {
+        try (FileInputStream in = new FileInputStream(file)) {
             digest = MessageDigest.getInstance("MD5");
             // 读取图片
-            in = new FileInputStream(file);
             while ((len = in.read(buffer, 0, 1024)) != -1) {
                 digest.update(buffer, 0, len);
             }
-            in.close();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
