@@ -1,9 +1,10 @@
 package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
+import com.vtmer.yisanbang.common.util.JwtUtil;
+import com.vtmer.yisanbang.service.UserService;
 import com.vtmer.yisanbang.vo.JwtToken;
 import com.vtmer.yisanbang.vo.Token;
-import com.vtmer.yisanbang.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -22,6 +23,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
     @ApiOperation(value = "微信用户登录", notes = "执行成功后返回用户对应的token")
     @PostMapping("/login")
     public ResponseMessage wxAppletLogin(@ApiParam(name = "code", value = "微信登录接口返回的code", required = true) @RequestBody Map<String, String> request) {
@@ -32,8 +36,13 @@ public class UserController {
         // 执行验证过程
         Subject subject = SecurityUtils.getSubject();
         JwtToken jwtToken = new JwtToken(token.getToken());
-        subject.login(jwtToken);
-        return ResponseMessage.newSuccessInstance(token,"获取token用户成功");
+        try {
+            subject.login(jwtToken);
+            return ResponseMessage.newSuccessInstance(token, "获取用户token成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseMessage.newErrorInstance("获取用户token失败");
+        }
     }
 
     @ApiOperation("根据用户登录对应的token获取用户id")

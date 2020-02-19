@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 class YisanbangApplicationTests {
 
     /**
-     * 设置token过期时间：15分钟
+     * 设置token过期时间
      */
     private static final long EXPIRE_TIME = 15000 * 60 * 1000;
     /**
@@ -93,5 +93,4 @@ class YisanbangApplicationTests {
         // redis缓存JWT,并设置过期时间
         redisTemplate.opsForValue().set("JWT-SESSION-" + jwtId, token, EXPIRE_TIME, TimeUnit.SECONDS);
     }
-
 }

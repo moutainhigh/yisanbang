@@ -43,7 +43,9 @@ public class UserRealm extends AuthorizingRealm {
         // 获取当前登陆用户
         Subject subject = SecurityUtils.getSubject();
         String token = subject.getPrincipal().toString();
-        System.out.println(token);
+        // token续期
+        jwtUtil.verifyToken(token);
+        // System.out.println(token);
         String userOpenId = jwtUtil.getOpenIdByToken(token);
         // 获取角色(id)并获取角色对应的权限url
         List<String> permUrls = new ArrayList<>();

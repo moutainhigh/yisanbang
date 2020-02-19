@@ -69,7 +69,7 @@ public class JwtUtil {
     public boolean verifyToken(String token) {
         try {
             // 根据token解密，解密出jwt-id，先从redis中查出redisToken，判断是否相同
-            Object redisToken = redisTemplate.opsForValue().get("JWT-SESSION-" + getJwtIdByToken(token));
+            String redisToken = (String) redisTemplate.opsForValue().get("JWT-SESSION-" + getJwtIdByToken(token));
             if (!redisToken.equals(token)) {
                 return false;
             }
@@ -85,7 +85,8 @@ public class JwtUtil {
                     .build();
             // 验证token
             logger.info("开始验证token");
-            verifier.verify(redisToken.toString());
+            verifier.verify(redisToken);
+            System.out.println(redisToken);
             // 续期redis中缓存的JWT
             redisTemplate.opsForValue().set("JWT-SESSION-" + getJwtIdByToken(token), redisToken, EXPIRE_TIME, TimeUnit.SECONDS);
             return true;

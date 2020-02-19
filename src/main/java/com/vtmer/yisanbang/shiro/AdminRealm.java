@@ -44,7 +44,7 @@ public class AdminRealm extends AuthorizingRealm {
         // 获取当前登陆用户
         Subject subject = SecurityUtils.getSubject();
         String adminName = subject.getPrincipal().toString();
-        System.out.println(adminName);
+        // System.out.println(adminName);
         // 获取角色(id)并获取角色对应的权限url
         List<String> permUrls = new ArrayList<>();
         for (Object roleId : adminRoleService.selectRoleIdByName(adminName)) {
