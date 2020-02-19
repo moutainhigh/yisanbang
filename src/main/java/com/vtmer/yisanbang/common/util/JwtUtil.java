@@ -22,9 +22,9 @@ public class JwtUtil {
 
     private final Logger logger = LoggerFactory.getLogger(JwtUtil.class);
     /**
-     * 设置token过期时间：15分钟
+     * 设置token过期时间：30分钟
      */
-    private static final long EXPIRE_TIME = 15000 * 60 * 1000;
+    private static final long EXPIRE_TIME = 30 * 60;
     /**
      * token私钥
      */
@@ -33,7 +33,7 @@ public class JwtUtil {
     /**
      * token名
      */
-    public static final String TOKEN_HEADER = "accessToken";
+    public static final String TOKEN_HEADER = "Authorization";
 
     @Autowired
     private RedisTemplate redisTemplate;
@@ -69,7 +69,7 @@ public class JwtUtil {
     public boolean verifyToken(String token) {
         try {
             // 根据token解密，解密出jwt-id，先从redis中查出redisToken，判断是否相同
-            Object redisToken = redisTemplate.opsForValue().get("JWT-SESSION-" + getJwtIdByToken(token));
+            String redisToken = (String) redisTemplate.opsForValue().get("JWT-SESSION-" + getJwtIdByToken(token));
             if (!redisToken.equals(token)) {
                 return false;
             }
@@ -85,7 +85,8 @@ public class JwtUtil {
                     .build();
             // 验证token
             logger.info("开始验证token");
-            verifier.verify(redisToken.toString());
+            verifier.verify(redisToken);
+            System.out.println(redisToken);
             // 续期redis中缓存的JWT
             redisTemplate.opsForValue().set("JWT-SESSION-" + getJwtIdByToken(token), redisToken, EXPIRE_TIME, TimeUnit.SECONDS);
             return true;
@@ -105,14 +106,14 @@ public class JwtUtil {
     /**
      * 根据token获取userId
      */
-    public static Integer getUserIdByToken(String token) throws JWTDecodeException {
+    public Integer getUserIdByToken(String token) throws JWTDecodeException {
         return JWT.decode(token).getClaim("userId").asInt();
     }
 
     /**
      * 根据token获取openId
      */
-    public static String getOpenIdByToken(String token) throws JWTDecodeException {
+    public String getOpenIdByToken(String token) throws JWTDecodeException {
         return JWT.decode(token).getClaim("openId").asString();
     }
 
@@ -123,7 +124,7 @@ public class JwtUtil {
         return JWT.decode(token).getClaim("sessionKey").asString();
     }
 
-    public static User getUserInfoByToken(String token) throws JWTDecodeException {
+    public User getUserInfoByToken(String token) throws JWTDecodeException {
         User user = new User();
         user.setId(getUserIdByToken(token));
         user.setOpenId(getOpenIdByToken(token));

@@ -34,7 +34,7 @@ public class TokenInterceptor implements HandlerInterceptor {
             System.out.println(flag);
             if (flag) {
                 logger.info("验证token成功，开始设置user对象进线程域");
-                t1.set(JwtUtil.getUserInfoByToken(token));
+                t1.set(jwtUtil.getUserInfoByToken(token));
                 return true;
             }
         }

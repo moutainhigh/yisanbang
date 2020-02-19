@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @ApiModel
-public class DeleteCartGoodsDto {
+public class DeleteCartGoodsDTO {
 
     @NotNull(message = "userId is null")
     @ApiModelProperty(value = "用户id",example = "1")
@@ -20,7 +20,7 @@ public class DeleteCartGoodsDto {
     @ApiModelProperty("商品列表")
     private List<GoodsSkuDTO> goodsDtoList;
 
-    public DeleteCartGoodsDto getDeleteCartGoodsDto() {
+    public DeleteCartGoodsDTO getDeleteCartGoodsDto() {
         return this;
     }
 

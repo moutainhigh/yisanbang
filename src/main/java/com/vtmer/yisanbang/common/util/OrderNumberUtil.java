@@ -1,5 +1,7 @@
 package com.vtmer.yisanbang.common.util;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
@@ -7,6 +9,16 @@ import java.util.Random;
 public class OrderNumberUtil {
 
     private static final int maxLength = 17;
+
+    private static Random rand;
+
+    static {
+        try {
+            rand = SecureRandom.getInstanceStrong();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     /**
@@ -59,8 +71,7 @@ public class OrderNumberUtil {
     }
 
     private static int getRandomNum(){
-        Random r = new Random();
-        return r.nextInt(900000)+100000;
+        return rand.nextInt(900000)+100000;
     }
 
     public static String getOrderNumber() {
