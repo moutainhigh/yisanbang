@@ -8,7 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.NotNull;
 
 @ApiModel(value = "colorSize对象", description = "颜色尺寸对象colorSize")
-public class ColorSizeDto {
+public class ColorSizeDTO {
     @NotNull(groups = {Update.class, Delete.class}, message = "颜色尺寸id不可为空")
     @ApiModelProperty(value = "颜色尺寸id", example = "1")
     private Integer id;
@@ -81,7 +81,7 @@ public class ColorSizeDto {
         this.model = model == null ? null : model.trim();
     }
 
-    public ColorSizeDto(Integer id, Integer goodsId, String color, String size, Integer inventory, String model) {
+    public ColorSizeDTO(Integer id, Integer goodsId, String color, String size, Integer inventory, String model) {
         this.id = id;
         this.goodsId = goodsId;
         this.color = color;

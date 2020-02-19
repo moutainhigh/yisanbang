@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 @ApiModel(value = "suit对象", description = "套装对象suit")
-public class SuitDto {
+public class SuitDTO {
     @NotNull(groups = {Update.class, Delete.class}, message = "套装id不可为空")
     @ApiModelProperty(value = "套装id", example = "1")
     private Integer id;
@@ -135,7 +135,7 @@ public class SuitDto {
                 '}';
     }
 
-    public SuitDto(Integer id, Integer sortId, String introduce, Double lowestPrice, Double highestPrice, Boolean isShow, Date updateTime) {
+    public SuitDTO(Integer id, Integer sortId, String introduce, Double lowestPrice, Double highestPrice, Boolean isShow, Date updateTime) {
         this.id = id;
         this.sortId = sortId;
         this.introduce = introduce;
@@ -145,6 +145,6 @@ public class SuitDto {
         this.updateTime = updateTime;
     }
 
-    public SuitDto() {
+    public SuitDTO() {
     }
 }

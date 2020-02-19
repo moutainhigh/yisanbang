@@ -1,7 +1,7 @@
 package com.vtmer.yisanbang.mapper;
 
 import com.vtmer.yisanbang.domain.PartSize;
-import com.vtmer.yisanbang.dto.PartSizeDto;
+import com.vtmer.yisanbang.dto.PartSizeDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -24,17 +24,17 @@ public interface PartSizeMapper {
     int updateInventoryByPrimaryKey(Map<String,Integer> inventoryMap);
 
     // Dto
-    int insertDto(PartSizeDto record);
+    int insertDto(PartSizeDTO record);
 
     // Dto
-    PartSizeDto selectDtoByPrimaryKey(Integer id);
+    PartSizeDTO selectDtoByPrimaryKey(Integer id);
 
     // Dto
-    List<PartSizeDto> selectAllDto();
+    List<PartSizeDTO> selectAllDto();
 
     // Dto
-    int updateDtoByPrimaryKey(PartSizeDto record);
+    int updateDtoByPrimaryKey(PartSizeDTO record);
 
     // Dto
-    List<PartSizeDto> selectAllBySuitId(Integer suitId);
+    List<PartSizeDTO> selectAllBySuitId(Integer suitId);
 }

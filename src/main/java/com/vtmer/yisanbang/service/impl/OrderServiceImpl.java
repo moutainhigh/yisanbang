@@ -18,18 +18,19 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class OrderServiceImpl implements OrderService {
 
     private final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
+
+    // 订单有效时间 30分钟
+    private static final Integer EFFECTIVE_TIME = 30;
 
     @Autowired
     private PostageMapper postageMapper;
@@ -63,6 +64,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private RefundService refundService;
+
+    @Autowired
+    private RedisTemplate<String,String> redisTemplate;
 
     // Free the postage after standardPrice
     private double standardPrice;
@@ -127,7 +131,6 @@ public class OrderServiceImpl implements OrderService {
      */
     @Transactional
     public Map<String,String> createCartOrder(CartOrderDTO cartOrderDTO) throws DataIntegrityViolationException {
-
         User user = TokenInterceptor.getLoginUser();
         /* ..写多了
         // 获取用户购物车清单
@@ -199,6 +202,13 @@ public class OrderServiceImpl implements OrderService {
         }
         orderMapper.insert(order);
         logger.info("创建订单[{}]，订单状态[未支付]---用户id[{}]",orderNumber,user.getId());
+        BoundZSetOperations<String, String> zSetOps = redisTemplate.boundZSetOps("OrderNumber");
+        // 延迟30分钟
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MINUTE,EFFECTIVE_TIME);
+        int minute30Later = (int) (cal.getTimeInMillis()/1000);
+        // score为超时时间戳，zset集合值orderId4的分数
+        zSetOps.add(order.getOrderNumber(),minute30Later);
         for (CartGoodsDTO cartGoodsDTO : cartGoodsList) {
             // 生成orderGoods
             OrderGoods orderGoods = new OrderGoods();
@@ -225,6 +235,7 @@ public class OrderServiceImpl implements OrderService {
             } else {
                 res = partSizeMapper.updateInventoryByPrimaryKey(inventoryMap);
             }
+
             if (res == 0) {
                 // 如果更新失败，说明库存不足
                 throw new InventoryNotEnoughException("商品库存不足--商品skuId："+colorSizeId+",是否是普通商品:"+whetherGoods+",需要数量"+amount);
@@ -585,4 +596,46 @@ public class OrderServiceImpl implements OrderService {
             return refundService.getUnRefundOrder(payOrderList);
         } else return null;
     }
+
+    @Override
+    public void orderTimeOutLogic() {
+        BoundZSetOperations<String, String> zSetOps = redisTemplate.boundZSetOps("OrderNumber");
+        Cursor<ZSetOperations.TypedTuple<String>> cursor;
+        while (true) {
+            cursor = zSetOps.scan(ScanOptions.NONE);
+            if (!cursor.hasNext()) {
+                logger.debug("当前没有等待的订单取消任务");
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    logger.warn("订单超时自动取消任务出现异常[{}]",e.getMessage());
+                }
+                continue;
+            }
+            ZSetOperations.TypedTuple typedTuple  = cursor.next();
+            int score =  Objects.requireNonNull(typedTuple.getScore()).intValue();
+            Calendar cal = Calendar.getInstance();
+            int nowSecond = (int) (cal.getTimeInMillis() / 1000);
+            if (nowSecond>=score) {
+                Object value = typedTuple.getValue();
+                Long removeCount = zSetOps.remove(value);
+                if (removeCount!=null && removeCount>0) {
+                    // 订单取消
+                    String orderNumber = String.valueOf(value == null ? "" : value.toString());
+                    logger.info("开始消费redis订单[{}]",orderNumber);
+                    Order order = orderMapper.selectByOrderNumber(orderNumber);
+                    logger.info("开始关闭超时订单任务，订单编号[{}],下单时间[{}]",orderNumber,order.getCreateTime());
+                    // 更待订单状态为交易关闭
+                    HashMap<String, Integer> orderMap = new HashMap<>();
+                    orderMap.put("orderId",order.getId());
+                    orderMap.put("status",4);
+                    setOrderStatus(orderMap);
+                    logger.info("订单[{}]状态更变：[未付款]-->[交易关闭]",orderNumber);
+                    // 库存归位,1代表增加库存
+                    updateInventory(orderNumber,1);
+                } // end if
+            } // end if 取消订单
+        } // end while
+    }
+
 }

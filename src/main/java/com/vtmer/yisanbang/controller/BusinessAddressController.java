@@ -11,9 +11,9 @@ import com.vtmer.yisanbang.domain.BusinessAddress;
 import com.vtmer.yisanbang.dto.insert.InsertBusinessAddressDTO;
 import com.vtmer.yisanbang.dto.update.UpdateBusinessAddressDTO;
 import com.vtmer.yisanbang.service.BusinessAddressService;
-import io.swagger.annotations.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -26,8 +26,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/businessAddress")
 public class BusinessAddressController {
-
-    private final Logger logger = LoggerFactory.getLogger(BusinessAddressController.class);
 
     @Autowired
     private BusinessAddressService businessAddressService;

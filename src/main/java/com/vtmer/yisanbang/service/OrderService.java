@@ -39,4 +39,9 @@ public interface OrderService {
     List<Order> getNotPayOrder();
 
     List<Order> getUnRefundPayOrderList();
+
+    /**
+     * 订单超时处理
+     */
+    void orderTimeOutLogic();
 }

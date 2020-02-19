@@ -1,7 +1,7 @@
 package com.vtmer.yisanbang.mapper;
 
 import com.vtmer.yisanbang.domain.Suit;
-import com.vtmer.yisanbang.dto.SuitDto;
+import com.vtmer.yisanbang.dto.SuitDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -21,27 +21,27 @@ public interface SuitMapper {
     int updateByPrimaryKey(Suit record);
 
     // Dto
-    int insertDto(SuitDto record);
+    int insertDto(SuitDTO record);
 
     // Dto
-    SuitDto selectDtoByPrimaryKey(Integer id);
+    SuitDTO selectDtoByPrimaryKey(Integer id);
 
     // Dto
-    List<SuitDto> selectAllDto();
+    List<SuitDTO> selectAllDto();
 
     // Dto
-    int updateDtoByPrimaryKey(SuitDto record);
+    int updateDtoByPrimaryKey(SuitDTO record);
 
     // Dto
-    SuitDto selectDtoBySuitName(String suitName);
+    SuitDTO selectDtoBySuitName(String suitName);
 
     // Dto
-    List<SuitDto> selectAllDtoOrderByPrice();
+    List<SuitDTO> selectAllDtoOrderByPrice();
 
     // Dto
-    List<SuitDto> selectAllDtoOrderByTime();
+    List<SuitDTO> selectAllDtoOrderByTime();
 
     // Dto
-    List<SuitDto> selectAllDtoBySortId(Integer sortId);
+    List<SuitDTO> selectAllDtoBySortId(Integer sortId);
 
 }

@@ -12,7 +12,7 @@
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
-    <resultMap id="GoodsMap" type="com.vtmer.yisanbang.dto.GoodsDto">
+    <resultMap id="GoodsMap" type="com.vtmer.yisanbang.dto.GoodsDTO">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="sort_id" jdbcType="INTEGER" property="sortId"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
@@ -57,7 +57,7 @@
     select id, sort_id, name, introduce, picture, price, is_show, create_time, update_time
     from goods
   </select>
-    <insert id="insertDto" parameterType="com.vtmer.yisanbang.dto.GoodsDto">
+    <insert id="insertDto" parameterType="com.vtmer.yisanbang.dto.GoodsDTO">
     insert into goods (id, sort_id, name,
       introduce, picture, price,
       is_show
@@ -67,7 +67,7 @@
       #{isShow,jdbcType=BIT}
       )
   </insert>
-    <update id="updateDtoByPrimaryKey" parameterType="com.vtmer.yisanbang.dto.GoodsDto">
+    <update id="updateDtoByPrimaryKey" parameterType="com.vtmer.yisanbang.dto.GoodsDTO">
     update goods
     set sort_id = #{sortId,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},

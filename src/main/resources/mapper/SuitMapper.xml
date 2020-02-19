@@ -13,7 +13,7 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
-  <resultMap id="SuitMap" type="com.vtmer.yisanbang.dto.SuitDto">
+  <resultMap id="SuitMap" type="com.vtmer.yisanbang.dto.SuitDTO">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="sort_id" jdbcType="INTEGER" property="sortId" />
     <result column="name" jdbcType="VARCHAR" property="name" />
@@ -61,7 +61,7 @@
     create_time, update_time
     from suit
   </select>
-  <insert id="insertDto" parameterType="com.vtmer.yisanbang.dto.SuitDto">
+  <insert id="insertDto" parameterType="com.vtmer.yisanbang.dto.SuitDTO">
     insert into suit (id, sort_id, name,
       introduce, picture, lowest_price,
       highest_price, is_show)
@@ -69,7 +69,7 @@
       #{introduce,jdbcType=VARCHAR}, #{picture,jdbcType=VARCHAR}, #{lowestPrice,jdbcType=DOUBLE},
       #{highestPrice,jdbcType=DOUBLE}, #{isShow,jdbcType=BIT})
   </insert>
-  <update id="updateDtoByPrimaryKey" parameterType="com.vtmer.yisanbang.dto.SuitDto">
+  <update id="updateDtoByPrimaryKey" parameterType="com.vtmer.yisanbang.dto.SuitDTO">
     update suit
     set sort_id = #{sortId,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},

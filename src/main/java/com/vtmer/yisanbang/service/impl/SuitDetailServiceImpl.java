@@ -1,7 +1,7 @@
 package com.vtmer.yisanbang.service.impl;
 
 import com.vtmer.yisanbang.common.util.Md5Util;
-import com.vtmer.yisanbang.dto.SuitDetailDto;
+import com.vtmer.yisanbang.dto.SuitDetailDTO;
 import com.vtmer.yisanbang.mapper.SuitDetailMapper;
 import com.vtmer.yisanbang.service.SuitDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class SuitDetailServiceImpl implements SuitDetailService {
 
     @Override
     // 添加套装详细信息
-    public boolean addSuitDetail(SuitDetailDto suitDetailDto) {
+    public boolean addSuitDetail(SuitDetailDTO suitDetailDto) {
         int addFlag = suitDetailMapper.insertDto(suitDetailDto);
         if (addFlag > 0) return true;
         return false;
@@ -33,7 +33,7 @@ public class SuitDetailServiceImpl implements SuitDetailService {
 
     @Override
     // 更新套装详细信息
-    public boolean updateSuitDetail(SuitDetailDto suitDetailDto) {
+    public boolean updateSuitDetail(SuitDetailDTO suitDetailDto) {
         int updateFlag = suitDetailMapper.updateDtoByPrimaryKey(suitDetailDto);
         if (updateFlag > 0) return true;
         return false;
@@ -41,8 +41,8 @@ public class SuitDetailServiceImpl implements SuitDetailService {
 
     @Override
     // 查找所有套装详细信息
-    public List<SuitDetailDto> selectAllDto() {
-        List<SuitDetailDto> suitDetailDtoList = suitDetailMapper.selectAllDto();
+    public List<SuitDetailDTO> selectAllDto() {
+        List<SuitDetailDTO> suitDetailDtoList = suitDetailMapper.selectAllDto();
         if (suitDetailDtoList != null && !suitDetailDtoList.isEmpty())
             return suitDetailDtoList;
         return null;
@@ -50,8 +50,8 @@ public class SuitDetailServiceImpl implements SuitDetailService {
 
     @Override
     // 根据套装id查找套装的所有套装详细信息
-    public List<SuitDetailDto> selectAllDtoBySuitId(Integer suitId) {
-        List<SuitDetailDto> suitDetailDtoList = suitDetailMapper.selectAllDtoBySuitId(suitId);
+    public List<SuitDetailDTO> selectAllDtoBySuitId(Integer suitId) {
+        List<SuitDetailDTO> suitDetailDtoList = suitDetailMapper.selectAllDtoBySuitId(suitId);
         if (suitDetailDtoList != null && !suitDetailDtoList.isEmpty())
             return suitDetailDtoList;
         return null;
@@ -59,18 +59,18 @@ public class SuitDetailServiceImpl implements SuitDetailService {
 
     @Override
     // 根据套装详细id查找套装详细信息
-    public SuitDetailDto selectSuitDetailByID(Integer suitDetailId) {
-        SuitDetailDto suitDetailDto = suitDetailMapper.selectDtoByPrimaryKey(suitDetailId);
+    public SuitDetailDTO selectSuitDetailByID(Integer suitDetailId) {
+        SuitDetailDTO suitDetailDto = suitDetailMapper.selectDtoByPrimaryKey(suitDetailId);
         if (suitDetailDto != null) return suitDetailDto;
         return null;
     }
 
     @Override
     // 查看套装详细信息是否相同
-    public boolean judgeSuitDetail(SuitDetailDto suitDetailDto, List<SuitDetailDto> suitDetailDtoList) {
+    public boolean judgeSuitDetail(SuitDetailDTO suitDetailDto, List<SuitDetailDTO> suitDetailDtoList) {
         File file1 = new File(suitDetailDto.getPirtucePath());
         String img1 = Md5Util.getFileMD5(file1);
-        for (SuitDetailDto suitDetail : suitDetailDtoList) {
+        for (SuitDetailDTO suitDetail : suitDetailDtoList) {
             File file2 = new File(suitDetail.getPirtucePath());
             String img2 = Md5Util.getFileMD5(file2);
             if (img1.equals(img2))

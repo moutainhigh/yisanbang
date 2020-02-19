@@ -11,7 +11,7 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
-  <resultMap id="UserAddressDtoMap" type="com.vtmer.yisanbang.dto.UserAddressDto">
+  <resultMap id="UserAddressDtoMap" type="com.vtmer.yisanbang.dto.UserAddressDTO">
     <id column="id" jdbcType="INTEGER" property="id"/>
     <result column="user_id" jdbcType="INTEGER" property="userId"/>
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
@@ -58,7 +58,7 @@
     where user_id = #{userId}
     and is_default = 1
   </select>
-  <insert id="insertDto" parameterType="com.vtmer.yisanbang.dto.UserAddressDto">
+  <insert id="insertDto" parameterType="com.vtmer.yisanbang.dto.UserAddressDTO">
     insert into user_address (id, user_id, user_name, address_name,
       phone_number, is_default
       )
@@ -66,7 +66,7 @@
       #{phoneNumber,jdbcType=VARCHAR}, #{isDefault,jdbcType=BIT}
       )
   </insert>
-  <update id="updateDtoByPrimaryKey" parameterType="com.vtmer.yisanbang.dto.UserAddressDto">
+  <update id="updateDtoByPrimaryKey" parameterType="com.vtmer.yisanbang.dto.UserAddressDTO">
     update user_address
     set user_id = #{userId,jdbcType=INTEGER},
       user_name = #{userName,jdbcType=VARCHAR},

@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @ApiModel(value = "goods对象", description = "商品对象goods")
-public class GoodsDto {
+public class GoodsDTO {
     @NotNull(groups = {Update.class, Delete.class}, message = "商品id不可为空")
     @ApiModelProperty(value = "商品id", example = "1")
     private Integer id;
@@ -127,7 +127,7 @@ public class GoodsDto {
         this.isShow = isShow;
     }
 
-    public GoodsDto(Integer id, Integer sortId, String name, String introduce, String picture, Double price, Boolean isShow) {
+    public GoodsDTO(Integer id, Integer sortId, String name, String introduce, String picture, Double price, Boolean isShow) {
         this.id = id;
         this.sortId = sortId;
         this.name = name;

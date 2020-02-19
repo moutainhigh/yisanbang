@@ -8,18 +8,18 @@ import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@ApiModel(value = "goodsDetail对象", description = "商品对象goodsDetail")
-public class GoodsDetailDto {
-    @NotNull(groups = {Update.class, Delete.class}, message = "商品详情id不可为空")
-    @ApiModelProperty(value = "商品详情id", example = "1")
+@ApiModel(value = "suitDetail对象", description = "套装详情对象suitDetail")
+public class SuitDetailDTO {
+    @NotNull(groups = {Update.class, Delete.class}, message = "套装详情id不可为空")
+    @ApiModelProperty(value = "套装详情id", example = "1")
     private Integer id;
 
-    @NotNull(message = "商品id不可为空")
-    @ApiModelProperty(value = "商品id", example = "1")
-    private Integer goodsId;
+    @NotNull(message = "套装id不可为空")
+    @ApiModelProperty(value = "套装id", example = "1")
+    private Integer suitId;
 
-    @NotBlank(message = "商品详情图片不可为空")
-    @ApiModelProperty(value = "商品详情图片", example = "goodsDetail/****")
+    @NotBlank(message = "图片路径不可为空")
+    @ApiModelProperty(value = "图片路径", example = "suitDetail/****")
     private String pirtucePath;
 
     @NotNull(message = "显示顺序不可为空")
@@ -34,12 +34,12 @@ public class GoodsDetailDto {
         this.id = id;
     }
 
-    public Integer getGoodsId() {
-        return goodsId;
+    public Integer getSuitId() {
+        return suitId;
     }
 
-    public void setGoodsId(Integer goodsId) {
-        this.goodsId = goodsId;
+    public void setSuitId(Integer suitId) {
+        this.suitId = suitId;
     }
 
     public String getPirtucePath() {
@@ -47,7 +47,7 @@ public class GoodsDetailDto {
     }
 
     public void setPirtucePath(String pirtucePath) {
-        this.pirtucePath = pirtucePath == null ? null : pirtucePath.trim();
+        this.pirtucePath = pirtucePath;
     }
 
     public Integer getShowOrder() {
@@ -58,20 +58,20 @@ public class GoodsDetailDto {
         this.showOrder = showOrder;
     }
 
-    public GoodsDetailDto(Integer id, Integer goodsId, String pirtucePath, Integer showOrder) {
-        this.id = id;
-        this.goodsId = goodsId;
-        this.pirtucePath = pirtucePath;
-        this.showOrder = showOrder;
-    }
-
     @Override
     public String toString() {
-        return "GoodsDetailDto{" +
+        return "SuitDetailDto{" +
                 "id=" + id +
-                ", goodsId=" + goodsId +
+                ", suitId=" + suitId +
                 ", pirtucePath='" + pirtucePath + '\'' +
                 ", showOrder=" + showOrder +
                 '}';
+    }
+
+    public SuitDetailDTO(Integer id, Integer suitId, String pirtucePath, Integer showOrder) {
+        this.id = id;
+        this.suitId = suitId;
+        this.pirtucePath = pirtucePath;
+        this.showOrder = showOrder;
     }
 }

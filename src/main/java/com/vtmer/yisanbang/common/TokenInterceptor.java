@@ -45,7 +45,9 @@ public class TokenInterceptor implements HandlerInterceptor {
     }
 
     public static User getLoginUser() {
-        return t1.get();
+        User user = t1.get();
+        t1.remove();
+        return user;
     }
 
 }

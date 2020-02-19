@@ -11,7 +11,7 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
-  <resultMap id="ColorSizeMap" type="com.vtmer.yisanbang.dto.ColorSizeDto">
+  <resultMap id="ColorSizeMap" type="com.vtmer.yisanbang.dto.ColorSizeDTO">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="goods_id" jdbcType="INTEGER" property="goodsId" />
     <result column="color" jdbcType="VARCHAR" property="color" />
@@ -63,13 +63,13 @@
     from color_size
   </select>
   <!--Dto-->
-  <insert id="insertDto" parameterType="com.vtmer.yisanbang.dto.ColorSizeDto">
+  <insert id="insertDto" parameterType="com.vtmer.yisanbang.dto.ColorSizeDTO">
     insert into color_size (id, goods_id, color,
       size, inventory, model)
     values (#{id,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, #{color,jdbcType=VARCHAR},
       #{size,jdbcType=VARCHAR}, #{inventory,jdbcType=INTEGER}, #{model,jdbcType=VARCHAR})
   </insert>
-  <update id="updateDtoByPrimaryKey" parameterType="com.vtmer.yisanbang.dto.ColorSizeDto">
+  <update id="updateDtoByPrimaryKey" parameterType="com.vtmer.yisanbang.dto.ColorSizeDTO">
     update color_size
     set goods_id = #{goodsId,jdbcType=INTEGER},
       color = #{color,jdbcType=VARCHAR},

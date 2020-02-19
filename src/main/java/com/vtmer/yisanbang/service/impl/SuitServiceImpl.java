@@ -1,6 +1,6 @@
 package com.vtmer.yisanbang.service.impl;
 
-import com.vtmer.yisanbang.dto.SuitDto;
+import com.vtmer.yisanbang.dto.SuitDTO;
 import com.vtmer.yisanbang.mapper.SuitMapper;
 import com.vtmer.yisanbang.service.SuitService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +15,8 @@ public class SuitServiceImpl implements SuitService {
 
     @Override
     // 查找所有套装
-    public List<SuitDto> selectAll() {
-        List<SuitDto> suitList = suitMapper.selectAllDto();
+    public List<SuitDTO> selectAll() {
+        List<SuitDTO> suitList = suitMapper.selectAllDto();
         if (suitList != null && !suitList.isEmpty()) return suitList;
         return null;
     }
@@ -31,7 +31,7 @@ public class SuitServiceImpl implements SuitService {
 
     @Override
     // 根据套装id更新套装
-    public boolean updateSuitById(SuitDto suitDto) {
+    public boolean updateSuitById(SuitDTO suitDto) {
         int updateFlag = suitMapper.updateDtoByPrimaryKey(suitDto);
         if (updateFlag > 0) return true;
         return false;
@@ -39,15 +39,15 @@ public class SuitServiceImpl implements SuitService {
 
     @Override
     // 添加套装
-    public boolean addSuit(SuitDto suitDto) {
+    public boolean addSuit(SuitDTO suitDto) {
         int insertFlag = suitMapper.insertDto(suitDto);
         if (insertFlag > 0) return true;
         return false;
     }
 
     @Override
-    public boolean judgeSuit(SuitDto suitDto, List<SuitDto> suitDtoList) {
-        for (SuitDto suit : suitDtoList) {
+    public boolean judgeSuit(SuitDTO suitDto, List<SuitDTO> suitDtoList) {
+        for (SuitDTO suit : suitDtoList) {
             if (suit.getName().equals(suitDto.getName()))
                 return true;
         }
@@ -56,47 +56,47 @@ public class SuitServiceImpl implements SuitService {
 
     @Override
     // 根据套装id查找套装
-    public SuitDto selectSuitById(Integer suitId) {
-        SuitDto suitDto = suitMapper.selectDtoByPrimaryKey(suitId);
+    public SuitDTO selectSuitById(Integer suitId) {
+        SuitDTO suitDto = suitMapper.selectDtoByPrimaryKey(suitId);
         if (suitDto != null) return suitDto;
         return null;
     }
 
     @Override
     // 根据套装名字查找套装
-    public SuitDto selectSuitByName(String suitName) {
-        SuitDto suitDto = suitMapper.selectDtoBySuitName(suitName);
+    public SuitDTO selectSuitByName(String suitName) {
+        SuitDTO suitDto = suitMapper.selectDtoBySuitName(suitName);
         if (suitDto != null) return suitDto;
         return null;
     }
 
     @Override
     // 根据套装的最低价格排序进行显示
-    public List<SuitDto> selectSuitOrderByPrice() {
-        List<SuitDto> suitDtoList = suitMapper.selectAllDtoOrderByPrice();
+    public List<SuitDTO> selectSuitOrderByPrice() {
+        List<SuitDTO> suitDtoList = suitMapper.selectAllDtoOrderByPrice();
         if (suitDtoList != null && !suitDtoList.isEmpty()) return suitDtoList;
         return null;
     }
 
     @Override
     // 根据套装的时间排序进行显示
-    public List<SuitDto> selectSuitOrderByTime() {
-        List<SuitDto> suitDtoList = suitMapper.selectAllDtoOrderByTime();
+    public List<SuitDTO> selectSuitOrderByTime() {
+        List<SuitDTO> suitDtoList = suitMapper.selectAllDtoOrderByTime();
         if (suitDtoList != null && !suitDtoList.isEmpty()) return suitDtoList;
         return null;
     }
 
     @Override
     // 根据分类id显示套装
-    public List<SuitDto> selectSuitBySort(Integer sortId) {
-        List<SuitDto> suitDtoList = suitMapper.selectAllDtoBySortId(sortId);
+    public List<SuitDTO> selectSuitBySort(Integer sortId) {
+        List<SuitDTO> suitDtoList = suitMapper.selectAllDtoBySortId(sortId);
         if (suitDtoList != null && !suitDtoList.isEmpty()) return suitDtoList;
         return null;
     }
 
     @Override
     // 隐藏套装
-    public boolean hideSuit(SuitDto suitDto) {
+    public boolean hideSuit(SuitDTO suitDto) {
         suitDto.setIsShow(false);
         int updateFlag = suitMapper.updateDtoByPrimaryKey(suitDto);
         if (updateFlag > 0) return true;

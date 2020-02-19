@@ -4,7 +4,7 @@ import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.common.valid.group.Delete;
 import com.vtmer.yisanbang.common.valid.group.Update;
 import com.vtmer.yisanbang.domain.User;
-import com.vtmer.yisanbang.dto.UserAddressDto;
+import com.vtmer.yisanbang.dto.UserAddressDTO;
 import com.vtmer.yisanbang.service.UserAddressService;
 import com.vtmer.yisanbang.service.UserService;
 import io.swagger.annotations.Api;
@@ -35,7 +35,7 @@ public class UserAddressController {
     public ResponseMessage listUserAddress(@ApiParam(name = "userId", value = "用户Id", required = true)
                                            @PathVariable("id") Integer userId) {
         User user = userService.selectByPrimaryKey(userId);
-        List<UserAddressDto> UserAdressDto = userAddressService.selectUserAddressByUserId(userId);
+        List<UserAddressDTO> UserAdressDto = userAddressService.selectUserAddressByUserId(userId);
         if (user == null) {
             return ResponseMessage.newErrorInstance("该用户id错误");
         } else if (UserAdressDto != null) {
@@ -52,8 +52,8 @@ public class UserAddressController {
     @ApiOperation(value = "添加用户地址")
     public ResponseMessage insertUserAddress(@ApiParam(name = "用户地址Dto实体类", value = "传入Json格式", required = true)
                                              @RequestBody
-                                             @Validated UserAddressDto userAddress) {
-        List<UserAddressDto> userAddressDtos = userAddressService.selectUserAddressByUserId(userAddress.getUserId());
+                                             @Validated UserAddressDTO userAddress) {
+        List<UserAddressDTO> userAddressDtos = userAddressService.selectUserAddressByUserId(userAddress.getUserId());
         if (userAddressDtos != null && !userAddressDtos.isEmpty()) {
             boolean flag = userAddressService.JudegAddressContent(userAddress, userAddressDtos);
             if (flag) return ResponseMessage.newErrorInstance("该地址已存在");
@@ -70,8 +70,8 @@ public class UserAddressController {
     @ApiOperation(value = "根据用户地址id更新该地址")
     public ResponseMessage updateUserAddress(@ApiParam(name = "用户地址Dto实体类", value = "传入Json格式", required = true)
                                              @RequestBody
-                                             @Validated(Update.class) UserAddressDto userAddress) {
-        UserAddressDto address = userAddressService.selectUserAddressDtoByAddressId(userAddress.getId());
+                                             @Validated(Update.class) UserAddressDTO userAddress) {
+        UserAddressDTO address = userAddressService.selectUserAddressDtoByAddressId(userAddress.getId());
         if (address != null) {
             boolean flag = userAddressService.updateUserAddressByAddressId(userAddress);
             if (flag == true) return ResponseMessage.newSuccessInstance("更新成功");
@@ -86,8 +86,8 @@ public class UserAddressController {
     @ApiOperation(value = "根据用户地址id删除地址")
     public ResponseMessage deleteUserAddress(@ApiParam(name = "用户地址Dto实体类", value = "传入Json格式", required = true)
                                              @RequestBody
-                                             @Validated(Delete.class) UserAddressDto userAddress) {
-        UserAddressDto address = userAddressService.selectUserAddressDtoByAddressId(userAddress.getId());
+                                             @Validated(Delete.class) UserAddressDTO userAddress) {
+        UserAddressDTO address = userAddressService.selectUserAddressDtoByAddressId(userAddress.getId());
         if (address != null) {
             boolean flag = userAddressService.deleteUserAddressByAddressId(address);
             if (flag == true) return ResponseMessage.newSuccessInstance("删除成功");
@@ -103,7 +103,7 @@ public class UserAddressController {
     public ResponseMessage selectDefaultUserAddress(@ApiParam(name = "userId", value = "用户Id", required = true)
                                                     @PathVariable("id") Integer userId) {
         User user = userService.selectByPrimaryKey(userId);
-        UserAddressDto addressDto = userAddressService.selectDefaultUserAddress(userId);
+        UserAddressDTO addressDto = userAddressService.selectDefaultUserAddress(userId);
         if (user == null) {
             return ResponseMessage.newErrorInstance("该用户id错误");
         } else if (addressDto == null) {
@@ -120,8 +120,8 @@ public class UserAddressController {
     @ApiOperation(value = "改变用户默认地址")
     public ResponseMessage changeDefaultUserAddress(@ApiParam(name = "用户地址Dto实体类", value = "传入Json格式", required = true)
                                                     @RequestBody
-                                                    @Validated(Update.class) UserAddressDto userAddress) {
-        UserAddressDto addressDto = userAddressService.selectDefaultUserAddress(userAddress.getUserId());
+                                                    @Validated(Update.class) UserAddressDTO userAddress) {
+        UserAddressDTO addressDto = userAddressService.selectDefaultUserAddress(userAddress.getUserId());
         if (addressDto != null) {
             boolean changeFlag = userAddressService.changeDefaultUserAddress(addressDto, userAddress);
             if (changeFlag) return ResponseMessage.newSuccessInstance("改变成功");

@@ -9,7 +9,7 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
-  <resultMap id="SuitDetailMap" type="com.vtmer.yisanbang.dto.SuitDetailDto">
+  <resultMap id="SuitDetailMap" type="com.vtmer.yisanbang.dto.SuitDetailDTO">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="suit_id" jdbcType="INTEGER" property="suitId" />
     <result column="pirtuce_path" jdbcType="VARCHAR" property="pirtucePath" />
@@ -45,7 +45,7 @@
     select id, suit_id, pirtuce_path, show_order, create_time, update_time
     from suit_detail
   </select>
-  <insert id="insertDto" parameterType="com.vtmer.yisanbang.dto.SuitDetailDto">
+  <insert id="insertDto" parameterType="com.vtmer.yisanbang.dto.SuitDetailDTO">
     insert into suit_detail (id, suit_id, pirtuce_path,
       show_order
       )
@@ -53,7 +53,7 @@
       #{showOrder,jdbcType=INTEGER}
       )
   </insert>
-  <update id="updateDtoByPrimaryKey" parameterType="com.vtmer.yisanbang.dto.SuitDetailDto">
+  <update id="updateDtoByPrimaryKey" parameterType="com.vtmer.yisanbang.dto.SuitDetailDTO">
     update suit_detail
     set suit_id = #{suitId,jdbcType=INTEGER},
       pirtuce_path = #{pirtucePath,jdbcType=VARCHAR},
