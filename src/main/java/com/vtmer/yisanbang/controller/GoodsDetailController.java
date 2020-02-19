@@ -57,11 +57,6 @@ public class GoodsDetailController {
     @ApiOperation(value = "添加商品详情信息")
     // 添加商品详情信息
     public ResponseMessage addGoodsDetail(@RequestBody GoodsDetailDTO goodsDetail) {
-        List<GoodsDetailDTO> goodsDetailDtos = goodsDetailService.selectAllDtoByGoodsId(goodsDetail.getGoodsId());
-        if (goodsDetailDtos != null && !goodsDetailDtos.isEmpty()) {
-            boolean judgeFlag = goodsDetailService.judgeGoodsDetail(goodsDetail, goodsDetailDtos);
-            if (judgeFlag) return ResponseMessage.newErrorInstance("该商品详细信息内容已经存在");
-        }
         boolean addFlag = goodsDetailService.addGoodsDetail(goodsDetail);
         if (addFlag) return ResponseMessage.newSuccessInstance("添加成功");
         else return ResponseMessage.newErrorInstance("添加失败");
@@ -71,9 +66,6 @@ public class GoodsDetailController {
     @ApiOperation(value = "更新商品详情信息")
     // 更新商品详情信息
     public ResponseMessage updateGoodsDetail(@RequestBody GoodsDetailDTO goodsDetail) {
-        List<GoodsDetailDTO> goodsDetailDtos = goodsDetailService.selectAllDtoByGoodsId(goodsDetail.getGoodsId());
-        boolean judgeFlag = goodsDetailService.judgeGoodsDetail(goodsDetail, goodsDetailDtos);
-        if (judgeFlag) return ResponseMessage.newErrorInstance("该商品详细信息内容已经存在");
         GoodsDetailDTO goodsDetailDto = goodsDetailService.selectGoodsDetailByID(goodsDetail.getId());
         if (goodsDetailDto != null) {
             boolean updateFlag = goodsDetailService.updateGoodsDetail(goodsDetail);

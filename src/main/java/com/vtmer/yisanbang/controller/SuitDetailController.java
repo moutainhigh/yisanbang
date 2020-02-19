@@ -73,11 +73,6 @@ public class SuitDetailController {
     public ResponseMessage addSuitDetail(@ApiParam(name = "套装详情Dto实体类", value = "传入Json格式", required = true)
                                          @RequestBody
                                          @Validated(Insert.class) SuitDetailDTO suitDetailDto) {
-        List<SuitDetailDTO> suitDetailDtoList = suitDetailService.selectAllDtoBySuitId(suitDetailDto.getSuitId());
-        if (suitDetailDtoList != null && !suitDetailDtoList.isEmpty()) {
-            boolean judgeFlag = suitDetailService.judgeSuitDetail(suitDetailDto, suitDetailDtoList);
-            if (judgeFlag) return ResponseMessage.newSuccessInstance("该套装详情已经存在");
-        }
         boolean addFlag = suitDetailService.addSuitDetail(suitDetailDto);
         if (addFlag) return ResponseMessage.newSuccessInstance("添加成功");
         else return ResponseMessage.newErrorInstance("添加失败");
