@@ -105,14 +105,14 @@ public class JwtUtil {
     /**
      * 根据token获取userId
      */
-    public static Integer getUserIdByToken(String token) throws JWTDecodeException {
+    public Integer getUserIdByToken(String token) throws JWTDecodeException {
         return JWT.decode(token).getClaim("userId").asInt();
     }
 
     /**
      * 根据token获取openId
      */
-    public static String getOpenIdByToken(String token) throws JWTDecodeException {
+    public String getOpenIdByToken(String token) throws JWTDecodeException {
         return JWT.decode(token).getClaim("openId").asString();
     }
 
@@ -123,7 +123,7 @@ public class JwtUtil {
         return JWT.decode(token).getClaim("sessionKey").asString();
     }
 
-    public static User getUserInfoByToken(String token) throws JWTDecodeException {
+    public User getUserInfoByToken(String token) throws JWTDecodeException {
         User user = new User();
         user.setId(getUserIdByToken(token));
         user.setOpenId(getOpenIdByToken(token));

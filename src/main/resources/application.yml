@@ -51,7 +51,7 @@ spring:
         login-password: wlt123..
 
   redis:
-    host: 119.3.254.171
+    host: 127.0.0.1
     port: 6379
     # redis密码，默认为空
     password:
