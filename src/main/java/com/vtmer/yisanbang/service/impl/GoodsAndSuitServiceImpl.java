@@ -24,14 +24,12 @@ public class GoodsAndSuitServiceImpl implements GoodsAndSuitService {
         List<Object> objectList = new ArrayList<>();
         oneCycle:
         for (int i = 0; i <= goodsDTOList.size(); i++) {
-            twoCycle:
             for (int j = 0; j < suitDTOList.size(); j++) {
                 if (goodsDTOList.get(i).getId() < suitDTOList.get(j).getId()) {
                     objectList.add(goodsDTOList.get(i));
                     break oneCycle;
                 } else {
                     objectList.add(suitDTOList.get(j));
-                    break twoCycle;
                 }
             }
         }
@@ -43,14 +41,12 @@ public class GoodsAndSuitServiceImpl implements GoodsAndSuitService {
         List<Object> objectList = new ArrayList<>();
         oneCycle:
         for (int i = 0; i <= goodsDTOList.size(); i++) {
-            twoCycle:
             for (int j = 0; j < suitDTOList.size(); j++) {
                 if (goodsDTOList.get(i).getPrice() < suitDTOList.get(j).getLowestPrice()) {
                     objectList.add(goodsDTOList.get(i));
                     break oneCycle;
                 } else {
                     objectList.add(suitDTOList.get(j));
-                    break twoCycle;
                 }
             }
         }
@@ -62,14 +58,12 @@ public class GoodsAndSuitServiceImpl implements GoodsAndSuitService {
         List<Object> objectList = new ArrayList<>();
         oneCycle:
         for (int i = 0; i <= goodsDTOList.size(); i++) {
-            twoCycle:
             for (int j = 0; j < suitDTOList.size(); j++) {
                 if (goodsDTOList.get(i).getPrice() > suitDTOList.get(j).getLowestPrice()) {
                     objectList.add(goodsDTOList.get(i));
                     break oneCycle;
                 } else {
                     objectList.add(suitDTOList.get(j));
-                    break twoCycle;
                 }
             }
         }
@@ -81,14 +75,12 @@ public class GoodsAndSuitServiceImpl implements GoodsAndSuitService {
         List<Object> objectList = new ArrayList<>();
         oneCycle:
         for (int i = 0; i <= goodsDTOList.size(); i++) {
-            twoCycle:
             for (int j = 0; j < suitDTOList.size(); j++) {
                 if (goodsDTOList.get(i).getUpdateTime().before(suitDTOList.get(j).getUpdateTime())) {
                     objectList.add(goodsDTOList.get(i));
                     break oneCycle;
                 } else {
                     objectList.add(suitDTOList.get(j));
-                    break twoCycle;
                 }
             }
         }
@@ -100,14 +92,12 @@ public class GoodsAndSuitServiceImpl implements GoodsAndSuitService {
         List<Object> objectList = new ArrayList<>();
         oneCycle:
         for (int i = 0; i <= goodsDTOList.size(); i++) {
-            twoCycle:
             for (int j = 0; j < suitDTOList.size(); j++) {
                 if (goodsDTOList.get(i).getUpdateTime().after(suitDTOList.get(j).getUpdateTime())) {
                     objectList.add(goodsDTOList.get(i));
                     break oneCycle;
                 } else {
                     objectList.add(suitDTOList.get(j));
-                    break twoCycle;
                 }
             }
         }
