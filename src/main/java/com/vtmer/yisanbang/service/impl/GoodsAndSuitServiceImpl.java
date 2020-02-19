@@ -22,16 +22,16 @@ public class GoodsAndSuitServiceImpl implements GoodsAndSuitService {
     @Override
     public List<Object> selectGoodsAndSuit(List<GoodsDTO> goodsDTOList, List<SuitDTO> suitDTOList) {
         List<Object> objectList = new ArrayList<>();
-        if (goodsDTOList != null && !goodsDTOList.isEmpty() && suitDTOList != null && !suitDTOList.isEmpty()) {
-            for (GoodsDTO goodsDTO : goodsDTOList) {
-                for (SuitDTO suitDTO : suitDTOList) {
-                    if (goodsDTO.getId() <= suitDTO.getId()){
-                        objectList.add(goodsDTO);
-                        goodsDTOList.remove(goodsDTO);
-                    }else {
-                        objectList.add(suitDTO);
-                        suitDTOList.remove(suitDTO);
-                    }
+        oneCycle:
+        for (int i = 0; i <= goodsDTOList.size(); i++) {
+            twoCycle:
+            for (int j = 0; j < suitDTOList.size(); j++) {
+                if (goodsDTOList.get(i).getId() < suitDTOList.get(j).getId()) {
+                    objectList.add(goodsDTOList.get(i));
+                    break oneCycle;
+                } else {
+                    objectList.add(suitDTOList.get(j));
+                    break twoCycle;
                 }
             }
         }
@@ -41,16 +41,16 @@ public class GoodsAndSuitServiceImpl implements GoodsAndSuitService {
     @Override
     public List<Object> selectGoodsAndSuitByPriceAsc(List<GoodsDTO> goodsDTOList, List<SuitDTO> suitDTOList) {
         List<Object> objectList = new ArrayList<>();
-        if (goodsDTOList != null && !goodsDTOList.isEmpty() && suitDTOList != null && !suitDTOList.isEmpty()) {
-            for (GoodsDTO goodsDTO : goodsDTOList) {
-                for (SuitDTO suitDTO : suitDTOList) {
-                    if (goodsDTO.getPrice() <= suitDTO.getLowestPrice()){
-                        objectList.add(goodsDTO);
-                        goodsDTOList.remove(goodsDTO);
-                    }else {
-                        objectList.add(suitDTO);
-                        suitDTOList.remove(suitDTO);
-                    }
+        oneCycle:
+        for (int i = 0; i <= goodsDTOList.size(); i++) {
+            twoCycle:
+            for (int j = 0; j < suitDTOList.size(); j++) {
+                if (goodsDTOList.get(i).getPrice() < suitDTOList.get(j).getLowestPrice()) {
+                    objectList.add(goodsDTOList.get(i));
+                    break oneCycle;
+                } else {
+                    objectList.add(suitDTOList.get(j));
+                    break twoCycle;
                 }
             }
         }
@@ -60,16 +60,16 @@ public class GoodsAndSuitServiceImpl implements GoodsAndSuitService {
     @Override
     public List<Object> selectGoodsAndSuitByPriceDec(List<GoodsDTO> goodsDTOList, List<SuitDTO> suitDTOList) {
         List<Object> objectList = new ArrayList<>();
-        if (goodsDTOList != null && !goodsDTOList.isEmpty() && suitDTOList != null && !suitDTOList.isEmpty()) {
-            for (GoodsDTO goodsDTO : goodsDTOList) {
-                for (SuitDTO suitDTO : suitDTOList) {
-                    if (goodsDTO.getPrice() >= suitDTO.getLowestPrice()){
-                        objectList.add(goodsDTO);
-                        goodsDTOList.remove(goodsDTO);
-                    }else {
-                        objectList.add(suitDTO);
-                        suitDTOList.remove(suitDTO);
-                    }
+        oneCycle:
+        for (int i = 0; i <= goodsDTOList.size(); i++) {
+            twoCycle:
+            for (int j = 0; j < suitDTOList.size(); j++) {
+                if (goodsDTOList.get(i).getPrice() > suitDTOList.get(j).getLowestPrice()) {
+                    objectList.add(goodsDTOList.get(i));
+                    break oneCycle;
+                } else {
+                    objectList.add(suitDTOList.get(j));
+                    break twoCycle;
                 }
             }
         }
@@ -79,16 +79,16 @@ public class GoodsAndSuitServiceImpl implements GoodsAndSuitService {
     @Override
     public List<Object> selectGoodsAndSuitByTimeAsc(List<GoodsDTO> goodsDTOList, List<SuitDTO> suitDTOList) {
         List<Object> objectList = new ArrayList<>();
-        if (goodsDTOList != null && !goodsDTOList.isEmpty() && suitDTOList != null && !suitDTOList.isEmpty()) {
-            for (GoodsDTO goodsDTO : goodsDTOList) {
-                for (SuitDTO suitDTO : suitDTOList) {
-                    if (suitDTO.getUpdateTime().before(goodsDTO.getUpdateTime())){
-                        objectList.add(goodsDTO);
-                        goodsDTOList.remove(goodsDTO);
-                    }else {
-                        objectList.add(suitDTO);
-                        suitDTOList.remove(suitDTO);
-                    }
+        oneCycle:
+        for (int i = 0; i <= goodsDTOList.size(); i++) {
+            twoCycle:
+            for (int j = 0; j < suitDTOList.size(); j++) {
+                if (goodsDTOList.get(i).getUpdateTime().before(suitDTOList.get(j).getUpdateTime())) {
+                    objectList.add(goodsDTOList.get(i));
+                    break oneCycle;
+                } else {
+                    objectList.add(suitDTOList.get(j));
+                    break twoCycle;
                 }
             }
         }
@@ -98,16 +98,16 @@ public class GoodsAndSuitServiceImpl implements GoodsAndSuitService {
     @Override
     public List<Object> selectGoodsAndSuitByTimeDec(List<GoodsDTO> goodsDTOList, List<SuitDTO> suitDTOList) {
         List<Object> objectList = new ArrayList<>();
-        if (goodsDTOList != null && !goodsDTOList.isEmpty() && suitDTOList != null && !suitDTOList.isEmpty()) {
-            for (GoodsDTO goodsDTO : goodsDTOList) {
-                for (SuitDTO suitDTO : suitDTOList) {
-                    if (suitDTO.getUpdateTime().after(goodsDTO.getUpdateTime())){
-                        objectList.add(goodsDTO);
-                        goodsDTOList.remove(goodsDTO);
-                    }else {
-                        objectList.add(suitDTO);
-                        suitDTOList.remove(suitDTO);
-                    }
+        oneCycle:
+        for (int i = 0; i <= goodsDTOList.size(); i++) {
+            twoCycle:
+            for (int j = 0; j < suitDTOList.size(); j++) {
+                if (goodsDTOList.get(i).getUpdateTime().after(suitDTOList.get(j).getUpdateTime())) {
+                    objectList.add(goodsDTOList.get(i));
+                    break oneCycle;
+                } else {
+                    objectList.add(suitDTOList.get(j));
+                    break twoCycle;
                 }
             }
         }
