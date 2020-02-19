@@ -59,7 +59,7 @@ spring:
   servlet:
     multipart:
       max-file-size: 50MB
-        max-request-size: 200MB
+      max-request-size: 200MB
 
   quartz:
     #相关属性配置
@@ -105,8 +105,8 @@ wx:
     keyPath: # p12证书的位置，可以指定绝对路径，也可以指定类路径（以classpath:开头）
     spbillCreateIp: #服务器IP地址
   applet:
-    appid: wx92f1fb1b509237f7
-    appsecret: 0d4b463c3b468d8d2f2a33ea7772291c
+    appid: wx447bdd8f7d850c06
+    appsecret: 1f8dc966cc30761d60394178a5d58301
 
 pagehelper:
   helper-dialect: mysql
@@ -117,9 +117,13 @@ pagehelper:
 server:
   servlet:
     context-path: /
-  port: 8089
+  port: 8080
   max-http-header-size: 81920 # 修改请求头允许的最大值
 
 sop:
   swagger:
     host: 119.3.254.171
+
+swagger:
+  show: true
+

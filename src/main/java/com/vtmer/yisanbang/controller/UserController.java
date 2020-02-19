@@ -1,11 +1,14 @@
 package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
+import com.vtmer.yisanbang.vo.JwtToken;
 import com.vtmer.yisanbang.vo.Token;
 import com.vtmer.yisanbang.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +29,10 @@ public class UserController {
             return ResponseMessage.newErrorInstance("缺少参数code或code不合法");
         }
         Token token = userService.wxUserLogin(request.get("code"));
+        // 执行验证过程
+        Subject subject = SecurityUtils.getSubject();
+        JwtToken jwtToken = new JwtToken(token.getToken());
+        subject.login(jwtToken);
         return ResponseMessage.newSuccessInstance(token,"获取token用户成功");
     }
 

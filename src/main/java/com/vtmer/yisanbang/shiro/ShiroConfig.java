@@ -1,11 +1,15 @@
 package com.vtmer.yisanbang.shiro;
 
+import com.vtmer.yisanbang.domain.Permission;
+import com.vtmer.yisanbang.mapper.PermissionMapper;
 import org.apache.shiro.authc.pam.FirstSuccessfulStrategy;
 import org.apache.shiro.authc.pam.ModularRealmAuthenticator;
 import org.apache.shiro.realm.Realm;
+import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +19,10 @@ import java.util.*;
 
 @Configuration
 public class ShiroConfig {
+
+    @Autowired
+    private PermissionMapper permissionMapper;
+
     /**
      * 创建ShiroFilterFactoryBean
      */
@@ -26,15 +34,27 @@ public class ShiroConfig {
         factoryBean.setFilters(filterMap);
         // 设置安全管理器
         factoryBean.setSecurityManager(securityManager);
+        factoryBean.setFilterChainDefinitionMap(setFilterChainDefinitionMap());
+        return factoryBean;
+    }
+
+    private Map<String, String> setFilterChainDefinitionMap() {
         // 添加Shiro内置过滤器
         Map<String, String> filterRuleMap = new LinkedHashMap<>();
-        //filterRuleMap.put("/admin/**", "anon");
-        //filterRuleMap.put("/user/**", "anon");
-        //filterRuleMap.put("/cart/**", "anon");
-        filterRuleMap.put("/**","authc");
-
-        factoryBean.setFilterChainDefinitionMap(filterRuleMap);
-        return factoryBean;
+        // 设置首页内容、登录、登出页面等无需认证
+        filterRuleMap.put("/admin/login", "anon");
+        filterRuleMap.put("/user/login", "anon");
+        filterRuleMap.put("/admin/logout", "anon");
+        filterRuleMap.put("/ad/list", "anon");
+        filterRuleMap.put("/carousel/list", "anon");
+        // 获取所有需要权限认证的接口路径
+        List<Permission> permissions = permissionMapper.selectAll();
+        for (Permission p : permissions) {
+            filterRuleMap.put(p.getUrl(), "perms[" + p.getUrl() + "]");
+        }
+        filterRuleMap.put("/**", "jwt");
+        filterRuleMap.put("/**", "authc");
+        return filterRuleMap;
     }
 
     /**
@@ -76,4 +96,15 @@ public class ShiroConfig {
         defaultAdvisorAutoProxyCreator.setUsePrefix(true);
         return defaultAdvisorAutoProxyCreator;
     }
+
+    /**
+     * 开启注解验证
+     */
+    @Bean
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(DefaultWebSecurityManager securityManager) {
+        AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
+        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
+        return authorizationAttributeSourceAdvisor;
+    }
+
 }

@@ -17,13 +17,11 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
 public class UserRealm extends AuthorizingRealm {
 
     @Autowired
@@ -40,16 +38,19 @@ public class UserRealm extends AuthorizingRealm {
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        System.out.println("进入授权流程...");
+        System.out.println("进入token授权流程...");
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         // 获取当前登陆用户
         Subject subject = SecurityUtils.getSubject();
-        String adminName = (String) subject.getPrincipal();
+        String token = subject.getPrincipal().toString();
+        System.out.println(token);
+        String userOpenId = jwtUtil.getOpenIdByToken(token);
         // 获取角色(id)并获取角色对应的权限url
         List<String> permUrls = new ArrayList<>();
-        for (Object roleId : adminRoleService.selectRoleIdByName(adminName)) {
+        for (Object roleId : adminRoleService.selectRoleIdByName(userOpenId)) {
             permUrls.addAll(permissionService.selectUrlByRoleId((Integer) roleId));
         }
+        // System.out.println(permUrls.size());
         authorizationInfo.addStringPermissions(permUrls);
         return authorizationInfo;
     }
@@ -59,6 +60,7 @@ public class UserRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) {
+        System.out.println("进入验证流程...");
         String jwtToken = (String) token.getCredentials();
         String wxOpenId = jwtUtil.getOpenIdByToken(jwtToken);
         String sessionKey = jwtUtil.getSessionKeyByToken(jwtToken);

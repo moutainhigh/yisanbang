@@ -27,6 +27,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         return auth != null && !auth.equals("");
 
     }
+
     /**
      * 此方法调用登陆，验证逻辑
      */
@@ -38,6 +39,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         }
         return true;
     }
+
     /**
      * 提供跨域支持
      */

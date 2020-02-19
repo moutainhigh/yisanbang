@@ -10,8 +10,6 @@ import com.vtmer.yisanbang.service.AdminService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,13 +76,32 @@ public class AdminController {
             // System.out.println("登陆");
             // 登陆成功
             return ResponseMessage.newSuccessInstance("登陆成功");
-        } catch (UnknownAccountException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            return ResponseMessage.newErrorInstance("登陆失败，用户名不存在");
-        } catch (IncorrectCredentialsException e) {
-            e.printStackTrace();
-            return ResponseMessage.newErrorInstance("登陆失败，密码错误");
+            return ResponseMessage.newErrorInstance("登陆失败，用户名不存在或密码错误");
         }
+    }
+
+    /**
+     * 管理员退出登录
+     * @return
+     */
+    @ApiOperation("管理员退出登录")
+    @PostMapping("logout")
+    public ResponseMessage logout() {
+        Subject subject = SecurityUtils.getSubject();
+        if (subject.isAuthenticated()) {
+            try {
+                subject.logout();
+                return ResponseMessage.newSuccessInstance("退出登陆成功");
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseMessage.newErrorInstance("退出登录失败");
+            }
+        } else {
+            ResponseMessage.newErrorInstance("用户尚未登录，无法退出");
+        }
+        return ResponseMessage.newErrorInstance("退出登录失败");
     }
 
     /**
