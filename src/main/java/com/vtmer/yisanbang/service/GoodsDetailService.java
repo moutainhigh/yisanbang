@@ -22,7 +22,4 @@ public interface GoodsDetailService {
 
     // 根据商品详细id查找商品详细信息
     public GoodsDetailDTO selectGoodsDetailByID(Integer goodsDeteilId);
-
-    // 查看商品详细信息是否相同
-    public boolean judgeGoodsDetail(GoodsDetailDTO goodsDetail, List<GoodsDetailDTO> goodsDetailDtoList);
 }

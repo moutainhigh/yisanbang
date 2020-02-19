@@ -23,6 +23,4 @@ public interface SuitDetailService {
     // 根据套装详细id查找套装详细信息
     public SuitDetailDTO selectSuitDetailByID(Integer suitDetailId);
 
-    // 查看套装详细信息是否相同
-    public boolean judgeSuitDetail(SuitDetailDTO suitDetailDto, List<SuitDetailDTO> suitDetailDtoList);
 }

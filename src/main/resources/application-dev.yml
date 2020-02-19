@@ -10,11 +10,11 @@ spring:
     # 如果存在多个数据源，监控的时候可以通过名字来区分开来
     name: mysql
     # 连接数据库的url
-    url: jdbc:mysql://192.168.0.128:3307/yi_san_bang?characterEncoding=utf-8&serverTimezone=GMT%2B8
+    url: jdbc:mysql://192.168.0.128:3307/yisanbang?characterEncoding=utf-8&serverTimezone=GMT%2B8
     # 连接数据库的账号
     username: root
     # 连接数据库的密码
-    password: Wlt123++
+    password: a570911275
     # 使用druid数据源
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
