@@ -1,5 +1,7 @@
 package com.vtmer.yisanbang.controller;
 
+import com.github.pagehelper.PageHelper;
+import com.vtmer.yisanbang.common.PageResponseMessage;
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.common.qiniu.QiniuUpload;
 import com.vtmer.yisanbang.common.valid.group.Delete;
@@ -27,11 +29,15 @@ public class SuitDetailController {
 
     @GetMapping("/selectAllSuitDetail")
     @ApiOperation(value = "查找显示所有商品详情")
-    // 查找显示所有商品详情
-    public ResponseMessage selectAll() {
+    // 查找显示所有套装详情
+    public ResponseMessage selectAll(@ApiParam("查询页数(第几页)")
+                                     @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                                     @ApiParam("单页数量")
+                                     @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
         List<SuitDetailDTO> suitDetailDtoList = suitDetailService.selectAllDto();
         if (suitDetailDtoList != null && !suitDetailDtoList.isEmpty())
-            return ResponseMessage.newSuccessInstance(suitDetailDtoList, "查找成功");
+            return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(suitDetailDtoList), "查找成功");
         else return ResponseMessage.newErrorInstance("查找失败");
     }
 
@@ -39,10 +45,15 @@ public class SuitDetailController {
     @ApiOperation(value = "根据套装id查找显示该套装的所有套装详情")
     // 根据套装id查找显示该套装的所有套装详情
     public ResponseMessage selectSuitDetailBySuitId(@ApiParam(name = "suitId", value = "套装Id", required = true)
-                                                        @PathVariable("id") Integer suitId) {
+                                                    @RequestParam(value = "suitId", defaultValue = "5") Integer suitId,
+                                                    @ApiParam("查询页数(第几页)")
+                                                    @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                                                    @ApiParam("单页数量")
+                                                    @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
         List<SuitDetailDTO> suitDetailDtoList = suitDetailService.selectAllDtoBySuitId(suitId);
         if (suitDetailDtoList != null && !suitDetailDtoList.isEmpty())
-            return ResponseMessage.newSuccessInstance(suitDetailDtoList, "查找成功");
+            return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(suitDetailDtoList), "查找成功");
         else return ResponseMessage.newErrorInstance("查找失败");
     }
 
@@ -50,7 +61,7 @@ public class SuitDetailController {
     @ApiOperation(value = "根据套装详情id查找套装详情")
     // 根据套装详情id查找套装详情
     public ResponseMessage selectSuitDetailById(@ApiParam(name = "suitDetailId", value = "套装详情Id", required = true)
-                                                    @PathVariable("id") Integer suitDetailId) {
+                                                @PathVariable("id") Integer suitDetailId) {
         SuitDetailDTO suitDetailDto = suitDetailService.selectSuitDetailByID(suitDetailId);
         if (suitDetailDto != null) return ResponseMessage.newSuccessInstance(suitDetailDto, "查找成功");
         else return ResponseMessage.newErrorInstance("查找失败");
@@ -60,8 +71,8 @@ public class SuitDetailController {
     @ApiOperation(value = "添加套装详情")
     // 添加套装详情
     public ResponseMessage addSuitDetail(@ApiParam(name = "套装详情Dto实体类", value = "传入Json格式", required = true)
-                                             @RequestBody
-                                                     @Validated(Insert.class) SuitDetailDTO suitDetailDto) {
+                                         @RequestBody
+                                         @Validated(Insert.class) SuitDetailDTO suitDetailDto) {
         List<SuitDetailDTO> suitDetailDtoList = suitDetailService.selectAllDtoBySuitId(suitDetailDto.getSuitId());
         if (suitDetailDtoList != null && !suitDetailDtoList.isEmpty()) {
             boolean judgeFlag = suitDetailService.judgeSuitDetail(suitDetailDto, suitDetailDtoList);
@@ -76,8 +87,8 @@ public class SuitDetailController {
     @ApiOperation(value = "更新套装详情")
     // 更新套装详情
     public ResponseMessage updateSuitDetail(@ApiParam(name = "套装详情Dto实体类", value = "传入Json格式", required = true)
-                                                @RequestBody
-                                                        @Validated(Update.class) SuitDetailDTO suitDetailDto) {
+                                            @RequestBody
+                                            @Validated(Update.class) SuitDetailDTO suitDetailDto) {
         SuitDetailDTO suitDetail = suitDetailService.selectSuitDetailByID(suitDetailDto.getId());
         if (suitDetail != null) {
             boolean updateFlag = suitDetailService.updateSuitDetail(suitDetailDto);
@@ -90,8 +101,8 @@ public class SuitDetailController {
     @ApiOperation(value = "删除套装详情")
     // 删除套装详情
     public ResponseMessage deleteSuitDetail(@ApiParam(name = "套装详情Dto实体类", value = "传入Json格式", required = true)
-                                                @RequestBody
-                                                        @Validated(Delete.class) SuitDetailDTO suitDetailDto) {
+                                            @RequestBody
+                                            @Validated(Delete.class) SuitDetailDTO suitDetailDto) {
         SuitDetailDTO suitDetail = suitDetailService.selectSuitDetailByID(suitDetailDto.getId());
         if (suitDetail != null) {
             boolean deleteFlag = suitDetailService.deleteSuitDetail(suitDetailDto.getId());

@@ -1,5 +1,7 @@
 package com.vtmer.yisanbang.controller;
 
+import com.github.pagehelper.PageHelper;
+import com.vtmer.yisanbang.common.PageResponseMessage;
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.common.qiniu.QiniuUpload;
 import com.vtmer.yisanbang.dto.GoodsDetailDTO;
@@ -24,20 +26,30 @@ public class GoodsDetailController {
     @GetMapping("/selectAllGoodsDetail")
     @ApiOperation(value = "查找所有商品详情信息")
     // 查找所有商品详情信息
-    public ResponseMessage selectAllGoodsDetail() {
+    public ResponseMessage selectAllGoodsDetail(@ApiParam("查询页数(第几页)")
+                                                @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                                                @ApiParam("单页数量")
+                                                @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
         List<GoodsDetailDTO> goodsDetailDtos = goodsDetailService.selectAllDto();
         if (goodsDetailDtos != null && !goodsDetailDtos.isEmpty())
-            return ResponseMessage.newSuccessInstance(goodsDetailDtos, "查找成功");
+            return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(goodsDetailDtos), "查找成功");
         else return ResponseMessage.newErrorInstance("查找失败");
     }
 
-    @GetMapping("/selectAllGoodsDetailByGoodsId/{id}")
+    @GetMapping("/selectAllGoodsDetailByGoodsId")
     @ApiOperation(value = "根据商品id查找该商品的所有商品详情信息")
     // 根据商品id查找该商品的所有商品详情信息
-    public ResponseMessage selectAllGoodsDetailByGoodsId(@PathVariable("id") Integer goodsId) {
+    public ResponseMessage selectAllGoodsDetailByGoodsId(@ApiParam(name = "goodsId", value = "商品Id", required = true)
+                                                         @RequestParam(value = "goodsId", defaultValue = "5") Integer goodsId,
+                                                         @ApiParam("查询页数(第几页)")
+                                                         @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                                                         @ApiParam("单页数量")
+                                                         @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
         List<GoodsDetailDTO> goodsDetailDtos = goodsDetailService.selectAllDtoByGoodsId(goodsId);
         if (goodsDetailDtos != null && !goodsDetailDtos.isEmpty())
-            return ResponseMessage.newSuccessInstance(goodsDetailDtos, "查找成功");
+            return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(goodsDetailDtos), "查找成功");
         else return ResponseMessage.newErrorInstance("查找失败");
     }
 
