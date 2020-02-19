@@ -82,45 +82,6 @@ public class SystemLogAspect {
         return result;
     }
 
-
-    /**
-     * 功能：获取IP地址
-     *
-     * @param request
-     * @return
-     */
-    public static String getClientIpAddr(HttpServletRequest request) {
-        String ip = request.getHeader("x-forwarded-for");
-        if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
-        }
-        return ip;
-    }
-
-    /**
-     * 功能：获取浏览器版本
-     *
-     * @return
-     */
-    public String getBrownerNo(HttpServletRequest request) {
-        return getNo(request, new String[]{"MSIE", "FIREFOX", "CHROME", "SAFARI", "OPERA"});
-    }
-
-    /**
-     * 功能：获取操作系统版本
-     *
-     * @return
-     */
-    public String getOsNo(HttpServletRequest request) {
-        return getNo(request, new String[]{"WINDOWS NT", "IOS"});
-    }
-
     /**
      * 获取参数
      *
@@ -136,8 +97,8 @@ public class SystemLogAspect {
             for (int i = 0; i < osNos.length; i++) {
                 if (str.indexOf(osNos[i]) > 0) {
                     String str1 = str.substring(str.indexOf(osNos[i]));
-                    if (str1.indexOf(";") > 0) {
-                        osNo = str1.substring(0, str1.indexOf(";"));
+                    if (str1.indexOf(';') > 0) {
+                        osNo = str1.substring(0, str1.indexOf(';'));
                     } else {
                         osNo = osNos[i];
                     }
