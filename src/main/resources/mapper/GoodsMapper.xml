@@ -88,7 +88,7 @@
     where name = #{name,jdbcType=VARCHAR} and is_show = true
   </select>
   <select id="selectAllDto" resultMap="GoodsMap">
-    select id, sort_id, name, introduce, picture, price, is_show
+    select id, sort_id, name, introduce, picture, price, is_show, update_time
     from goods
   </select>
     <select id="selectAllDtoBySort" parameterType="java.lang.Integer" resultMap="GoodsMap">
