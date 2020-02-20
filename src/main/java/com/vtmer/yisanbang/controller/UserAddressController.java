@@ -73,6 +73,23 @@ public class UserAddressController {
                                              @Validated(Update.class) UserAddressDTO userAddress) {
         UserAddressDTO address = userAddressService.selectUserAddressDtoByAddressId(userAddress.getId());
         if (address != null) {
+            UserAddressDTO userAddressDTO = userAddressService.selectDefaultUserAddress(userAddress.getUserId());
+            List<UserAddressDTO> userAddressDTOS = userAddressService.selectUserAddressByUserId(address.getUserId());
+            if (userAddressDTO.getId() == address.getId())
+                if (!userAddress.getIsDefault())
+                    if (userAddressDTOS.size() > 1) {
+                        Boolean flag = true;
+                        for (int i = 0; i < userAddressDTOS.size(); i++) {
+                            if (flag)
+                                if (userAddressDTOS.get(i).getId() != address.getId()) {
+                                    UserAddressDTO addressDTO = userAddressDTOS.get(i);
+                                    addressDTO.setIsDefault(true);
+                                    userAddressService.updateUserAddressByAddressId(addressDTO);
+                                    flag = false;
+                                }
+                        }
+                    }
+
             boolean flag = userAddressService.updateUserAddressByAddressId(userAddress);
             if (flag == true) return ResponseMessage.newSuccessInstance("更新成功");
             else return ResponseMessage.newErrorInstance("更新失败");
@@ -89,6 +106,22 @@ public class UserAddressController {
                                              @Validated(Delete.class) UserAddressDTO userAddress) {
         UserAddressDTO address = userAddressService.selectUserAddressDtoByAddressId(userAddress.getId());
         if (address != null) {
+            UserAddressDTO userAddressDTO = userAddressService.selectDefaultUserAddress(userAddress.getUserId());
+            List<UserAddressDTO> userAddressDTOS = userAddressService.selectUserAddressByUserId(address.getUserId());
+            if (userAddressDTO.getId() == address.getId()) {
+                if (userAddressDTOS.size() > 1) {
+                    Boolean flag = true;
+                    for (int i = 0; i < userAddressDTOS.size(); i++) {
+                        if (flag)
+                            if (userAddressDTOS.get(i).getId() != address.getId()) {
+                                UserAddressDTO addressDTO = userAddressDTOS.get(i);
+                                addressDTO.setIsDefault(true);
+                                userAddressService.updateUserAddressByAddressId(addressDTO);
+                                flag = false;
+                            }
+                    }
+                }
+            }
             boolean flag = userAddressService.deleteUserAddressByAddressId(address);
             if (flag == true) return ResponseMessage.newSuccessInstance("删除成功");
             else return ResponseMessage.newErrorInstance("删除失败");
