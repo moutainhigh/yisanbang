@@ -102,7 +102,6 @@ public class OrderController {
 
     /**
      * 通过订单号进行微信支付
-     *
      * @param orderNumber：orderNumber订单号
      * @return 返回前端调起微信支付所需的支付参数（5个参数和sign）
      */
@@ -162,7 +161,6 @@ public class OrderController {
 
     /**
      * 支付回调通知处理
-     *
      * @param xmlData 相关支付结果及用户信息(微信端提供)
      * @return 向微信服务端返回应答
      * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--申请退款(待商家处理) 5--退款中(待商家收货) 6--退款成功 7--退款失败 8--交易关闭 9--所有订单

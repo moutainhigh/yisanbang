@@ -1,5 +1,8 @@
 package com.vtmer.yisanbang.service.impl;
 
+import com.github.binarywang.wxpay.bean.result.WxPayOrderQueryResult;
+import com.github.binarywang.wxpay.exception.WxPayException;
+import com.github.binarywang.wxpay.service.WxPayService;
 import com.vtmer.yisanbang.common.TokenInterceptor;
 import com.vtmer.yisanbang.common.exception.service.order.*;
 import com.vtmer.yisanbang.common.util.OrderNumberUtil;
@@ -64,6 +67,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private RefundService refundService;
+
+    @Autowired
+    private WxPayService wxPayService;
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
@@ -260,8 +266,8 @@ public class OrderServiceImpl implements OrderService {
     public List<OrderDTO> getUserOrderList(Integer status) {
         HashMap<String, Integer> orderMap = new HashMap<>();
         Integer userId = TokenInterceptor.getLoginUser().getId();
-        orderMap.put("userId",userId);
-        orderMap.put("status",status);
+        orderMap.put("userId", userId);
+        orderMap.put("status", status);
         return getOrderDTOArrayList(orderMap);
     }
 
@@ -269,17 +275,18 @@ public class OrderServiceImpl implements OrderService {
     public List<OrderDTO> getOrderList(Integer status) {
         HashMap<String, Integer> orderMap = new HashMap<>();
         // userId为null表示不把userId当查询条件
-        orderMap.put("userId",null);
-        orderMap.put("status",status);
+        orderMap.put("userId", null);
+        orderMap.put("status", status);
         return getOrderDTOArrayList(orderMap);
     }
 
     /**
      * 根据标识获取相应订单列表
+     *
      * @param orderMap
      * @return
      */
-    private  ArrayList<OrderDTO> getOrderDTOArrayList(Map<String,Integer> orderMap) {
+    private ArrayList<OrderDTO> getOrderDTOArrayList(Map<String, Integer> orderMap) {
         ArrayList<OrderDTO> orderDTOArrayList = new ArrayList<>();
         List<Order> orderList = orderMapper.selectAllByUserIdAndStatus(orderMap);
         for (Order order : orderList) {
@@ -389,6 +396,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 通过订单号查询订单详情信息
+     *
      * @return 订单详情信息OrderDTO
      */
     public OrderDTO selectOrderDTOByOrderNumber(String orderNumber) {
@@ -542,6 +550,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 用户取消订单
+     *
      * @param orderNumber：订单编号
      * @return
      */
@@ -615,6 +624,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public void orderTimeOutLogic() {
         BoundZSetOperations<String, String> zSetOps = redisTemplate.boundZSetOps("OrderNumber");
         Cursor<ZSetOperations.TypedTuple<String>> cursor;
@@ -638,24 +648,42 @@ public class OrderServiceImpl implements OrderService {
                         String orderNumber = String.valueOf(value == null ? "" : value.toString());
                         logger.info("开始消费redis订单[{}]", orderNumber);
                         Order order = orderMapper.selectByOrderNumber(orderNumber);
-                        logger.info("开始关闭超时订单任务，订单编号[{}],下单时间[{}]", orderNumber, order.getCreateTime());
-                        // 更待订单状态为交易关闭
-                        HashMap<String, Integer> orderMap = new HashMap<>();
-                        orderMap.put("orderId", order.getId());
-                        orderMap.put("status", 4);
-                        setOrderStatus(orderMap);
-                        logger.info("订单[{}]状态更变：[未付款]-->[交易关闭]", orderNumber);
-                        // 库存归位,1代表增加库存
-                        updateInventory(orderNumber, 1);
+                        if (order.getStatus() != 0) {
+                            // 如果该订单状态不为0，即不是未付款，说明已经付款了，不需要取消订单
+                            continue;
+                        }
+                        // 调用微信查询订单接口，确认用户是否真的未付款
+                        WxPayOrderQueryResult wxPayOrderQueryResult = wxPayService.queryOrder(null, orderNumber);
+                        if (wxPayOrderQueryResult.getTradeState().equals("SUCCESS")) {
+                            // 如果微信订单结果为已支付，说明程序错误，给予补偿,更新订单状态为待发货
+                            Map<String, Integer> orderMap = new HashMap<>();
+                            orderMap.put("orderId", order.getId());
+                            orderMap.put("status", 1);
+                            orderMapper.setOrderStatus(orderMap);
+                        } else if (wxPayOrderQueryResult.getTradeState().equals("NOTPAY")) {
+                            // 如果结果为未支付，开始关闭订单操作
+                            logger.info("开始关闭超时订单任务，订单编号[{}],下单时间[{}]", orderNumber, order.getCreateTime());
+                            // 更待订单状态为交易关闭
+                            HashMap<String, Integer> orderMap = new HashMap<>();
+                            orderMap.put("orderId", order.getId());
+                            orderMap.put("status", 4);
+                            setOrderStatus(orderMap);
+                            logger.info("订单[{}]状态更变：[未付款]-->[交易关闭]", orderNumber);
+                            // 库存归位,1代表增加库存
+                            updateInventory(orderNumber, 1);
+                            // 调用微信支付关闭订单操作，以免用户继续操作支付
+                            wxPayService.closeOrder(orderNumber);
+                        }
                     } // end if
                 } // end if 取消订单
             } // end while
+        } catch (WxPayException wxPayEx) {
+            logger.warn("调用微信查询订单和关闭订单出错[{}]", wxPayEx.getMessage());
         } catch (InterruptedException e) {
             logger.warn("Interrupted!订单超时自动取消任务出现异常[{}]", e.getMessage());
             // clean up state...
             Thread.currentThread().interrupt();
         }
-
     }
 
 }
