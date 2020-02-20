@@ -20,7 +20,7 @@
         <result column="picture" jdbcType="VARCHAR" property="picture"/>
         <result column="price" jdbcType="DOUBLE" property="price"/>
         <result column="is_show" jdbcType="BIT" property="isShow"/>
-      <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from goods
@@ -87,7 +87,7 @@
     from goods
     where name = #{name,jdbcType=VARCHAR} and is_show = true
   </select>
-  <select id="selectAllDto" resultMap="GoodsMap">
+    <select id="selectAllDto" resultMap="GoodsMap">
     select id, sort_id, name, introduce, picture, price, is_show, update_time
     from goods
   </select>

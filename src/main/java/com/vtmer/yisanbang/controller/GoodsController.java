@@ -195,9 +195,9 @@ public class GoodsController {
                                      @Validated(Update.class) GoodsDTO goodsDto) {
         GoodsDTO goods = goodsService.selectDtoByPrimaryKey(goodsDto.getId());
         if (goods != null) {
-            boolean hideFlag = goodsService.hideGoods(goodsDto);
-            if (hideFlag) return ResponseMessage.newSuccessInstance("隐藏成功");
-            else return ResponseMessage.newErrorInstance("隐藏失败");
+            boolean hideFlag = goodsService.hideGoods(goods);
+            if (hideFlag) return ResponseMessage.newSuccessInstance("修改成功");
+            else return ResponseMessage.newErrorInstance("修改失败");
         } else return ResponseMessage.newErrorInstance("该商品不存在");
     }
 
