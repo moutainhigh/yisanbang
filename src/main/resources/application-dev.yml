@@ -57,13 +57,6 @@ spring:
     # redis密码，默认为空
     password: wlt123..
 
-logging:
-  level:
-    ROOT: info
-    com.example: trace
-  file:
-    name: target/mylog.log
-
 swagger:
   host: 119.3.254.171:8088
   show: true
