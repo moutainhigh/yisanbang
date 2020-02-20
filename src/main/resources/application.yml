@@ -1,9 +1,8 @@
 spring:
   profiles:
-    active: dev
+    active: test
   jackson:
     time-zone: GMT+8
-<<<<<<< HEAD
   devtools:
     restart:
       enabled: true  #设置开启热部署
@@ -119,14 +118,8 @@ pagehelper:
 server:
   servlet:
     context-path: /
-  port: 8080
   max-http-header-size: 81920 # 修改请求头允许的最大值
 
-sop:
-  swagger:
-    host: 119.3.254.171
 
-swagger:
-  show: true
 
 

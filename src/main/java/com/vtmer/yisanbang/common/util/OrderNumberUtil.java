@@ -8,7 +8,7 @@ import java.util.Random;
 
 public class OrderNumberUtil {
 
-    private static final int maxLength = 17;
+    private static final long maxLength = 17;
 
     private static Random rand;
 

@@ -1,5 +1,8 @@
 package com.vtmer.yisanbang.service.impl;
 
+import com.github.binarywang.wxpay.bean.result.WxPayOrderQueryResult;
+import com.github.binarywang.wxpay.exception.WxPayException;
+import com.github.binarywang.wxpay.service.WxPayService;
 import com.vtmer.yisanbang.common.TokenInterceptor;
 import com.vtmer.yisanbang.common.exception.service.order.*;
 import com.vtmer.yisanbang.common.util.OrderNumberUtil;
@@ -66,7 +69,10 @@ public class OrderServiceImpl implements OrderService {
     private RefundService refundService;
 
     @Autowired
-    private RedisTemplate<String,String> redisTemplate;
+    private WxPayService wxPayService;
+
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     // Free the postage after standardPrice
     private double standardPrice;
@@ -76,7 +82,7 @@ public class OrderServiceImpl implements OrderService {
 
     private void setPostage() {
         Postage postage = postageMapper.select();
-        if (postage!=null) {
+        if (postage != null) {
             standardPrice = postage.getPrice();
             defaultPostage = postage.getDefaultPostage();
         } else {  // 达标金额和邮费都默认为0
@@ -88,9 +94,9 @@ public class OrderServiceImpl implements OrderService {
     /**
      * The user clicks the settlement button,and then confirm the order
      * used in cart
+     *
      * @param
      * @return
-     *
      */
     public OrderDTO confirmCartOrder() {
         Integer userId = TokenInterceptor.getLoginUser().getId();
@@ -114,7 +120,7 @@ public class OrderServiceImpl implements OrderService {
         ArrayList<OrderGoodsDTO> orderGoodsDTOArrayList = new ArrayList<>();
         for (CartGoodsDTO cartGoodsDTO : cartGoodsList) {
             OrderGoodsDTO orderGoodsDTO = new OrderGoodsDTO();
-            BeanUtils.copyProperties(cartGoodsDTO,orderGoodsDTO);
+            BeanUtils.copyProperties(cartGoodsDTO, orderGoodsDTO);
             orderGoodsDTOArrayList.add(orderGoodsDTO);
         }
         orderDTO.setOrderGoodsDTOList(orderGoodsDTOArrayList);
@@ -125,12 +131,13 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * create shopping cart order after users submit order
+     *
      * @param cartOrderDTO:UserAddress(用户地址、联系人、手机号)、邮费、留言
      * @return openid、orderNumber
      * @throws DataIntegrityViolationException：库存不足抛出异常
      */
     @Transactional
-    public Map<String,String> createCartOrder(CartOrderDTO cartOrderDTO) throws DataIntegrityViolationException {
+    public Map<String, String> createCartOrder(CartOrderDTO cartOrderDTO) throws DataIntegrityViolationException {
         User user = TokenInterceptor.getLoginUser();
         /* ..写多了
         // 获取用户购物车清单
@@ -175,10 +182,10 @@ public class OrderServiceImpl implements OrderService {
         HashMap<String, String> orderMap = new HashMap<>();
         // 从登录信息中拿到openId
         String openId = user.getOpenId();
-        orderMap.put("openId",openId);
+        orderMap.put("openId", openId);
         // 生成订单编号
         String orderNumber = OrderNumberUtil.getOrderNumber();
-        orderMap.put("orderNumber",orderNumber);
+        orderMap.put("orderNumber", orderNumber);
         // 用户地址
         UserAddress userAddress = cartOrderDTO.getUserAddress();
         // 获取用户购物车清单
@@ -197,18 +204,18 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderNumber(orderNumber);
         order.setTotalPrice(cartVo.getTotalPrice());
         order.setPostage(cartOrderDTO.getPostage());
-        if (cartOrderDTO.getMessage()!=null) {
+        if (cartOrderDTO.getMessage() != null) {
             order.setMessage(cartOrderDTO.getMessage());
         }
         orderMapper.insert(order);
-        logger.info("创建订单[{}]，订单状态[未支付]---用户id[{}]",orderNumber,user.getId());
+        logger.info("创建订单[{}]，订单状态[未支付]---用户id[{}]", orderNumber, user.getId());
         BoundZSetOperations<String, String> zSetOps = redisTemplate.boundZSetOps("OrderNumber");
         // 延迟30分钟
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.MINUTE,EFFECTIVE_TIME);
-        int minute30Later = (int) (cal.getTimeInMillis()/1000);
+        cal.add(Calendar.MINUTE, EFFECTIVE_TIME);
+        int minute30Later = (int) (cal.getTimeInMillis() / 1000);
         // score为超时时间戳，zset集合值orderId4的分数
-        zSetOps.add(order.getOrderNumber(),minute30Later);
+        zSetOps.add(order.getOrderNumber(), minute30Later);
         for (CartGoodsDTO cartGoodsDTO : cartGoodsList) {
             // 生成orderGoods
             OrderGoods orderGoods = new OrderGoods();
@@ -225,10 +232,10 @@ public class OrderServiceImpl implements OrderService {
             // 减少相应商品的库存
             // 不调用updateInventory方法，省得插入又再查一次数据库
             HashMap<String, Integer> inventoryMap = new HashMap<>();
-            inventoryMap.put("amount",amount);
-            inventoryMap.put("sizeId",colorSizeId);
+            inventoryMap.put("amount", amount);
+            inventoryMap.put("sizeId", colorSizeId);
             // 0代表减少库存
-            inventoryMap.put("flag",0);
+            inventoryMap.put("flag", 0);
             int res;
             if (whetherGoods == Boolean.TRUE) {
                 res = colorSizeMapper.updateInventoryByPrimaryKey(inventoryMap);
@@ -238,7 +245,7 @@ public class OrderServiceImpl implements OrderService {
 
             if (res == 0) {
                 // 如果更新失败，说明库存不足
-                throw new InventoryNotEnoughException("商品库存不足--商品skuId："+colorSizeId+",是否是普通商品:"+whetherGoods+",需要数量"+amount);
+                throw new InventoryNotEnoughException("商品库存不足--商品skuId：" + colorSizeId + ",是否是普通商品:" + whetherGoods + ",需要数量" + amount);
             }
         } // end for
         // 删除购物车勾选项
@@ -251,33 +258,41 @@ public class OrderServiceImpl implements OrderService {
      * 获取用户指定订单状态的订单
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败
-     * @param orderMap —— flag、status
-     *                 flag为0时查询商城内的订单
-     *                 status传入3时同时获取退款成功、退款失败（3 4）的订单
-     *                 status传入5查询所有订单
+     *
+     * @param status:status传入3时同时获取退款成功（3)的订单;status传入5查询所有订单
      * @return
      */
     @Transactional
-    public List<OrderDTO> getOrderList(Map<String,Integer> orderMap) {
-
+    public List<OrderDTO> getUserOrderList(Integer status) {
+        HashMap<String, Integer> orderMap = new HashMap<>();
         Integer userId = TokenInterceptor.getLoginUser().getId();
-        if (orderMap.get("flag") == 1) {
-            // 如果是获取用户的订单
-            // 向map中添加userId,查询订单
-            orderMap.put("userId",userId);
-        } else {
-            // 查询所有订单
-            orderMap.put("userId",null);
-        }
+        orderMap.put("userId", userId);
+        orderMap.put("status", status);
+        return getOrderDTOArrayList(orderMap);
+    }
 
+    @Override
+    public List<OrderDTO> getOrderList(Integer status) {
+        HashMap<String, Integer> orderMap = new HashMap<>();
+        // userId为null表示不把userId当查询条件
+        orderMap.put("userId", null);
+        orderMap.put("status", status);
+        return getOrderDTOArrayList(orderMap);
+    }
+
+    /**
+     * 根据标识获取相应订单列表
+     *
+     * @param orderMap
+     * @return
+     */
+    private ArrayList<OrderDTO> getOrderDTOArrayList(Map<String, Integer> orderMap) {
         ArrayList<OrderDTO> orderDTOArrayList = new ArrayList<>();
-
         List<Order> orderList = orderMapper.selectAllByUserIdAndStatus(orderMap);
-
         for (Order order : orderList) {
             OrderDTO orderDTO = getOrderDTOByOrder(order);
             Refund refund = refundMapper.selectByOrderId(order.getId());
-            if (refund!=null) { // 如果该订单有退款信息
+            if (refund != null) { // 如果该订单有退款信息
                 // 设置退款状态
                 orderDTO.setRefundStatus(refund.getStatus());
             }
@@ -290,30 +305,31 @@ public class OrderServiceImpl implements OrderService {
      * 订单状态自增修改
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 0--待付款 1--待发货 2--待收货 类型订单 更新订单状态
+     *
      * @param orderNumber:订单编号
      * @return -2 —— 订单状态不能自增修改
-     *         -1 —— 订单id不存在
-     *         0 —— 更新订单状态失败
-     *         1 —— 更新订单状态成功
+     * -1 —— 订单id不存在
+     * 0 —— 更新订单状态失败
+     * 1 —— 更新订单状态成功
      */
     public int updateOrderStatus(String orderNumber) {
         Order order = orderMapper.selectByOrderNumber(orderNumber);
         Integer userId = TokenInterceptor.getLoginUser().getId();
-        if (order!=null) {
+        if (order != null) {
             // 如果该订单存在
             if (!userId.equals(order.getUserId())) {
                 // 订单和用户不匹配
-                throw new OrderAndUserNotMatchException("订单和用户不匹配--订单编号："+orderNumber+",用户id："+userId);
+                throw new OrderAndUserNotMatchException("订单和用户不匹配--订单编号：" + orderNumber + ",用户id：" + userId);
             }
             Integer status = order.getStatus();
-            if (status>=0 && status<3) { // 如果订单状态是待付款、待发货、待收货
+            if (status >= 0 && status < 3) { // 如果订单状态是待付款、待发货、待收货
                 // 更新订单状态
                 int res = orderMapper.updateOrderStatus(order.getId());
-                logger.info("更新订单[{}]状态：[待收货]-->[已完成]",orderNumber);
+                logger.info("更新订单[{}]状态：[待收货]-->[已完成]", orderNumber);
                 return res;
             } else {
                 // 订单状态不能自增修改
-                throw new OrderStatusNotFitException("该订单状态["+ status +"]不能自增修改");
+                throw new OrderStatusNotFitException("该订单状态[" + status + "]不能自增修改");
             }
         } else {
             // 订单不存在
@@ -324,11 +340,12 @@ public class OrderServiceImpl implements OrderService {
     /**
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 非 0--待付款 1--待发货 2--待收货 状态订单 设置订单状态
+     *
      * @param orderMap—— orderId、status
      * @return -2 —— 订单id不存在
-     *         -1 —— 将要修改的订单状态与原状态相同
-     *         0 —— 更新订单状态失败
-     *         1 —— 更新订单状态成功
+     * -1 —— 将要修改的订单状态与原状态相同
+     * 0 —— 更新订单状态失败
+     * 1 —— 更新订单状态成功
      */
     public void setOrderStatus(Map<String, Integer> orderMap) {
         Integer userId = TokenInterceptor.getLoginUser().getId();
@@ -339,8 +356,8 @@ public class OrderServiceImpl implements OrderService {
             // 如果该订单存在
             if (!userId.equals(order.getUserId())) {
                 // 订单和用户不匹配
-                throw new OrderAndUserNotMatchException("订单和用户不匹配--订单编号："+order.getOrderNumber()+",用户id："+userId);
-            }else if (status.equals(order.getStatus())) {
+                throw new OrderAndUserNotMatchException("订单和用户不匹配--订单编号：" + order.getOrderNumber() + ",用户id：" + userId);
+            } else if (status.equals(order.getStatus())) {
                 // 如果将要修改的订单状态与原状态相同
                 throw new OrderStatusNotFitException("将要修改的订单状态与原状态相同");
             } else { // 更新订单状态
@@ -354,22 +371,23 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 删除订单 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
+     *
      * @param orderId
      * @return
      */
     public void deleteOrder(Integer orderId) {
         Integer userId = TokenInterceptor.getLoginUser().getId();
         Order order = orderMapper.selectByPrimaryKey(orderId);
-        if (order!=null) {
+        if (order != null) {
             if (!userId.equals(order.getUserId())) {
                 // 订单和用户不匹配
-                throw new OrderAndUserNotMatchException("订单和用户不匹配--订单编号："+order.getOrderNumber()+",用户id："+userId);
-            } else if (order.getStatus()!=3 || order.getStatus()!=4) {
+                throw new OrderAndUserNotMatchException("订单和用户不匹配--订单编号：" + order.getOrderNumber() + ",用户id：" + userId);
+            } else if (order.getStatus() != 3 || order.getStatus() != 4) {
                 // 如果订单不是已完成或者交易关闭
                 throw new OrderStatusNotFitException("该订单状态不能执行删除订单操作");
             }
-            logger.info("删除订单[{}]",order.getOrderNumber());
-            orderMapper.deleteByPrimaryKey(orderId);
+            logger.info("删除订单[{}]", order.getOrderNumber());
+            orderMapper.deleteOrderById(orderId);
         } else {
             // 订单不存在
             throw new OrderNotFoundException();
@@ -378,6 +396,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 通过订单号查询订单详情信息
+     *
      * @return 订单详情信息OrderDTO
      */
     public OrderDTO selectOrderDTOByOrderNumber(String orderNumber) {
@@ -387,6 +406,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 通过订单号查询订单基础信息
+     *
      * @param orderNumber：订单号
      * @return order：订单基础信息
      */
@@ -396,6 +416,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 设置订单的快递编号
+     *
      * @param order：courierNumber、orderNumber
      * @return
      */
@@ -405,13 +426,13 @@ public class OrderServiceImpl implements OrderService {
         Order order1 = orderMapper.selectByOrderNumber(orderNumber);
         if (order1 == null) {
             throw new OrderNotFoundException();
-        } else if (order1.getStatus()!= 1) {
+        } else if (order1.getStatus() != 1) {
             // 如果订单状态不是待发货状态
-            throw new OrderStatusNotFitException("该订单["+ orderNumber +"]状态不是待发货状态，不可设置快递编号");
+            throw new OrderStatusNotFitException("该订单[" + orderNumber + "]状态不是待发货状态，不可设置快递编号");
         } else {
             // 修改订单的状态为待收货
             updateOrderStatus(orderNumber);
-            logger.info("设置订单[{}]的快递编号为[{}],订单状态改变[待发货]-->[待收货]",order,order.getCourierNumber());
+            logger.info("设置订单[{}]的快递编号为[{}],订单状态改变[待发货]-->[待收货]", order, order.getCourierNumber());
             // 设置订单的快递编号
             orderMapper.setCourierNumber(order);
         }
@@ -419,6 +440,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 通过订单表实体类获取订单详情VO对象
+     *
      * @param order:订单表实体类
      * @return OrderVo
      */
@@ -456,7 +478,7 @@ public class OrderServiceImpl implements OrderService {
         for (OrderGoods orderGoods : orderGoodsList) {
             OrderGoodsDTO orderGoodsDTO = new OrderGoodsDTO();
             // 商品单价
-            double price = orderGoods.getTotalPrice()/orderGoods.getAmount();
+            double price = orderGoods.getTotalPrice() / orderGoods.getAmount();
 
             // 设置商品价格
             orderGoodsDTO.setPrice(price);
@@ -466,7 +488,7 @@ public class OrderServiceImpl implements OrderService {
             // 设置商品基础信息
             Integer sizeId = orderGoods.getSizeId();
             Boolean isGoods = orderGoods.getWhetherGoods();
-            setOrderGoodsDTO(orderGoodsDTO,sizeId,isGoods);
+            setOrderGoodsDTO(orderGoodsDTO, sizeId, isGoods);
 
             orderGoodsDTOList.add(orderGoodsDTO);
         }
@@ -499,6 +521,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
+     *
      * @param orderDTO:userAddress、orderNumber
      * @return
      */
@@ -506,14 +529,14 @@ public class OrderServiceImpl implements OrderService {
         Integer userId = TokenInterceptor.getLoginUser().getId();
         String orderNumber = orderDTO.getOrderNumber();
         Order order = orderMapper.selectByOrderNumber(orderNumber);
-        if (order==null) {
+        if (order == null) {
             throw new OrderNotFoundException();
         } else if (!userId.equals(order.getUserId())) {
-            throw new OrderAndUserNotMatchException("订单["+orderNumber+"]和用户["+ userId+"]"+"不匹配");
-        } else if (!(order.getStatus()>=0 && order.getStatus()<=1)) {
+            throw new OrderAndUserNotMatchException("订单[" + orderNumber + "]和用户[" + userId + "]" + "不匹配");
+        } else if (!(order.getStatus() >= 0 && order.getStatus() <= 1)) {
             // 订单状态不为 待付款、待发货，则不可修改地址
-            logger.info("订单[{}]的状态为[{}]，不可修改收货地址",orderNumber,order.getStatus());
-            throw new OrderStatusNotFitException("订单[{"+orderNumber+"}]的状态为[{"+order.getStatus()+"}]，不可修改收货地址");
+            logger.info("订单[{}]的状态为[{}]，不可修改收货地址", orderNumber, order.getStatus());
+            throw new OrderStatusNotFitException("订单[{" + orderNumber + "}]的状态为[{" + order.getStatus() + "}]，不可修改收货地址");
         }
         // 正常执行逻辑
         UserAddress userAddress = orderDTO.getUserAddress();
@@ -521,12 +544,13 @@ public class OrderServiceImpl implements OrderService {
         order.setAddressName(userAddress.getAddressName());
         order.setUserName(userAddress.getUserName());
         logger.info("修改订单[{}]地址信息---收货地址：[{}],联系人姓名[{}],联系号码[{}]",
-                orderNumber,order.getAddressName(),order.getUserName(),order.getPhoneNumber());
+                orderNumber, order.getAddressName(), order.getUserName(), order.getPhoneNumber());
         orderMapper.updateAddressByOrderNumber(order);
     }
 
     /**
      * 用户取消订单
+     *
      * @param orderNumber：订单编号
      * @return
      */
@@ -534,20 +558,20 @@ public class OrderServiceImpl implements OrderService {
     public void cancelOrder(String orderNumber) {
         Integer userId = TokenInterceptor.getLoginUser().getId();
         Order order = orderMapper.selectByOrderNumber(orderNumber);
-        if (order!=null) {
+        if (order != null) {
             if (!userId.equals(order.getUserId())) {
-                throw new OrderAndUserNotMatchException("订单["+orderNumber+"]和用户["+ userId+"]"+"不匹配");
-            } else if (order.getStatus()==0) {
+                throw new OrderAndUserNotMatchException("订单[" + orderNumber + "]和用户[" + userId + "]" + "不匹配");
+            } else if (order.getStatus() == 0) {
                 // 正确逻辑，取消订单，更新订单状态为4，交易关闭
-                logger.info("订单[{}]取消，状态[未付款]-->[交易关闭]",order.getOrderNumber());
+                logger.info("订单[{}]取消，状态[未付款]-->[交易关闭]", order.getOrderNumber());
                 HashMap<String, Integer> orderMap = new HashMap<>();
-                orderMap.put("orderId",order.getId());
-                orderMap.put("status",4);
+                orderMap.put("orderId", order.getId());
+                orderMap.put("status", 4);
                 setOrderStatus(orderMap);
                 // 库存归位
-                updateInventory(order.getOrderNumber(),1);
+                updateInventory(order.getOrderNumber(), 1);
             } else { // 订单状态不可取消订单
-                throw new OrderStatusNotFitException("订单[{"+orderNumber+"}]的状态[{"+order.getStatus()+"}]不可取消订单");
+                throw new OrderStatusNotFitException("订单[{" + orderNumber + "}]的状态[{" + order.getStatus() + "}]不可取消订单");
             }
         } else { // 订单id不存在
             throw new OrderNotFoundException();
@@ -556,6 +580,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 更新订单商品库存
+     *
      * @param orderNumber：订单编号
      * @param flag：1代表增加库存，0代表减少库存
      * @return 返回成功失败状态
@@ -569,10 +594,10 @@ public class OrderServiceImpl implements OrderService {
             Integer sizeId = orderGoods.getSizeId();
             Integer amount = orderGoods.getAmount();
             HashMap<String, Integer> inventoryMap = new HashMap<>();
-            inventoryMap.put("sizeId",sizeId);
-            inventoryMap.put("amount",amount);
+            inventoryMap.put("sizeId", sizeId);
+            inventoryMap.put("amount", amount);
             // 1代表增加库存,0代表减少库存
-            inventoryMap.put("flag",flag);
+            inventoryMap.put("flag", flag);
             if (isGoods == Boolean.TRUE) {
                 colorSizeMapper.updateInventoryByPrimaryKey(inventoryMap);
             } else {
@@ -581,61 +606,75 @@ public class OrderServiceImpl implements OrderService {
         } // end for
     }
 
-    /**
-     * 获取未付款订单
-     * @return
-     */
-    public List<Order> getNotPayOrder() {
-        return orderMapper.getNotPayOrder();
-    }
-
     @Override
     public List<Order> getUnRefundPayOrderList() {
         List<Order> payOrderList = orderMapper.getPayOrder();
-        if (payOrderList!=null) {
+        if (payOrderList != null) {
             return refundService.getUnRefundOrder(payOrderList);
         } else return null;
     }
 
     @Override
+    @Transactional
     public void orderTimeOutLogic() {
         BoundZSetOperations<String, String> zSetOps = redisTemplate.boundZSetOps("OrderNumber");
         Cursor<ZSetOperations.TypedTuple<String>> cursor;
-        while (true) {
-            cursor = zSetOps.scan(ScanOptions.NONE);
-            if (!cursor.hasNext()) {
-                logger.debug("当前没有等待的订单取消任务");
-                try {
+        try {
+            while (true) {
+                cursor = zSetOps.scan(ScanOptions.NONE);
+                if (!cursor.hasNext()) {
+                    logger.debug("当前没有等待的订单取消任务");
                     Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    logger.warn("订单超时自动取消任务出现异常[{}]",e.getMessage());
+                    continue;
                 }
-                continue;
-            }
-            ZSetOperations.TypedTuple typedTuple  = cursor.next();
-            int score =  Objects.requireNonNull(typedTuple.getScore()).intValue();
-            Calendar cal = Calendar.getInstance();
-            int nowSecond = (int) (cal.getTimeInMillis() / 1000);
-            if (nowSecond>=score) {
-                Object value = typedTuple.getValue();
-                Long removeCount = zSetOps.remove(value);
-                if (removeCount!=null && removeCount>0) {
-                    // 订单取消
-                    String orderNumber = String.valueOf(value == null ? "" : value.toString());
-                    logger.info("开始消费redis订单[{}]",orderNumber);
-                    Order order = orderMapper.selectByOrderNumber(orderNumber);
-                    logger.info("开始关闭超时订单任务，订单编号[{}],下单时间[{}]",orderNumber,order.getCreateTime());
-                    // 更待订单状态为交易关闭
-                    HashMap<String, Integer> orderMap = new HashMap<>();
-                    orderMap.put("orderId",order.getId());
-                    orderMap.put("status",4);
-                    setOrderStatus(orderMap);
-                    logger.info("订单[{}]状态更变：[未付款]-->[交易关闭]",orderNumber);
-                    // 库存归位,1代表增加库存
-                    updateInventory(orderNumber,1);
-                } // end if
-            } // end if 取消订单
-        } // end while
+                ZSetOperations.TypedTuple typedTuple = cursor.next();
+                int score = Objects.requireNonNull(typedTuple.getScore()).intValue();
+                Calendar cal = Calendar.getInstance();
+                int nowSecond = (int) (cal.getTimeInMillis() / 1000);
+                if (nowSecond >= score) {
+                    Object value = typedTuple.getValue();
+                    Long removeCount = zSetOps.remove(value);
+                    if (removeCount != null && removeCount > 0) {
+                        // 订单取消
+                        String orderNumber = String.valueOf(value == null ? "" : value.toString());
+                        logger.info("开始消费redis订单[{}]", orderNumber);
+                        Order order = orderMapper.selectByOrderNumber(orderNumber);
+                        if (order.getStatus() != 0) {
+                            // 如果该订单状态不为0，即不是未付款，说明已经付款了，不需要取消订单
+                            continue;
+                        }
+                        // 调用微信查询订单接口，确认用户是否真的未付款
+                        WxPayOrderQueryResult wxPayOrderQueryResult = wxPayService.queryOrder(null, orderNumber);
+                        if (wxPayOrderQueryResult.getTradeState().equals("SUCCESS")) {
+                            // 如果微信订单结果为已支付，说明程序错误，给予补偿,更新订单状态为待发货
+                            Map<String, Integer> orderMap = new HashMap<>();
+                            orderMap.put("orderId", order.getId());
+                            orderMap.put("status", 1);
+                            orderMapper.setOrderStatus(orderMap);
+                        } else if (wxPayOrderQueryResult.getTradeState().equals("NOTPAY")) {
+                            // 如果结果为未支付，开始关闭订单操作
+                            logger.info("开始关闭超时订单任务，订单编号[{}],下单时间[{}]", orderNumber, order.getCreateTime());
+                            // 更待订单状态为交易关闭
+                            HashMap<String, Integer> orderMap = new HashMap<>();
+                            orderMap.put("orderId", order.getId());
+                            orderMap.put("status", 4);
+                            setOrderStatus(orderMap);
+                            logger.info("订单[{}]状态更变：[未付款]-->[交易关闭]", orderNumber);
+                            // 库存归位,1代表增加库存
+                            updateInventory(orderNumber, 1);
+                            // 调用微信支付关闭订单操作，以免用户继续操作支付
+                            wxPayService.closeOrder(orderNumber);
+                        }
+                    } // end if
+                } // end if 取消订单
+            } // end while
+        } catch (WxPayException wxPayEx) {
+            logger.warn("调用微信查询订单和关闭订单出错[{}]", wxPayEx.getMessage());
+        } catch (InterruptedException e) {
+            logger.warn("Interrupted!订单超时自动取消任务出现异常[{}]", e.getMessage());
+            // clean up state...
+            Thread.currentThread().interrupt();
+        }
     }
 
 }
