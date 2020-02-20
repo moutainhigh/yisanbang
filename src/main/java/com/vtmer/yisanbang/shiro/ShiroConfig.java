@@ -42,18 +42,19 @@ public class ShiroConfig {
         // 添加Shiro内置过滤器
         Map<String, String> filterRuleMap = new LinkedHashMap<>();
         // 设置首页内容、登录、登出页面等无需认证
-        filterRuleMap.put("/admin/login", "anon");
+        filterRuleMap.put("/**", "anon");
+      /*  filterRuleMap.put("/admin/login", "anon");
         filterRuleMap.put("/user/login", "anon");
         filterRuleMap.put("/admin/logout", "anon");
         filterRuleMap.put("/ad/list", "anon");
-        filterRuleMap.put("/carousel/list", "anon");
+        filterRuleMap.put("/carousel/list", "anon");*/
         // 获取所有需要权限认证的接口路径
-        List<Permission> permissions = permissionMapper.selectAll();
+        /*List<Permission> permissions = permissionMapper.selectAll();
         for (Permission p : permissions) {
             filterRuleMap.put(p.getUrl(), "perms[" + p.getUrl() + "]");
         }
         filterRuleMap.put("/**", "jwt");
-        filterRuleMap.put("/**", "authc");
+        filterRuleMap.put("/**", "authc");*/
         return filterRuleMap;
     }
 
