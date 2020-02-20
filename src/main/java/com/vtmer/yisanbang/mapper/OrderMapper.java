@@ -35,4 +35,6 @@ public interface OrderMapper {
     List<Order> getNotPayOrder();
 
     List<Order> getPayOrder();
+
+    void deleteOrderById(Integer orderId);
 }

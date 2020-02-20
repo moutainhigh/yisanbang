@@ -3,10 +3,11 @@
 <mapper namespace="com.vtmer.yisanbang.mapper.OrderMapper">
   <sql id="BaseColumnList">
     id, order_number, user_id, user_name, phone_number, total_price, address_name,
-    status,postage,  courier_number, message, create_time,update_time
+    status,postage,  courier_number, message, is_delete,create_time,update_time
   </sql>
   <sql id="OrderCondition">
-    <if test="userId!=null and userId!=0">
+    and is_delete = 0
+    <if test="userId!=null">
       and user_id = #{userId}
     </if>
     <if test="status!=null">
@@ -28,6 +29,7 @@
     <result column="postage" jdbcType="DOUBLE" property="postage"/>
     <result column="courier_number" jdbcType="VARCHAR" property="courierNumber" />
     <result column="message" jdbcType="VARCHAR" property="message" />
+    <result column="is_delete" jdbcType="TINYINT" property="whetherDelete"/>
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
@@ -91,44 +93,52 @@
     phone_number = #{phoneNumber,jdbcType=VARCHAR}
     where order_number = #{orderNumber,jdbcType=VARCHAR}
   </update>
+  <update id="deleteOrderById">
+    update `order`
+    set is_delete = 1
+    where id = #{orderId}
+  </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select id, order_number, user_id, user_name, phone_number, total_price, address_name, 
-    status, postage, courier_number, message, create_time, update_time
+    select
+    <include refid="BaseColumnList"/>
     from `order`
     where id = #{id,jdbcType=INTEGER}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select id, order_number, user_id, user_name, phone_number, total_price, address_name, 
-    status, postage, courier_number, message, create_time, update_time
+    select
+    <include refid="BaseColumnList"/>
     from `order`
   </select>
   <select id="selectAllByUserIdAndStatus" resultType="com.vtmer.yisanbang.domain.Order">
     select
-    <include refid="BaseColumnList"></include>
+    <include refid="BaseColumnList"/>
     from `order`
     where 1 = 1
-    <include refid="OrderCondition"></include>
+    <include refid="OrderCondition"/>
     order by update_time DESC
   </select>
   <select id="selectByOrderNumber" resultType="com.vtmer.yisanbang.domain.Order">
     select
-    <include refid="BaseColumnList"></include>
+    <include refid="BaseColumnList"/>
     from `order`
     where order_number = #{orderNumber}
+    and is_delete = 0
   </select>
   <select id="getNotPayOrder" resultType="com.vtmer.yisanbang.domain.Order">
     select
     <include refid="BaseColumnList"/>
     from `order`
     where status = 0
+    and is_delete = 0
     order by create_time
   </select>
   <select id="getPayOrder" resultType="com.vtmer.yisanbang.domain.Order">
     select
     <include refid="BaseColumnList"/>
     from `order`
-    where status = 1
+    where is_delete = 0
+    and (status = 1
     or status = 2
-    or status = 3
+    or status = 3)
   </select>
 </mapper>

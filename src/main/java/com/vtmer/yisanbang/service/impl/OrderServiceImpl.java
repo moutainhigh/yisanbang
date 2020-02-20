@@ -253,29 +253,35 @@ public class OrderServiceImpl implements OrderService {
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败
      *
-     * @param orderMap —— flag、status
-     *                 flag为0时查询商城内的订单
-     *                 status传入3时同时获取退款成功、退款失败（3 4）的订单
-     *                 status传入5查询所有订单
+     * @param status:status传入3时同时获取退款成功（3)的订单;status传入5查询所有订单
      * @return
      */
     @Transactional
-    public List<OrderDTO> getOrderList(Map<String, Integer> orderMap) {
-
+    public List<OrderDTO> getUserOrderList(Integer status) {
+        HashMap<String, Integer> orderMap = new HashMap<>();
         Integer userId = TokenInterceptor.getLoginUser().getId();
-        if (orderMap.get("flag") == 1) {
-            // 如果是获取用户的订单
-            // 向map中添加userId,查询订单
-            orderMap.put("userId", userId);
-        } else {
-            // 查询所有订单
-            orderMap.put("userId", null);
-        }
+        orderMap.put("userId",userId);
+        orderMap.put("status",status);
+        return getOrderDTOArrayList(orderMap);
+    }
 
+    @Override
+    public List<OrderDTO> getOrderList(Integer status) {
+        HashMap<String, Integer> orderMap = new HashMap<>();
+        // userId为null表示不把userId当查询条件
+        orderMap.put("userId",null);
+        orderMap.put("status",status);
+        return getOrderDTOArrayList(orderMap);
+    }
+
+    /**
+     * 根据标识获取相应订单列表
+     * @param orderMap
+     * @return
+     */
+    private  ArrayList<OrderDTO> getOrderDTOArrayList(Map<String,Integer> orderMap) {
         ArrayList<OrderDTO> orderDTOArrayList = new ArrayList<>();
-
         List<Order> orderList = orderMapper.selectAllByUserIdAndStatus(orderMap);
-
         for (Order order : orderList) {
             OrderDTO orderDTO = getOrderDTOByOrder(order);
             Refund refund = refundMapper.selectByOrderId(order.getId());
@@ -374,7 +380,7 @@ public class OrderServiceImpl implements OrderService {
                 throw new OrderStatusNotFitException("该订单状态不能执行删除订单操作");
             }
             logger.info("删除订单[{}]", order.getOrderNumber());
-            orderMapper.deleteByPrimaryKey(orderId);
+            orderMapper.deleteOrderById(orderId);
         } else {
             // 订单不存在
             throw new OrderNotFoundException();
@@ -383,7 +389,6 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 通过订单号查询订单详情信息
-     *
      * @return 订单详情信息OrderDTO
      */
     public OrderDTO selectOrderDTOByOrderNumber(String orderNumber) {
@@ -537,7 +542,6 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 用户取消订单
-     *
      * @param orderNumber：订单编号
      * @return
      */
