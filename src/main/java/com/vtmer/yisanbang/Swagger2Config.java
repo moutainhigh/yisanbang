@@ -51,8 +51,6 @@ public class Swagger2Config {
                 .apiInfo(getApiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.vtmer.yisanbang.controller")) // 过滤的接口
-                //.apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
-                //.apis(RequestHandlerSelectors.withMethodAnnotation(Api.class))
                 .paths(PathSelectors.any())
                 .build();
                 //.globalOperationParameters(getTokenPar());

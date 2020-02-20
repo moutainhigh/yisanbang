@@ -6,7 +6,6 @@ import org.apache.shiro.authc.pam.FirstSuccessfulStrategy;
 import org.apache.shiro.authc.pam.ModularRealmAuthenticator;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
-import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +13,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.servlet.Filter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 @Configuration
 public class ShiroConfig {
@@ -26,11 +27,12 @@ public class ShiroConfig {
     /**
      * 创建ShiroFilterFactoryBean
      */
+    /*
     @Bean
     public ShiroFilterFactoryBean getShiroFilterFactoryBean(@Qualifier("securityManager") DefaultWebSecurityManager securityManager) {
         ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();
         Map<String, Filter> filterMap = new HashMap<>();
-        filterMap.put("jwt", new JwtFilter());
+        //filterMap.put("jwt", new JwtFilter());
         factoryBean.setFilters(filterMap);
         // 设置安全管理器
         factoryBean.setSecurityManager(securityManager);
@@ -38,23 +40,24 @@ public class ShiroConfig {
         return factoryBean;
     }
 
+     */
+
     private Map<String, String> setFilterChainDefinitionMap() {
         // 添加Shiro内置过滤器
         Map<String, String> filterRuleMap = new LinkedHashMap<>();
         // 设置首页内容、登录、登出页面等无需认证
-        filterRuleMap.put("/**", "anon");
-      /*  filterRuleMap.put("/admin/login", "anon");
+        filterRuleMap.put("/admin/login", "anon");
         filterRuleMap.put("/user/login", "anon");
         filterRuleMap.put("/admin/logout", "anon");
         filterRuleMap.put("/ad/list", "anon");
-        filterRuleMap.put("/carousel/list", "anon");*/
+        filterRuleMap.put("/carousel/list", "anon");
         // 获取所有需要权限认证的接口路径
-        /*List<Permission> permissions = permissionMapper.selectAll();
+        List<Permission> permissions = permissionMapper.selectAll();
         for (Permission p : permissions) {
-            filterRuleMap.put(p.getUrl(), "perms[" + p.getUrl() + "]");
+            //filterRuleMap.put(p.getUrl(), "perms[" + p.getUrl() + "]");
         }
-        filterRuleMap.put("/**", "jwt");
-        filterRuleMap.put("/**", "authc");*/
+        //filterRuleMap.put("/**", "jwt");
+        //filterRuleMap.put("/**", "authc");
         return filterRuleMap;
     }
 
