@@ -48,8 +48,6 @@ public interface OrderService {
 
     void updateInventory(String orderNumber,Integer flag);
 
-    List<Order> getNotPayOrder();
-
     List<Order> getUnRefundPayOrderList();
 
     /**

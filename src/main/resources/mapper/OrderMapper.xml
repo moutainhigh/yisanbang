@@ -124,21 +124,12 @@
     where order_number = #{orderNumber}
     and is_delete = 0
   </select>
-  <select id="getNotPayOrder" resultType="com.vtmer.yisanbang.domain.Order">
-    select
-    <include refid="BaseColumnList"/>
-    from `order`
-    where status = 0
-    and is_delete = 0
-    order by create_time
-  </select>
   <select id="getPayOrder" resultType="com.vtmer.yisanbang.domain.Order">
     select
     <include refid="BaseColumnList"/>
     from `order`
-    where is_delete = 0
-    and (status = 1
+    where status = 1
     or status = 2
-    or status = 3)
+    or status = 3
   </select>
 </mapper>

@@ -32,8 +32,6 @@ public interface OrderMapper {
 
     int updateAddressByOrderNumber(Order order);
 
-    List<Order> getNotPayOrder();
-
     List<Order> getPayOrder();
 
     void deleteOrderById(Integer orderId);

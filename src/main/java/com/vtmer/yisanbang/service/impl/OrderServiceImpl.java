@@ -606,15 +606,6 @@ public class OrderServiceImpl implements OrderService {
         } // end for
     }
 
-    /**
-     * 获取未付款订单
-     *
-     * @return
-     */
-    public List<Order> getNotPayOrder() {
-        return orderMapper.getNotPayOrder();
-    }
-
     @Override
     public List<Order> getUnRefundPayOrderList() {
         List<Order> payOrderList = orderMapper.getPayOrder();
