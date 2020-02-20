@@ -52,8 +52,8 @@ public class ShiroConfig {
         for (Permission p : permissions) {
             filterRuleMap.put(p.getUrl(), "perms[" + p.getUrl() + "]");
         }
-        filterRuleMap.put("/**", "jwt");
-        filterRuleMap.put("/**", "authc");
+        //filterRuleMap.put("/**", "jwt");
+        //filterRuleMap.put("/**", "authc");
         return filterRuleMap;
     }
 
