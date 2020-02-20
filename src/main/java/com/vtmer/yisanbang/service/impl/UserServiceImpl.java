@@ -3,7 +3,11 @@ package com.vtmer.yisanbang.service.impl;
 import com.vtmer.yisanbang.common.util.HttpUtil;
 import com.vtmer.yisanbang.common.util.JSONUtil;
 import com.vtmer.yisanbang.common.util.JwtUtil;
+import com.vtmer.yisanbang.domain.Admin;
+import com.vtmer.yisanbang.domain.AdminRole;
 import com.vtmer.yisanbang.domain.User;
+import com.vtmer.yisanbang.mapper.AdminMapper;
+import com.vtmer.yisanbang.mapper.AdminRoleMapper;
 import com.vtmer.yisanbang.mapper.UserMapper;
 import com.vtmer.yisanbang.service.UserService;
 import com.vtmer.yisanbang.vo.Code2SessionResponse;
@@ -44,6 +48,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private AdminMapper adminMapper;
+
+    @Autowired
+    private AdminRoleMapper adminRoleMapper;
 
     /**
      * 微信官方API：code2session
@@ -87,6 +97,15 @@ public class UserServiceImpl implements UserService {
                 userMapper.addUser(newUser);
                 logger.info("插入数据成功，自增userId为{}",newUser.getId());
                 user = newUser;
+                // 把用户openId插入Admin表中，并分配普通用户角色，并设置密码为一个空格
+                Admin admin = new Admin();
+                admin.setName(user.getOpenId());
+                admin.setPassword(" ");
+                adminMapper.insertAdmin(admin);
+                AdminRole adminRole = new AdminRole();
+                adminRole.setAdminId(admin.getId());
+                adminRole.setRoleId(3);
+                adminRoleMapper.insert(adminRole);
             }
             // JWT返回自定义登录态token并把token缓存到redis中
             WxAccount wxAccount = new WxAccount();
@@ -108,8 +127,7 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
-
-
+    @Override
     public String getOpenIdByUserId(Integer userId) {
         return userMapper.selectOpenIdByUserId(userId);
     }

@@ -47,6 +47,7 @@ public class SortController {
     }
 
     @ApiOperation("分页查询校服分类")
+    // @RequiresPermissions("/sort/uniformSort")
     @GetMapping("/uniformSort")
     public ResponseMessage getAllUniformSortInfo(@ApiParam("查询页数(第几页)") @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
                                                  @ApiParam("单页数量") @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {

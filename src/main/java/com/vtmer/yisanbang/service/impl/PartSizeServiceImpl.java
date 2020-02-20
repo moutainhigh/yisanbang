@@ -111,8 +111,7 @@ public class PartSizeServiceImpl implements PartSizeService {
             String part = partSize.getPart();
             partList.add(part);
         }
-        if (partList != null) return partList;
-        return null;
+        return partList;
     }
 
     @Override
@@ -124,8 +123,7 @@ public class PartSizeServiceImpl implements PartSizeService {
             String size = partSize.getSize();
             sizeList.add(size);
         }
-        if (sizeList != null) return sizeList;
-        return null;
+        return sizeList;
     }
 
     @Override
