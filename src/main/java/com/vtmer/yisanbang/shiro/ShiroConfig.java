@@ -30,7 +30,7 @@ public class ShiroConfig {
     public ShiroFilterFactoryBean getShiroFilterFactoryBean(@Qualifier("securityManager") DefaultWebSecurityManager securityManager) {
         ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();
         Map<String, Filter> filterMap = new HashMap<>();
-        filterMap.put("jwt", new JwtFilter());
+        //filterMap.put("jwt", new JwtFilter());
         factoryBean.setFilters(filterMap);
         // 设置安全管理器
         factoryBean.setSecurityManager(securityManager);
