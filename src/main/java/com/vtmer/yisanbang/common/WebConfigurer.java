@@ -18,10 +18,18 @@ public class WebConfigurer implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(tokenInterceptor)
+                .addPathPatterns("/cart/**")
+                .addPathPatterns("/order/**")
+                .excludePathPatterns("/order/wxNotify")
+                .excludePathPatterns("/order/getOrderList/**")
+                .excludePathPatterns("/order/setCourierNumber")
+                .addPathPatterns("/collection/**")
+                .addPathPatterns("/refund/delete/**")
+                .addPathPatterns("/refund/express/**")
+                .addPathPatterns("/refund/apply/**")
                 .excludePathPatterns("/admin/**")
                 .excludePathPatterns("/user/login")
                 .excludePathPatterns("/user/userId")
-                .addPathPatterns("/cart/**")
                 .excludePathPatterns("/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**");
                 //.excludePathPatterns("/cart/**")
                 //.addPathPatterns("/**");

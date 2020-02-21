@@ -165,9 +165,9 @@ public class SuitController {
                                     @Validated(Update.class) SuitDTO suitDto) {
         SuitDTO suit = suitService.selectSuitById(suitDto.getId());
         if (suit != null) {
-            boolean hideFlag = suitService.hideSuit(suitDto);
-            if (hideFlag) return ResponseMessage.newSuccessInstance("隐藏成功");
-            else return ResponseMessage.newErrorInstance("隐藏失败");
+            boolean hideFlag = suitService.hideSuit(suit);
+            if (hideFlag) return ResponseMessage.newSuccessInstance("修改成功");
+            else return ResponseMessage.newErrorInstance("修改失败");
         } else return ResponseMessage.newErrorInstance("该商品不存在");
     }
 

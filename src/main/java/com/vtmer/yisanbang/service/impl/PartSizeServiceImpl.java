@@ -107,11 +107,13 @@ public class PartSizeServiceImpl implements PartSizeService {
     public List<String> selectAllPartById(Integer suitId) {
         List<PartSizeDTO> partSizeDtos = partSizeMapper.selectAllBySuitId(suitId);
         List<String> partList = new ArrayList<>();
-        for (PartSizeDTO partSize : partSizeDtos) {
-            String part = partSize.getPart();
-            partList.add(part);
+        if (partSizeDtos != null && !partSizeDtos.isEmpty()) {
+            for (PartSizeDTO partSize : partSizeDtos) {
+                String part = partSize.getPart();
+                partList.add(part);
+            }
+            return partList;
         }
-        if (partList != null) return partList;
         return null;
     }
 
@@ -120,11 +122,13 @@ public class PartSizeServiceImpl implements PartSizeService {
     public List<String> selectAllSizeById(Integer suitId) {
         List<PartSizeDTO> partSizeDtos = partSizeMapper.selectAllBySuitId(suitId);
         List<String> sizeList = new ArrayList<>();
-        for (PartSizeDTO partSize : partSizeDtos) {
-            String size = partSize.getSize();
-            sizeList.add(size);
+        if (partSizeDtos != null && !partSizeDtos.isEmpty()) {
+            for (PartSizeDTO partSize : partSizeDtos) {
+                String size = partSize.getSize();
+                sizeList.add(size);
+            }
+            return sizeList;
         }
-        if (sizeList != null) return sizeList;
         return null;
     }
 

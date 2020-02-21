@@ -97,7 +97,10 @@ public class SuitServiceImpl implements SuitService {
     @Override
     // 隐藏套装
     public boolean hideSuit(SuitDTO suitDto) {
-        suitDto.setIsShow(false);
+        if (suitDto.getIsShow())
+            suitDto.setIsShow(false);
+        else
+            suitDto.setIsShow(true);
         int updateFlag = suitMapper.updateDtoByPrimaryKey(suitDto);
         if (updateFlag > 0) return true;
         return false;

@@ -1,6 +1,5 @@
 package com.vtmer.yisanbang.service.impl;
 
-import com.vtmer.yisanbang.common.util.Md5Util;
 import com.vtmer.yisanbang.dto.SuitDetailDTO;
 import com.vtmer.yisanbang.mapper.SuitDetailMapper;
 import com.vtmer.yisanbang.service.SuitDetailService;
@@ -63,19 +62,5 @@ public class SuitDetailServiceImpl implements SuitDetailService {
         SuitDetailDTO suitDetailDto = suitDetailMapper.selectDtoByPrimaryKey(suitDetailId);
         if (suitDetailDto != null) return suitDetailDto;
         return null;
-    }
-
-    @Override
-    // 查看套装详细信息是否相同
-    public boolean judgeSuitDetail(SuitDetailDTO suitDetailDto, List<SuitDetailDTO> suitDetailDtoList) {
-        File file1 = new File(suitDetailDto.getPirtucePath());
-        String img1 = Md5Util.getFileMD5(file1);
-        for (SuitDetailDTO suitDetail : suitDetailDtoList) {
-            File file2 = new File(suitDetail.getPirtucePath());
-            String img2 = Md5Util.getFileMD5(file2);
-            if (img1.equals(img2))
-                return true;
-        }
-        return false;
     }
 }

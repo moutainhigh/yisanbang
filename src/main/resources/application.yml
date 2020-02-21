@@ -3,22 +3,7 @@ spring:
     active: dev
   jackson:
     time-zone: GMT+8
-<<<<<<< HEAD
-  devtools:
-    restart:
-      enabled: true  #设置开启热部署
   datasource:
-    # 如果存在多个数据源，监控的时候可以通过名字来区分开来
-    name: mysql
-    # 连接数据库的url
-    url: jdbc:mysql://localhost:3306/yisanbang?characterEncoding=utf-8&serverTimezone=GMT%2B8
-    # 连接数据库的账号
-    username: root
-    # 连接数据库的密码
-    password: 123456
-    # 使用druid数据源
-    type: com.alibaba.druid.pool.DruidDataSource
-    driver-class-name: com.mysql.cj.jdbc.Driver
     # 扩展插件
     # 监控统计用的filter:stat 日志用的filter:log4j 防御sql注入的filter:wall
     druid:
@@ -53,17 +38,13 @@ spring:
         login-username: root
         login-password: wlt123..
 
-  redis:
-    host: 127.0.0.1
-    port: 6379
-    # redis密码，默认为空
-    password:
-
+  devtools:
+    restart:
+      enabled: true  #设置开启热部署
   servlet:
     multipart:
       max-file-size: 50MB
       max-request-size: 200MB
-
   quartz:
     #相关属性配置
     properties:
@@ -119,14 +100,12 @@ pagehelper:
 server:
   servlet:
     context-path: /
-  port: 8080
   max-http-header-size: 81920 # 修改请求头允许的最大值
 
-sop:
-  swagger:
-    host: 119.3.254.171
-
 swagger:
+  host: 119.3.254.171:8088
   show: true
+
+
 
 

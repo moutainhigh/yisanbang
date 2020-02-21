@@ -75,7 +75,11 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     // 隐藏商品，不展示
     public boolean hideGoods(GoodsDTO goods) {
-        goods.setIsShow(false);
+        if (goods.getIsShow()) {
+            goods.setIsShow(false);
+        } else {
+            goods.setIsShow(true);
+        }
         int updateFlag = goodsMapper.updateDtoByPrimaryKey(goods);
         if (updateFlag > 0) return true;
         return false;

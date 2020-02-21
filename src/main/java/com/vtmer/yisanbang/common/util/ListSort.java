@@ -1,6 +1,9 @@
 package com.vtmer.yisanbang.common.util;
 
+import com.vtmer.yisanbang.domain.Goods;
 import com.vtmer.yisanbang.dto.CartGoodsDTO;
+import com.vtmer.yisanbang.dto.GoodsDTO;
+import com.vtmer.yisanbang.dto.SuitDTO;
 
 import java.util.Comparator;
 import java.util.List;

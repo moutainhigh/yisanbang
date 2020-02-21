@@ -14,7 +14,19 @@ public interface OrderService {
 
     Map<String,String> createCartOrder(CartOrderDTO cartOrderDTO);
 
-    List<OrderDTO> getOrderList(Map<String,Integer> orderMap);
+    /**
+     * 获取用户的状态订单
+     * @param status
+     * @return
+     */
+    List<OrderDTO> getUserOrderList(Integer status);
+
+    /**
+     * 获取商城的状态订单
+     * @param status
+     * @return
+     */
+    List<OrderDTO> getOrderList(Integer status);
 
     int updateOrderStatus(String orderNumber);
 
@@ -35,8 +47,6 @@ public interface OrderService {
     void cancelOrder(String orderNumber);
 
     void updateInventory(String orderNumber,Integer flag);
-
-    List<Order> getNotPayOrder();
 
     List<Order> getUnRefundPayOrderList();
 

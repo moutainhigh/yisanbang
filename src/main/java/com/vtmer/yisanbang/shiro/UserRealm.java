@@ -6,16 +6,15 @@ import com.vtmer.yisanbang.service.AdminRoleService;
 import com.vtmer.yisanbang.service.PermissionService;
 import com.vtmer.yisanbang.vo.JwtToken;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -23,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserRealm extends AuthorizingRealm {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserRealm.class);
 
     @Autowired
     private PermissionService permissionService;
@@ -64,10 +65,11 @@ public class UserRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) {
         System.out.println("进入验证流程...");
         String jwtToken = (String) token.getCredentials();
+        logger.debug("token值为"+jwtToken);
         String wxOpenId = jwtUtil.getOpenIdByToken(jwtToken);
         String sessionKey = jwtUtil.getSessionKeyByToken(jwtToken);
         if (wxOpenId == null || wxOpenId.equals("")) {
-            throw new AuthenticationException("user account not exits , please check your token");
+            throw new UnknownAccountException("user account not exists , please check your token");
         }
         if (sessionKey == null || sessionKey.equals("")) {
             throw new AuthenticationException("sessionKey is invalid , please check your token");

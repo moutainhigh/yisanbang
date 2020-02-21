@@ -75,8 +75,8 @@ public class ColorSizeServiceImpl implements ColorSizeService {
         for (ColorSizeDTO colorSize : colorSizeDtoList) {
             if (colorSize.getGoodsId() == colorSizeDto.getGoodsId())
                 if (colorSize.getSize().equals(colorSizeDto.getSize()))
-                        if (colorSize.getColor().equals(colorSizeDto.getColor()))
-                            return true;
+                    if (colorSize.getColor().equals(colorSizeDto.getColor()))
+                        return true;
         }
         return false;
     }
@@ -86,11 +86,13 @@ public class ColorSizeServiceImpl implements ColorSizeService {
     public List<String> selectAllColorById(Integer goodsId) {
         List<ColorSizeDTO> colorSizeDtos = colorSizeMapper.selectAllDtoByGoodsId(goodsId);
         List<String> colorList = new ArrayList<>();
-        for (ColorSizeDTO colorSize : colorSizeDtos) {
-            String color = colorSize.getColor();
-            colorList.add(color);
+        if (colorSizeDtos != null && !colorSizeDtos.isEmpty()) {
+            for (ColorSizeDTO colorSize : colorSizeDtos) {
+                String color = colorSize.getColor();
+                colorList.add(color);
+            }
+            return colorList;
         }
-        if (colorList != null) return colorList;
         return null;
     }
 
@@ -99,11 +101,13 @@ public class ColorSizeServiceImpl implements ColorSizeService {
     public List<String> selectAllSizeById(Integer goodsId) {
         List<ColorSizeDTO> colorSizeDtos = colorSizeMapper.selectAllDtoByGoodsId(goodsId);
         List<String> sizeList = new ArrayList<>();
-        for (ColorSizeDTO colorSize : colorSizeDtos) {
-            String size = colorSize.getSize();
-            sizeList.add(size);
+        if (colorSizeDtos != null && !colorSizeDtos.isEmpty()) {
+            for (ColorSizeDTO colorSize : colorSizeDtos) {
+                String size = colorSize.getSize();
+                sizeList.add(size);
+            }
+            return sizeList;
         }
-        if (sizeList != null) return sizeList;
         return null;
     }
 

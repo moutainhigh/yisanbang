@@ -31,13 +31,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Api(tags = "订单接口",value = "用户部分")
+@Api(tags = "订单接口", value = "用户部分")
 @RestController
 @RequestMapping("/order")
 public class OrderController {
@@ -85,7 +86,7 @@ public class OrderController {
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
     })
-    @ApiOperation(value = "创建购物车订单", notes = "用户从购物车页面确认订单，点击提交订单后调用,若是订单中的某件商品数量超过库存，会返回【库存不足】的提示")
+    @ApiOperation(value = "创建购物车订单", notes = "用户从购物车页面确认订单，点击提交订单后调用,若是订单中的某件商品数量超过库存，会返回【库存不足】的提示，返回订单编号和用户openid")
     @PostMapping("/insert")
     public ResponseMessage insert(@RequestBody @Validated({Insert.class}) CartOrderDTO cartOrderDTO) {
         Map<String, String> orderMap;
@@ -101,7 +102,6 @@ public class OrderController {
 
     /**
      * 通过订单号进行微信支付
-     *
      * @param orderNumber：orderNumber订单号
      * @return 返回前端调起微信支付所需的支付参数（5个参数和sign）
      */
@@ -161,7 +161,6 @@ public class OrderController {
 
     /**
      * 支付回调通知处理
-     *
      * @param xmlData 相关支付结果及用户信息(微信端提供)
      * @return 向微信服务端返回应答
      * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--申请退款(待商家处理) 5--退款中(待商家收货) 6--退款成功 7--退款失败 8--交易关闭 9--所有订单
@@ -227,7 +226,7 @@ public class OrderController {
      * 列出用户相关状态所有订单
      * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      *
-     * @param flag、status flag传0可以列出商城相关状态的所有订单
+     * @param status：订单状态标识
      * @return
      */
     @RequestLog(module = "订单", operationDesc = "获取用户相关状态的所有订单")
@@ -236,23 +235,35 @@ public class OrderController {
     })
     @ApiOperation(value = "获取用户相关状态的所有订单",
             notes = "订单状态定义：status 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单;\n" +
-                    "退款状态定义：status 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败\n" +
-                    "flag传0获取商城相关状态的所有订单,flag传1获取用户相关状态的所有订单")
-    @GetMapping("/get/status/{status}/flag/{flag}")
-    public ResponseMessage<List<OrderDTO>> getOrderList(@ApiParam(name = "status", value = "订单状态标识", required = true) @PathVariable Integer status,
-                                                       @ApiParam(name = "flag", value = "查询标识", required = true) @PathVariable Integer flag) {
-        Map<String, Integer> orderMap = new HashMap<>();
-        orderMap.put("status", status);
-        orderMap.put("flag", flag);
-        if (!(status <= 5 && status >= 0)) {
-            return ResponseMessage.newErrorInstance("订单状态参数超出定义范围");
+                    "退款状态定义：status 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败")
+    @GetMapping("/getUserOrderList/status/{status}")
+    public ResponseMessage<List<OrderDTO>> getUserOrderList(@Max(value = 5, message = "订单标识最大值为5")
+                                                            @Min(value = 0, message = "订单标识最小值为0")
+                                                            @ApiParam(name = "status", value = "订单状态标识", required = true) @PathVariable Integer status) {
+        List<OrderDTO> orderDTOList = orderService.getUserOrderList(status);
+        if (orderDTOList != null && orderDTOList.size() != 0) {
+            return ResponseMessage.newSuccessInstance(orderDTOList, "获取订单列表成功");
         } else {
-            List<OrderDTO> orderDTOList = orderService.getOrderList(orderMap);
-            if (orderDTOList != null && orderDTOList.size() != 0) {
-                return ResponseMessage.newSuccessInstance(orderDTOList, "获取订单列表成功");
-            } else {
-                return ResponseMessage.newSuccessInstance("无该类型订单");
-            }
+            return ResponseMessage.newSuccessInstance("暂无该类型订单");
+        }
+    }
+
+    /**
+     * @param status
+     */
+    @RequestLog(module = "订单", operationDesc = "获取商城中相关状态的所有订单")
+    @ApiOperation(value = "获取商城中相关状态的所有订单",
+            notes = "订单状态定义：status 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单;\n" +
+                    "退款状态定义：status 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败")
+    @GetMapping("/getOrderList/status/{status}")
+    public ResponseMessage<List<OrderDTO>> getOrderList(@Max(value = 5, message = "订单标识最大值为5")
+                                                        @Min(value = 0, message = "订单标识最小值为0")
+                                                        @ApiParam(name = "status", value = "订单状态标识", required = true) @PathVariable Integer status) {
+        List<OrderDTO> orderDTOList = orderService.getOrderList(status);
+        if (orderDTOList != null && orderDTOList.size() != 0) {
+            return ResponseMessage.newSuccessInstance(orderDTOList, "获取订单列表成功");
+        } else {
+            return ResponseMessage.newSuccessInstance("暂无该类型订单");
         }
     }
 
@@ -317,7 +328,6 @@ public class OrderController {
 
     /**
      * 删除订单，暂时无用，用户没有删除订单按钮emm
-     *
      * @param orderId：订单id
      * @return
      */
@@ -344,7 +354,7 @@ public class OrderController {
     }
 
     /**
-     * 根据订单编号设置快递编号（订单编号优先）
+     * 根据订单编号设置快递编号
      * @param deliverGoodsDTO:orderNumber and courierNumber
      * @return
      */
@@ -353,7 +363,7 @@ public class OrderController {
     @PutMapping("/setCourierNumber")
     public ResponseMessage setCourierNumber(@RequestBody @Validated DeliverGoodsDTO deliverGoodsDTO) {
         Order order = new Order();
-        BeanUtils.copyProperties(deliverGoodsDTO,order);
+        BeanUtils.copyProperties(deliverGoodsDTO, order);
         try {
             orderService.setCourierNumber(order);
         } catch (OrderNotFoundException e) {
@@ -389,7 +399,7 @@ public class OrderController {
         } catch (OrderStatusNotFitException e) {
             throw new ApiOrderStatusNotFitException(e.getMessage());
         } catch (OrderAndUserNotMatchException e) {
-            throw  new ApiOrderAndUserNotMatchException(e.getMessage());
+            throw new ApiOrderAndUserNotMatchException(e.getMessage());
         } catch (Exception e) {
             throw new ApiException(e);
         }
@@ -398,7 +408,7 @@ public class OrderController {
 
     /**
      * 取消订单接口
-     * @param orderId：订单编号
+     * @param orderNumber：订单编号
      * @return
      */
     @RequestLog(module = "订单", operationDesc = "取消订单")
@@ -416,7 +426,7 @@ public class OrderController {
         } catch (OrderStatusNotFitException e) {
             throw new ApiOrderStatusNotFitException(e.getMessage());
         } catch (OrderAndUserNotMatchException e) {
-            throw  new ApiOrderAndUserNotMatchException(e.getMessage());
+            throw new ApiOrderAndUserNotMatchException(e.getMessage());
         } catch (Exception e) {
             throw new ApiException(e);
         }
