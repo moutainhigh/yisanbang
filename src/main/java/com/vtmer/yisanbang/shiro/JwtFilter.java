@@ -2,6 +2,8 @@ package com.vtmer.yisanbang.shiro;
 
 import com.vtmer.yisanbang.vo.JwtToken;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -17,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class JwtFilter extends BasicHttpAuthenticationFilter {
 
+    private final Logger logger = LoggerFactory.getLogger(JwtFilter.class);
     /**
      * 判断用户是否想要进行 需要验证的操作
      * 检测header里面是否包含Authorization字段即可
@@ -24,10 +27,9 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
     @Override
     protected boolean isLoginAttempt(ServletRequest request, ServletResponse response) {
         String auth = getAuthzHeader(request);
+        // 如果auth不为null则需要验证
         return auth != null && !auth.equals("");
-
     }
-
     /**
      * 此方法调用登陆，验证逻辑
      */
@@ -35,11 +37,11 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
         if (isLoginAttempt(request, response)) {
             JwtToken token = new JwtToken(getAuthzHeader(request));
+            logger.info("鉴权token为[{}]",token.getToken());
             getSubject(request, response).login(token);
         }
         return true;
     }
-
     /**
      * 提供跨域支持
      */

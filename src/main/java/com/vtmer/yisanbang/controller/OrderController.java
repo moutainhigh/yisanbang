@@ -56,7 +56,6 @@ public class OrderController {
 
     /**
      * 点击去结算，显示确认订单页面
-     *
      * @return
      */
     @RequestLog(module = "订单", operationDesc = "确认订单")
@@ -78,7 +77,6 @@ public class OrderController {
 
     /**
      * 创建订单
-     *
      * @param cartOrderDTO：留言，用户收货地址，邮费
      * @return
      */
@@ -177,7 +175,6 @@ public class OrderController {
     @RequestLog(module = "订单", operationDesc = "支付回调通知处理")
     @PostMapping("/wxNotify")
     public String parseOrderNotifyResult(@RequestBody String xmlData) {
-
         try {
             final WxPayOrderNotifyResult notifyResult = this.wxPayService.parseOrderNotifyResult(xmlData);
             // 用户订单编号
@@ -225,7 +222,6 @@ public class OrderController {
     /**
      * 列出用户相关状态所有订单
      * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
-     *
      * @param status：订单状态标识
      * @return
      */
@@ -271,7 +267,6 @@ public class OrderController {
      * 订单状态自增修改，适用于待付款、待发货、待收货类订单
      * 订单状态定义：status 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 0--待付款 1--待发货 2--待收货 状态订单 更新订单状态
-     *
      * @param orderNumber:订单编号
      * @return
      */
@@ -302,7 +297,6 @@ public class OrderController {
      * 设置订单状态 —— 适用于已完成、交易关闭订单（该接口貌似没用emm）
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 非 0--待付款 1--待发货 2--待收货 状态订单 设置订单状态
-     *
      * @param orderMap —— orderId、status
      * @return
      */
@@ -378,7 +372,6 @@ public class OrderController {
 
     /**
      * 在未发货之前用户修改地址接口
-     *
      * @param updateUserAddressVo:用户地址UserAddress、订单编号orderNumber
      * @return
      */

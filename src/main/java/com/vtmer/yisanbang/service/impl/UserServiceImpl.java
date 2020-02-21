@@ -1,5 +1,6 @@
 package com.vtmer.yisanbang.service.impl;
 
+import com.vtmer.yisanbang.common.exception.service.third.Code2SessionException;
 import com.vtmer.yisanbang.common.util.HttpUtil;
 import com.vtmer.yisanbang.common.util.JSONUtil;
 import com.vtmer.yisanbang.common.util.JwtUtil;
@@ -13,7 +14,6 @@ import com.vtmer.yisanbang.service.UserService;
 import com.vtmer.yisanbang.vo.Code2SessionResponse;
 import com.vtmer.yisanbang.vo.Token;
 import com.vtmer.yisanbang.vo.WxAccount;
-import org.apache.shiro.authc.AuthenticationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +22,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -76,6 +77,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public Token wxUserLogin(String code) {
         // code2session接口返回JSON数据
         String resultJson = code2Session(code);
@@ -83,7 +85,7 @@ public class UserServiceImpl implements UserService {
         // 解析数据
         Code2SessionResponse response = JSONUtil.toJavaObject(resultJson, Code2SessionResponse.class);
         if (!"0".equals(response.getErrcode())) {
-            throw new AuthenticationException("code2session失败：" + response.getErrmsg());
+            throw new Code2SessionException("code2session失败：" + response.getErrmsg());
         } else {
             // 查询数据库是否存在该微信用户
             logger.info("用户的openid为{},根据openid查询数据库是否存在该微信用户",response.getOpenid());
@@ -110,7 +112,7 @@ public class UserServiceImpl implements UserService {
             // JWT返回自定义登录态token并把token缓存到redis中
             WxAccount wxAccount = new WxAccount();
             wxAccount.setUserId(user.getId());
-            wxAccount.setOpenId(response.getOpenid());
+            wxAccount.setOpenId(user.getOpenId());
             wxAccount.setSessionKey(response.getSession_key());
             String token = jwtUtil.createTokenByUser(wxAccount);
             return new Token(token);
