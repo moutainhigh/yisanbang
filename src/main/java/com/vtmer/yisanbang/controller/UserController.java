@@ -35,12 +35,17 @@ public class UserController {
         Token token = userService.wxUserLogin(request.get("code"));
         // 执行验证过程
         Subject subject = SecurityUtils.getSubject();
-        JwtToken jwtToken = new JwtToken(token.getToken());
+        // 密码认证令牌
+        JwtToken jwtToken = new JwtToken(token.getToken(),"UserLogin");
         try {
             subject.login(jwtToken);
-            return ResponseMessage.newSuccessInstance(token, "获取用户token成功");
+            if (subject.isAuthenticated()) {
+                // shiro授权成功，返回token
+                return ResponseMessage.newSuccessInstance(token, "获取用户token成功");
+            } else {
+                return ResponseMessage.newErrorInstance("shiro授权失败");
+            }
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseMessage.newErrorInstance("获取用户token失败");
         }
     }

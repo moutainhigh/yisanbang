@@ -5,9 +5,7 @@ import com.vtmer.yisanbang.mapper.PermissionMapper;
 import org.apache.shiro.authc.pam.FirstSuccessfulStrategy;
 import org.apache.shiro.authc.pam.ModularRealmAuthenticator;
 import org.apache.shiro.realm.Realm;
-import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -51,6 +49,7 @@ public class ShiroConfig {
         filterRuleMap.put("/admin/logout", "anon");
         filterRuleMap.put("/ad/list", "anon");
         filterRuleMap.put("/carousel/list", "anon");
+        filterRuleMap.put("/**", "anon");
         // 获取所有需要权限认证的接口路径
         List<Permission> permissions = permissionMapper.selectAll();
         for (Permission p : permissions) {
@@ -76,7 +75,7 @@ public class ShiroConfig {
         List<Realm> realms = new ArrayList<>();
         // 配置多个Realm
         realms.add(adminRealm);
-        realms.add(userRealm);
+        //realms.add(userRealm);
         securityManager.setRealms(realms);
         return securityManager;
     }
@@ -94,6 +93,7 @@ public class ShiroConfig {
         return new UserRealm();
     }
 
+    /*
     @Bean
     public static DefaultAdvisorAutoProxyCreator getDefaultAdvisorAutoProxyCreator() {
         DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
@@ -101,14 +101,19 @@ public class ShiroConfig {
         return defaultAdvisorAutoProxyCreator;
     }
 
+     */
+
     /**
      * 开启注解验证
      */
+    /*
     @Bean
     public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(DefaultWebSecurityManager securityManager) {
         AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
         authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
         return authorizationAttributeSourceAdvisor;
     }
+
+     */
 
 }
