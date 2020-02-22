@@ -34,13 +34,15 @@ public class SuitDTO {
     @ApiModelProperty(value = "是否显示", example = "true")
     private Boolean isShow;
 
-    private Date updateTime;
-
-    @ApiModelProperty(hidden = true)
+    @NotNull(message = "套装名称不可为空")
+    @ApiModelProperty(value = "是否显示", example = "true")
     private String name;
 
-    @ApiModelProperty(hidden = true)
+    @NotNull(message = "图片地址不可为空")
+    @ApiModelProperty(value = "是否显示", example = "true")
     private String picture;
+
+    private Date updateTime;
 
     @ApiModelProperty(hidden = true)
     private double price;
@@ -125,14 +127,29 @@ public class SuitDTO {
 
     @Override
     public String toString() {
-        return "SuitDto{" +
+        return "SuitDTO{" +
                 "id=" + id +
                 ", sortId=" + sortId +
                 ", introduce='" + introduce + '\'' +
                 ", lowestPrice=" + lowestPrice +
                 ", highestPrice=" + highestPrice +
                 ", isShow=" + isShow +
+                ", name='" + name + '\'' +
+                ", picture='" + picture + '\'' +
+                ", updateTime=" + updateTime +
                 '}';
+    }
+
+    public SuitDTO(@NotNull(groups = {Update.class, Delete.class}, message = "套装id不可为空") Integer id, @NotNull(message = "分类id不可为空") Integer sortId, @NotBlank(message = "套装简介不可为空") String introduce, @NotNull(message = "最低价不可为空") Double lowestPrice, @NotNull(message = "最高价不可为空") Double highestPrice, @NotNull(message = "显示标志不可为空") Boolean isShow, @NotNull(message = "套装名称不可为空") String name, @NotNull(message = "图片地址不可为空") String picture, Date updateTime) {
+        this.id = id;
+        this.sortId = sortId;
+        this.introduce = introduce;
+        this.lowestPrice = lowestPrice;
+        this.highestPrice = highestPrice;
+        this.isShow = isShow;
+        this.name = name;
+        this.picture = picture;
+        this.updateTime = updateTime;
     }
 
     public SuitDTO(Integer id, Integer sortId, String introduce, Double lowestPrice, Double highestPrice, Boolean isShow, Date updateTime) {
