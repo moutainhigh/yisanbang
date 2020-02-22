@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.vtmer.yisanbang.mapper.SuitMapper">
-  <resultMap id="BaseResultMap" type="com.vtmer.yisanbang.domain.Suit">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="sort_id" jdbcType="INTEGER" property="sortId" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="introduce" jdbcType="VARCHAR" property="introduce" />
-    <result column="picture" jdbcType="VARCHAR" property="picture" />
-    <result column="lowest_price" jdbcType="DOUBLE" property="lowestPrice" />
-    <result column="highest_price" jdbcType="DOUBLE" property="highestPrice" />
-    <result column="is_show" jdbcType="BIT" property="isShow" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-  </resultMap>
-  <resultMap id="SuitMap" type="com.vtmer.yisanbang.dto.SuitDTO">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="sort_id" jdbcType="INTEGER" property="sortId" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="introduce" jdbcType="VARCHAR" property="introduce" />
-    <result column="picture" jdbcType="VARCHAR" property="picture" />
-    <result column="lowest_price" jdbcType="DOUBLE" property="lowestPrice" />
-    <result column="highest_price" jdbcType="DOUBLE" property="highestPrice" />
-    <result column="is_show" jdbcType="BIT" property="isShow" />
-  </resultMap>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <resultMap id="BaseResultMap" type="com.vtmer.yisanbang.domain.Suit">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="sort_id" jdbcType="INTEGER" property="sortId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="introduce" jdbcType="VARCHAR" property="introduce"/>
+        <result column="picture" jdbcType="VARCHAR" property="picture"/>
+        <result column="lowest_price" jdbcType="DOUBLE" property="lowestPrice"/>
+        <result column="highest_price" jdbcType="DOUBLE" property="highestPrice"/>
+        <result column="is_show" jdbcType="BIT" property="isShow"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <resultMap id="SuitMap" type="com.vtmer.yisanbang.dto.SuitDTO">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="sort_id" jdbcType="INTEGER" property="sortId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="introduce" jdbcType="VARCHAR" property="introduce"/>
+        <result column="picture" jdbcType="VARCHAR" property="picture"/>
+        <result column="lowest_price" jdbcType="DOUBLE" property="lowestPrice"/>
+        <result column="highest_price" jdbcType="DOUBLE" property="highestPrice"/>
+        <result column="is_show" jdbcType="BIT" property="isShow"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from suit
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.vtmer.yisanbang.domain.Suit">
+    <insert id="insert" parameterType="com.vtmer.yisanbang.domain.Suit">
     insert into suit (id, sort_id, name, 
       introduce, picture, lowest_price, 
       highest_price, is_show, create_time, 
@@ -37,7 +37,7 @@
       #{highestPrice,jdbcType=DOUBLE}, #{isShow,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP})
   </insert>
-  <update id="updateByPrimaryKey" parameterType="com.vtmer.yisanbang.domain.Suit">
+    <update id="updateByPrimaryKey" parameterType="com.vtmer.yisanbang.domain.Suit">
     update suit
     set sort_id = #{sortId,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
@@ -50,18 +50,18 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select id, sort_id, name, introduce, picture, lowest_price, highest_price, is_show, 
     create_time, update_time
     from suit
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <select id="selectAll" resultMap="BaseResultMap">
+    <select id="selectAll" resultMap="BaseResultMap">
     select id, sort_id, name, introduce, picture, lowest_price, highest_price, is_show, 
     create_time, update_time
     from suit
   </select>
-  <insert id="insertDto" parameterType="com.vtmer.yisanbang.dto.SuitDTO">
+    <insert id="insertDto" parameterType="com.vtmer.yisanbang.dto.SuitDTO">
     insert into suit (id, sort_id, name,
       introduce, picture, lowest_price,
       highest_price, is_show)
@@ -69,7 +69,7 @@
       #{introduce,jdbcType=VARCHAR}, #{picture,jdbcType=VARCHAR}, #{lowestPrice,jdbcType=DOUBLE},
       #{highestPrice,jdbcType=DOUBLE}, #{isShow,jdbcType=BIT})
   </insert>
-  <update id="updateDtoByPrimaryKey" parameterType="com.vtmer.yisanbang.dto.SuitDTO">
+    <update id="updateDtoByPrimaryKey" parameterType="com.vtmer.yisanbang.dto.SuitDTO">
     update suit
     set sort_id = #{sortId,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
@@ -80,32 +80,42 @@
       is_show = #{isShow,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="selectDtoByPrimaryKey" parameterType="java.lang.Integer" resultMap="SuitMap">
+    <update id="hideSuit" parameterType="com.vtmer.yisanbang.dto.SuitDTO">
+    update suit
+    set is_show = 0
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <update id="showSuit" parameterType="com.vtmer.yisanbang.dto.SuitDTO">
+    update suit
+    set is_show = 1
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="selectDtoByPrimaryKey" parameterType="java.lang.Integer" resultMap="SuitMap">
     select id, sort_id, name, introduce, picture, lowest_price, highest_price, is_show
     from suit
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <select id="selectDtoBySuitName" parameterType="java.lang.String" resultMap="SuitMap">
+    <select id="selectDtoBySuitName" parameterType="java.lang.String" resultMap="SuitMap">
     select id, sort_id, name, introduce, picture, lowest_price, highest_price, is_show
     from suit
     where name = #{name,jdbcType=VARCHAR} and is_show = true
   </select>
-  <select id="selectAllDto" resultMap="SuitMap">
+    <select id="selectAllDto" resultMap="SuitMap">
     select id, sort_id, name, introduce, picture, lowest_price, highest_price, is_show, update_time
     from suit
   </select>
-  <select id="selectAllDtoBySortId" parameterType="java.lang.Integer" resultMap="SuitMap">
+    <select id="selectAllDtoBySortId" parameterType="java.lang.Integer" resultMap="SuitMap">
     select id, sort_id, name, introduce, picture, lowest_price, highest_price, is_show
     from suit
     where sort_id = #{sortId,jdbcType=INTEGER} and is_show = true
   </select>
-  <select id="selectAllDtoOrderByPrice" resultMap="SuitMap">
+    <select id="selectAllDtoOrderByPrice" resultMap="SuitMap">
     select id, sort_id, name, introduce, picture, lowest_price, highest_price, is_show
     from suit
     where is_show = true
     order by lowest_price
   </select>
-  <select id="selectAllDtoOrderByTime" resultMap="SuitMap">
+    <select id="selectAllDtoOrderByTime" resultMap="SuitMap">
     select id, sort_id, name, introduce, picture, lowest_price, highest_price, is_show, update_time
     from suit
     where is_show = true

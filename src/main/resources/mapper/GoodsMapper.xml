@@ -77,6 +77,16 @@
       is_show = #{isShow,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+    <update id="hideGoods" parameterType="com.vtmer.yisanbang.dto.GoodsDTO">
+    update goods
+    set is_show = 0
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="showGoods" parameterType="com.vtmer.yisanbang.dto.GoodsDTO">
+    update goods
+    set is_show = 1
+    where id = #{id,jdbcType=INTEGER}
+  </update>
     <select id="selectDtoByPrimaryKey" parameterType="java.lang.Integer" resultMap="GoodsMap">
     select id, sort_id, name, introduce, picture, price, is_show
     from goods

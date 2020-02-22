@@ -44,4 +44,7 @@ public interface SuitMapper {
     // Dto
     List<SuitDTO> selectAllDtoBySortId(Integer sortId);
 
+    int hideSuit(Integer suitId);
+
+    int showSuit(Integer suitId);
 }
