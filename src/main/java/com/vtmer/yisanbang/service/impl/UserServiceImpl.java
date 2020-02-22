@@ -1,6 +1,7 @@
 package com.vtmer.yisanbang.service.impl;
 
 import com.vtmer.yisanbang.common.exception.service.third.Code2SessionException;
+import com.vtmer.yisanbang.common.util.EncryptUtils;
 import com.vtmer.yisanbang.common.util.HttpUtil;
 import com.vtmer.yisanbang.common.util.JSONUtil;
 import com.vtmer.yisanbang.common.util.JwtUtil;
@@ -22,7 +23,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -77,32 +77,31 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public Token wxUserLogin(String code) {
         // code2session接口返回JSON数据
         String resultJson = code2Session(code);
-        logger.info("code2session接口返回JSON数据{}",resultJson);
+        logger.info("code2session接口返回JSON数据{}", resultJson);
         // 解析数据
         Code2SessionResponse response = JSONUtil.toJavaObject(resultJson, Code2SessionResponse.class);
+
         if (!"0".equals(response.getErrcode())) {
             throw new Code2SessionException("code2session失败：" + response.getErrmsg());
         } else {
+            String openid = "oSWGq5VifPgfIIF7eHFjNh9GEr_g";
+            String sessionKey = "ZSjsKPKv+xRqOoahLTgpCQ==";
             // 查询数据库是否存在该微信用户
-            logger.info("用户的openid为{},根据openid查询数据库是否存在该微信用户",response.getOpenid());
-            User user = userMapper.selectUserByOpenId(response.getOpenid());
+            User user = userMapper.selectUserByOpenId(openid);
             User newUser = new User();
             if (null == user) {
-                logger.info("数据库中不存在该微信用户，插入新数据");
-                String openid = response.getOpenid();
+                // String openid = response.getOpenid();
                 // 若不存在则新建用户到数据库中
                 newUser.setOpenId(openid);
                 userMapper.addUser(newUser);
-                logger.info("插入数据成功，自增userId为{}",newUser.getId());
                 user = newUser;
                 // 把用户openId插入Admin表中，并分配普通用户角色，并设置密码为一个空格
                 Admin admin = new Admin();
                 admin.setName(user.getOpenId());
-                admin.setPassword(" ");
+                admin.setPassword(EncryptUtils.encrypt(openid, "123456").toString());
                 adminMapper.insertAdmin(admin);
                 AdminRole adminRole = new AdminRole();
                 adminRole.setAdminId(admin.getId());
@@ -113,30 +112,32 @@ public class UserServiceImpl implements UserService {
             WxAccount wxAccount = new WxAccount();
             wxAccount.setUserId(user.getId());
             wxAccount.setOpenId(user.getOpenId());
-            wxAccount.setSessionKey(response.getSession_key());
+            //wxAccount.setSessionKey(response.getSession_key());
+            wxAccount.setSessionKey(sessionKey);
             String token = jwtUtil.createTokenByUser(wxAccount);
+            logger.info("JWT返回自定义登录态token[{}]，并把token缓存到redis中", token);
             return new Token(token);
         }
     }
 
-    @Override
-    public Integer getUserIdByToken(String token) {
-        String openId = jwtUtil.getOpenIdByToken(token);
-        User user = userMapper.selectUserByOpenId(openId);
-        if (null != user) {
-            return user.getId();
+        @Override
+        public Integer getUserIdByToken (String token){
+            String openId = jwtUtil.getOpenIdByToken(token);
+            User user = userMapper.selectUserByOpenId(openId);
+            if (null != user) {
+                return user.getId();
+            }
+            return null;
         }
-        return null;
-    }
 
-    @Override
-    public String getOpenIdByUserId(Integer userId) {
-        return userMapper.selectOpenIdByUserId(userId);
-    }
+        @Override
+        public String getOpenIdByUserId (Integer userId){
+            return userMapper.selectOpenIdByUserId(userId);
+        }
 
-    @Override
-    public User selectByPrimaryKey(Integer userId) {
-        return userMapper.selectByPrimaryKey(userId);
-    }
+        @Override
+        public User selectByPrimaryKey (Integer userId){
+            return userMapper.selectByPrimaryKey(userId);
+        }
 
-}
+    }

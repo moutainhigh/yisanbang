@@ -5,15 +5,18 @@ import com.vtmer.yisanbang.common.exception.api.ApiException;
 import com.vtmer.yisanbang.common.exception.api.shiro.ApiUnknownAccountException;
 import com.vtmer.yisanbang.common.exception.api.third.ApiCode2SessionException;
 import com.vtmer.yisanbang.common.exception.service.third.Code2SessionException;
+import com.vtmer.yisanbang.common.util.JwtUtil;
 import com.vtmer.yisanbang.service.UserService;
-import com.vtmer.yisanbang.vo.JwtToken;
 import com.vtmer.yisanbang.vo.Token;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,8 +27,13 @@ import java.util.Map;
 @RequestMapping("/user")
 public class UserController {
 
+    private final Logger logger = LoggerFactory.getLogger(UserController.class);
+
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @ApiOperation(value = "微信用户登录", notes = "执行成功后返回用户对应的token")
     @PostMapping("/login")
@@ -35,10 +43,12 @@ public class UserController {
         }
         try {
             Token token = userService.wxUserLogin(request.get("code"));
+            String openId = jwtUtil.getOpenIdByToken(token.getToken());
             // 执行验证过程
             Subject subject = SecurityUtils.getSubject();
-            JwtToken jwtToken = new JwtToken(token.getToken());
-            subject.login(jwtToken);
+            // 用户的账号为openId，密码为一个空格
+            UsernamePasswordToken UsernamePasswordToken = new UsernamePasswordToken(openId, "123456");
+            subject.login(UsernamePasswordToken);
             if (subject.isAuthenticated()) {
                 // 已经认证
                 return ResponseMessage.newSuccessInstance(token,"获取token用户成功");

@@ -21,8 +21,7 @@ public class PermissionServiceImpl implements PermissionService {
     @Override
     public List<String> selectUrlByRoleId(Integer roleId) {
         List<String> urls= new ArrayList<>();
-        for (Integer permiId:
-             rolePermiMapper.selectPermiIdByRoleId(roleId)) {
+        for (Integer permiId: rolePermiMapper.selectPermiIdByRoleId(roleId)) {
             String url = permissionMapper.selectUrlByPermiId(permiId);
             urls.add(url);
         }

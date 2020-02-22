@@ -60,7 +60,7 @@ public class OrderController {
      */
     @RequestLog(module = "订单", operationDesc = "确认订单")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @ApiOperation(value = "确认订单", notes = "点击去结算，显示确认订单页面")
     @GetMapping("confirmOrder")
@@ -82,7 +82,7 @@ public class OrderController {
      */
     @RequestLog(module = "订单", operationDesc = "创建购物车类订单")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @ApiOperation(value = "创建购物车订单", notes = "用户从购物车页面确认订单，点击提交订单后调用,若是订单中的某件商品数量超过库存，会返回【库存不足】的提示，返回订单编号和用户openid")
     @PostMapping("/insert")
@@ -116,7 +116,7 @@ public class OrderController {
                     "\n}")
     })
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @GetMapping("/wxpay/{orderNumber}")
     public ResponseMessage wxpay(@ApiParam(name = "orderNumber", value = "订单编号", required = true)
@@ -227,7 +227,7 @@ public class OrderController {
      */
     @RequestLog(module = "订单", operationDesc = "获取用户相关状态的所有订单")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @ApiOperation(value = "获取用户相关状态的所有订单",
             notes = "订单状态定义：status 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单;\n" +
@@ -274,7 +274,7 @@ public class OrderController {
     @ApiOperation(value = "确认收货", notes = "订单状态定义：status 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单\n"
             + "修改订单状态为下一状态，适用于'确认收货'按钮")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @PutMapping("updateOrderStatus/{orderNumber}")
     public ResponseMessage updateOrderStatus(@ApiParam(name = "orderNumber", value = "订单编号", required = true)
@@ -328,7 +328,7 @@ public class OrderController {
     @RequestLog(module = "订单", operationDesc = "删除订单")
     @ApiOperation(value = "删除订单", notes = "暂时无用，用户没有删除订单按钮emm")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @DeleteMapping("/delete/{orderId}")
     public ResponseMessage delete(@ApiParam(name = "orderId", value = "订单id", required = true)
@@ -377,7 +377,7 @@ public class OrderController {
      */
     @RequestLog(module = "订单", operationDesc = "修改收货地址")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @ApiOperation(value = "修改收货地址", notes = "待付款、待发货状态适用")
     @PutMapping("/updateAddress")
@@ -406,7 +406,7 @@ public class OrderController {
      */
     @RequestLog(module = "订单", operationDesc = "取消订单")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @ApiOperation(value = "取消订单", notes = "在未支付的情况下用户可以取消订单")
     @PutMapping("/cancelOrder/{orderId}")

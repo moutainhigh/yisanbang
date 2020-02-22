@@ -28,15 +28,13 @@ public class Swagger2Config {
     @Value("${swagger.host}")
     private String host;
 
-
-
     /**
      * 业务系统的token认证机制
      */
     private List<Parameter> getTokenPar(){
         ParameterBuilder tokenPar = new ParameterBuilder();
         List<Parameter> pars = new ArrayList<Parameter>();
-        tokenPar.name("accessToken")
+        tokenPar.name("Authorization")
                 .description("鉴权token")
                 .modelRef(new ModelRef("string")).parameterType("header").required(true).build();
         pars.add(tokenPar.build());

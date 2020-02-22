@@ -304,7 +304,7 @@ public class RefundController {
     @RequestLog(module = "退款", operationDesc = "撤销退款申请")
     @ApiOperation(value = "用户撤销退款申请", notes = "根据退款编号删除退款订单接口,用户撤销退款使用")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @DeleteMapping("/delete")
     public ResponseMessage delete(@ApiParam(name = "refundNumber", value = "退款编号", example = "12345678998765432110", required = true)
@@ -355,7 +355,7 @@ public class RefundController {
     @ApiOperation(value = "用户填写退款发货单",
             notes = "用户填写退款发货单,退款状态【待用户发货】-->【待商家收货】")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @PostMapping("/express")
     public ResponseMessage insertExpress(@RequestBody @Validated RefundExpress refundExpress) {
@@ -383,7 +383,7 @@ public class RefundController {
     @RequestLog(module = "退款", operationDesc = "申请退款")
     @ApiOperation(value = "用户申请退款", notes = "用户申请退款接口;退款商品传null代表全退，退款原因非必需")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @PostMapping("/apply")
     public ResponseMessage apply(@RequestBody @Validated RefundDTO refundDTO) {
