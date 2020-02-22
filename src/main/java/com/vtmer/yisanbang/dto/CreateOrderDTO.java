@@ -1,7 +1,5 @@
 package com.vtmer.yisanbang.dto;
 
-import com.vtmer.yisanbang.common.valid.group.Insert;
-import com.vtmer.yisanbang.common.valid.group.Update;
 import com.vtmer.yisanbang.domain.UserAddress;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -14,11 +12,11 @@ import javax.validation.constraints.NotNull;
  * 下购物车订单DTO
  */
 @Data
-@ApiModel(value = "下购物车订单DTO")
-public class CartOrderDTO {
+@ApiModel(value = "创建订单DTO")
+public class CreateOrderDTO {
 
     @Valid
-    @NotNull(groups = {Insert.class, Update.class},message = "用户地址信息为空")
+    @NotNull(message = "用户地址信息为空")
     @ApiModelProperty(value = "用户默认收货地址信息",required = true,example = "广东工业大学教学三号楼创客基地E102")
     private UserAddress userAddress;
 
@@ -27,5 +25,5 @@ public class CartOrderDTO {
     private String message;
 
     @ApiModelProperty(readOnly = true,value = "邮费",example = "8")
-    private double postage;
+    private Double postage;
 }

@@ -1,7 +1,8 @@
 package com.vtmer.yisanbang.service;
 
 import com.vtmer.yisanbang.domain.Order;
-import com.vtmer.yisanbang.dto.CartOrderDTO;
+import com.vtmer.yisanbang.dto.CreateDirectOrderDTO;
+import com.vtmer.yisanbang.dto.CreateOrderDTO;
 import com.vtmer.yisanbang.dto.OrderDTO;
 import com.vtmer.yisanbang.dto.OrderGoodsDTO;
 
@@ -12,7 +13,11 @@ public interface OrderService {
 
     OrderDTO confirmCartOrder();
 
-    Map<String,String> createCartOrder(CartOrderDTO cartOrderDTO);
+    OrderDTO confirmDirectOrder(List<OrderGoodsDTO> orderGoodsDTOList);
+
+    Map<String,String> createCartOrder(CreateOrderDTO createOrderDTO);
+
+    Map<String,String> createDirectOrder(CreateDirectOrderDTO createDirectOrderDTO);
 
     /**
      * 获取用户的状态订单

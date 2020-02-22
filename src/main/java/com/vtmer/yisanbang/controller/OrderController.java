@@ -17,9 +17,7 @@ import com.vtmer.yisanbang.common.exception.service.order.*;
 import com.vtmer.yisanbang.common.valid.group.Insert;
 import com.vtmer.yisanbang.domain.Order;
 import com.vtmer.yisanbang.domain.User;
-import com.vtmer.yisanbang.dto.CartOrderDTO;
-import com.vtmer.yisanbang.dto.DeliverGoodsDTO;
-import com.vtmer.yisanbang.dto.OrderDTO;
+import com.vtmer.yisanbang.dto.*;
 import com.vtmer.yisanbang.service.OrderService;
 import com.vtmer.yisanbang.vo.UpdateUserAddressVo;
 import io.swagger.annotations.*;
@@ -31,10 +29,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.util.List;
 import java.util.Map;
 
@@ -58,13 +53,13 @@ public class OrderController {
      * 点击去结算，显示确认订单页面
      * @return
      */
-    @RequestLog(module = "订单", operationDesc = "确认订单")
+    @RequestLog(module = "订单", operationDesc = "确认购物车订单")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
-    @ApiOperation(value = "确认订单", notes = "点击去结算，显示确认订单页面")
-    @GetMapping("confirmOrder")
-    public ResponseMessage<OrderDTO> confirmOrder() {
+    @ApiOperation(value = "确认购物车订单", notes = "点击去结算，显示确认订单页面")
+    @GetMapping("confirmCartOrder")
+    public ResponseMessage<OrderDTO> confirmCartOrder() {
         OrderDTO orderDTO;
         try {
             orderDTO = orderService.confirmCartOrder();
@@ -74,10 +69,39 @@ public class OrderController {
         return ResponseMessage.newSuccessInstance(orderDTO, "获取确认订单相关信息成功");
     }
 
+    @RequestLog(module = "订单", operationDesc = "确认[直接购买]订单")
+    @GetMapping("confirmDirectOrder")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
+    })
+    @ApiOperation(value = "确认[直接购买]订单", notes = "点击[直接购买]，显示确认订单页面")
+    public ResponseMessage<OrderDTO> confirmDirectOrder(@RequestBody @NotEmpty(message = "订单集合为空") List<OrderGoodsDTO> orderGoodsDTOList) {
+        OrderDTO orderDTO = orderService.confirmDirectOrder(orderGoodsDTOList);
+        return ResponseMessage.newSuccessInstance(orderDTO,"获取确认订单相关信息成功");
+    }
 
+    @RequestLog(module = "订单", operationDesc = "创建[直接购买]类订单")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
+    })
+    @ApiOperation(value = "创建[直接购买]类订单", notes = "用户从商品页面选择直接购买确认订单，点击提交订单后调用,若是订单中的某件商品数量超过库存，会返回【库存不足】的提示，返回订单编号和用户openid")
+    @PostMapping("/insertDirectOrder")
+    public ResponseMessage insertDirectOrder(@RequestBody @Validated({Insert.class}) CreateDirectOrderDTO createDirectOrderDTO) {
+        Map<String, String> orderMap;
+        try {
+            orderMap = orderService.createCartOrder(createDirectOrderDTO);
+        } catch (InventoryNotEnoughException e) {
+            throw new ApiInventoryNotEnoughException(e.getMessage());
+        } catch (OrderPriceNotMatchException e) {
+            throw new ApiOrderPriceNotMatchException(e.getMessage());
+        } catch (Exception e) {
+            throw new ApiException(e);
+        }
+        return ResponseMessage.newSuccessInstance(orderMap, "创建订单成功，返回订单编号和openId");
+    }
     /**
      * 创建订单
-     * @param cartOrderDTO：留言，用户收货地址，邮费
+     * @param createOrderDTO：留言，用户收货地址，邮费
      * @return
      */
     @RequestLog(module = "订单", operationDesc = "创建购物车类订单")
@@ -85,11 +109,11 @@ public class OrderController {
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @ApiOperation(value = "创建购物车订单", notes = "用户从购物车页面确认订单，点击提交订单后调用,若是订单中的某件商品数量超过库存，会返回【库存不足】的提示，返回订单编号和用户openid")
-    @PostMapping("/insert")
-    public ResponseMessage insert(@RequestBody @Validated({Insert.class}) CartOrderDTO cartOrderDTO) {
+    @PostMapping("/insertCartOrder")
+    public ResponseMessage insertCartOrder(@RequestBody @Validated CreateOrderDTO createOrderDTO) {
         Map<String, String> orderMap;
         try {
-            orderMap = orderService.createCartOrder(cartOrderDTO);
+            orderMap = orderService.createCartOrder(createOrderDTO);
         } catch (InventoryNotEnoughException e) {
             throw new ApiInventoryNotEnoughException(e.getMessage());
         } catch (Exception e) {

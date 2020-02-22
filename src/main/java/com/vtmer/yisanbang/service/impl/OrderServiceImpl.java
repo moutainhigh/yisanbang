@@ -7,10 +7,7 @@ import com.vtmer.yisanbang.common.TokenInterceptor;
 import com.vtmer.yisanbang.common.exception.service.order.*;
 import com.vtmer.yisanbang.common.util.OrderNumberUtil;
 import com.vtmer.yisanbang.domain.*;
-import com.vtmer.yisanbang.dto.CartGoodsDTO;
-import com.vtmer.yisanbang.dto.CartOrderDTO;
-import com.vtmer.yisanbang.dto.OrderDTO;
-import com.vtmer.yisanbang.dto.OrderGoodsDTO;
+import com.vtmer.yisanbang.dto.*;
 import com.vtmer.yisanbang.mapper.*;
 import com.vtmer.yisanbang.service.CartService;
 import com.vtmer.yisanbang.service.OrderService;
@@ -108,7 +105,7 @@ public class OrderServiceImpl implements OrderService {
             throw new CartEmptyException();
         }
         if (cartVo.getTotalPrice() >= standardPrice) { // 包邮
-            orderDTO.setPostage(0);
+            orderDTO.setPostage((double) 0);
         } else {  // 不包邮
             orderDTO.setPostage(defaultPostage);
         }
@@ -129,17 +126,41 @@ public class OrderServiceImpl implements OrderService {
         return orderDTO;
     }
 
+    @Override
+    public OrderDTO confirmDirectOrder(List<OrderGoodsDTO> orderGoodsDTOList) {
+        Integer userId = TokenInterceptor.getLoginUser().getId();
+        OrderDTO orderDTO = new OrderDTO();
+        // 优惠前总价
+        double beforeTotalPrice = 0;
+        // 优惠后总价
+        double totalPrice = 0;
+        for (OrderGoodsDTO orderGoodsDTO : orderGoodsDTOList) {
+            Integer sizeId = orderGoodsDTO.getColorSizeId();
+            Boolean whetherGoods = orderGoodsDTO.getWhetherGoods();
+            // 设置商品属性
+            setOrderGoodsDTO(orderGoodsDTO,sizeId,whetherGoods);
+            beforeTotalPrice += orderGoodsDTO.getAmount() * orderGoodsDTO.getPrice();
+            totalPrice += orderGoodsDTO.getAfterTotalPrice();
+        }
+        orderDTO.setBeforeTotalPrice(beforeTotalPrice);
+        orderDTO.setTotalPrice(totalPrice);
+        orderDTO.setOrderGoodsDTOList(orderGoodsDTOList);
+        UserAddress userAddress = userAddressMapper.selectDefaultByUserId(userId);
+        orderDTO.setUserAddress(userAddress);
+        return orderDTO;
+    }
+
+
     /**
      * create shopping cart order after users submit order
      *
-     * @param cartOrderDTO:UserAddress(用户地址、联系人、手机号)、邮费、留言
+     * @param createOrderDTO:UserAddress(用户地址、联系人、手机号)、邮费、留言
      * @return openid、orderNumber
      * @throws DataIntegrityViolationException：库存不足抛出异常
      */
     @Transactional
-    public Map<String, String> createCartOrder(CartOrderDTO cartOrderDTO) throws DataIntegrityViolationException {
-        User user = TokenInterceptor.getLoginUser();
-        /* ..写多了
+    public Map<String, String> createCartOrder(CreateOrderDTO createOrderDTO) throws DataIntegrityViolationException {
+        /* ..写多了不舍得删
         // 获取用户购物车清单
         CartVo cartVo = cartService.selectCartVo();
         // 获取用户购物车商品列表
@@ -178,6 +199,50 @@ public class OrderServiceImpl implements OrderService {
         } // end for
         // 校验完成，开始下单逻辑
          */
+        // 获取用户购物车清单
+        CartVo cartVo = cartService.selectCartVo();
+        // 获取用户购物车商品列表
+        List<CartGoodsDTO> cartGoodsList = cartVo.getCartGoodsList();
+        // 删除未勾选商品,得到购物车勾选商品列表
+        cartGoodsList.removeIf(cartGoodsDto -> cartGoodsDto.getWhetherChosen() == Boolean.FALSE);
+        double postage = createOrderDTO.getPostage();
+        String message = createOrderDTO.getMessage();
+        UserAddress userAddress = createOrderDTO.getUserAddress();
+        // 生成order
+        Map<String, String> orderMap = createOrder(cartVo, postage, message, userAddress);
+        // 删除购物车勾选项
+        cartService.deleteCartGoodsByIsChosen();
+        // 返回订单编号和openid
+        return orderMap;
+    }
+
+    /**
+     * 创建直接下单类订单
+     * @param createDirectOrderDTO
+     * @return
+     */
+    @Override
+    public Map<String, String> createDirectOrder(CreateDirectOrderDTO createDirectOrderDTO) {
+        // 获取用户订单商品列表和优惠后的总价
+        CartVo cartVo = createDirectOrderDTO.getCartVo();
+        // 前端传递的订单总价，在后台验证一遍是否正确
+        double totalPrice = cartVo.getTotalPrice();
+        List<CartGoodsDTO> cartGoodsList = cartVo.getCartGoodsList();
+        // 后台计算订单总价，map中包括优惠前和优惠后的总价，这里我们只需要优惠后的总价
+        Map<String, Double> priceMap = cartService.calculateTotalPrice(cartGoodsList);
+        Double totalPrice1 = priceMap.get("totalPrice");
+        if (!totalPrice1.equals(totalPrice)) {
+            // 如果前端传递的优惠后订单总价和后台计算的优惠后订单总价不一致，说明出现了问题，抛出异常
+            throw new OrderPriceNotMatchException();
+        }
+        double postage = createDirectOrderDTO.getPostage();
+        String message = createDirectOrderDTO.getMessage();
+        UserAddress userAddress = createDirectOrderDTO.getUserAddress();
+        return createOrder(cartVo,postage,message,userAddress);
+    }
+
+    private Map<String,String> createOrder(CartVo cartVo,double postage,String message,UserAddress userAddress) {
+        User user = TokenInterceptor.getLoginUser();
         // 返回map
         HashMap<String, String> orderMap = new HashMap<>();
         // 从登录信息中拿到openId
@@ -186,15 +251,6 @@ public class OrderServiceImpl implements OrderService {
         // 生成订单编号
         String orderNumber = OrderNumberUtil.getOrderNumber();
         orderMap.put("orderNumber", orderNumber);
-        // 用户地址
-        UserAddress userAddress = cartOrderDTO.getUserAddress();
-        // 获取用户购物车清单
-        CartVo cartVo = cartService.selectCartVo();
-        // 获取用户购物车商品列表
-        List<CartGoodsDTO> cartGoodsList = cartVo.getCartGoodsList();
-        // 删除未勾选商品,得到购物车勾选商品列表
-        cartGoodsList.removeIf(cartGoodsDto -> cartGoodsDto.getWhetherChosen() == Boolean.FALSE);
-
         // 生成order
         Order order = new Order();
         order.setUserId(user.getId());
@@ -203,10 +259,8 @@ public class OrderServiceImpl implements OrderService {
         order.setPhoneNumber(userAddress.getPhoneNumber());
         order.setOrderNumber(orderNumber);
         order.setTotalPrice(cartVo.getTotalPrice());
-        order.setPostage(cartOrderDTO.getPostage());
-        if (cartOrderDTO.getMessage() != null) {
-            order.setMessage(cartOrderDTO.getMessage());
-        }
+        order.setPostage(postage);
+        order.setMessage(message);
         orderMapper.insert(order);
         logger.info("创建订单[{}]，订单状态[未支付]---用户id[{}]", orderNumber, user.getId());
         BoundZSetOperations<String, String> zSetOps = redisTemplate.boundZSetOps("OrderNumber");
@@ -216,6 +270,7 @@ public class OrderServiceImpl implements OrderService {
         int minute30Later = (int) (cal.getTimeInMillis() / 1000);
         // score为超时时间戳，zset集合值orderId4的分数
         zSetOps.add(order.getOrderNumber(), minute30Later);
+        List<CartGoodsDTO> cartGoodsList = cartVo.getCartGoodsList();
         for (CartGoodsDTO cartGoodsDTO : cartGoodsList) {
             // 生成orderGoods
             OrderGoods orderGoods = new OrderGoods();
@@ -228,7 +283,6 @@ public class OrderServiceImpl implements OrderService {
             orderGoods.setTotalPrice(cartGoodsDTO.getAfterTotalPrice());
             orderGoods.setSizeId(colorSizeId);
             orderGoodsMapper.insert(orderGoods);
-
             // 减少相应商品的库存
             // 不调用updateInventory方法，省得插入又再查一次数据库
             HashMap<String, Integer> inventoryMap = new HashMap<>();
@@ -242,15 +296,11 @@ public class OrderServiceImpl implements OrderService {
             } else {
                 res = partSizeMapper.updateInventoryByPrimaryKey(inventoryMap);
             }
-
             if (res == 0) {
                 // 如果更新失败，说明库存不足
                 throw new InventoryNotEnoughException("商品库存不足--商品skuId：" + colorSizeId + ",是否是普通商品:" + whetherGoods + ",需要数量" + amount);
             }
         } // end for
-        // 删除购物车勾选项
-        cartService.deleteCartGoodsByIsChosen();
-        // 返回订单编号和openid
         return orderMap;
     }
 

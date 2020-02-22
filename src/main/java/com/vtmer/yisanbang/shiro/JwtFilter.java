@@ -52,7 +52,8 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
                 // 进行shiro的登录LoginRealm
                 allowed = executeLogin(request,response);
             } catch (IllegalStateException e) {
-                logger.error("Not Find Any Token");
+                logger.warn("Not find any token,may be token has expired or token is invalid");
+                return false;
             } catch (Exception e) {
                 logger.error("Error occurs when login",e);
             }
@@ -66,7 +67,16 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
     @Override
     protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) {
         String token = getAuthzHeader(request);
+        // 因为是先走shiro认证，再走JWT认证，在这里先要认证token的正确性，对了再去获取openid，否则会抛出异常
+        // com.auth0.jwt.exceptions.JWTDecodeException: The token was expected to have 3 parts, but got 1.
+        // 在这里有两种情况会返回false，一是token过期，二是token不正确，这两种的处理方案都是一致的，让用户去重新请求登录接口，获取新的token
+        boolean res = jwtUtil.verifyToken(token);
+        if (!res) {
+            // 如果token认证失败，直接返回null，进入isAccessAllowed（）的异常处理逻辑，抛出IllegalStateException异常并捕获
+            return null;
+        }
         String openId = jwtUtil.getOpenIdByToken(token);
+        System.out.println(token);
         logger.info("鉴权token为[{}]", token);
         if (StringUtils.isNotBlank(token))
             return new UsernamePasswordToken(openId, "123456");;
