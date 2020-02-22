@@ -104,6 +104,11 @@
     select id, sort_id, name, introduce, picture, lowest_price, highest_price, is_show, update_time
     from suit
   </select>
+    <select id="selectAllShowDto" resultMap="SuitMap">
+    select id, sort_id, name, introduce, picture, lowest_price, highest_price, is_show, update_time
+    from suit
+    where is_show = true 
+  </select>
     <select id="selectAllDtoBySortId" parameterType="java.lang.Integer" resultMap="SuitMap">
     select id, sort_id, name, introduce, picture, lowest_price, highest_price, is_show
     from suit

@@ -53,4 +53,6 @@ public interface GoodsMapper {
     int hideGoods(Integer goodsId);
 
     int showGoods(Integer goodsId);
+
+    List<GoodsDTO> selectAllShowDto();
 }

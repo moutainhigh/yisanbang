@@ -106,4 +106,11 @@ public class SuitServiceImpl implements SuitService {
         }
         return false;
     }
+
+    @Override
+    public List<SuitDTO> selectAllShow() {
+        List<SuitDTO> suitList = suitMapper.selectAllShowDto();
+        if (suitList != null && !suitList.isEmpty()) return suitList;
+        return null;
+    }
 }

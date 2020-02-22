@@ -124,4 +124,11 @@ public class GoodsServiceImpl implements GoodsService {
         if (goodsDtos != null && !goodsDtos.isEmpty()) return goodsDtos;
         return null;
     }
+
+    @Override
+    public List<GoodsDTO> selectAllShow() {
+        List<GoodsDTO> goodsDtos = goodsMapper.selectAllShowDto();
+        if (goodsDtos != null && !goodsDtos.isEmpty()) return goodsDtos;
+        return null;
+    }
 }

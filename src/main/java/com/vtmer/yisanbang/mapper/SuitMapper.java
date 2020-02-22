@@ -47,4 +47,6 @@ public interface SuitMapper {
     int hideSuit(Integer suitId);
 
     int showSuit(Integer suitId);
+
+    List<SuitDTO> selectAllShowDto();
 }

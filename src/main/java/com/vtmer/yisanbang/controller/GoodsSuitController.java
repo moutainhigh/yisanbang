@@ -43,8 +43,8 @@ public class GoodsSuitController {
                                               @ApiParam("单页数量")
                                               @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        List<GoodsDTO> goodsDTOS = goodsService.selectAllDto();
-        List<SuitDTO> suitDTOS = suitService.selectAll();
+        List<GoodsDTO> goodsDTOS = goodsService.selectAllShow();
+        List<SuitDTO> suitDTOS = suitService.selectAllShow();
         if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty()) {
             List<Object> list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, suitDTOS);
             if (list != null && !list.isEmpty()) {
@@ -61,8 +61,8 @@ public class GoodsSuitController {
                                                         @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
                                                         @ApiParam("单页数量")
                                                         @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
-        List<GoodsDTO> goodsDTOS = goodsService.selectAllDto();
-        List<SuitDTO> suitDTOS = suitService.selectAll();
+        List<GoodsDTO> goodsDTOS = goodsService.selectAllShow();
+        List<SuitDTO> suitDTOS = suitService.selectAllShow();
         PageHelper.startPage(pageNum, pageSize);
         if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty()) {
             List<Object> list = goodsAndSuitService.selectGoodsAndSuitByPriceAsc(goodsDTOS, suitDTOS);
@@ -80,8 +80,8 @@ public class GoodsSuitController {
                                                         @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
                                                         @ApiParam("单页数量")
                                                         @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
-        List<GoodsDTO> goodsDTOS = goodsService.selectAllDto();
-        List<SuitDTO> suitDTOS = suitService.selectAll();
+        List<GoodsDTO> goodsDTOS = goodsService.selectAllShow();
+        List<SuitDTO> suitDTOS = suitService.selectAllShow();
         PageHelper.startPage(pageNum, pageSize);
         if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty()) {
             List<Object> list = goodsAndSuitService.selectGoodsAndSuitByPriceDec(goodsDTOS, suitDTOS);
@@ -99,8 +99,8 @@ public class GoodsSuitController {
                                                         @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
                                                         @ApiParam("单页数量")
                                                         @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
-        List<GoodsDTO> goodsDTOS = goodsService.selectAllDto();
-        List<SuitDTO> suitDTOS = suitService.selectAll();
+        List<GoodsDTO> goodsDTOS = goodsService.selectAllShow();
+        List<SuitDTO> suitDTOS = suitService.selectAllShow();
         PageHelper.startPage(pageNum, pageSize);
         if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty()) {
             List<Object> list = goodsAndSuitService.selectGoodsAndSuitByTimeAsc(goodsDTOS, suitDTOS);
@@ -118,8 +118,8 @@ public class GoodsSuitController {
                                                        @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
                                                        @ApiParam("单页数量")
                                                        @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
-        List<GoodsDTO> goodsDTOS = goodsService.selectAllDto();
-        List<SuitDTO> suitDTOS = suitService.selectAll();
+        List<GoodsDTO> goodsDTOS = goodsService.selectAllShow();
+        List<SuitDTO> suitDTOS = suitService.selectAllShow();
         PageHelper.startPage(pageNum, pageSize);
         if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty()) {
             List<Object> list = goodsAndSuitService.selectGoodsAndSuitByTimeDec(goodsDTOS, suitDTOS);

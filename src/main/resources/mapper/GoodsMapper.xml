@@ -101,6 +101,11 @@
     select id, sort_id, name, introduce, picture, price, is_show, update_time
     from goods
   </select>
+  <select id="selectAllShowDto" resultMap="GoodsMap">
+    select id, sort_id, name, introduce, picture, price, is_show, update_time
+    from goods
+    where is_show = true
+  </select>
     <select id="selectAllDtoBySort" parameterType="java.lang.Integer" resultMap="GoodsMap">
     select id, sort_id, name, introduce, picture, price, is_show
     from goods
