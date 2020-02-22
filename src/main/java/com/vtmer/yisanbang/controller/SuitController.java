@@ -146,9 +146,6 @@ public class SuitController {
     public ResponseMessage updateSuit(@ApiParam(name = "套装Dto实体类", value = "传入Json格式", required = true)
                                       @RequestBody
                                       @Validated(Update.class) SuitDTO suitDto) {
-        List<SuitDTO> suitDtoList = suitService.selectAll();
-        boolean judgeFlag = suitService.judgeSuit(suitDto, suitDtoList);
-        if (judgeFlag) return ResponseMessage.newErrorInstance("该套装名称已经存在");
         SuitDTO suit = suitService.selectSuitById(suitDto.getId());
         if (suit != null) {
             boolean updateFlag = suitService.updateSuitById(suitDto);
