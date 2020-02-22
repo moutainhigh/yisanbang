@@ -55,7 +55,6 @@ public class GlobalExceptionHandler {
         assert fieldError != null;
         logger.info("参数校验异常:{}({})", fieldError.getDefaultMessage(),fieldError.getField());
         return ResponseMessage.newErrorInstance(fieldError.getDefaultMessage());
-
     }
 
     @ExceptionHandler(BindException.class)
@@ -69,5 +68,6 @@ public class GlobalExceptionHandler {
         logger.info("参数校验异常:{}", ex.getMessage());
         return ResponseMessage.newErrorInstance(ex.getMessage());
     }
+
 
 }

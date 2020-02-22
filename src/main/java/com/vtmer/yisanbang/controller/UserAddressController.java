@@ -30,7 +30,7 @@ public class UserAddressController {
      * */
     @GetMapping("/listUserAddress/{id}")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @ApiOperation(value = "根据用户id查看该用户的所有地址")
     public ResponseMessage listUserAddress(@ApiParam(name = "userId", value = "用户Id", required = true)
@@ -51,7 +51,7 @@ public class UserAddressController {
      * */
     @PostMapping("/addUserAddress")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @ApiOperation(value = "添加用户地址")
     public ResponseMessage insertUserAddress(@ApiParam(name = "用户地址Dto实体类", value = "传入Json格式", required = true)
@@ -72,7 +72,7 @@ public class UserAddressController {
      * */
     @PutMapping("/updateUserAddress")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @ApiOperation(value = "根据用户地址id更新该地址")
     public ResponseMessage updateUserAddress(@ApiParam(name = "用户地址Dto实体类", value = "传入Json格式", required = true)
@@ -108,7 +108,7 @@ public class UserAddressController {
      * */
     @DeleteMapping("/deleteUserAddress")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @ApiOperation(value = "根据用户地址id删除地址")
     public ResponseMessage deleteUserAddress(@ApiParam(name = "用户地址Dto实体类", value = "传入Json格式", required = true)
@@ -143,7 +143,7 @@ public class UserAddressController {
      * */
     @GetMapping("/defaultUserAddress/{id}")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @ApiOperation(value = "根据用户id查看该用户的默认地址")
     public ResponseMessage selectDefaultUserAddress(@ApiParam(name = "userId", value = "用户Id", required = true)
@@ -164,7 +164,7 @@ public class UserAddressController {
      * */
     @PutMapping("/changeDefaultUserAddress")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @ApiOperation(value = "改变用户默认地址")
     public ResponseMessage changeDefaultUserAddress(@ApiParam(name = "用户地址Dto实体类", value = "传入Json格式", required = true)

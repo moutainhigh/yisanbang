@@ -70,25 +70,16 @@ public class JwtUtil {
         try {
             // 根据token解密，解密出jwt-id，先从redis中查出redisToken，判断是否相同
             String redisToken = (String) redisTemplate.opsForValue().get("JWT-SESSION-" + getJwtIdByToken(token));
-            if (!redisToken.equals(token)) {
+            if (redisToken!=null) {
+                if (!redisToken.equals(token)) {
+                    return false;
+                }
+            } else {
+                // 查询不到token，说明token过期或者是token有误
                 return false;
             }
-            // 获取算法相同的JWTVerifier
-            Algorithm algorithm = Algorithm.HMAC256(TOKEN_SECRET);
-            JWTVerifier verifier = JWT.require(algorithm)
-                    .withClaim("userId",getUserIdByToken(redisToken.toString()))
-                    .withClaim("openId", getOpenIdByToken(redisToken.toString()))
-                    .withClaim("sessionKey", getSessionKeyByToken(redisToken.toString()))
-                    .withClaim("jwt-id", getJwtIdByToken(redisToken.toString()))
-                    // JWT续期
-                    .acceptExpiresAt(System.currentTimeMillis() + EXPIRE_TIME)
-                    .build();
-            // 验证token
-            logger.info("开始验证token");
-            verifier.verify(redisToken);
-            System.out.println(redisToken);
-            // 续期redis中缓存的JWT
-            redisTemplate.opsForValue().set("JWT-SESSION-" + getJwtIdByToken(token), redisToken, EXPIRE_TIME, TimeUnit.SECONDS);
+            // 效验token
+            acceptExpiresAt(redisToken);
             return true;
         // 捕捉到任何异常均视为校验失败
         } catch (Exception e) {
@@ -96,6 +87,25 @@ public class JwtUtil {
         }
     }
 
+    /**
+     * JWT、token续期
+     */
+    public void acceptExpiresAt(String token) {
+        // 获取算法相同的JWTVerifier
+        Algorithm algorithm = Algorithm.HMAC256(TOKEN_SECRET);
+        JWTVerifier verifier = JWT.require(algorithm)
+                .withClaim("userId",getUserIdByToken(token))
+                .withClaim("openId", getOpenIdByToken(token))
+                .withClaim("sessionKey", getSessionKeyByToken(token))
+                .withClaim("jwt-id", getJwtIdByToken(token))
+                // JWT续期
+                .acceptExpiresAt(System.currentTimeMillis() + EXPIRE_TIME)
+                .build();
+        // 验证token
+        verifier.verify(token);
+        // 续期redis中缓存的JWT
+        redisTemplate.opsForValue().set("JWT-SESSION-" + getJwtIdByToken(token), token, EXPIRE_TIME, TimeUnit.SECONDS);
+    }
     /**
      * 根据token获取jwt-id
      */

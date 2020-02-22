@@ -37,7 +37,7 @@ public class CollectionController {
      */
     @RequestLog(module = "收藏夹", operationDesc = "添加商品到收藏夹")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @ApiOperation(value = "添加商品到收藏夹")
     @PostMapping("/insert")
@@ -64,7 +64,7 @@ public class CollectionController {
      */
     @RequestLog(module = "收藏夹", operationDesc = "批量删除收藏夹中的商品")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @ApiOperation(value = "批量删除收藏商品")
     @DeleteMapping("/delete")
@@ -95,7 +95,7 @@ public class CollectionController {
      */
     @RequestLog(module = "收藏夹", operationDesc = "获取用户收藏商品列表")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @ApiOperation(value = "获取用户收藏商品列表")
     @GetMapping("/get")

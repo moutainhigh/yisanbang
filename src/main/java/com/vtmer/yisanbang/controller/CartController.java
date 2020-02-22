@@ -40,7 +40,7 @@ public class CartController {
      */
     @RequestLog(module = "购物车",operationDesc = "获取用户购物车商品列表")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @ApiOperation(value = "获取用户的购物车商品列表")
     @GetMapping("/listCartGoods")
@@ -60,7 +60,7 @@ public class CartController {
      */
     @RequestLog(module = "购物车",operationDesc = "添加商品进入购物车")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @ApiOperation(value = "添加商品进入购物车")
     @PostMapping("/addCartGoods")
@@ -76,7 +76,7 @@ public class CartController {
      */
     @RequestLog(module = "购物车",operationDesc = "更新购物车商品勾选")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @ApiOperation(value = "更新购物车勾选",notes = "每次用户(取消)勾选请求该接口")
     @PutMapping("/updateChosen")
@@ -98,7 +98,7 @@ public class CartController {
      */
     @RequestLog(module = "购物车",operationDesc = "购物车商品增加1或删减1")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @ApiOperation(value = "购物车商品增加1或删减1",notes = "用于购物车中+ -按钮，+ amount传1，- amount传-1")
     @PutMapping("/addOrSubtractAmount")
@@ -120,7 +120,7 @@ public class CartController {
      */
     @RequestLog(module = "购物车",operationDesc = "购物车修改商品数量")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @ApiOperation(value = "直接修改购物车某件商品的数量",notes = "amount传修改数量")
     @PutMapping("/updateAmount")
@@ -142,7 +142,7 @@ public class CartController {
      */
     @RequestLog(module = "购物车",operationDesc = "批量删除购物车商品")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @ApiOperation(value = "批量删除购物车商品")
     @DeleteMapping("/deleteCartGoods")

@@ -27,11 +27,10 @@ public class TokenInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         response.setCharacterEncoding("utf-8");
-        String token = request.getHeader("accessToken");
+        String token = request.getHeader("Authorization");
         if(null != token) {
             // 验证token是否正确
             boolean flag = jwtUtil.verifyToken(token);
-            System.out.println(flag);
             if (flag) {
                 logger.info("验证token成功，开始设置user对象进线程域");
                 t1.set(jwtUtil.getUserInfoByToken(token));
@@ -46,7 +45,6 @@ public class TokenInterceptor implements HandlerInterceptor {
 
     public static User getLoginUser() {
         User user = t1.get();
-        t1.remove();
         return user;
     }
 
