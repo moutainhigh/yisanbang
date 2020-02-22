@@ -20,6 +20,7 @@ import com.vtmer.yisanbang.domain.User;
 import com.vtmer.yisanbang.dto.CartOrderDTO;
 import com.vtmer.yisanbang.dto.DeliverGoodsDTO;
 import com.vtmer.yisanbang.dto.OrderDTO;
+import com.vtmer.yisanbang.dto.OrderGoodsDTO;
 import com.vtmer.yisanbang.service.OrderService;
 import com.vtmer.yisanbang.vo.UpdateUserAddressVo;
 import io.swagger.annotations.*;
@@ -31,10 +32,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.util.List;
 import java.util.Map;
 
@@ -58,13 +56,13 @@ public class OrderController {
      * 点击去结算，显示确认订单页面
      * @return
      */
-    @RequestLog(module = "订单", operationDesc = "确认订单")
+    @RequestLog(module = "订单", operationDesc = "确认购物车订单")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
-    @ApiOperation(value = "确认订单", notes = "点击去结算，显示确认订单页面")
-    @GetMapping("confirmOrder")
-    public ResponseMessage<OrderDTO> confirmOrder() {
+    @ApiOperation(value = "确认购物车订单", notes = "点击去结算，显示确认订单页面")
+    @GetMapping("confirmCartOrder")
+    public ResponseMessage<OrderDTO> confirmCartOrder() {
         OrderDTO orderDTO;
         try {
             orderDTO = orderService.confirmCartOrder();
@@ -72,6 +70,17 @@ public class OrderController {
             throw new ApiCartEmptyException(e.getMessage());
         }
         return ResponseMessage.newSuccessInstance(orderDTO, "获取确认订单相关信息成功");
+    }
+
+    @RequestLog(module = "订单", operationDesc = "确认[直接购买]订单")
+    @GetMapping("confirmDirectOrder")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
+    })
+    @ApiOperation(value = "确认[直接购买]订单", notes = "点击[直接购买]，显示确认订单页面")
+    public ResponseMessage<OrderDTO> confirmDirectOrder(@RequestBody @NotEmpty(message = "订单集合为空") List<OrderGoodsDTO> orderGoodsDTOList) {
+        OrderDTO orderDTO = orderService.confirmDirectOrder(orderGoodsDTOList);
+        return ResponseMessage.newSuccessInstance(orderDTO,"获取确认订单相关信息成功");
     }
 
 

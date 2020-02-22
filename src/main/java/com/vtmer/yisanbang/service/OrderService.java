@@ -12,6 +12,8 @@ public interface OrderService {
 
     OrderDTO confirmCartOrder();
 
+    OrderDTO confirmDirectOrder(List<OrderGoodsDTO> orderGoodsDTOList);
+
     Map<String,String> createCartOrder(CartOrderDTO cartOrderDTO);
 
     /**

@@ -23,10 +23,10 @@ public class OrderDTO extends CartOrderDTO{
     private UserAddress userAddress;
 
     @ApiModelProperty(value = "优惠后总价",name = "totalPrice",required = true,example = "250")
-    private double totalPrice;
+    private Double totalPrice;
 
     @ApiModelProperty(value = "优惠前总价",readOnly = true,example = "520")
-    private double beforeTotalPrice;
+    private Double beforeTotalPrice;
 
     @ApiModelProperty(value = "订单商品列表",name = "cartGoodsList",required = true)
     private List<OrderGoodsDTO> orderGoodsDTOList;

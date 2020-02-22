@@ -129,6 +129,31 @@ public class OrderServiceImpl implements OrderService {
         return orderDTO;
     }
 
+    @Override
+    public OrderDTO confirmDirectOrder(List<OrderGoodsDTO> orderGoodsDTOList) {
+        Integer userId = TokenInterceptor.getLoginUser().getId();
+        OrderDTO orderDTO = new OrderDTO();
+        // 优惠前总价
+        double beforeTotalPrice = 0;
+        // 优惠后总价
+        double totalPrice = 0;
+        for (OrderGoodsDTO orderGoodsDTO : orderGoodsDTOList) {
+            Integer sizeId = orderGoodsDTO.getColorSizeId();
+            Boolean whetherGoods = orderGoodsDTO.getWhetherGoods();
+            // 设置商品属性
+            setOrderGoodsDTO(orderGoodsDTO,sizeId,whetherGoods);
+            beforeTotalPrice += orderGoodsDTO.getAmount() * orderGoodsDTO.getPrice();
+            totalPrice += orderGoodsDTO.getAfterTotalPrice();
+        }
+        orderDTO.setBeforeTotalPrice(beforeTotalPrice);
+        orderDTO.setTotalPrice(totalPrice);
+        orderDTO.setOrderGoodsDTOList(orderGoodsDTOList);
+        UserAddress userAddress = userAddressMapper.selectDefaultByUserId(userId);
+        orderDTO.setUserAddress(userAddress);
+        return orderDTO;
+    }
+
+
     /**
      * create shopping cart order after users submit order
      *
