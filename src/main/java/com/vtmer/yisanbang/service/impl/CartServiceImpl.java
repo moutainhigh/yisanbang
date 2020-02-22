@@ -323,6 +323,9 @@ public class CartServiceImpl implements CartService {
         return true;
     }
 
+    /**
+     * 购物车数据持久化到数据库
+     */
     @Override
     @Transactional
     public void cartDataPersistence() {

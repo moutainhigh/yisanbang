@@ -15,7 +15,7 @@ import java.util.List;
 
 @Data
 @ApiModel
-public class OrderDTO extends CartOrderDTO{
+public class OrderDTO extends CreateOrderDTO {
 
     @Valid
     @NotNull(groups = {Insert.class,Update.class},message = "用户地址信息为空")
