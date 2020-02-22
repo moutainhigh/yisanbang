@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: dev
+    active: test
   jackson:
     time-zone: GMT+8
   datasource:
@@ -71,9 +71,6 @@ mybatis:
   mapper-locations: classpath:mapper/*.xml
 
 logging:
-  level:
-    ROOT: info
-    com.example: trace
   file:
     name: target/yourlog.log
 
@@ -90,7 +87,6 @@ wx:
   applet:
     appid: wx447bdd8f7d850c06
     appsecret: 1f8dc966cc30761d60394178a5d58301
-
 pagehelper:
   helper-dialect: mysql
   reasonable: true
@@ -102,9 +98,6 @@ server:
     context-path: /
   max-http-header-size: 81920 # 修改请求头允许的最大值
 
-swagger:
-  host: 119.3.254.171:8088
-  show: true
 
 
 
