@@ -8,6 +8,9 @@ public interface UserAddressService {
     // 查看所有地址
     List<UserAddressDTO> selectUserAddressByUserId(Integer userId);
 
+    // 查看所有地址——通过token获取userId
+    List<UserAddressDTO> selectUserAddressByToken();
+
     // 添加地址时查看是否存在该地址
     public boolean JudegAddressContent(UserAddressDTO userAddress, List<UserAddressDTO> userAdressDtos);
 

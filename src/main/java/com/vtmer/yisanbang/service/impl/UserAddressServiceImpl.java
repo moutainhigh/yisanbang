@@ -1,5 +1,6 @@
 package com.vtmer.yisanbang.service.impl;
 
+import com.vtmer.yisanbang.common.TokenInterceptor;
 import com.vtmer.yisanbang.dto.UserAddressDTO;
 import com.vtmer.yisanbang.mapper.UserAddressMapper;
 import com.vtmer.yisanbang.service.UserAddressService;
@@ -16,6 +17,13 @@ public class UserAddressServiceImpl implements UserAddressService {
     @Override
     // 查看所有地址
     public List<UserAddressDTO> selectUserAddressByUserId(Integer userId) {
+        return userAddressMapper.selectAllByUserId(userId);
+    }
+
+    @Override
+    // 通过Token
+    public List<UserAddressDTO> selectUserAddressByToken() {
+        Integer userId = TokenInterceptor.getLoginUser().getId();
         return userAddressMapper.selectAllByUserId(userId);
     }
 
