@@ -1,5 +1,7 @@
 package com.vtmer.yisanbang.dto;
 
+import com.vtmer.yisanbang.common.valid.group.Insert;
+import com.vtmer.yisanbang.common.valid.group.Update;
 import com.vtmer.yisanbang.domain.UserAddress;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -16,7 +18,7 @@ import javax.validation.constraints.NotNull;
 public class CreateOrderDTO {
 
     @Valid
-    @NotNull(message = "用户地址信息为空")
+    @NotNull(message = "用户地址信息为空",groups = {Insert.class, Update.class})
     @ApiModelProperty(value = "用户默认收货地址信息",required = true,example = "广东工业大学教学三号楼创客基地E102")
     private UserAddress userAddress;
 
