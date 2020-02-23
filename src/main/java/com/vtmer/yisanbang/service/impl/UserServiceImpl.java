@@ -87,8 +87,8 @@ public class UserServiceImpl implements UserService {
         if (!"0".equals(response.getErrcode())) {
             throw new Code2SessionException("code2session失败：" + response.getErrmsg());
         } else {
-            String openid = "oSWGq5VifPgfIIF7eHFjNh9GEr_g";
-            String sessionKey = "ZSjsKPKv+xRqOoahLTgpCQ==";
+            String openid = response.getOpenid();
+            String sessionKey = response.getSession_key();
             // 查询数据库是否存在该微信用户
             User user = userMapper.selectUserByOpenId(openid);
             User newUser = new User();
