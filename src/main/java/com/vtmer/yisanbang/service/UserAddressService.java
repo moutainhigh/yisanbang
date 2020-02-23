@@ -29,6 +29,9 @@ public interface UserAddressService {
     // 寻找默认地址
     public UserAddressDTO selectDefaultUserAddress(Integer userId);
 
+    // 寻找默认地址
+    public UserAddressDTO selectDefaultUserAddressByToken();
+
     // 改变默认地址
     public boolean changeDefaultUserAddress(UserAddressDTO oldUserAddress, UserAddressDTO newUserAddress);
 }

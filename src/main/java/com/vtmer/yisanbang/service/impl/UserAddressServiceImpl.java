@@ -61,6 +61,17 @@ public class UserAddressServiceImpl implements UserAddressService {
     }
 
     @Override
+    public UserAddressDTO selectDefaultUserAddressByToken() {
+        Integer userId = TokenInterceptor.getLoginUser().getId();
+        List<UserAddressDTO> userAddressDtos = userAddressMapper.selectAllByUserId(userId);
+        for (UserAddressDTO addressDto : userAddressDtos) {
+            if (addressDto.getIsDefault())
+                return addressDto;
+        }
+        return null;
+    }
+
+    @Override
     // 改变默认地址
     public boolean changeDefaultUserAddress(UserAddressDTO oldUserAddress, UserAddressDTO newUserAddress) {
         UserAddressDTO address = userAddressMapper.selectDtoByPrimaryKey(oldUserAddress.getId());
