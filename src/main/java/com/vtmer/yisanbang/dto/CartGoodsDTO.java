@@ -32,7 +32,7 @@ public class CartGoodsDTO {
     @Min(value = -1,groups = {Update.class},message = "修改最小值只能为-1")
     @Max(value = 1,groups = {Update.class},message = "修改最大值只能为1")
     @Min(value = 1,groups = {Insert.class},message = "插入的最小值只能为1")
-    @ApiModelProperty(value = "商品数量",example = "6")
+    @ApiModelProperty(value = "商品数量",example = "6",required = true)
     private Integer amount;
 
     @ApiModelProperty(hidden = true,value = "更新时间",example = "147515314")

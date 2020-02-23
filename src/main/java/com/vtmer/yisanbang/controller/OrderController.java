@@ -13,11 +13,14 @@ import com.vtmer.yisanbang.common.TokenInterceptor;
 import com.vtmer.yisanbang.common.annotation.RequestLog;
 import com.vtmer.yisanbang.common.exception.api.ApiException;
 import com.vtmer.yisanbang.common.exception.api.order.*;
+import com.vtmer.yisanbang.common.exception.service.cart.OrderGoodsCartGoodsNotMatchException;
 import com.vtmer.yisanbang.common.exception.service.order.*;
 import com.vtmer.yisanbang.common.valid.group.Insert;
 import com.vtmer.yisanbang.domain.Order;
 import com.vtmer.yisanbang.domain.User;
-import com.vtmer.yisanbang.dto.*;
+import com.vtmer.yisanbang.dto.DeliverGoodsDTO;
+import com.vtmer.yisanbang.dto.OrderDTO;
+import com.vtmer.yisanbang.dto.OrderGoodsDTO;
 import com.vtmer.yisanbang.service.OrderService;
 import com.vtmer.yisanbang.vo.UpdateUserAddressVo;
 import io.swagger.annotations.*;
@@ -51,6 +54,7 @@ public class OrderController {
 
     /**
      * 点击去结算，显示确认订单页面
+     *
      * @return
      */
     @RequestLog(module = "订单", operationDesc = "确认购物车订单")
@@ -77,7 +81,7 @@ public class OrderController {
     @ApiOperation(value = "确认[直接购买]订单", notes = "点击[直接购买]，显示确认订单页面")
     public ResponseMessage<OrderDTO> confirmDirectOrder(@RequestBody @NotEmpty(message = "订单集合为空") List<OrderGoodsDTO> orderGoodsDTOList) {
         OrderDTO orderDTO = orderService.confirmDirectOrder(orderGoodsDTOList);
-        return ResponseMessage.newSuccessInstance(orderDTO,"获取确认订单相关信息成功");
+        return ResponseMessage.newSuccessInstance(orderDTO, "获取确认订单相关信息成功");
     }
 
     @RequestLog(module = "订单", operationDesc = "创建[直接购买]类订单")
@@ -86,10 +90,10 @@ public class OrderController {
     })
     @ApiOperation(value = "创建[直接购买]类订单", notes = "用户从商品页面选择直接购买确认订单，点击提交订单后调用,若是订单中的某件商品数量超过库存，会返回【库存不足】的提示，返回订单编号和用户openid")
     @PostMapping("/insertDirectOrder")
-    public ResponseMessage insertDirectOrder(@RequestBody @Validated({Insert.class}) CreateDirectOrderDTO createDirectOrderDTO) {
+    public ResponseMessage insertDirectOrder(@RequestBody @Validated({Insert.class}) OrderDTO orderDTO) {
         Map<String, String> orderMap;
         try {
-            orderMap = orderService.createCartOrder(createDirectOrderDTO);
+            orderMap = orderService.createDirectOrder(orderDTO);
         } catch (InventoryNotEnoughException e) {
             throw new ApiInventoryNotEnoughException(e.getMessage());
         } catch (OrderPriceNotMatchException e) {
@@ -99,9 +103,11 @@ public class OrderController {
         }
         return ResponseMessage.newSuccessInstance(orderMap, "创建订单成功，返回订单编号和openId");
     }
+
     /**
-     * 创建订单
-     * @param createOrderDTO：留言，用户收货地址，邮费
+     * 创建购物车类订单
+     *
+     * @param orderDTO：留言，用户收货地址，邮费
      * @return
      */
     @RequestLog(module = "订单", operationDesc = "创建购物车类订单")
@@ -110,12 +116,16 @@ public class OrderController {
     })
     @ApiOperation(value = "创建购物车订单", notes = "用户从购物车页面确认订单，点击提交订单后调用,若是订单中的某件商品数量超过库存，会返回【库存不足】的提示，返回订单编号和用户openid")
     @PostMapping("/insertCartOrder")
-    public ResponseMessage insertCartOrder(@RequestBody @Validated CreateOrderDTO createOrderDTO) {
+    public ResponseMessage insertCartOrder(@RequestBody @Validated({Insert.class}) OrderDTO orderDTO) {
         Map<String, String> orderMap;
         try {
-            orderMap = orderService.createCartOrder(createOrderDTO);
+            orderMap = orderService.createCartOrder(orderDTO);
         } catch (InventoryNotEnoughException e) {
             throw new ApiInventoryNotEnoughException(e.getMessage());
+        } catch (OrderGoodsCartGoodsNotMatchException e) {
+            throw new ApiOrderGoodsCartGoodsNotMatchException(e.getMessage());
+        } catch (OrderPriceNotMatchException e) {
+            throw new ApiOrderPriceNotMatchException(e.getMessage());
         } catch (Exception e) {
             throw new ApiException(e);
         }
@@ -124,6 +134,7 @@ public class OrderController {
 
     /**
      * 通过订单号进行微信支付
+     *
      * @param orderNumber：orderNumber订单号
      * @return 返回前端调起微信支付所需的支付参数（5个参数和sign）
      */
@@ -183,6 +194,7 @@ public class OrderController {
 
     /**
      * 支付回调通知处理
+     *
      * @param xmlData 相关支付结果及用户信息(微信端提供)
      * @return 向微信服务端返回应答
      * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--申请退款(待商家处理) 5--退款中(待商家收货) 6--退款成功 7--退款失败 8--交易关闭 9--所有订单
@@ -246,6 +258,7 @@ public class OrderController {
     /**
      * 列出用户相关状态所有订单
      * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
+     *
      * @param status：订单状态标识
      * @return
      */
@@ -291,6 +304,7 @@ public class OrderController {
      * 订单状态自增修改，适用于待付款、待发货、待收货类订单
      * 订单状态定义：status 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 0--待付款 1--待发货 2--待收货 状态订单 更新订单状态
+     *
      * @param orderNumber:订单编号
      * @return
      */
@@ -321,6 +335,7 @@ public class OrderController {
      * 设置订单状态 —— 适用于已完成、交易关闭订单（该接口貌似没用emm）
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 非 0--待付款 1--待发货 2--待收货 状态订单 设置订单状态
+     *
      * @param orderMap —— orderId、status
      * @return
      */
@@ -346,6 +361,7 @@ public class OrderController {
 
     /**
      * 删除订单，暂时无用，用户没有删除订单按钮emm
+     *
      * @param orderId：订单id
      * @return
      */
@@ -373,6 +389,7 @@ public class OrderController {
 
     /**
      * 根据订单编号设置快递编号
+     *
      * @param deliverGoodsDTO:orderNumber and courierNumber
      * @return
      */
@@ -396,6 +413,7 @@ public class OrderController {
 
     /**
      * 在未发货之前用户修改地址接口
+     *
      * @param updateUserAddressVo:用户地址UserAddress、订单编号orderNumber
      * @return
      */
@@ -425,6 +443,7 @@ public class OrderController {
 
     /**
      * 取消订单接口
+     *
      * @param orderNumber：订单编号
      * @return
      */
