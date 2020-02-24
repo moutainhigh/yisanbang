@@ -1,6 +1,5 @@
 package com.vtmer.yisanbang.service.impl;
 
-import com.vtmer.yisanbang.common.TokenInterceptor;
 import com.vtmer.yisanbang.common.exception.service.order.OrderAndUserNotMatchException;
 import com.vtmer.yisanbang.common.exception.service.order.OrderNotFoundException;
 import com.vtmer.yisanbang.common.exception.service.refund.DuplicateApplyRefundException;
@@ -16,6 +15,7 @@ import com.vtmer.yisanbang.mapper.RefundGoodsMapper;
 import com.vtmer.yisanbang.mapper.RefundMapper;
 import com.vtmer.yisanbang.service.OrderService;
 import com.vtmer.yisanbang.service.RefundService;
+import com.vtmer.yisanbang.shiro.JwtFilter;
 import com.vtmer.yisanbang.vo.RefundVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +54,7 @@ public class RefundServiceImpl implements RefundService {
     @Override
     @Transactional
     public void applyForRefund(RefundDTO refundDTO) {
-        Integer userId = TokenInterceptor.getLoginUser().getId();
+        Integer userId = JwtFilter.getLoginUser().getId();
         Refund refund = refundDTO.getRefund();
         Integer orderId = refund.getOrderId();
         Order order = orderMapper.selectByPrimaryKey(orderId);
@@ -270,7 +270,7 @@ public class RefundServiceImpl implements RefundService {
      */
     @Transactional
     public void deleteByRefundNumber(String refundNumber) {
-        Integer userId = TokenInterceptor.getLoginUser().getId();
+        Integer userId = JwtFilter.getLoginUser().getId();
         Refund refund = refundMapper.selectByRefundNumber(refundNumber);
         if (refund == null) {
             throw new RefundNotFoundException();
@@ -342,7 +342,7 @@ public class RefundServiceImpl implements RefundService {
 
     @Override
     public void insertRefundExpress(RefundExpress refundExpress) {
-        Integer userId = TokenInterceptor.getLoginUser().getId();
+        Integer userId = JwtFilter.getLoginUser().getId();
         Refund refund = selectByPrimaryKey(refundExpress.getRefundId());
         if (refund == null) {
             throw new RefundNotFoundException();

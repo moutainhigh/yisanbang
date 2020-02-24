@@ -1,6 +1,5 @@
 package com.vtmer.yisanbang.service.impl;
 
-import com.vtmer.yisanbang.common.TokenInterceptor;
 import com.vtmer.yisanbang.common.exception.service.collection.CollectionExistException;
 import com.vtmer.yisanbang.common.exception.service.collection.CollectionNotFoundException;
 import com.vtmer.yisanbang.common.exception.service.collection.CommodityNotExistException;
@@ -12,6 +11,7 @@ import com.vtmer.yisanbang.mapper.CollectionMapper;
 import com.vtmer.yisanbang.mapper.GoodsMapper;
 import com.vtmer.yisanbang.mapper.SuitMapper;
 import com.vtmer.yisanbang.service.CollectionService;
+import com.vtmer.yisanbang.shiro.JwtFilter;
 import com.vtmer.yisanbang.vo.CollectionVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,7 +36,7 @@ public class CollectionServiceImpl implements CollectionService {
      */
     @Override
     public void delete(List<Integer> collectionIdList) {
-        Integer userId = TokenInterceptor.getLoginUser().getId();
+        Integer userId = JwtFilter.getLoginUser().getId();
         for (Integer collectionId : collectionIdList) {
             Collection collection = collectionMapper.selectByPrimaryKey(collectionId);
             if (collection == null) {
@@ -55,7 +55,7 @@ public class CollectionServiceImpl implements CollectionService {
 
     @Override
     public void insertOne(Collection collection) {
-        int userId = TokenInterceptor.getLoginUser().getId();
+        int userId = JwtFilter.getLoginUser().getId();
         Integer goodsId = collection.getGoodsId();
         Boolean whetherGoods = collection.getWhetherGoods();
         Object checkExist;
@@ -83,7 +83,7 @@ public class CollectionServiceImpl implements CollectionService {
 
     @Override
     public List<CollectionVo> selectAllByUserId() {
-        Integer userId = TokenInterceptor.getLoginUser().getId();
+        Integer userId = JwtFilter.getLoginUser().getId();
         // 查询出goodsId、isGoods 集合
         List<Collection> collectionList = collectionMapper.selectAllByUserId(userId);
 

@@ -1,13 +1,13 @@
 package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
-import com.vtmer.yisanbang.common.TokenInterceptor;
 import com.vtmer.yisanbang.common.valid.group.Delete;
 import com.vtmer.yisanbang.common.valid.group.Update;
 import com.vtmer.yisanbang.domain.User;
 import com.vtmer.yisanbang.dto.UserAddressDTO;
 import com.vtmer.yisanbang.service.UserAddressService;
 import com.vtmer.yisanbang.service.UserService;
+import com.vtmer.yisanbang.shiro.JwtFilter;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -35,7 +35,7 @@ public class UserAddressController {
     })
     @ApiOperation(value = "根据用户id查看该用户的所有地址")
     public ResponseMessage listUserAddress() {
-        Integer userId = TokenInterceptor.getLoginUser().getId();
+        Integer userId = JwtFilter.getLoginUser().getId();
         User user = userService.selectByPrimaryKey(userId);
         List<UserAddressDTO> UserAdressDto = userAddressService.selectUserAddressByUserId(userId);
         if (user == null) {
@@ -148,12 +148,8 @@ public class UserAddressController {
     })
     @ApiOperation(value = "根据用户id查看该用户的默认地址")
     public ResponseMessage selectDefaultUserAddress() {
-        Integer userId = TokenInterceptor.getLoginUser().getId();
-        User user = userService.selectByPrimaryKey(userId);
         UserAddressDTO addressDto = userAddressService.selectDefaultUserAddressByToken();
-        if (user == null) {
-            return ResponseMessage.newErrorInstance("该用户id错误");
-        } else if (addressDto == null) {
+        if (addressDto == null) {
             return ResponseMessage.newErrorInstance("无默认地址");
         } else {
             return ResponseMessage.newSuccessInstance(addressDto, "查找成功");

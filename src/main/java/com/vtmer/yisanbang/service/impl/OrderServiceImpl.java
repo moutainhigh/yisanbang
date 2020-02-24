@@ -3,7 +3,6 @@ package com.vtmer.yisanbang.service.impl;
 import com.github.binarywang.wxpay.bean.result.WxPayOrderQueryResult;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
-import com.vtmer.yisanbang.common.TokenInterceptor;
 import com.vtmer.yisanbang.common.exception.service.cart.OrderGoodsCartGoodsNotMatchException;
 import com.vtmer.yisanbang.common.exception.service.order.*;
 import com.vtmer.yisanbang.common.util.OrderNumberUtil;
@@ -15,6 +14,7 @@ import com.vtmer.yisanbang.mapper.*;
 import com.vtmer.yisanbang.service.CartService;
 import com.vtmer.yisanbang.service.OrderService;
 import com.vtmer.yisanbang.service.RefundService;
+import com.vtmer.yisanbang.shiro.JwtFilter;
 import com.vtmer.yisanbang.vo.CartVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -99,7 +99,7 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     public OrderDTO confirmCartOrder() {
-        Integer userId = TokenInterceptor.getLoginUser().getId();
+        Integer userId = JwtFilter.getLoginUser().getId();
         setPostage();
         OrderDTO orderDTO = new OrderDTO();
         // 获取用户购物车清单
@@ -131,7 +131,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDTO confirmDirectOrder(List<OrderGoodsDTO> orderGoodsDTOList) {
-        Integer userId = TokenInterceptor.getLoginUser().getId();
+        Integer userId = JwtFilter.getLoginUser().getId();
         OrderDTO orderDTO = new OrderDTO();
         // 优惠前总价
         double beforeTotalPrice = 0;
@@ -253,7 +253,7 @@ public class OrderServiceImpl implements OrderService {
         UserAddress userAddress = orderDTO.getUserAddress();
         double postage = orderDTO.getPostage();
         String message = orderDTO.getMessage();
-        User user = TokenInterceptor.getLoginUser();
+        User user = JwtFilter.getLoginUser();
         // 返回map
         HashMap<String, String> orderMap = new HashMap<>();
         // 从登录信息中拿到openId
@@ -326,7 +326,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public List<OrderDTO> getUserOrderList(Integer status) {
         HashMap<String, Integer> orderMap = new HashMap<>();
-        Integer userId = TokenInterceptor.getLoginUser().getId();
+        Integer userId = JwtFilter.getLoginUser().getId();
         orderMap.put("userId", userId);
         orderMap.put("status", status);
         return getOrderDTOArrayList(orderMap);
@@ -375,7 +375,7 @@ public class OrderServiceImpl implements OrderService {
      */
     public int updateOrderStatus(String orderNumber) {
         Order order = orderMapper.selectByOrderNumber(orderNumber);
-        Integer userId = TokenInterceptor.getLoginUser().getId();
+        Integer userId = JwtFilter.getLoginUser().getId();
         if (order != null) {
             // 如果该订单存在
             if (!userId.equals(order.getUserId())) {
@@ -409,7 +409,7 @@ public class OrderServiceImpl implements OrderService {
      * 1 —— 更新订单状态成功
      */
     public void setOrderStatus(Map<String, Integer> orderMap) {
-        Integer userId = TokenInterceptor.getLoginUser().getId();
+        Integer userId = JwtFilter.getLoginUser().getId();
         Integer orderId = orderMap.get("orderId");
         Integer status = orderMap.get("status");
         Order order = orderMapper.selectByPrimaryKey(orderId);
@@ -437,7 +437,7 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     public void deleteOrder(Integer orderId) {
-        Integer userId = TokenInterceptor.getLoginUser().getId();
+        Integer userId = JwtFilter.getLoginUser().getId();
         Order order = orderMapper.selectByPrimaryKey(orderId);
         if (order != null) {
             if (!userId.equals(order.getUserId())) {
@@ -530,7 +530,7 @@ public class OrderServiceImpl implements OrderService {
         // 订单创建时间
         orderDTO.setCreateTime(order.getCreateTime());
 
-        // 订单商品信息封装
+        // 订单商品信息封装a
         orderDTO.setTotalPrice(order.getTotalPrice());
 
         // 根据订单id查询该订单的所有商品
@@ -587,7 +587,7 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     public void updateAddress(OrderDTO orderDTO) {
-        Integer userId = TokenInterceptor.getLoginUser().getId();
+        Integer userId = JwtFilter.getLoginUser().getId();
         String orderNumber = orderDTO.getOrderNumber();
         Order order = orderMapper.selectByOrderNumber(orderNumber);
         if (order == null) {
@@ -617,7 +617,7 @@ public class OrderServiceImpl implements OrderService {
      */
     @Transactional
     public void cancelOrder(String orderNumber) {
-        Integer userId = TokenInterceptor.getLoginUser().getId();
+        Integer userId = JwtFilter.getLoginUser().getId();
         Order order = orderMapper.selectByOrderNumber(orderNumber);
         if (order != null) {
             if (!userId.equals(order.getUserId())) {

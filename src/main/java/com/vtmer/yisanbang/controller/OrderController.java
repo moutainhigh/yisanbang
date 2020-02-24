@@ -9,7 +9,6 @@ import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.github.binarywang.wxpay.util.SignUtils;
 import com.vtmer.yisanbang.common.ResponseMessage;
-import com.vtmer.yisanbang.common.TokenInterceptor;
 import com.vtmer.yisanbang.common.annotation.RequestLog;
 import com.vtmer.yisanbang.common.exception.api.ApiException;
 import com.vtmer.yisanbang.common.exception.api.order.*;
@@ -22,6 +21,7 @@ import com.vtmer.yisanbang.dto.DeliverGoodsDTO;
 import com.vtmer.yisanbang.dto.OrderDTO;
 import com.vtmer.yisanbang.dto.OrderGoodsDTO;
 import com.vtmer.yisanbang.service.OrderService;
+import com.vtmer.yisanbang.shiro.JwtFilter;
 import com.vtmer.yisanbang.vo.UpdateUserAddressVo;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
@@ -157,7 +157,7 @@ public class OrderController {
     public ResponseMessage wxpay(@ApiParam(name = "orderNumber", value = "订单编号", required = true)
                                  @NotBlank(message = "订单号传入为空") @PathVariable String orderNumber) {
         OrderDTO orderDTO = orderService.selectOrderDTOByOrderNumber(orderNumber);
-        User user = TokenInterceptor.getLoginUser();
+        User user = JwtFilter.getLoginUser();
         if (orderDTO == null) {
             throw new ApiOrderNotFoundException("找不到订单[" + orderNumber + "]");
         } else {

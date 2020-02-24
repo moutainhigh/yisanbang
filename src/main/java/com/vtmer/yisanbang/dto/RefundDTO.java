@@ -7,6 +7,7 @@ import lombok.Data;
 
 import javax.validation.Valid;
 import java.util.List;
+
 @Data
 @ApiModel
 public class RefundDTO {
@@ -19,4 +20,6 @@ public class RefundDTO {
     @Valid
     @ApiModelProperty(value = "退款商品sku")
     private List<GoodsSkuDTO> RefundGoodsList;
+
+
 }

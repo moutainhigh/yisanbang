@@ -3,6 +3,7 @@ package com.vtmer.yisanbang.shiro;
 import com.alibaba.fastjson.JSONObject;
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.common.util.JwtUtil;
+import com.vtmer.yisanbang.domain.User;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -29,6 +30,8 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
 
     private final Logger logger = LoggerFactory.getLogger(JwtFilter.class);
 
+    private static final ThreadLocal<User> t1 = new ThreadLocal<>();
+
     /**
      * 判断用户是否想要进行 需要验证的操作
      * 检测header里面是否包含Authorization字段即可
@@ -46,7 +49,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
         if (isLoginAttempt(request,response)) {
-            // 用户带了token，想要登入，进行shiro认证
+            // 用户带了token，想要登入，进行shiro认证和token认证
             try {
                 // 进行shiro的登录LoginRealm
                 executeLogin(request,response);
@@ -70,13 +73,15 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         // 因为是先走shiro认证，再走JWT认证，在这里先要认证token的正确性，对了再去获取openid，否则会抛出异常
         // com.auth0.jwt.exceptions.JWTDecodeException: The token was expected to have 3 parts, but got 1.
         // 在这里有两种情况会返回false，一是token过期，二是token不正确，这两种的处理方案都是一致的，让用户去重新请求登录接口，获取新的token
+        logger.info("鉴权token为[{}]", token);
         boolean res = jwtUtil.verifyToken(token);
         if (!res) {
             // 如果token认证失败，直接返回null，进入isAccessAllowed（）的异常处理逻辑，抛出IllegalStateException异常并捕获
             return null;
         }
+        logger.info("验证token成功，开始设置user对象进线程域");
+        t1.set(jwtUtil.getUserInfoByToken(token));
         String openId = jwtUtil.getOpenIdByToken(token);
-        logger.info("鉴权token为[{}]", token);
         if (StringUtils.isNotBlank(token))
             return new UsernamePasswordToken(openId, "123456");
         return null;
@@ -139,5 +144,10 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         ResponseMessage responseMessage = ResponseMessage.newErrorInstance("请先登录后再进行操作");
         httpServletResponse.getWriter().write(JSONObject.toJSON(responseMessage).toString());
         return false;
+    }
+
+    public static User getLoginUser() {
+        User user = t1.get();
+        return user;
     }
 }
