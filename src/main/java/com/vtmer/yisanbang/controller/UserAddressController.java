@@ -145,8 +145,7 @@ public class UserAddressController {
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @ApiOperation(value = "根据用户id查看该用户的默认地址")
-    public ResponseMessage selectDefaultUserAddress(@ApiParam(name = "userId", value = "用户Id", required = true)
-                                                    @PathVariable("id") Integer userId) {
+    public ResponseMessage selectDefaultUserAddress() {
         User user = userService.selectByToken();
         UserAddressDTO addressDto = userAddressService.selectDefaultUserAddressByToken();
         if (user == null) {
