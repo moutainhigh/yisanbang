@@ -11,6 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -71,20 +72,28 @@ public class CarouselController {
         return ResponseMessage.newErrorInstance("轮播图信息修改失败");
     }
 
-    @ApiOperation("分页查询轮播图信息")
-    @GetMapping("/get/list")
-    public ResponseMessage getAllCarouselInfo(@ApiParam("查询页数(第几页)") @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-                                              @ApiParam("单页查询数量") @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
-        List<Carousel>carousels = carouselService.listAllCarouselInfo();
-        if (carousels != null) {
-            return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(carousels), "获取所有轮播图信息成功");
+    @ApiOperation(value = "查询轮播图信息", notes = "(默认不分页，传入分页相关参数则返回分页信息)")
+    @GetMapping("/list")
+    public ResponseMessage getAllCarouselInfo(@ApiParam("查询页数(第几页)") @Param(value = "pageNum") Integer pageNum,
+                                              @ApiParam("单页查询数量") @Param(value = "pageSize") Integer pageSize) {
+        if (pageNum != null && pageSize != null && pageNum != 0 && pageSize != 0) {
+            PageHelper.startPage(pageNum, pageSize);
+            List<Carousel> carousels = carouselService.listAllCarouselInfo();
+            if (carousels != null) {
+                return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(carousels), "获取所有轮播图信息成功");
+            }
+            return ResponseMessage.newErrorInstance("获取轮播图信息失败");
+        } else {
+            List<Carousel> carousels = carouselService.listAllCarouselInfo();
+            if (carousels != null) {
+                return ResponseMessage.newSuccessInstance(carousels, "获取所有轮播图信息成功");
+            }
+            return ResponseMessage.newErrorInstance("获取轮播图信息失败");
         }
-        return ResponseMessage.newErrorInstance("获取轮播图信息失败");
     }
 
     @ApiOperation("根据id查询轮播图信息")
-    @GetMapping("/get/{carouselId}")
+    @GetMapping("/{carouselId}")
     public ResponseMessage getAdInfo(@PathVariable("carouselId") Integer carouselId) {
         Carousel carousel = carouselService.listInfoById(carouselId);
         if (carousel != null) {

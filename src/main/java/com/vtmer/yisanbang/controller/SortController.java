@@ -10,6 +10,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +38,7 @@ public class SortController {
     }
 
     @ApiOperation("根据id查询分类信息")
-    @GetMapping("/get/{sortId}")
+    @GetMapping("/{sortId}")
     public ResponseMessage getSortInfo(@PathVariable("sortId") Integer sortId) {
         Sort sort = sortService.listSortInfoById(sortId);
         if (sort != null) {
@@ -46,29 +47,46 @@ public class SortController {
         return ResponseMessage.newErrorInstance("查询指定分类信息失败");
     }
 
-    @ApiOperation("分页查询校服分类")
-    @GetMapping("/get/uniformSort")
-    public ResponseMessage getAllUniformSortInfo(@ApiParam("查询页数(第几页)") @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-                                                 @ApiParam("单页数量") @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
-        List<Sort> sorts = sortService.listAllUniformSort();
-        if (sorts != null) {
-            return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(sorts), "查询所有校服分类信息成功");
+    @ApiOperation(value = "查询校服分类", notes = "(默认不分页，传入分页相关参数则返回分页信息)")
+    @GetMapping("/uniformSort")
+    public ResponseMessage getAllUniformSortInfo(@ApiParam("查询页数(第几页)") @Param(value = "pageNum") Integer pageNum,
+                                                 @ApiParam("单页数量") @Param(value = "pageSize") Integer pageSize) {
+        if (pageNum != null && pageSize != null && pageNum != 0 && pageSize != 0) {
+            PageHelper.startPage(pageNum, pageSize);
+            List<Sort> sorts = sortService.listAllUniformSort();
+            if (sorts != null) {
+                return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(sorts), "查询所有校服分类信息成功");
+            }
+            return ResponseMessage.newErrorInstance("查询校服分类信息失败");
+        } else {
+            List<Sort> sorts = sortService.listAllUniformSort();
+            if (sorts != null) {
+                return ResponseMessage.newSuccessInstance(sorts, "查询所有校服分类信息成功");
+            }
+            return ResponseMessage.newErrorInstance("查询校服分类信息失败");
         }
-        return ResponseMessage.newErrorInstance("查询校服分类信息失败");
     }
 
-    @ApiOperation(value = "分页查询职业装分类", notes = "按分类等级查询")
-    @GetMapping("/get/suitSort/{parentId}")
+    @ApiOperation(value = "查询职业装分类", notes = "按分类等级查询(默认不分页，传入分页相关参数则返回分页信息)")
+    @GetMapping("/suitSort/{parentId}")
     public ResponseMessage getAllSuitSortInfo(@ApiParam("上级分类id(若查询一级分类则为0)") @PathVariable("parentId") Integer parentId,
-                                              @ApiParam("查询页数(第几页)") @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-                                              @ApiParam("单页数量") @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
-        List<Sort> sorts = sortService.listSuitSort(parentId);
-        if (sorts != null) {
-            return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(sorts), "查询职业装分类信息成功");
+                                              @ApiParam("查询页数(第几页)") @Param(value = "pageNum") Integer pageNum,
+                                              @ApiParam("单页数量") @Param(value = "pageSize") Integer pageSize) {
+        if (pageNum != null && pageSize != null && pageNum != 0 && pageSize != 0) {
+            PageHelper.startPage(pageNum, pageSize);
+            List<Sort> sorts = sortService.listSuitSort(parentId);
+            if (sorts != null) {
+                return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(sorts), "查询职业装分类信息成功");
+            }
+            return ResponseMessage.newErrorInstance("查询校服分类信息失败");
+        } else {
+            List<Sort> sorts = sortService.listSuitSort(parentId);
+            if (sorts != null) {
+                return ResponseMessage.newSuccessInstance(sorts, "查询职业装分类信息成功");
+            }
+            return ResponseMessage.newErrorInstance("查询校服分类信息失败");
         }
-        return ResponseMessage.newErrorInstance("查询职业装分类信息失败");
+
     }
 
     /*
@@ -116,3 +134,4 @@ public class SortController {
     }
 
 }
+
