@@ -11,6 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,16 +27,24 @@ public class AdController {
     @Autowired
     private AdService adService;
 
-    @ApiOperation(value = "分页查询所有广告信息")
+    @ApiOperation(value = "查询所有广告信息", notes = "(默认不分页，传入分页相关参数则返回分页信息)")
     @GetMapping("/list")
-    public ResponseMessage getAllAdInfo(@ApiParam("查询页数(第几页)") @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-                                        @ApiParam("单页查询数量") @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
-        List<Ad> ads = adService.listAllAdInfo();
-        if (ads != null) {
-            return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(ads), "查询所有广告信息成功");
+    public ResponseMessage getAllAdInfo(@ApiParam("查询页数(第几页)") @Param(value = "pageNum") Integer pageNum,
+                                        @ApiParam("单页查询数量") @Param(value = "pageSize") Integer pageSize) {
+        if (pageNum != null && pageSize != null && pageNum != 0 && pageSize != 0) {
+            PageHelper.startPage(pageNum, pageSize);
+            List<Ad> ads = adService.listAllAdInfo();
+            if (ads != null) {
+                return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(ads), "查询所有广告信息成功");
+            }
+            return ResponseMessage.newErrorInstance("查询广告信息失败");
+        } else {
+            List<Ad> ads = adService.listAllAdInfo();
+            if (ads != null) {
+                return ResponseMessage.newSuccessInstance(ads, "查询所有广告信息成功");
+            }
+            return ResponseMessage.newErrorInstance("查询广告信息失败");
         }
-        return ResponseMessage.newErrorInstance("查询广告信息失败");
     }
 
     @ApiOperation("根据id查询广告信息")
