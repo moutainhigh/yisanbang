@@ -21,13 +21,6 @@ public class UserAddressServiceImpl implements UserAddressService {
     }
 
     @Override
-    // 通过Token
-    public List<UserAddressDTO> selectUserAddressByToken() {
-        Integer userId = TokenInterceptor.getLoginUser().getId();
-        return userAddressMapper.selectAllByUserId(userId);
-    }
-
-    @Override
     // 根据地址id查找地址
     public UserAddressDTO selectUserAddressDtoByAddressId(Integer addressId) {
         return userAddressMapper.selectDtoByPrimaryKey(addressId);
