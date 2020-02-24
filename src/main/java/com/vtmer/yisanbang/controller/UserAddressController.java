@@ -28,15 +28,14 @@ public class UserAddressController {
     /*
      * 根据用户id查看所有地址
      * */
-    @GetMapping("/listUserAddress/{id}")
+    @GetMapping("/listUserAddress")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @ApiOperation(value = "根据用户id查看该用户的所有地址")
-    public ResponseMessage listUserAddress(@ApiParam(name = "userId", value = "用户Id", required = true)
-                                           @PathVariable("id") Integer userId) {
-        User user = userService.selectByPrimaryKey(userId);
-        List<UserAddressDTO> UserAdressDto = userAddressService.selectUserAddressByUserId(userId);
+    public ResponseMessage listUserAddress() {
+        User user = userService.selectByToken();
+        List<UserAddressDTO> UserAdressDto = userAddressService.selectUserAddressByToken();
         if (user == null) {
             return ResponseMessage.newErrorInstance("该用户id错误");
         } else if (UserAdressDto != null) {
@@ -148,8 +147,8 @@ public class UserAddressController {
     @ApiOperation(value = "根据用户id查看该用户的默认地址")
     public ResponseMessage selectDefaultUserAddress(@ApiParam(name = "userId", value = "用户Id", required = true)
                                                     @PathVariable("id") Integer userId) {
-        User user = userService.selectByPrimaryKey(userId);
-        UserAddressDTO addressDto = userAddressService.selectDefaultUserAddress(userId);
+        User user = userService.selectByToken();
+        UserAddressDTO addressDto = userAddressService.selectDefaultUserAddressByToken();
         if (user == null) {
             return ResponseMessage.newErrorInstance("该用户id错误");
         } else if (addressDto == null) {

@@ -102,8 +102,6 @@ public class PartSizeController {
     public ResponseMessage updatePartSize(@ApiParam(name = "部件尺寸Dto实体类", value = "传入Json格式", required = true)
                                           @RequestBody
                                           @Validated(Update.class) PartSizeDTO partSizeDto) {
-        boolean judgeFlag = partSizeService.judgePartSize(partSizeDto);
-        if (judgeFlag) return ResponseMessage.newErrorInstance("该套装部件尺寸已经存在");
         PartSizeDTO partSize = partSizeService.selectPartSizeById(partSizeDto.getId());
         if (partSize != null) {
             boolean updateFlag = partSizeService.updatePartSize(partSizeDto);
