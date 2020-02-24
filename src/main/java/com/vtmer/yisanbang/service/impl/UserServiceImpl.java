@@ -89,10 +89,13 @@ public class UserServiceImpl implements UserService {
         } else {
             String openid = response.getOpenid();
             String sessionKey = response.getSession_key();
+            //String sessionKey = "GZY0V5EDGRQXMjllyjSPGg==";
+            //String openid = "oSWGq5VifPgfIIF7eHFjNh9GEr_g";
             // 查询数据库是否存在该微信用户
             User user = userMapper.selectUserByOpenId(openid);
             User newUser = new User();
             if (null == user) {
+                logger.info("微信登录--用户不在数据库中，向数据库插入信息");
                 // String openid = response.getOpenid();
                 // 若不存在则新建用户到数据库中
                 newUser.setOpenId(openid);
@@ -112,7 +115,6 @@ public class UserServiceImpl implements UserService {
             WxAccount wxAccount = new WxAccount();
             wxAccount.setUserId(user.getId());
             wxAccount.setOpenId(user.getOpenId());
-            //wxAccount.setSessionKey(response.getSession_key());
             wxAccount.setSessionKey(sessionKey);
             String token = jwtUtil.createTokenByUser(wxAccount);
             logger.info("JWT返回自定义登录态token[{}]，并把token缓存到redis中", token);

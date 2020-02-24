@@ -45,12 +45,11 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
      */
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
-        boolean allowed = false;
         if (isLoginAttempt(request,response)) {
             // 用户带了token，想要登入，进行shiro认证
             try {
                 // 进行shiro的登录LoginRealm
-                allowed = executeLogin(request,response);
+                executeLogin(request,response);
             } catch (IllegalStateException e) {
                 logger.warn("Not find any token,may be token has expired or token is invalid");
                 return false;
@@ -58,7 +57,8 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
                 logger.error("Error occurs when login",e);
             }
         }
-        return allowed || super.isPermissive(mappedValue);
+        logger.info("shiro认证登录结果为[{}]",super.isAccessAllowed(request,response,mappedValue));
+        return super.isAccessAllowed(request,response,mappedValue);
     }
 
     /**
@@ -76,10 +76,9 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
             return null;
         }
         String openId = jwtUtil.getOpenIdByToken(token);
-        System.out.println(token);
         logger.info("鉴权token为[{}]", token);
         if (StringUtils.isNotBlank(token))
-            return new UsernamePasswordToken(openId, "123456");;
+            return new UsernamePasswordToken(openId, "123456");
         return null;
     }
 

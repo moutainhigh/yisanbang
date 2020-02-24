@@ -93,4 +93,5 @@ class YisanbangApplicationTests {
         // redis缓存JWT,并设置过期时间
         redisTemplate.opsForValue().set("JWT-SESSION-" + jwtId, token, EXPIRE_TIME, TimeUnit.SECONDS);
     }
+
 }

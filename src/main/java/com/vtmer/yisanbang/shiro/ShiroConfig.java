@@ -45,6 +45,7 @@ public class ShiroConfig {
         // 设置首页内容、登录、登出页面等无需认证
         filterRuleMap.put("/admin/login", "anon");
         filterRuleMap.put("/user/login", "anon");
+        filterRuleMap.put("/admin/addAdmin", "anon");
         filterRuleMap.put("/admin/logout", "anon");
         filterRuleMap.put("/ad/list", "anon");
         filterRuleMap.put("/carousel/list", "anon");
