@@ -15,8 +15,4 @@ public interface UserService {
 
     // 根据userId获取openId
     String getOpenIdByUserId(Integer userId);
-
-    // 根据Token获取用户id查找用户
-    public User selectByToken();
-
 }

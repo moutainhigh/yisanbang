@@ -1,6 +1,7 @@
 package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
+import com.vtmer.yisanbang.common.TokenInterceptor;
 import com.vtmer.yisanbang.common.valid.group.Delete;
 import com.vtmer.yisanbang.common.valid.group.Update;
 import com.vtmer.yisanbang.domain.User;
@@ -34,8 +35,9 @@ public class UserAddressController {
     })
     @ApiOperation(value = "根据用户id查看该用户的所有地址")
     public ResponseMessage listUserAddress() {
-        User user = userService.selectByToken();
-        List<UserAddressDTO> UserAdressDto = userAddressService.selectUserAddressByToken();
+        Integer userId = TokenInterceptor.getLoginUser().getId();
+        User user = userService.selectByPrimaryKey(userId);
+        List<UserAddressDTO> UserAdressDto = userAddressService.selectUserAddressByUserId(userId);
         if (user == null) {
             return ResponseMessage.newErrorInstance("该用户id错误");
         } else if (UserAdressDto != null) {
@@ -146,7 +148,8 @@ public class UserAddressController {
     })
     @ApiOperation(value = "根据用户id查看该用户的默认地址")
     public ResponseMessage selectDefaultUserAddress() {
-        User user = userService.selectByToken();
+        Integer userId = TokenInterceptor.getLoginUser().getId();
+        User user = userService.selectByPrimaryKey(userId);
         UserAddressDTO addressDto = userAddressService.selectDefaultUserAddressByToken();
         if (user == null) {
             return ResponseMessage.newErrorInstance("该用户id错误");

@@ -137,13 +137,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User selectByToken() {
-        Integer userId = TokenInterceptor.getLoginUser().getId();
-        return userMapper.selectByPrimaryKey(userId);
-    }
-
-
-    @Override
     public User selectByPrimaryKey(Integer userId) {
         return userMapper.selectByPrimaryKey(userId);
     }
