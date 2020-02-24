@@ -7,6 +7,7 @@ import com.vtmer.yisanbang.domain.User;
 import com.vtmer.yisanbang.dto.UserAddressDTO;
 import com.vtmer.yisanbang.service.UserAddressService;
 import com.vtmer.yisanbang.service.UserService;
+import com.vtmer.yisanbang.shiro.JwtFilter;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -28,13 +29,13 @@ public class UserAddressController {
     /*
      * 根据用户id查看所有地址
      * */
-    @GetMapping("/listUserAddress/{id}")
+    @GetMapping("/listUserAddress")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @ApiOperation(value = "根据用户id查看该用户的所有地址")
-    public ResponseMessage listUserAddress(@ApiParam(name = "userId", value = "用户Id", required = true)
-                                           @PathVariable("id") Integer userId) {
+    public ResponseMessage listUserAddress() {
+        Integer userId = JwtFilter.getLoginUser().getId();
         User user = userService.selectByPrimaryKey(userId);
         List<UserAddressDTO> UserAdressDto = userAddressService.selectUserAddressByUserId(userId);
         if (user == null) {
@@ -51,7 +52,7 @@ public class UserAddressController {
      * */
     @PostMapping("/addUserAddress")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @ApiOperation(value = "添加用户地址")
     public ResponseMessage insertUserAddress(@ApiParam(name = "用户地址Dto实体类", value = "传入Json格式", required = true)
@@ -72,7 +73,7 @@ public class UserAddressController {
      * */
     @PutMapping("/updateUserAddress")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @ApiOperation(value = "根据用户地址id更新该地址")
     public ResponseMessage updateUserAddress(@ApiParam(name = "用户地址Dto实体类", value = "传入Json格式", required = true)
@@ -108,7 +109,7 @@ public class UserAddressController {
      * */
     @DeleteMapping("/deleteUserAddress")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @ApiOperation(value = "根据用户地址id删除地址")
     public ResponseMessage deleteUserAddress(@ApiParam(name = "用户地址Dto实体类", value = "传入Json格式", required = true)
@@ -143,16 +144,12 @@ public class UserAddressController {
      * */
     @GetMapping("/defaultUserAddress/{id}")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @ApiOperation(value = "根据用户id查看该用户的默认地址")
-    public ResponseMessage selectDefaultUserAddress(@ApiParam(name = "userId", value = "用户Id", required = true)
-                                                    @PathVariable("id") Integer userId) {
-        User user = userService.selectByPrimaryKey(userId);
-        UserAddressDTO addressDto = userAddressService.selectDefaultUserAddress(userId);
-        if (user == null) {
-            return ResponseMessage.newErrorInstance("该用户id错误");
-        } else if (addressDto == null) {
+    public ResponseMessage selectDefaultUserAddress() {
+        UserAddressDTO addressDto = userAddressService.selectDefaultUserAddressByToken();
+        if (addressDto == null) {
             return ResponseMessage.newErrorInstance("无默认地址");
         } else {
             return ResponseMessage.newSuccessInstance(addressDto, "查找成功");
@@ -164,7 +161,7 @@ public class UserAddressController {
      * */
     @PutMapping("/changeDefaultUserAddress")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @ApiOperation(value = "改变用户默认地址")
     public ResponseMessage changeDefaultUserAddress(@ApiParam(name = "用户地址Dto实体类", value = "传入Json格式", required = true)

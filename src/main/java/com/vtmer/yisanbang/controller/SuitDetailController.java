@@ -27,7 +27,7 @@ public class SuitDetailController {
     @Autowired
     private SuitDetailService suitDetailService;
 
-    @GetMapping("/selectAllSuitDetail")
+    @GetMapping("/get/selectAllSuitDetail")
     @ApiOperation(value = "查找显示所有商品详情")
     // 查找显示所有套装详情
     public ResponseMessage selectAll(@ApiParam("查询页数(第几页)")
@@ -41,7 +41,7 @@ public class SuitDetailController {
         else return ResponseMessage.newErrorInstance("查找失败");
     }
 
-    @GetMapping("/selectSuitDetailBySuitId/{id}")
+    @GetMapping("/get/selectSuitDetailBySuitId/{id}")
     @ApiOperation(value = "根据套装id查找显示该套装的所有套装详情")
     // 根据套装id查找显示该套装的所有套装详情
     public ResponseMessage selectSuitDetailBySuitId(@ApiParam(name = "suitId", value = "套装Id", required = true)
@@ -57,7 +57,7 @@ public class SuitDetailController {
         else return ResponseMessage.newErrorInstance("查找失败");
     }
 
-    @GetMapping("/selectSuitDetailById/{id}")
+    @GetMapping("/get/selectSuitDetailById/{id}")
     @ApiOperation(value = "根据套装详情id查找套装详情")
     // 根据套装详情id查找套装详情
     public ResponseMessage selectSuitDetailById(@ApiParam(name = "suitDetailId", value = "套装详情Id", required = true)

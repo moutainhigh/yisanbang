@@ -76,12 +76,12 @@ public class GoodsServiceImpl implements GoodsService {
     // 隐藏商品，不展示
     public boolean hideGoods(GoodsDTO goods) {
         if (goods.getIsShow()) {
-            goods.setIsShow(false);
+            int hideFlag = goodsMapper.hideGoods(goods.getId());
+            if (hideFlag > 0) return true;
         } else {
-            goods.setIsShow(true);
+            int showFlag = goodsMapper.showGoods(goods.getId());
+            if (showFlag > 0) return true;
         }
-        int updateFlag = goodsMapper.updateDtoByPrimaryKey(goods);
-        if (updateFlag > 0) return true;
         return false;
     }
 
@@ -121,6 +121,13 @@ public class GoodsServiceImpl implements GoodsService {
     // 根据商品更新时间排序显示商品
     public List<GoodsDTO> selectAllDtoOrderByTime() {
         List<GoodsDTO> goodsDtos = goodsMapper.selectAllDtoOrderByTime();
+        if (goodsDtos != null && !goodsDtos.isEmpty()) return goodsDtos;
+        return null;
+    }
+
+    @Override
+    public List<GoodsDTO> selectAllShow() {
+        List<GoodsDTO> goodsDtos = goodsMapper.selectAllShowDto();
         if (goodsDtos != null && !goodsDtos.isEmpty()) return goodsDtos;
         return null;
     }

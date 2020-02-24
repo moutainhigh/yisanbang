@@ -26,7 +26,7 @@ public class GoodsController {
     @Autowired
     private GoodsService goodsService;
 
-    @GetMapping("/selectAllGoods")
+    @GetMapping("/get/selectAllGoods")
     @ApiOperation(value = "查找所有商品")
     // 查找所有商品
     public ResponseMessage selectAllGoods(@ApiParam("查询页数(第几页)")
@@ -41,7 +41,7 @@ public class GoodsController {
             return ResponseMessage.newErrorInstance("无商品信息，查找失败");
     }
 
-    @GetMapping("/selectAllGoodsOrderByTime")
+    @GetMapping("/get/selectAllGoodsOrderByTime")
     @ApiOperation(value = "根据商品更新时间顺序显示商品")
     // 根据商品更新时间顺序显示商品
     public ResponseMessage selectAllGoodsOrderByTime(@ApiParam("查询页数(第几页)")
@@ -56,7 +56,7 @@ public class GoodsController {
             return ResponseMessage.newErrorInstance("无商品信息，查找失败");
     }
 
-    @GetMapping("/selectAllGoodsOrderByPrice")
+    @GetMapping("/get/selectAllGoodsOrderByPrice")
     @ApiOperation(value = "根据商品价格顺序显示商品")
     // 根据商品价格顺序显示商品
     public ResponseMessage selectAllGoodsOrderByPrice(@ApiParam("查询页数(第几页)")
@@ -71,7 +71,7 @@ public class GoodsController {
             return ResponseMessage.newErrorInstance("无商品信息，查找失败");
     }
 
-    @GetMapping("/selectAllGoodsBySortId")
+    @GetMapping("/get/selectAllGoodsBySortId")
     @ApiOperation(value = "根据分类id查找商品")
     // 根据商品分类查找商品
     public ResponseMessage selectAllGoodsBySortId(@ApiParam(name = "sortId", value = "分类Id", required = true)
@@ -88,7 +88,7 @@ public class GoodsController {
             return ResponseMessage.newErrorInstance("无商品信息，查找失败");
     }
 
-    @GetMapping("/selectAllGoodsBySortIdOrderByTime")
+    @GetMapping("/get/selectAllGoodsBySortIdOrderByTime")
     @ApiOperation(value = "根据分类id以及更新时间顺序显示商品")
     // 根据商品分类以及更新时间顺序显示商品
     public ResponseMessage selectAllGoodsBySortIdOrderByTime(@ApiParam(name = "sortId", value = "分类Id", required = true)
@@ -105,7 +105,7 @@ public class GoodsController {
             return ResponseMessage.newErrorInstance("无商品信息，查找失败");
     }
 
-    @GetMapping("/selectAllGoodsBySortIdOrderByPrice")
+    @GetMapping("/get/selectAllGoodsBySortIdOrderByPrice")
     @ApiOperation(value = "根据分类id以及价格顺序显示商品")
     // 根据商品分类以及价格顺序显示商品
     public ResponseMessage selectAllGoodsBySortIdOrderByPrice(@ApiParam(name = "sortId", value = "分类Id", required = true)
@@ -122,7 +122,7 @@ public class GoodsController {
             return ResponseMessage.newErrorInstance("无商品信息，查找失败");
     }
 
-    @GetMapping("/selectGoodsById/{id}")
+    @GetMapping("/get/selectGoodsById/{id}")
     @ApiOperation(value = "根据商品id查找商品")
     // 根据商品id查找商品
     public ResponseMessage selectGoodsById(@ApiParam(name = "goodsId", value = "商品Id", required = true)
@@ -133,7 +133,7 @@ public class GoodsController {
         else return ResponseMessage.newErrorInstance("该商品id错误");
     }
 
-    @GetMapping("/selectGoodsByName/{name}")
+    @GetMapping("/get/selectGoodsByName/{name}")
     @ApiOperation(value = "根据商品名称查找商品")
     // 根据商品名称查找商品
     public ResponseMessage selectGoodsByName(@ApiParam(name = "goodsName", value = "商品名称", required = true)

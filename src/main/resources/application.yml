@@ -1,0 +1,104 @@
+spring:
+  profiles:
+    active: dev
+  jackson:
+    time-zone: GMT+8
+  datasource:
+    # 扩展插件
+    # 监控统计用的filter:stat 日志用的filter:log4j 防御sql注入的filter:wall
+    druid:
+      filters: stat
+      # 最大连接池数量
+      maxActive: 20
+      # 初始化时建立物理连接的个数。初始化发生在显示调用init方法，或者第一次getConnection时
+      initialSize: 1
+      # 获取连接时最大等待时间，单位毫秒
+      maxWait: 60000
+      # 最小连接池数量
+      minIdle: 1
+      timeBetweenEvictionRunsMillis: 60000
+      # 连接保持空闲而不被驱逐的最长时间
+      minEvictableIdleTimeMillis: 300000
+      # 用来检测连接是否有效的sql，要求是一个查询语句
+      # 如果validationQuery为null，testOnBorrow、testOnReturn、testWhileIdle都不会其作用
+      validationQuery: select count(1) from 'table'
+      # 申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效
+      testWhileIdle: true
+      # 申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能
+      testOnBorrow: false
+      # 归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能
+      testOnReturn: false
+      # 是否缓存preparedStatement，即PSCache
+      poolPreparedStatements: false
+      # 要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true
+      maxOpenPreparedStatements: -1
+      stat-view-servlet:
+        url-pattern: /druid/*
+        # 登录用户名/密码
+        login-username: root
+        login-password: wlt123..
+
+  devtools:
+    restart:
+      enabled: true  #设置开启热部署
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 200MB
+  quartz:
+    #相关属性配置
+    properties:
+      org:
+        quartz:
+          scheduler:
+            #默认或是自己改名字都行
+            instanceName: DefaultQuartzScheduler
+            #如果使用集群，instanceId必须唯一，设置成AUTO
+            instanceId: AUTO
+          jobStore:
+            #存储方式使用RAMJobStore,也就是缓存
+            class: org.quartz.simpl.RAMJobStore
+          threadPool:
+            class: org.quartz.simpl.SimpleThreadPool
+            threadCount: 10
+            threadPriority: 5
+            threadsInheritContextClassLoaderOfInitializingThread: true
+
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:mapper/*.xml
+
+logging:
+  file:
+    name: target/yourlog.log
+
+wx:
+  pay:
+    appId: wx447bdd8f7d850c06
+    mchId: #微信支付商户号
+    mchKey: #微信支付商户密钥
+    payNotifyURL: #微信支付成功后的回调接口 /order/wxNotify
+    refundNotifyURL: #微信退款成功后的回调接口 /refund/wxNotify
+    tradeType: JSAPI
+    keyPath: # p12证书的位置，可以指定绝对路径，也可以指定类路径（以classpath:开头）
+    spbillCreateIp: #服务器IP地址
+  applet:
+    appid: wx447bdd8f7d850c06
+    appsecret: 1f8dc966cc30761d60394178a5d58301
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+
+server:
+  servlet:
+    context-path: /
+  max-http-header-size: 81920 # 修改请求头允许的最大值
+
+
+
+
+

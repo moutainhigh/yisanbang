@@ -38,4 +38,6 @@ public interface SuitService {
 
     // 隐藏套装
     public boolean hideSuit(SuitDTO suitDto);
+
+    public List<SuitDTO> selectAllShow();
 }

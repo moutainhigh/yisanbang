@@ -17,6 +17,8 @@ order:
   orderNotFoundErrorCode: 10003L # 订单未找到
   orderAndUserNotMatchErrorCode: 10004L # 订单和用户不匹配
   orderStatusNotFitErrorCode: 10005L # 该订单不适合修改对应状态
+  orderPriceNotMatchErrorCode: 10006L # 前后端的订单总价不一致
+  orderGoodsCartGoodsNotMatchErrorCode: 10007L # 下购物车订单的商品列表和购物车勾选商品列表不一致
 postage:
   postageSettingsExistErrorCode: 10001L # 邮费设置已经存在
   postageSettingsNotFoundErrorCode: 10002L # 找不到邮费设置信息
@@ -25,4 +27,8 @@ refund:
   refundStatusNotFitErrorCode: 10002L # 退款订单状态不适配接口
   RefundNotMatchUserErrorCode: 10003L # 该退款单不属于目前的用户
   DuplicateApplyRefundErrorCode: 10004L # 重复申请退款
+shiro:
+  unknownAccountExceptionErrorCode: 10001L # shiro认证账号密码不正确
+third:
+  code2SessionExceptionErrorCode: 10001L # 调用微信第三方code2Session失败
 

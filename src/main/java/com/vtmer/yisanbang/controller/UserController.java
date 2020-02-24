@@ -1,15 +1,17 @@
 package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
+import com.vtmer.yisanbang.common.exception.api.ApiException;
+import com.vtmer.yisanbang.common.exception.api.third.ApiCode2SessionException;
+import com.vtmer.yisanbang.common.exception.service.third.Code2SessionException;
 import com.vtmer.yisanbang.common.util.JwtUtil;
 import com.vtmer.yisanbang.service.UserService;
-import com.vtmer.yisanbang.vo.JwtToken;
 import com.vtmer.yisanbang.vo.Token;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +21,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+
+    private final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private UserService userService;
@@ -32,35 +36,14 @@ public class UserController {
         if (!request.containsKey("code") || request.get("code") == null || request.get("code").equals("")) {
             return ResponseMessage.newErrorInstance("缺少参数code或code不合法");
         }
-        Token token = userService.wxUserLogin(request.get("code"));
-        // 执行验证过程
-        Subject subject = SecurityUtils.getSubject();
-        // 密码认证令牌
-        JwtToken jwtToken = new JwtToken(token.getToken(),"UserLogin");
         try {
-            subject.login(jwtToken);
-            if (subject.isAuthenticated()) {
-                // shiro授权成功，返回token
-                return ResponseMessage.newSuccessInstance(token, "获取用户token成功");
-            } else {
-                return ResponseMessage.newErrorInstance("shiro授权失败");
-            }
+            Token token = userService.wxUserLogin(request.get("code"));
+            return ResponseMessage.newSuccessInstance(token,"获取token用户成功");
+        } catch (Code2SessionException e) {
+            throw new ApiCode2SessionException(e.getMessage());
         } catch (Exception e) {
-            return ResponseMessage.newErrorInstance("获取用户token失败");
+            throw new ApiException(e);
         }
-    }
-
-    @ApiOperation("根据用户登录对应的token获取用户id")
-    @GetMapping("/userId")
-    public ResponseMessage getUserIdByToken(@ApiParam(name = "token", value = "用户微信登录返回的token", required = true) @RequestBody Map<String, String> request) {
-        if (!request.containsKey("token") || request.get("token") == null || request.get("token").equals("")) {
-            return ResponseMessage.newErrorInstance("缺少参数用户id或用户id不合法");
-        }
-        Integer userId = userService.getUserIdByToken(request.get("token"));
-        if (null == userId || userId.equals("")) {
-            return ResponseMessage.newErrorInstance("获取用户Id失败");
-        }
-        return ResponseMessage.newSuccessInstance(userId, "获取用户Id成功");
     }
 
 }

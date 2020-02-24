@@ -49,4 +49,10 @@ public interface GoodsMapper {
 
     // Dto
     List<GoodsDTO> selectAllDtoOrderByTime();
+
+    int hideGoods(Integer goodsId);
+
+    int showGoods(Integer goodsId);
+
+    List<GoodsDTO> selectAllShowDto();
 }

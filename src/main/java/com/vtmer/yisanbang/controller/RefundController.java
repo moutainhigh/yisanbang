@@ -109,7 +109,6 @@ public class RefundController {
      * 申请退款成功会更新订单表、退款表的状态，失败则返回相关信息
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败
-     *
      * @param agreeRefundDTO:退款编号（必填）、退款原因（商家选填，如无货）
      * @return
      */
@@ -189,10 +188,9 @@ public class RefundController {
     /**
      * 更新退款退货订单状态接口，status0-->1
      * 使用，待商家处理-->待用户发货 0 --> 1
-     * * status全改变： 0 --> 1 or 3 or 4  and  1 --> 2   and  2 --> 3  and 0 1 2-->删除
-     * * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
-     * * 退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败
-     *
+     * status全改变： 0 --> 1 or 3 or 4  and  1 --> 2   and  2 --> 3  and 0 1 2-->删除
+     * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
+     * 退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败
      * @param refundNumber:退款编号
      * @return
      */
@@ -300,14 +298,13 @@ public class RefundController {
     /**
      * 用户撤销退款，根据退款编号删除退款订单接口
      * 该接口应该由用户调用，商家不应该动客户的退款信息
-     *
      * @param refundNumber:退款编号
      * @return
      */
     @RequestLog(module = "退款", operationDesc = "撤销退款申请")
     @ApiOperation(value = "用户撤销退款申请", notes = "根据退款编号删除退款订单接口,用户撤销退款使用")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @DeleteMapping("/delete")
     public ResponseMessage delete(@ApiParam(name = "refundNumber", value = "退款编号", example = "12345678998765432110", required = true)
@@ -328,7 +325,6 @@ public class RefundController {
 
     /**
      * 商家拒绝退款申请 status 0-->4
-     *
      * @param refundNumber:退款编号
      * @return
      */
@@ -352,7 +348,6 @@ public class RefundController {
     /**
      * 用户填写退款发货单
      * status 1-->2
-     *
      * @param refundExpress:refundId、expressCompany(选填)、courierNumber(快递单号)
      * @return
      */
@@ -360,7 +355,7 @@ public class RefundController {
     @ApiOperation(value = "用户填写退款发货单",
             notes = "用户填写退款发货单,退款状态【待用户发货】-->【待商家收货】")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @PostMapping("/express")
     public ResponseMessage insertExpress(@RequestBody @Validated RefundExpress refundExpress) {
@@ -388,7 +383,7 @@ public class RefundController {
     @RequestLog(module = "退款", operationDesc = "申请退款")
     @ApiOperation(value = "用户申请退款", notes = "用户申请退款接口;退款商品传null代表全退，退款原因非必需")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "校验token", name = "accessToken", paramType = "header", required = true)
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @PostMapping("/apply")
     public ResponseMessage apply(@RequestBody @Validated RefundDTO refundDTO) {

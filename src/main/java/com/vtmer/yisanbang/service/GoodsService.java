@@ -44,4 +44,6 @@ public interface GoodsService {
 
     // 根据商品更新时间排序显示商品
     public List<GoodsDTO> selectAllDtoOrderByTime();
+
+    public List<GoodsDTO> selectAllShow();
 }

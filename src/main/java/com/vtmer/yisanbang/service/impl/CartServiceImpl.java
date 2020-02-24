@@ -1,7 +1,6 @@
 package com.vtmer.yisanbang.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.vtmer.yisanbang.common.TokenInterceptor;
 import com.vtmer.yisanbang.common.exception.service.cart.CartGoodsNotExistException;
 import com.vtmer.yisanbang.common.util.ListSort;
 import com.vtmer.yisanbang.domain.Cart;
@@ -17,6 +16,7 @@ import com.vtmer.yisanbang.mapper.UserMapper;
 import com.vtmer.yisanbang.service.CartService;
 import com.vtmer.yisanbang.service.ColorSizeService;
 import com.vtmer.yisanbang.service.PartSizeService;
+import com.vtmer.yisanbang.shiro.JwtFilter;
 import com.vtmer.yisanbang.vo.CartVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,7 +90,7 @@ public class CartServiceImpl implements CartService {
     }
 
     private void getUserIdAndSetKey() {
-        userId = TokenInterceptor.getLoginUser().getId();
+        userId = JwtFilter.getLoginUser().getId();
         key = REDIS_CART + ":" + userId;
         hashOperations = stringRedisTemplate.boundHashOps(key);
     }
@@ -323,6 +323,9 @@ public class CartServiceImpl implements CartService {
         return true;
     }
 
+    /**
+     * 购物车数据持久化到数据库
+     */
     @Override
     @Transactional
     public void cartDataPersistence() {

@@ -2,16 +2,16 @@ package com.vtmer.yisanbang.shiro;
 
 import com.vtmer.yisanbang.domain.Permission;
 import com.vtmer.yisanbang.mapper.PermissionMapper;
-import org.apache.shiro.authc.pam.FirstSuccessfulStrategy;
-import org.apache.shiro.authc.pam.ModularRealmAuthenticator;
-import org.apache.shiro.realm.Realm;
+import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.ArrayList;
+import javax.servlet.Filter;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,20 +25,19 @@ public class ShiroConfig {
     /**
      * 创建ShiroFilterFactoryBean
      */
-    /*
     @Bean
     public ShiroFilterFactoryBean getShiroFilterFactoryBean(@Qualifier("securityManager") DefaultWebSecurityManager securityManager) {
         ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();
-        Map<String, Filter> filterMap = new HashMap<>();
-        //filterMap.put("jwt", new JwtFilter());
+        Map<String, Filter> filterMap = factoryBean.getFilters();
+        filterMap.put("jwt", jwtFilter());
+        //将自定义 的FormAuthenticationFilter注入shiroFilter中
+        filterMap.put("perms",new ShiroPermissionFilter());
         factoryBean.setFilters(filterMap);
         // 设置安全管理器
         factoryBean.setSecurityManager(securityManager);
         factoryBean.setFilterChainDefinitionMap(setFilterChainDefinitionMap());
         return factoryBean;
     }
-
-     */
 
     private Map<String, String> setFilterChainDefinitionMap() {
         // 添加Shiro内置过滤器
@@ -49,14 +48,43 @@ public class ShiroConfig {
         filterRuleMap.put("/admin/logout", "anon");
         filterRuleMap.put("/ad/list", "anon");
         filterRuleMap.put("/carousel/list", "anon");
-        filterRuleMap.put("/**", "anon");
+        // 管理员添加接口放行，方便测试
+        filterRuleMap.put("/admin/addAdmin", "anon");
+        // get接口放行...
+        // 分类模块接口放行
+        filterRuleMap.put("/sort/get/**","anon");
+        // 单间商品与套装商品管理接口放行
+        filterRuleMap.put("/goodsAndSuit/**","anon");
+        // 商品查询接口放行
+        filterRuleMap.put("/goods/get/**","anon");
+        // 商品详情接口放行
+        filterRuleMap.put("/goodsDetail/get/**","anon");
+        // 获取商家默认收货地址接口放行
+        filterRuleMap.put("/businessAddress/getDefault","anon");
+        // 套装接口放行
+        filterRuleMap.put("/suit/get/**","anon");
+        // 套装详情接口放行
+        filterRuleMap.put("/suitDetail/get/**","anon");
+        // 广告接口放行
+        filterRuleMap.put("/ad/get/**","anon");
+        // 轮播图接口放行
+        filterRuleMap.put("/carousel/get/**","anon");
+        // 部件尺寸管理接口放行
+        filterRuleMap.put("/partSize/get/**","anon");
+        // 颜色尺寸管理接口放行
+        filterRuleMap.put("/colorSize/get/**","anon");
+        //swagger接口权限 开放
+        filterRuleMap.put("/swagger-ui.html", "anon");
+        filterRuleMap.put("/webjars/**", "anon");
+        filterRuleMap.put("/v2/**", "anon");
+        filterRuleMap.put("/swagger-resources/**", "anon");
+        filterRuleMap.put("/static/**", "anon");
+        filterRuleMap.put("/**", "jwt");
         // 获取所有需要权限认证的接口路径
         List<Permission> permissions = permissionMapper.selectAll();
         for (Permission p : permissions) {
-            //filterRuleMap.put(p.getUrl(), "perms[" + p.getUrl() + "]");
+            filterRuleMap.put(p.getUrl(), "perms[" + p.getUrl() + "]");
         }
-        //filterRuleMap.put("/**", "jwt");
-        //filterRuleMap.put("/**", "authc");
         return filterRuleMap;
     }
 
@@ -64,36 +92,21 @@ public class ShiroConfig {
      * 创建DefaultWebSecurityManager
      */
     @Bean("securityManager")
-    public DefaultWebSecurityManager getDefaultWebSecurityManager(@Qualifier("adminRealm") AdminRealm adminRealm,
-                                                                  @Qualifier("userRealm") UserRealm userRealm) {
+    public DefaultWebSecurityManager getDefaultWebSecurityManager(@Qualifier("loginRealm") LoginRealm loginRealm) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        ModularRealmAuthenticator modularRealmAuthenticator = new ModularRealmAuthenticator();
-        // 设置只要有一个Realm验证成功即可，只返回第一个Realm身份验证成功的认证信息
-        modularRealmAuthenticator.setAuthenticationStrategy(new FirstSuccessfulStrategy());
-        securityManager.setAuthenticator(modularRealmAuthenticator);
-
-        List<Realm> realms = new ArrayList<>();
-        // 配置多个Realm
-        realms.add(adminRealm);
-        //realms.add(userRealm);
-        securityManager.setRealms(realms);
+        securityManager.setRealm(loginRealm);
         return securityManager;
     }
 
     /**
      * 创建Realm
      */
-    @Bean("adminRealm")
-    public AdminRealm getAdminRealm() {
-        return new AdminRealm();
+    @Bean("loginRealm")
+    public LoginRealm getLoginRealm() {
+        return new LoginRealm();
     }
 
-    @Bean("userRealm")
-    public UserRealm getUserRealm() {
-        return new UserRealm();
-    }
 
-    /*
     @Bean
     public static DefaultAdvisorAutoProxyCreator getDefaultAdvisorAutoProxyCreator() {
         DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
@@ -101,7 +114,6 @@ public class ShiroConfig {
         return defaultAdvisorAutoProxyCreator;
     }
 
-     */
 
     /**
      * 开启注解验证
@@ -113,7 +125,19 @@ public class ShiroConfig {
         authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
         return authorizationAttributeSourceAdvisor;
     }
-
      */
+
+    @Bean
+    public FilterRegistrationBean registerJwtFilter(@Autowired JwtFilter jwtFilter) {
+        // 设置jwt filter不自动注册到spring管理的监听器中，防止与shiro filter同级，导致该监听器必定执行
+        FilterRegistrationBean<JwtFilter> jwtFilterRegister = new FilterRegistrationBean<>(jwtFilter);
+        jwtFilterRegister.setEnabled(false);
+        return jwtFilterRegister;
+    }
+
+    @Bean
+    public JwtFilter jwtFilter() {
+        return new JwtFilter();
+    }
 
 }

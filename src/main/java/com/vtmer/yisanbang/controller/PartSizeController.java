@@ -24,7 +24,7 @@ public class PartSizeController {
     @Autowired
     private PartSizeService partSizeService;
 
-    @GetMapping("/selectAllPartSize")
+    @GetMapping("/get/selectAllPartSize")
     @ApiOperation(value = "查找所有部件尺寸")
     // 查找所有部件尺寸
     public ResponseMessage selectAll(@ApiParam("查询页数(第几页)")
@@ -38,7 +38,7 @@ public class PartSizeController {
         else return ResponseMessage.newErrorInstance("查找失败");
     }
 
-    @GetMapping("/selectPartBySuitId")
+    @GetMapping("/get/selectPartBySuitId")
     @ApiOperation(value = "根据套装id查找所有该套装的部件尺寸")
     // 根据套装id查找所有该套装的部件尺寸
     public ResponseMessage selectPartBySuitId(@ApiParam(name = "suitId", value = "套装Id", required = true)
@@ -54,7 +54,7 @@ public class PartSizeController {
         else return ResponseMessage.newErrorInstance("查找失败");
     }
 
-    @GetMapping("/selectPartById/{id}")
+    @GetMapping("/get/selectPartById/{id}")
     @ApiOperation(value = "根据部件尺寸id查找部件尺寸")
     // 根据部件尺寸id查找部件尺寸
     public ResponseMessage selectPartById(@ApiParam(name = "partSizeId", value = "部件尺寸Id", required = true)
@@ -102,8 +102,6 @@ public class PartSizeController {
     public ResponseMessage updatePartSize(@ApiParam(name = "部件尺寸Dto实体类", value = "传入Json格式", required = true)
                                           @RequestBody
                                           @Validated(Update.class) PartSizeDTO partSizeDto) {
-        boolean judgeFlag = partSizeService.judgePartSize(partSizeDto);
-        if (judgeFlag) return ResponseMessage.newErrorInstance("该套装部件尺寸已经存在");
         PartSizeDTO partSize = partSizeService.selectPartSizeById(partSizeDto.getId());
         if (partSize != null) {
             boolean updateFlag = partSizeService.updatePartSize(partSizeDto);
@@ -112,7 +110,7 @@ public class PartSizeController {
         } else return ResponseMessage.newErrorInstance("该部件尺寸id错误");
     }
 
-    @GetMapping("/selectAllPartById")
+    @GetMapping("/get/selectAllPartById")
     @ApiOperation(value = "根据套装id查找该套装的所有部件")
     // 根据套装id查找该套装的所有部件
     public ResponseMessage selectAllPartById(@ApiParam(name = "suitId", value = "套装Id", required = true)
@@ -136,7 +134,7 @@ public class PartSizeController {
         }
     }
 
-    @GetMapping("/selectAllSizeById")
+    @GetMapping("/get/selectAllSizeById")
     @ApiOperation(value = "根据套装id查找该套装的所有尺寸")
     // 根据套装id查找该套装的所有尺寸
     public ResponseMessage selectAllSizeById(@ApiParam(name = "suitId", value = "套装Id", required = true)
@@ -160,7 +158,7 @@ public class PartSizeController {
         }
     }
 
-    @GetMapping("/selectInventoryByPartSize/{id}/{part}/{size}")
+    @GetMapping("/get/selectInventoryByPartSize/{id}/{part}/{size}")
     @ApiOperation(value = "根据部件尺寸返回该部件尺寸对应的库存")
     // 根据部件尺寸返回该部件尺寸对应的库存
     public ResponseMessage selectInventoryByPartSize(@ApiParam(name = "suitId", value = "套装Id", required = true)
@@ -179,7 +177,7 @@ public class PartSizeController {
         } else return ResponseMessage.newErrorInstance("该套装id错误，查找无结果");
     }
 
-    @GetMapping("/selectPriceByPartSize/{id}/{part}/{size}")
+    @GetMapping("/get/selectPriceByPartSize/{id}/{part}/{size}")
     @ApiOperation(value = "根据部件尺寸返回该部件尺寸对应的价格")
     // 根据部件尺寸返回该部件尺寸对应的价格
     public ResponseMessage selectPriceByPartSize(@ApiParam(name = "suitId", value = "套装Id", required = true)
@@ -198,7 +196,7 @@ public class PartSizeController {
         } else return ResponseMessage.newErrorInstance("该套装id错误，查找无结果");
     }
 
-    @GetMapping("/selectLowPriceById/{id}")
+    @GetMapping("/get/selectLowPriceById/{id}")
     @ApiOperation(value = "返回套装内部件的最低价")
     // 返回套装内部件的最低价
     public ResponseMessage selectLowPriceById(@ApiParam(name = "suitId", value = "套装Id", required = true)
@@ -213,7 +211,7 @@ public class PartSizeController {
         } else return ResponseMessage.newErrorInstance("该套装id错误，查找无结果");
     }
 
-    @GetMapping("/selectHighPriceById/{id}")
+    @GetMapping("/get/selectHighPriceById/{id}")
     @ApiOperation(value = "返回套装内部件的最高价")
     // 返回套装内部件的最高价
     public ResponseMessage selectHighPriceById(@ApiParam(name = "suitId", value = "套装Id", required = true)

@@ -11,17 +11,6 @@ public class JwtToken implements AuthenticationToken {
 
     private String token;
 
-    private String loginType;
-
-    public JwtToken() {
-
-    }
-
-    public JwtToken(String token,String loginType) {
-        this.token = token;
-        this.loginType = loginType;
-    }
-
     public JwtToken(String token) {
         this.token = token;
     }
