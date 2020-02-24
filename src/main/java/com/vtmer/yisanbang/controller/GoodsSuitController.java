@@ -4,10 +4,8 @@ import com.github.pagehelper.PageHelper;
 import com.vtmer.yisanbang.common.PageResponseMessage;
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.dto.GoodsDTO;
-import com.vtmer.yisanbang.dto.GoodsDetailDTO;
 import com.vtmer.yisanbang.dto.SuitDTO;
 import com.vtmer.yisanbang.service.GoodsAndSuitService;
-import com.vtmer.yisanbang.service.GoodsDetailService;
 import com.vtmer.yisanbang.service.GoodsService;
 import com.vtmer.yisanbang.service.SuitService;
 import io.swagger.annotations.Api;
@@ -35,7 +33,7 @@ public class GoodsSuitController {
     @Autowired
     private SuitService suitService;
 
-    @GetMapping("/selectGoodsAndSuit")
+    @GetMapping("/get/selectGoodsAndSuit")
     @ApiOperation(value = "查找所有单件商品与套装商品信息")
     // 查找所有单件商品与套装商品信息
     public ResponseMessage selectGoodsAndSuit(@ApiParam("查询页数(第几页)")
@@ -54,7 +52,7 @@ public class GoodsSuitController {
         } else return ResponseMessage.newErrorInstance("查找失败");
     }
 
-    @GetMapping("/selectGoodsAndSuitByPriceAsc")
+    @GetMapping("/get/selectGoodsAndSuitByPriceAsc")
     @ApiOperation(value = "根据价格从低到高显示单件商品与套装商品")
     // 根据价格从低到高显示单件商品与套装商品
     public ResponseMessage selectGoodsAndSuitByPriceAsc(@ApiParam("查询页数(第几页)")
@@ -73,7 +71,7 @@ public class GoodsSuitController {
         } else return ResponseMessage.newErrorInstance("查找失败");
     }
 
-    @GetMapping("/selectGoodsAndSuitByPriceDec")
+    @GetMapping("/get/selectGoodsAndSuitByPriceDec")
     @ApiOperation(value = "根据价格从高到低显示单件商品与套装商品")
     // 根据价格从高到低显示单件商品与套装商品
     public ResponseMessage selectGoodsAndSuitByPriceDec(@ApiParam("查询页数(第几页)")
@@ -92,7 +90,7 @@ public class GoodsSuitController {
         } else return ResponseMessage.newErrorInstance("查找失败");
     }
 
-    @GetMapping("/selectGoodsAndSuitByTimeAsc")
+    @GetMapping("/get/selectGoodsAndSuitByTimeAsc")
     @ApiOperation(value = "根据时间从低到高显示单件商品与套装商品")
     // 根据时间从低到高显示单件商品与套装商品
     public ResponseMessage selectGoodsAndSuitByTimeAsc(@ApiParam("查询页数(第几页)")
@@ -111,7 +109,7 @@ public class GoodsSuitController {
         } else return ResponseMessage.newErrorInstance("查找失败");
     }
 
-    @GetMapping("/selectGoodsAndSuitByTimeDec")
+    @GetMapping("/get/selectGoodsAndSuitByTimeDec")
     @ApiOperation(value = "根据时间从高到低显示单件商品与套装商品")
     // 根据时间从高到低显示单件商品与套装商品
     public ResponseMessage selectGoodsAndSuitByTimeDec(@ApiParam("查询页数(第几页)")

@@ -60,7 +60,6 @@ public class JwtUtil {
                 .withClaim("jwt-id", jwtId)
                 .withExpiresAt(expireTime)
                 .sign(algorithm);
-        logger.info("得到token：{}",token);
         // redis缓存JWT,并设置过期时间
         redisTemplate.opsForValue().set("JWT-SESSION-" + jwtId, token, EXPIRE_TIME, TimeUnit.SECONDS);
         return token;
@@ -72,10 +71,12 @@ public class JwtUtil {
             String redisToken = (String) redisTemplate.opsForValue().get("JWT-SESSION-" + getJwtIdByToken(token));
             if (redisToken!=null) {
                 if (!redisToken.equals(token)) {
+                    logger.info("redis中的token和用户提交的token不一致");
                     return false;
                 }
             } else {
                 // 查询不到token，说明token过期或者是token有误
+                logger.info("redis中查询不到token");
                 return false;
             }
             // 效验token
@@ -83,6 +84,7 @@ public class JwtUtil {
             return true;
         // 捕捉到任何异常均视为校验失败
         } catch (Exception e) {
+            logger.info("校验过程中捕获到异常");
             return false;
         }
     }

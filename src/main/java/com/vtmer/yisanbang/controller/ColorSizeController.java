@@ -24,7 +24,7 @@ public class ColorSizeController {
     @Autowired
     private ColorSizeService colorSizeService;
 
-    @GetMapping("/selectAllColorSizeByGoodsId")
+    @GetMapping("/get/selectAllColorSizeByGoodsId")
     @ApiOperation(value = "根据商品id查找该商品的所有颜色尺寸")
     // 查找所有颜色尺寸通过商品id
     public ResponseMessage selectAllColorSizeByGoodsId(@ApiParam(name = "goodsId", value = "商品Id", required = true)
@@ -86,7 +86,7 @@ public class ColorSizeController {
         } else return ResponseMessage.newErrorInstance("该商品颜色尺寸不存在");
     }
 
-    @GetMapping("/selectAllColorById")
+    @GetMapping("/get/selectAllColorById")
     @ApiOperation(value = "根据商品id查找该商品的所有颜色")
     // 查找所有颜色
     public ResponseMessage selectAllColorById(@ApiParam(name = "goodsId", value = "商品Id", required = true)
@@ -110,7 +110,7 @@ public class ColorSizeController {
         }
     }
 
-    @GetMapping("/selectAllSizeById")
+    @GetMapping("/get/selectAllSizeById")
     @ApiOperation(value = "根据商品id查找该商品的所有尺寸")
     // 查找所有尺寸
     public ResponseMessage selectAllSizeById(@ApiParam(name = "goodsId", value = "商品Id", required = true)
@@ -134,7 +134,7 @@ public class ColorSizeController {
         }
     }
 
-    @GetMapping("/selectInventoryByColorSize/{id}/{color}/{size}")
+    @GetMapping("/get/selectInventoryByColorSize/{id}/{color}/{size}")
     @ApiOperation(value = "根据颜色尺寸查找显示库存数量")
     // 根据颜色尺寸查找显示库存
     public ResponseMessage selectInventoryByColorSize(@ApiParam(name = "goodsId", value = "商品Id", required = true) @PathVariable("id") Integer goodsId,

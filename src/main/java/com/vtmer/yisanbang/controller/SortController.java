@@ -37,7 +37,7 @@ public class SortController {
     }
 
     @ApiOperation("根据id查询分类信息")
-    @GetMapping("/{sortId}")
+    @GetMapping("/get/{sortId}")
     public ResponseMessage getSortInfo(@PathVariable("sortId") Integer sortId) {
         Sort sort = sortService.listSortInfoById(sortId);
         if (sort != null) {
@@ -47,7 +47,7 @@ public class SortController {
     }
 
     @ApiOperation("分页查询校服分类")
-    @GetMapping("/uniformSort")
+    @GetMapping("/get/uniformSort")
     public ResponseMessage getAllUniformSortInfo(@ApiParam("查询页数(第几页)") @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
                                                  @ApiParam("单页数量") @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
@@ -59,7 +59,7 @@ public class SortController {
     }
 
     @ApiOperation(value = "分页查询职业装分类", notes = "按分类等级查询")
-    @GetMapping("/suitSort/{parentId}")
+    @GetMapping("/get/suitSort/{parentId}")
     public ResponseMessage getAllSuitSortInfo(@ApiParam("上级分类id(若查询一级分类则为0)") @PathVariable("parentId") Integer parentId,
                                               @ApiParam("查询页数(第几页)") @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
                                               @ApiParam("单页数量") @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {

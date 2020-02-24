@@ -23,7 +23,7 @@ public class GoodsDetailController {
     @Autowired
     private GoodsDetailService goodsDetailService;
 
-    @GetMapping("/selectAllGoodsDetail")
+    @GetMapping("/get/selectAllGoodsDetail")
     @ApiOperation(value = "查找所有商品详情信息")
     // 查找所有商品详情信息
     public ResponseMessage selectAllGoodsDetail(@ApiParam("查询页数(第几页)")
@@ -37,7 +37,7 @@ public class GoodsDetailController {
         else return ResponseMessage.newErrorInstance("查找失败");
     }
 
-    @GetMapping("/selectAllGoodsDetailByGoodsId")
+    @GetMapping("/get/selectAllGoodsDetailByGoodsId")
     @ApiOperation(value = "根据商品id查找该商品的所有商品详情信息")
     // 根据商品id查找该商品的所有商品详情信息
     public ResponseMessage selectAllGoodsDetailByGoodsId(@ApiParam(name = "goodsId", value = "商品Id", required = true)

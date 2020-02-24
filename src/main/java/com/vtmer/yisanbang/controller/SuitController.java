@@ -26,7 +26,7 @@ public class SuitController {
     @Autowired
     private SuitService suitService;
 
-    @GetMapping("/selectAllSuit")
+    @GetMapping("/get/selectAllSuit")
     @ApiOperation(value = "查找显示所有套装")
     // 查找所有套装
     public ResponseMessage selectAllSuit(@ApiParam("查询页数(第几页)")
@@ -41,7 +41,7 @@ public class SuitController {
             return ResponseMessage.newErrorInstance("无套装信息，查找失败");
     }
 
-    @GetMapping("/selectAllSuitOrderByTime")
+    @GetMapping("/get/selectAllSuitOrderByTime")
     @ApiOperation(value = "根据套装更新时间顺序查找显示套装")
     // 根据套装更新时间顺序显示套装
     public ResponseMessage selectAllSuitOrderByTime(@ApiParam("查询页数(第几页)")
@@ -56,7 +56,7 @@ public class SuitController {
             return ResponseMessage.newErrorInstance("无商品信息，查找失败");
     }
 
-    @GetMapping("/selectAllSuitOrderByPrice")
+    @GetMapping("/get/selectAllSuitOrderByPrice")
     @ApiOperation(value = "根据套装价格顺序查找显示套装")
     // 根据套装价格顺序显示套装
     public ResponseMessage selectAllGoodsOrderByPrice(@ApiParam("查询页数(第几页)")
@@ -71,7 +71,7 @@ public class SuitController {
             return ResponseMessage.newErrorInstance("无商品信息，查找失败");
     }
 
-    @GetMapping("/selectAllSuitBySortId")
+    @GetMapping("/get/selectAllSuitBySortId")
     @ApiOperation(value = "根据套装分类id查找套装")
     // 根据套装分类查找套装
     public ResponseMessage selectAllSuitBySortId(@ApiParam(name = "sortId", value = "分类Id", required = true)
@@ -88,7 +88,7 @@ public class SuitController {
             return ResponseMessage.newErrorInstance("无套装信息，查找失败");
     }
 
-    @GetMapping("/selectSuitById/{id}")
+    @GetMapping("/get/selectSuitById/{id}")
     @ApiOperation(value = "根据套装id查找套装")
     // 根据套装id查找套装
     public ResponseMessage selectSuitById(@ApiParam(name = "goodsId", value = "商品Id", required = true)
@@ -99,7 +99,7 @@ public class SuitController {
         else return ResponseMessage.newErrorInstance("该套装id错误");
     }
 
-    @GetMapping("/selectSuitByName/{name}")
+    @GetMapping("/get/selectSuitByName/{name}")
     @ApiOperation(value = "根据套装名称查找套装")
     // 根据套装名称查找套装
     public ResponseMessage selectSuitByName(@ApiParam(name = "goodsName", value = "商品名称", required = true)
