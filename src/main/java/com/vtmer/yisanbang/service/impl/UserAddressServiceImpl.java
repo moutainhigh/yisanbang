@@ -30,16 +30,22 @@ public class UserAddressServiceImpl implements UserAddressService {
     // 根据地址id更新地址
     public boolean updateUserAddressByAddressId(UserAddressDTO userAddress) {
         int updateFlag = userAddressMapper.updateDtoByPrimaryKey(userAddress);
-        if (updateFlag > 0) return true;
-        else return false;
+        if (updateFlag > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
     // 根据地址id删除地址
     public boolean deleteUserAddressByAddressId(UserAddressDTO userAddress) {
         int deleteFlag = userAddressMapper.deleteByPrimaryKey(userAddress.getId());
-        if (deleteFlag > 0) return true;
-        else return false;
+        if (deleteFlag > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -47,8 +53,9 @@ public class UserAddressServiceImpl implements UserAddressService {
     public UserAddressDTO selectDefaultUserAddress(Integer userId) {
         List<UserAddressDTO> userAddressDtos = userAddressMapper.selectAllByUserId(userId);
         for (UserAddressDTO addressDto : userAddressDtos) {
-            if (addressDto.getIsDefault())
+            if (addressDto.getIsDefault()) {
                 return addressDto;
+            }
         }
         return null;
     }
@@ -58,8 +65,9 @@ public class UserAddressServiceImpl implements UserAddressService {
         Integer userId = JwtFilter.getLoginUser().getId();
         List<UserAddressDTO> userAddressDtos = userAddressMapper.selectAllByUserId(userId);
         for (UserAddressDTO addressDto : userAddressDtos) {
-            if (addressDto.getIsDefault())
+            if (addressDto.getIsDefault()) {
                 return addressDto;
+            }
         }
         return null;
     }
@@ -83,7 +91,9 @@ public class UserAddressServiceImpl implements UserAddressService {
     public boolean JudegAddressContent(UserAddressDTO userAddress, List<UserAddressDTO> userAdressDtos) {
         for (UserAddressDTO userAdressList : userAdressDtos) {
             String addressName = userAdressList.getAddressName();
-            if (userAddress.getAddressName().equals(addressName)) return true;
+            if (userAddress.getAddressName().equals(addressName)) {
+                return true;
+            }
         }
         return false;
     }
@@ -92,12 +102,16 @@ public class UserAddressServiceImpl implements UserAddressService {
     // 添加地址
     public boolean InsertUserAddress(UserAddressDTO userAddress) {
         List<UserAddressDTO> userAddressDtos = userAddressMapper.selectAllByUserId(userAddress.getUserId());
-        if (userAddressDtos != null && !userAddressDtos.isEmpty())
+        if (userAddressDtos != null && !userAddressDtos.isEmpty()) {
             userAddress.setIsDefault(false);
-        else
+        } else {
             userAddress.setIsDefault(true);
+        }
         Integer flag = userAddressMapper.insertDto(userAddress);
-        if (flag > 0) return true;
-        else return false;
+        if (flag > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

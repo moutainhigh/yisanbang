@@ -36,10 +36,11 @@ public class SuitController {
                                          @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<SuitDTO> suitDtoList = suitService.selectAll();
-        if (suitDtoList != null && !suitDtoList.isEmpty())
+        if (suitDtoList != null && !suitDtoList.isEmpty()) {
             return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(suitDtoList), "查找成功");
-        else
+        } else {
             return ResponseMessage.newErrorInstance("无套装信息，查找失败");
+        }
     }
 
     @GetMapping("/get/selectAllSuitOrderByTime")
@@ -54,11 +55,13 @@ public class SuitController {
         PageHelper.startPage(pageNum, pageSize);
         List<SuitDTO> suitDtoList = suitService.selectSuitOrderByTime();
         if (suitDtoList != null && !suitDtoList.isEmpty()) {
-            if (ifDec > 0)
+            if (ifDec > 0) {
                 Collections.reverse(suitDtoList);
+            }
             return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(suitDtoList), "查找成功");
-        } else
+        } else {
             return ResponseMessage.newErrorInstance("无商品信息，查找失败");
+        }
     }
 
     @GetMapping("/get/selectAllSuitOrderByPrice")
@@ -73,11 +76,13 @@ public class SuitController {
         PageHelper.startPage(pageNum, pageSize);
         List<SuitDTO> suitDtoList = suitService.selectSuitOrderByPrice();
         if (suitDtoList != null && !suitDtoList.isEmpty()) {
-            if (ifDec > 0)
+            if (ifDec > 0) {
                 Collections.reverse(suitDtoList);
+            }
             return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(suitDtoList), "查找成功");
-        } else
+        } else {
             return ResponseMessage.newErrorInstance("无商品信息，查找失败");
+        }
     }
 
     @GetMapping("/get/selectAllSuitBySortIdOrderByPrice")
@@ -94,11 +99,13 @@ public class SuitController {
         PageHelper.startPage(pageNum, pageSize);
         List<SuitDTO> suitDtoList = suitService.selectSuitBySortIdOrderByPrice(sortId);
         if (suitDtoList != null && !suitDtoList.isEmpty()) {
-            if (ifDec > 0)
+            if (ifDec > 0) {
                 Collections.reverse(suitDtoList);
+            }
             return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(suitDtoList), "查找成功");
-        } else
+        } else {
             return ResponseMessage.newErrorInstance("无套装信息，查找失败");
+        }
     }
 
     @GetMapping("/get/selectAllSuitBySortIdOrderByTime")
@@ -115,11 +122,13 @@ public class SuitController {
         PageHelper.startPage(pageNum, pageSize);
         List<SuitDTO> suitDtoList = suitService.selectSuitBySortIdOrderByTime(sortId);
         if (suitDtoList != null && !suitDtoList.isEmpty()) {
-            if (ifDec > 0)
+            if (ifDec > 0) {
                 Collections.reverse(suitDtoList);
+            }
             return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(suitDtoList), "查找成功");
-        } else
+        } else {
             return ResponseMessage.newErrorInstance("无套装信息，查找失败");
+        }
     }
 
     @GetMapping("/get/selectAllSuitBySortId")
@@ -136,11 +145,13 @@ public class SuitController {
         PageHelper.startPage(pageNum, pageSize);
         List<SuitDTO> suitDtoList = suitService.selectSuitBySort(sortId);
         if (suitDtoList != null && !suitDtoList.isEmpty()) {
-            if (ifDec > 0)
+            if (ifDec > 0) {
                 Collections.reverse(suitDtoList);
+            }
             return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(suitDtoList), "查找成功");
-        } else
+        } else {
             return ResponseMessage.newErrorInstance("无套装信息，查找失败");
+        }
     }
 
     @GetMapping("/get/selectSuitById")
@@ -149,9 +160,11 @@ public class SuitController {
     public ResponseMessage selectSuitById(@ApiParam(name = "suitId", value = "套装Id", required = true)
                                           @RequestParam(value = "suitId", defaultValue = "5") Integer suitId) {
         SuitDTO suitDto = suitService.selectSuitById(suitId);
-        if (suitDto != null)
+        if (suitDto != null) {
             return ResponseMessage.newSuccessInstance(suitDto, "查找成功");
-        else return ResponseMessage.newErrorInstance("该套装id错误");
+        } else {
+            return ResponseMessage.newErrorInstance("该套装id错误");
+        }
     }
 
     @GetMapping("/get/selectSuitByContent")
@@ -163,13 +176,16 @@ public class SuitController {
                                                @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
                                                @ApiParam("单页数量")
                                                @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
-        if (content == null)
+        if (content == null) {
             return ResponseMessage.newErrorInstance("输入内容为空");
+        }
         PageHelper.startPage(pageNum, pageSize);
         List<SuitDTO> suitDtoList = suitService.selectSuitByContent(content);
-        if (suitDtoList != null && !suitDtoList.isEmpty())
+        if (suitDtoList != null && !suitDtoList.isEmpty()) {
             return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(suitDtoList), "查找成功");
-        else return ResponseMessage.newErrorInstance("该套装名称不存在");
+        } else {
+            return ResponseMessage.newErrorInstance("该套装名称不存在");
+        }
     }
 
     @PostMapping("/addSuit")
@@ -181,11 +197,16 @@ public class SuitController {
         List<SuitDTO> suitDtoList = suitService.selectAll();
         if (suitDtoList != null && !suitDtoList.isEmpty()) {
             boolean judgeFlag = suitService.judgeSuit(suitDto, suitDtoList);
-            if (judgeFlag) return ResponseMessage.newErrorInstance("该套装名称已经存在");
+            if (judgeFlag) {
+                return ResponseMessage.newErrorInstance("该套装名称已经存在");
+            }
         }
         boolean addFlag = suitService.addSuit(suitDto);
-        if (addFlag) return ResponseMessage.newSuccessInstance("添加成功");
-        else return ResponseMessage.newErrorInstance("添加失败");
+        if (addFlag) {
+            return ResponseMessage.newSuccessInstance("添加成功");
+        } else {
+            return ResponseMessage.newErrorInstance("添加失败");
+        }
     }
 
     @DeleteMapping("/deleteSuit")
@@ -197,9 +218,14 @@ public class SuitController {
         SuitDTO suit = suitService.selectSuitById(suitDto.getId());
         if (suit != null) {
             boolean deleteFlag = suitService.deleteSuitById(suitDto.getId());
-            if (deleteFlag) return ResponseMessage.newSuccessInstance("删除成功");
-            else return ResponseMessage.newErrorInstance("删除失败");
-        } else return ResponseMessage.newSuccessInstance("该商品不存在");
+            if (deleteFlag) {
+                return ResponseMessage.newSuccessInstance("删除成功");
+            } else {
+                return ResponseMessage.newErrorInstance("删除失败");
+            }
+        } else {
+            return ResponseMessage.newSuccessInstance("该商品不存在");
+        }
     }
 
     @PutMapping("/updateSuit")
@@ -211,9 +237,14 @@ public class SuitController {
         SuitDTO suit = suitService.selectSuitById(suitDto.getId());
         if (suit != null) {
             boolean updateFlag = suitService.updateSuitById(suitDto);
-            if (updateFlag) return ResponseMessage.newSuccessInstance("更新成功");
-            else return ResponseMessage.newErrorInstance("更新失败");
-        } else return ResponseMessage.newSuccessInstance("该商品不存在");
+            if (updateFlag) {
+                return ResponseMessage.newSuccessInstance("更新成功");
+            } else {
+                return ResponseMessage.newErrorInstance("更新失败");
+            }
+        } else {
+            return ResponseMessage.newSuccessInstance("该商品不存在");
+        }
     }
 
     @PutMapping("/hideSuit")
@@ -225,9 +256,14 @@ public class SuitController {
         SuitDTO suit = suitService.selectSuitById(suitDto.getId());
         if (suit != null) {
             boolean hideFlag = suitService.hideSuit(suit);
-            if (hideFlag) return ResponseMessage.newSuccessInstance("修改成功");
-            else return ResponseMessage.newErrorInstance("修改失败");
-        } else return ResponseMessage.newErrorInstance("该商品不存在");
+            if (hideFlag) {
+                return ResponseMessage.newSuccessInstance("修改成功");
+            } else {
+                return ResponseMessage.newErrorInstance("修改失败");
+            }
+        } else {
+            return ResponseMessage.newErrorInstance("该商品不存在");
+        }
     }
 
     @PostMapping("/uploadGoodsPic")

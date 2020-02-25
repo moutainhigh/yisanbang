@@ -43,8 +43,9 @@ public class PartSizeServiceImpl implements PartSizeService {
     // 查找所有部件尺寸
     public List<PartSizeDTO> selectAll() {
         List<PartSizeDTO> partSizeDtos = partSizeMapper.selectAllDto();
-        if (partSizeDtos != null && !partSizeDtos.isEmpty())
+        if (partSizeDtos != null && !partSizeDtos.isEmpty()) {
             return partSizeDtos;
+        }
         return null;
     }
 
@@ -52,7 +53,9 @@ public class PartSizeServiceImpl implements PartSizeService {
     // 添加部件尺寸
     public boolean addPartSize(PartSizeDTO partSizeDto) {
         int addFlag = partSizeMapper.insertDto(partSizeDto);
-        if (addFlag > 0) return true;
+        if (addFlag > 0) {
+            return true;
+        }
         return false;
     }
 
@@ -60,7 +63,9 @@ public class PartSizeServiceImpl implements PartSizeService {
     // 删除部件尺寸
     public boolean deletePartSize(Integer partSizeId) {
         int deleteFlag = partSizeMapper.deleteByPrimaryKey(partSizeId);
-        if (deleteFlag > 0) return true;
+        if (deleteFlag > 0) {
+            return true;
+        }
         return false;
     }
 
@@ -68,7 +73,9 @@ public class PartSizeServiceImpl implements PartSizeService {
     // 更新部件尺寸
     public boolean updatePartSize(PartSizeDTO partSizeDto) {
         int updateFlag = partSizeMapper.updateDtoByPrimaryKey(partSizeDto);
-        if (updateFlag > 0) return true;
+        if (updateFlag > 0) {
+            return true;
+        }
         return false;
     }
 
@@ -76,7 +83,9 @@ public class PartSizeServiceImpl implements PartSizeService {
     // 根据部件尺寸id查找部件尺寸
     public PartSizeDTO selectPartSizeById(Integer partSizeId) {
         PartSizeDTO partSizeDto = partSizeMapper.selectDtoByPrimaryKey(partSizeId);
-        if (partSizeDto != null) return partSizeDto;
+        if (partSizeDto != null) {
+            return partSizeDto;
+        }
         return null;
     }
 
@@ -84,8 +93,9 @@ public class PartSizeServiceImpl implements PartSizeService {
     // 根据套装id查找所有该套装的部件尺寸
     public List<PartSizeDTO> selectAllBySuitId(Integer suitId) {
         List<PartSizeDTO> partSizeDtos = partSizeMapper.selectAllBySuitId(suitId);
-        if (partSizeDtos != null && !partSizeDtos.isEmpty())
+        if (partSizeDtos != null && !partSizeDtos.isEmpty()) {
             return partSizeDtos;
+        }
         return null;
     }
 
@@ -94,10 +104,13 @@ public class PartSizeServiceImpl implements PartSizeService {
     public boolean judgePartSize(PartSizeDTO partSizeDto) {
         List<PartSizeDTO> partSizeDtoList = partSizeMapper.selectAllDto();
         for (PartSizeDTO partSize : partSizeDtoList) {
-            if (partSize.getSuitId() == partSizeDto.getSuitId())
-                if (partSize.getPart().equals(partSizeDto.getPart()))
-                    if (partSize.getSize().equals(partSizeDto.getSize()))
+            if (partSize.getSuitId().equals(partSizeDto.getSuitId())) {
+                if (partSize.getPart().equals(partSizeDto.getPart())) {
+                    if (partSize.getSize().equals(partSizeDto.getSize())) {
                         return true;
+                    }
+                }
+            }
         }
         return false;
     }
@@ -137,9 +150,11 @@ public class PartSizeServiceImpl implements PartSizeService {
     public Integer selectInventoryByPartSize(Integer suitId, String part, String size) {
         List<PartSizeDTO> partSizeDtos = partSizeMapper.selectAllBySuitId(suitId);
         for (PartSizeDTO partSize : partSizeDtos) {
-            if (partSize.getPart().equals(part))
-                if (partSize.getSize().equals(size))
+            if (partSize.getPart().equals(part)) {
+                if (partSize.getSize().equals(size)) {
                     return partSize.getInventory();
+                }
+            }
         }
         return null;
     }
@@ -149,9 +164,11 @@ public class PartSizeServiceImpl implements PartSizeService {
     public Double selectPriceByPartSize(Integer suitId, String part, String size) {
         List<PartSizeDTO> partSizeDtos = partSizeMapper.selectAllBySuitId(suitId);
         for (PartSizeDTO partSize : partSizeDtos) {
-            if (partSize.getPart().equals(part))
-                if (partSize.getSize().equals(size))
+            if (partSize.getPart().equals(part)) {
+                if (partSize.getSize().equals(size)) {
                     return partSize.getPrice();
+                }
+            }
         }
         return null;
     }

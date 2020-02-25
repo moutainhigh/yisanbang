@@ -32,9 +32,11 @@ public class GoodsDetailController {
                                                 @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<GoodsDetailDTO> goodsDetailDtos = goodsDetailService.selectAllDto();
-        if (goodsDetailDtos != null && !goodsDetailDtos.isEmpty())
+        if (goodsDetailDtos != null && !goodsDetailDtos.isEmpty()) {
             return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(goodsDetailDtos), "查找成功");
-        else return ResponseMessage.newErrorInstance("查找失败");
+        } else {
+            return ResponseMessage.newErrorInstance("查找失败");
+        }
     }
 
     @GetMapping("/get/selectAllGoodsDetailByGoodsId")
@@ -48,9 +50,11 @@ public class GoodsDetailController {
                                                          @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<GoodsDetailDTO> goodsDetailDtos = goodsDetailService.selectAllDtoByGoodsId(goodsId);
-        if (goodsDetailDtos != null && !goodsDetailDtos.isEmpty())
+        if (goodsDetailDtos != null && !goodsDetailDtos.isEmpty()) {
             return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(goodsDetailDtos), "查找成功");
-        else return ResponseMessage.newErrorInstance("查找失败");
+        } else {
+            return ResponseMessage.newErrorInstance("查找失败");
+        }
     }
 
     @PostMapping("/addGoodsDetail")
@@ -58,8 +62,11 @@ public class GoodsDetailController {
     // 添加商品详情信息
     public ResponseMessage addGoodsDetail(@RequestBody GoodsDetailDTO goodsDetail) {
         boolean addFlag = goodsDetailService.addGoodsDetail(goodsDetail);
-        if (addFlag) return ResponseMessage.newSuccessInstance("添加成功");
-        else return ResponseMessage.newErrorInstance("添加失败");
+        if (addFlag) {
+            return ResponseMessage.newSuccessInstance("添加成功");
+        } else {
+            return ResponseMessage.newErrorInstance("添加失败");
+        }
     }
 
     @PutMapping("/updateGoodsDetail")
@@ -69,9 +76,14 @@ public class GoodsDetailController {
         GoodsDetailDTO goodsDetailDto = goodsDetailService.selectGoodsDetailByID(goodsDetail.getId());
         if (goodsDetailDto != null) {
             boolean updateFlag = goodsDetailService.updateGoodsDetail(goodsDetail);
-            if (updateFlag) return ResponseMessage.newSuccessInstance("更新成功");
-            else return ResponseMessage.newErrorInstance("更新失败");
-        } else return ResponseMessage.newErrorInstance("该商品详细id错误，无该商品详细信息");
+            if (updateFlag) {
+                return ResponseMessage.newSuccessInstance("更新成功");
+            } else {
+                return ResponseMessage.newErrorInstance("更新失败");
+            }
+        } else {
+            return ResponseMessage.newErrorInstance("该商品详细id错误，无该商品详细信息");
+        }
     }
 
     @DeleteMapping("/deleteGoodsDetail")
@@ -81,9 +93,14 @@ public class GoodsDetailController {
         GoodsDetailDTO goodsDetailDto = goodsDetailService.selectGoodsDetailByID(goodsDetail.getId());
         if (goodsDetailDto != null) {
             boolean deleteFlag = goodsDetailService.deleteGoodsDetail(goodsDetail.getId());
-            if (deleteFlag) return ResponseMessage.newSuccessInstance("删除成功");
-            else return ResponseMessage.newErrorInstance("删除失败");
-        } else return ResponseMessage.newErrorInstance("该商品详细id错误，无该商品详细信息");
+            if (deleteFlag) {
+                return ResponseMessage.newSuccessInstance("删除成功");
+            } else {
+                return ResponseMessage.newErrorInstance("删除失败");
+            }
+        } else {
+            return ResponseMessage.newErrorInstance("该商品详细id错误，无该商品详细信息");
+        }
     }
 
     @PostMapping("/uploadGoodsDetailPic")

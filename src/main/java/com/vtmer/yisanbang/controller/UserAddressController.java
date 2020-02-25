@@ -61,11 +61,16 @@ public class UserAddressController {
         List<UserAddressDTO> userAddressDtos = userAddressService.selectUserAddressByUserId(userAddress.getUserId());
         if (userAddressDtos != null && !userAddressDtos.isEmpty()) {
             boolean flag = userAddressService.JudegAddressContent(userAddress, userAddressDtos);
-            if (flag) return ResponseMessage.newErrorInstance("该地址已存在");
+            if (flag) {
+                return ResponseMessage.newErrorInstance("该地址已存在");
+            }
         }
         boolean insertFlag = userAddressService.InsertUserAddress(userAddress);
-        if (insertFlag == true) return ResponseMessage.newSuccessInstance("添加成功");
-        else return ResponseMessage.newErrorInstance("添加失败");
+        if (insertFlag == true) {
+            return ResponseMessage.newSuccessInstance("添加成功");
+        } else {
+            return ResponseMessage.newErrorInstance("添加失败");
+        }
     }
 
     /*
@@ -83,25 +88,33 @@ public class UserAddressController {
         if (address != null) {
             UserAddressDTO userAddressDTO = userAddressService.selectDefaultUserAddress(userAddress.getUserId());
             List<UserAddressDTO> userAddressDTOS = userAddressService.selectUserAddressByUserId(address.getUserId());
-            if (userAddressDTO.getId() == address.getId())
-                if (!userAddress.getIsDefault())
+            if (userAddressDTO.getId().equals(address.getId())) {
+                if (!userAddress.getIsDefault()) {
                     if (userAddressDTOS.size() > 1) {
                         Boolean flag = true;
                         for (int i = 0; i < userAddressDTOS.size(); i++) {
-                            if (flag)
-                                if (userAddressDTOS.get(i).getId() != address.getId()) {
+                            if (flag) {
+                                if (!userAddressDTOS.get(i).getId().equals(address.getId())) {
                                     UserAddressDTO addressDTO = userAddressDTOS.get(i);
                                     addressDTO.setIsDefault(true);
                                     userAddressService.updateUserAddressByAddressId(addressDTO);
                                     flag = false;
                                 }
+                            }
                         }
                     }
+                }
+            }
 
             boolean flag = userAddressService.updateUserAddressByAddressId(userAddress);
-            if (flag == true) return ResponseMessage.newSuccessInstance("更新成功");
-            else return ResponseMessage.newErrorInstance("更新失败");
-        } else return ResponseMessage.newErrorInstance("该地址id错误");
+            if (flag == true) {
+                return ResponseMessage.newSuccessInstance("更新成功");
+            } else {
+                return ResponseMessage.newErrorInstance("更新失败");
+            }
+        } else {
+            return ResponseMessage.newErrorInstance("该地址id错误");
+        }
     }
 
     /*
@@ -119,24 +132,30 @@ public class UserAddressController {
         if (address != null) {
             UserAddressDTO userAddressDTO = userAddressService.selectDefaultUserAddress(userAddress.getUserId());
             List<UserAddressDTO> userAddressDTOS = userAddressService.selectUserAddressByUserId(address.getUserId());
-            if (userAddressDTO.getId() == address.getId()) {
+            if (userAddressDTO.getId().equals(address.getId())) {
                 if (userAddressDTOS.size() > 1) {
                     Boolean flag = true;
                     for (int i = 0; i < userAddressDTOS.size(); i++) {
-                        if (flag)
-                            if (userAddressDTOS.get(i).getId() != address.getId()) {
+                        if (flag) {
+                            if (!userAddressDTOS.get(i).getId().equals(address.getId())) {
                                 UserAddressDTO addressDTO = userAddressDTOS.get(i);
                                 addressDTO.setIsDefault(true);
                                 userAddressService.updateUserAddressByAddressId(addressDTO);
                                 flag = false;
                             }
+                        }
                     }
                 }
             }
             boolean flag = userAddressService.deleteUserAddressByAddressId(address);
-            if (flag == true) return ResponseMessage.newSuccessInstance("删除成功");
-            else return ResponseMessage.newErrorInstance("删除失败");
-        } else return ResponseMessage.newErrorInstance("该地址id错误");
+            if (flag == true) {
+                return ResponseMessage.newSuccessInstance("删除成功");
+            } else {
+                return ResponseMessage.newErrorInstance("删除失败");
+            }
+        } else {
+            return ResponseMessage.newErrorInstance("该地址id错误");
+        }
     }
 
     /*
@@ -170,8 +189,13 @@ public class UserAddressController {
         UserAddressDTO addressDto = userAddressService.selectDefaultUserAddress(userAddress.getUserId());
         if (addressDto != null) {
             boolean changeFlag = userAddressService.changeDefaultUserAddress(addressDto, userAddress);
-            if (changeFlag) return ResponseMessage.newSuccessInstance("改变成功");
-            else return ResponseMessage.newErrorInstance("改变失败");
-        } else return ResponseMessage.newErrorInstance("该地址错误");
+            if (changeFlag) {
+                return ResponseMessage.newSuccessInstance("改变成功");
+            } else {
+                return ResponseMessage.newErrorInstance("改变失败");
+            }
+        } else {
+            return ResponseMessage.newErrorInstance("该地址错误");
+        }
     }
 }

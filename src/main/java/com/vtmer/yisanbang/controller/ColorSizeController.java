@@ -36,10 +36,11 @@ public class ColorSizeController {
                                                        @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<ColorSizeDTO> colorSizeDtos = colorSizeService.selectAllByGoodsId(goodsId);
-        if (colorSizeDtos != null && !colorSizeDtos.isEmpty())
+        if (colorSizeDtos != null && !colorSizeDtos.isEmpty()) {
             return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(colorSizeDtos), "查找成功");
-        else
+        } else {
             return ResponseMessage.newErrorInstance("无商品颜色尺寸信息，查找失败");
+        }
     }
 
     @PostMapping("/addColorSize")
@@ -53,10 +54,15 @@ public class ColorSizeController {
             return ResponseMessage.newErrorInstance("该商品颜色尺寸id已经存在");
         }
         boolean judgeFlag = colorSizeService.judgeColorSize(colorSizeDto);
-        if (judgeFlag) return ResponseMessage.newErrorInstance("该商品颜色尺寸已经存在");
+        if (judgeFlag) {
+            return ResponseMessage.newErrorInstance("该商品颜色尺寸已经存在");
+        }
         boolean addFlag = colorSizeService.addColorSize(colorSizeDto);
-        if (addFlag) return ResponseMessage.newSuccessInstance("添加成功");
-        else return ResponseMessage.newErrorInstance("添加失败");
+        if (addFlag) {
+            return ResponseMessage.newSuccessInstance("添加成功");
+        } else {
+            return ResponseMessage.newErrorInstance("添加失败");
+        }
     }
 
     @PutMapping("/updateColorSize")
@@ -68,9 +74,14 @@ public class ColorSizeController {
         ColorSizeDTO colorSize = colorSizeService.selectColorSizeById(colorSizeDto.getId());
         if (colorSize != null) {
             boolean updateFlag = colorSizeService.updateColorSize(colorSizeDto);
-            if (updateFlag) return ResponseMessage.newSuccessInstance("更新成功");
-            else return ResponseMessage.newErrorInstance("更新失败");
-        } else return ResponseMessage.newErrorInstance("该商品颜色尺寸id不存在");
+            if (updateFlag) {
+                return ResponseMessage.newSuccessInstance("更新成功");
+            } else {
+                return ResponseMessage.newErrorInstance("更新失败");
+            }
+        } else {
+            return ResponseMessage.newErrorInstance("该商品颜色尺寸id不存在");
+        }
     }
 
     @DeleteMapping("/deleteColorSize")
@@ -82,9 +93,14 @@ public class ColorSizeController {
         ColorSizeDTO colorSize = colorSizeService.selectColorSizeById(colorSizeDto.getId());
         if (colorSize != null) {
             boolean deleteFlag = colorSizeService.deleteColorSize(colorSizeDto.getId());
-            if (deleteFlag) return ResponseMessage.newSuccessInstance("删除成功");
-            else return ResponseMessage.newErrorInstance("删除失败");
-        } else return ResponseMessage.newErrorInstance("该商品颜色尺寸不存在");
+            if (deleteFlag) {
+                return ResponseMessage.newSuccessInstance("删除成功");
+            } else {
+                return ResponseMessage.newErrorInstance("删除失败");
+            }
+        } else {
+            return ResponseMessage.newErrorInstance("该商品颜色尺寸不存在");
+        }
     }
 
     @GetMapping("/get/selectAllColorById")
@@ -137,9 +153,11 @@ public class ColorSizeController {
         ColorSizeDTO colorSizeDto = colorSizeService.selectColorSizeById(goodsId);
         if (colorSizeDto != null) {
             Integer inventory = colorSizeService.selectInventoryByColorSize(goodsId, color, size);
-            if (inventory != null)
+            if (inventory != null) {
                 return ResponseMessage.newSuccessInstance(inventory, "查找成功");
-            else return ResponseMessage.newErrorInstance("查找失败");
+            } else {
+                return ResponseMessage.newErrorInstance("查找失败");
+            }
         } else {
             return ResponseMessage.newErrorInstance("查找失败，该商品id错误");
         }

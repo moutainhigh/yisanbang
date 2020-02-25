@@ -22,7 +22,9 @@ public class GoodsDetailServiceImpl implements GoodsDetailService {
     // 添加商品详细信息
     public boolean addGoodsDetail(GoodsDetailDTO goodsDetail) {
         int addFlag = goodsDetailMapper.insertDto(goodsDetail);
-        if (addFlag > 0) return true;
+        if (addFlag > 0) {
+            return true;
+        }
         return false;
     }
 
@@ -30,7 +32,9 @@ public class GoodsDetailServiceImpl implements GoodsDetailService {
     // 删除商品详细信息
     public boolean deleteGoodsDetail(Integer goodsDetailId) {
         int deleteFlag = goodsDetailMapper.deleteByPrimaryKey(goodsDetailId);
-        if (deleteFlag > 0) return true;
+        if (deleteFlag > 0) {
+            return true;
+        }
         return false;
     }
 
@@ -38,7 +42,9 @@ public class GoodsDetailServiceImpl implements GoodsDetailService {
     // 更新商品详细信息
     public boolean updateGoodsDetail(GoodsDetailDTO goodsDetail) {
         int updateFlag = goodsDetailMapper.updateDtoByPrimaryKey(goodsDetail);
-        if (updateFlag > 0) return true;
+        if (updateFlag > 0) {
+            return true;
+        }
         return false;
     }
 
@@ -46,7 +52,9 @@ public class GoodsDetailServiceImpl implements GoodsDetailService {
     // 查找所有商品详细信息
     public List<GoodsDetailDTO> selectAllDto() {
         List<GoodsDetailDTO> goodsDetailDtos = goodsDetailMapper.selectAllDto();
-        if (goodsDetailDtos != null) return goodsDetailDtos;
+        if (goodsDetailDtos != null) {
+            return goodsDetailDtos;
+        }
         return null;
     }
 
@@ -66,7 +74,9 @@ public class GoodsDetailServiceImpl implements GoodsDetailService {
     // 根据商品详细id查找商品详细信息
     public GoodsDetailDTO selectGoodsDetailByID(Integer goodsDeteilId) {
         GoodsDetailDTO goodsDetailDto = goodsDetailMapper.selectDtoByPrimaryKey(goodsDeteilId);
-        if (goodsDetailDto != null) return goodsDetailDto;
+        if (goodsDetailDto != null) {
+            return goodsDetailDto;
+        }
         return null;
     }
 }

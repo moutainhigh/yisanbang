@@ -21,7 +21,9 @@ public class SuitServiceImpl implements SuitService {
     // 查找所有套装
     public List<SuitDTO> selectAll() {
         List<SuitDTO> suitList = suitMapper.selectAllDto();
-        if (suitList != null && !suitList.isEmpty()) return suitList;
+        if (suitList != null && !suitList.isEmpty()) {
+            return suitList;
+        }
         return null;
     }
 
@@ -29,7 +31,9 @@ public class SuitServiceImpl implements SuitService {
     // 根据套装id删除套装
     public boolean deleteSuitById(Integer suitId) {
         int deleteFlaf = suitMapper.deleteByPrimaryKey(suitId);
-        if (deleteFlaf > 0) return true;
+        if (deleteFlaf > 0) {
+            return true;
+        }
         return false;
     }
 
@@ -37,7 +41,9 @@ public class SuitServiceImpl implements SuitService {
     // 根据套装id更新套装
     public boolean updateSuitById(SuitDTO suitDto) {
         int updateFlag = suitMapper.updateDtoByPrimaryKey(suitDto);
-        if (updateFlag > 0) return true;
+        if (updateFlag > 0) {
+            return true;
+        }
         return false;
     }
 
@@ -45,15 +51,18 @@ public class SuitServiceImpl implements SuitService {
     // 添加套装
     public boolean addSuit(SuitDTO suitDto) {
         int insertFlag = suitMapper.insertDto(suitDto);
-        if (insertFlag > 0) return true;
+        if (insertFlag > 0) {
+            return true;
+        }
         return false;
     }
 
     @Override
     public boolean judgeSuit(SuitDTO suitDto, List<SuitDTO> suitDtoList) {
         for (SuitDTO suit : suitDtoList) {
-            if (suit.getName().equals(suitDto.getName()))
+            if (suit.getName().equals(suitDto.getName())) {
                 return true;
+            }
         }
         return false;
     }
@@ -62,7 +71,9 @@ public class SuitServiceImpl implements SuitService {
     // 根据套装id查找套装
     public SuitDTO selectSuitById(Integer suitId) {
         SuitDTO suitDto = suitMapper.selectDtoByPrimaryKey(suitId);
-        if (suitDto != null) return suitDto;
+        if (suitDto != null) {
+            return suitDto;
+        }
         return null;
     }
 
@@ -70,8 +81,9 @@ public class SuitServiceImpl implements SuitService {
     // 根据套装名字与简介查找套装
     public List<SuitDTO> selectSuitByContent(String content) {
         List<SuitDTO> suitDtoList = suitMapper.selectDtoByContent(content);
-        if (suitDtoList != null && !suitDtoList.isEmpty())
+        if (suitDtoList != null && !suitDtoList.isEmpty()) {
             return suitDtoList;
+        }
         return null;
     }
 
@@ -140,10 +152,14 @@ public class SuitServiceImpl implements SuitService {
     public boolean hideSuit(SuitDTO suitDto) {
         if (suitDto.getIsShow()) {
             int hideFlag = suitMapper.hideSuit(suitDto.getId());
-            if (hideFlag > 0) return true;
+            if (hideFlag > 0) {
+                return true;
+            }
         } else {
             int showFlag = suitMapper.showSuit(suitDto.getId());
-            if (showFlag > 0) return true;
+            if (showFlag > 0) {
+                return true;
+            }
         }
         return false;
     }
@@ -151,7 +167,9 @@ public class SuitServiceImpl implements SuitService {
     @Override
     public List<SuitDTO> selectAllShow() {
         List<SuitDTO> suitList = suitMapper.selectAllShowDto();
-        if (suitList != null && !suitList.isEmpty()) return suitList;
+        if (suitList != null && !suitList.isEmpty()) {
+            return suitList;
+        }
         return null;
     }
 }
