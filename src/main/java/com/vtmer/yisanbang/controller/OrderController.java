@@ -31,6 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.constraints.*;
 import java.util.List;
@@ -205,6 +206,7 @@ public class OrderController {
      * 推荐的做法是，当收到通知进行处理时，首先检查对应业务数据的状态，判断该通知是否已经处理过，如果没有处理过再进行处理，如果处理过直接返回结果成功。在对业务数据进行状态检查和处理之前，要采用数据锁进行并发控制，以避免函数重入造成的数据混乱。
      * 特别提醒：商户系统对于支付结果通知的内容一定要做签名验证,并校验返回的订单金额是否与商户侧的订单金额一致，防止数据泄漏导致出现“假通知”，造成资金损失。
      */
+    @ApiIgnore
     @RequestLog(module = "订单", operationDesc = "支付回调通知处理")
     @PostMapping("/wxNotify")
     public String parseOrderNotifyResult(@RequestBody String xmlData) {
@@ -335,6 +337,7 @@ public class OrderController {
      * @param orderMap —— orderId、status
      * @return
      */
+    @ApiIgnore
     @PutMapping("/setOrderStatus")
     public ResponseMessage setOrderStatus(@RequestBody Map<String, Integer> orderMap) {
         Integer status = orderMap.get("status");
