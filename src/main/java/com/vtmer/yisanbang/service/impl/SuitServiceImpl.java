@@ -1,11 +1,15 @@
 package com.vtmer.yisanbang.service.impl;
 
+import com.vtmer.yisanbang.common.util.Comparator.ComparatorGoodsSuit;
+import com.vtmer.yisanbang.common.util.Comparator.ComparatorGoodsSuitByPrice;
+import com.vtmer.yisanbang.common.util.Comparator.ComparatorGoodsSuitByTime;
 import com.vtmer.yisanbang.dto.SuitDTO;
 import com.vtmer.yisanbang.mapper.SuitMapper;
 import com.vtmer.yisanbang.service.SuitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -63,10 +67,11 @@ public class SuitServiceImpl implements SuitService {
     }
 
     @Override
-    // 根据套装名字查找套装
-    public SuitDTO selectSuitByName(String suitName) {
-        SuitDTO suitDto = suitMapper.selectDtoBySuitName(suitName);
-        if (suitDto != null) return suitDto;
+    // 根据套装名字与简介查找套装
+    public List<SuitDTO> selectSuitByContent(String content) {
+        List<SuitDTO> suitDtoList = suitMapper.selectDtoByContent(content);
+        if (suitDtoList != null && !suitDtoList.isEmpty())
+            return suitDtoList;
         return null;
     }
 
@@ -74,7 +79,11 @@ public class SuitServiceImpl implements SuitService {
     // 根据套装的最低价格排序进行显示
     public List<SuitDTO> selectSuitOrderByPrice() {
         List<SuitDTO> suitDtoList = suitMapper.selectAllDtoOrderByPrice();
-        if (suitDtoList != null && !suitDtoList.isEmpty()) return suitDtoList;
+        if (suitDtoList != null && !suitDtoList.isEmpty()) {
+            ComparatorGoodsSuitByPrice comparatorGoodsSuitByPrice = new ComparatorGoodsSuitByPrice();
+            Collections.sort(suitDtoList, comparatorGoodsSuitByPrice);
+            return suitDtoList;
+        }
         return null;
     }
 
@@ -82,7 +91,11 @@ public class SuitServiceImpl implements SuitService {
     // 根据套装的时间排序进行显示
     public List<SuitDTO> selectSuitOrderByTime() {
         List<SuitDTO> suitDtoList = suitMapper.selectAllDtoOrderByTime();
-        if (suitDtoList != null && !suitDtoList.isEmpty()) return suitDtoList;
+        if (suitDtoList != null && !suitDtoList.isEmpty()) {
+            ComparatorGoodsSuitByTime comparatorGoodsSuitByTime = new ComparatorGoodsSuitByTime();
+            Collections.sort(suitDtoList, comparatorGoodsSuitByTime);
+            return suitDtoList;
+        }
         return null;
     }
 
@@ -90,7 +103,35 @@ public class SuitServiceImpl implements SuitService {
     // 根据分类id显示套装
     public List<SuitDTO> selectSuitBySort(Integer sortId) {
         List<SuitDTO> suitDtoList = suitMapper.selectAllDtoBySortId(sortId);
-        if (suitDtoList != null && !suitDtoList.isEmpty()) return suitDtoList;
+        if (suitDtoList != null && !suitDtoList.isEmpty()) {
+            ComparatorGoodsSuit comparatorGoodsSuit = new ComparatorGoodsSuit();
+            Collections.sort(suitDtoList, comparatorGoodsSuit);
+            return suitDtoList;
+        }
+        return null;
+    }
+
+    @Override
+    // 根据分类id与套装的最低价格排序进行显示
+    public List<SuitDTO> selectSuitBySortIdOrderByPrice(Integer sortId) {
+        List<SuitDTO> suitDTOList = suitMapper.selectSuitBySortIdOrderByPrice(sortId);
+        if (suitDTOList != null && !suitDTOList.isEmpty()) {
+            ComparatorGoodsSuitByPrice comparatorGoodsSuitByPrice = new ComparatorGoodsSuitByPrice();
+            Collections.sort(suitDTOList, comparatorGoodsSuitByPrice);
+            return suitDTOList;
+        }
+        return null;
+    }
+
+    @Override
+    // 根据分类id与套装的时间排序进行显示
+    public List<SuitDTO> selectSuitBySortIdOrderByTime(Integer sortId) {
+        List<SuitDTO> suitDTOList = suitMapper.selectSuitBySortIdOrderByTime(sortId);
+        if (suitDTOList != null && !suitDTOList.isEmpty()) {
+            ComparatorGoodsSuitByTime comparatorGoodsSuitByTime = new ComparatorGoodsSuitByTime();
+            Collections.sort(suitDTOList, comparatorGoodsSuitByTime);
+            return suitDTOList;
+        }
         return null;
     }
 

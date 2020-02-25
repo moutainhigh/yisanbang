@@ -16,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,31 +45,81 @@ public class SuitController {
     @GetMapping("/get/selectAllSuitOrderByTime")
     @ApiOperation(value = "根据套装更新时间顺序查找显示套装")
     // 根据套装更新时间顺序显示套装
-    public ResponseMessage selectAllSuitOrderByTime(@ApiParam("查询页数(第几页)")
+    public ResponseMessage selectAllSuitOrderByTime(@ApiParam(name = "ifDec", value = "降序标志", required = true)
+                                                    @RequestParam(value = "ifDec", defaultValue = "1") Integer ifDec,
+                                                    @ApiParam("查询页数(第几页)")
                                                     @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
                                                     @ApiParam("单页数量")
                                                     @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<SuitDTO> suitDtoList = suitService.selectSuitOrderByTime();
-        if (suitDtoList != null && !suitDtoList.isEmpty())
+        if (suitDtoList != null && !suitDtoList.isEmpty()) {
+            if (ifDec > 0)
+                Collections.reverse(suitDtoList);
             return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(suitDtoList), "查找成功");
-        else
+        } else
             return ResponseMessage.newErrorInstance("无商品信息，查找失败");
     }
 
     @GetMapping("/get/selectAllSuitOrderByPrice")
     @ApiOperation(value = "根据套装价格顺序查找显示套装")
     // 根据套装价格顺序显示套装
-    public ResponseMessage selectAllGoodsOrderByPrice(@ApiParam("查询页数(第几页)")
+    public ResponseMessage selectAllGoodsOrderByPrice(@ApiParam(name = "ifDec", value = "降序标志", required = true)
+                                                      @RequestParam(value = "ifDec", defaultValue = "1") Integer ifDec,
+                                                      @ApiParam("查询页数(第几页)")
                                                       @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
                                                       @ApiParam("单页数量")
                                                       @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<SuitDTO> suitDtoList = suitService.selectSuitOrderByPrice();
-        if (suitDtoList != null && !suitDtoList.isEmpty())
+        if (suitDtoList != null && !suitDtoList.isEmpty()) {
+            if (ifDec > 0)
+                Collections.reverse(suitDtoList);
             return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(suitDtoList), "查找成功");
-        else
+        } else
             return ResponseMessage.newErrorInstance("无商品信息，查找失败");
+    }
+
+    @GetMapping("/get/selectAllSuitBySortIdOrderByPrice")
+    @ApiOperation(value = "根据分类id以及价格顺序显示套装")
+    // 根据分类id以及价格顺序显示套装
+    public ResponseMessage selectAllSuitBySortIdOrderByPrice(@ApiParam(name = "sortId", value = "分类Id", required = true)
+                                                             @RequestParam(value = "sortId", defaultValue = "5") Integer sortId,
+                                                             @ApiParam(name = "ifDec", value = "降序标志", required = true)
+                                                             @RequestParam(value = "ifDec", defaultValue = "1") Integer ifDec,
+                                                             @ApiParam("查询页数(第几页)")
+                                                             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                                                             @ApiParam("单页数量")
+                                                             @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<SuitDTO> suitDtoList = suitService.selectSuitBySortIdOrderByPrice(sortId);
+        if (suitDtoList != null && !suitDtoList.isEmpty()) {
+            if (ifDec > 0)
+                Collections.reverse(suitDtoList);
+            return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(suitDtoList), "查找成功");
+        } else
+            return ResponseMessage.newErrorInstance("无套装信息，查找失败");
+    }
+
+    @GetMapping("/get/selectAllSuitBySortIdOrderByTime")
+    @ApiOperation(value = "根据分类id以及更新时间顺序显示商品套装")
+    // 根据分类id以及更新时间顺序显示商品套装
+    public ResponseMessage selectAllSuitBySortIdOrderByTime(@ApiParam(name = "sortId", value = "分类Id", required = true)
+                                                            @RequestParam(value = "sortId", defaultValue = "5") Integer sortId,
+                                                            @ApiParam(name = "ifDec", value = "降序标志", required = true)
+                                                            @RequestParam(value = "ifDec", defaultValue = "1") Integer ifDec,
+                                                            @ApiParam("查询页数(第几页)")
+                                                            @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                                                            @ApiParam("单页数量")
+                                                            @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<SuitDTO> suitDtoList = suitService.selectSuitBySortIdOrderByTime(sortId);
+        if (suitDtoList != null && !suitDtoList.isEmpty()) {
+            if (ifDec > 0)
+                Collections.reverse(suitDtoList);
+            return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(suitDtoList), "查找成功");
+        } else
+            return ResponseMessage.newErrorInstance("无套装信息，查找失败");
     }
 
     @GetMapping("/get/selectAllSuitBySortId")
@@ -76,37 +127,46 @@ public class SuitController {
     // 根据套装分类查找套装
     public ResponseMessage selectAllSuitBySortId(@ApiParam(name = "sortId", value = "分类Id", required = true)
                                                  @RequestParam(value = "sortId", defaultValue = "5") Integer sortId,
+                                                 @ApiParam(name = "ifDec", value = "降序标志", required = true)
+                                                 @RequestParam(value = "ifDec", defaultValue = "1") Integer ifDec,
                                                  @ApiParam("查询页数(第几页)")
                                                  @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
                                                  @ApiParam("单页数量")
                                                  @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<SuitDTO> suitDtoList = suitService.selectSuitBySort(sortId);
-        if (suitDtoList != null && !suitDtoList.isEmpty())
+        if (suitDtoList != null && !suitDtoList.isEmpty()) {
+            if (ifDec > 0)
+                Collections.reverse(suitDtoList);
             return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(suitDtoList), "查找成功");
-        else
+        } else
             return ResponseMessage.newErrorInstance("无套装信息，查找失败");
     }
 
-    @GetMapping("/get/selectSuitById/{id}")
+    @GetMapping("/get/selectSuitById")
     @ApiOperation(value = "根据套装id查找套装")
     // 根据套装id查找套装
-    public ResponseMessage selectSuitById(@ApiParam(name = "goodsId", value = "商品Id", required = true)
-                                          @PathVariable("id") Integer goodsId) {
-        SuitDTO suitDto = suitService.selectSuitById(goodsId);
+    public ResponseMessage selectSuitById(@ApiParam(name = "suitId", value = "套装Id", required = true)
+                                          @RequestParam(value = "suitId", defaultValue = "5") Integer suitId) {
+        SuitDTO suitDto = suitService.selectSuitById(suitId);
         if (suitDto != null)
             return ResponseMessage.newSuccessInstance(suitDto, "查找成功");
         else return ResponseMessage.newErrorInstance("该套装id错误");
     }
 
-    @GetMapping("/get/selectSuitByName/{name}")
-    @ApiOperation(value = "根据套装名称查找套装")
-    // 根据套装名称查找套装
-    public ResponseMessage selectSuitByName(@ApiParam(name = "goodsName", value = "商品名称", required = true)
-                                            @PathVariable("name") String goodsName) {
-        SuitDTO suit = suitService.selectSuitByName(goodsName);
-        if (suit != null)
-            return ResponseMessage.newSuccessInstance(suit, "查找成功");
+    @GetMapping("/get/selectSuitByContent")
+    @ApiOperation(value = "根据套装名称与简介查找套装")
+    // 根据套装名称与简介查找套装
+    public ResponseMessage selectSuitByContent(@ApiParam(name = "content", value = "查找内容", required = true)
+                                               @RequestParam(value = "content", defaultValue = "学生") String content,
+                                               @ApiParam("查询页数(第几页)")
+                                               @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                                               @ApiParam("单页数量")
+                                               @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<SuitDTO> suitDtoList = suitService.selectSuitByContent(content);
+        if (suitDtoList != null && !suitDtoList.isEmpty())
+            return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(suitDtoList), "查找成功");
         else return ResponseMessage.newErrorInstance("该套装名称不存在");
     }
 

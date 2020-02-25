@@ -27,7 +27,7 @@ public interface GoodsMapper {
     GoodsDTO selectDtoByPrimaryKey(Integer goodsId);
 
     // Dto
-    GoodsDTO selectDtoByGoodsName(String goodsName);
+    List<GoodsDTO> selectDtoByContent(String content);
 
     // Dto
     List<GoodsDTO> selectAllDto();
