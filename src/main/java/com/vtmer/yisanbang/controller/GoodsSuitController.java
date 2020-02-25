@@ -218,6 +218,8 @@ public class GoodsSuitController {
         List<GoodsDTO> goodsDTOS = goodsService.selectDtoByContent(content);
         List<SuitDTO> suitDTOS = suitService.selectSuitByContent(content);
         List<Object> list = null;
+        if (content == null)
+            return ResponseMessage.newErrorInstance("输入内容为空");
         if ((goodsDTOS != null && !goodsDTOS.isEmpty()) || (suitDTOS != null && !suitDTOS.isEmpty())) {
             if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty())
                 list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, suitDTOS);

@@ -163,6 +163,8 @@ public class SuitController {
                                                @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
                                                @ApiParam("单页数量")
                                                @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
+        if (content == null)
+            return ResponseMessage.newErrorInstance("输入内容为空");
         PageHelper.startPage(pageNum, pageSize);
         List<SuitDTO> suitDtoList = suitService.selectSuitByContent(content);
         if (suitDtoList != null && !suitDtoList.isEmpty())
