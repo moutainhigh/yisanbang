@@ -75,6 +75,9 @@ public class ShiroConfig {
         filterRuleMap.put("/colorSize/get/**","anon");
         //swagger接口权限 开放
         filterRuleMap.put("/swagger-ui.html", "anon");
+        filterRuleMap.put("/doc.html", "anon");
+        filterRuleMap.put("/v2/api-docs", "anon");
+        filterRuleMap.put("/v2/api-docs-ext", "anon");
         filterRuleMap.put("/webjars/**", "anon");
         filterRuleMap.put("/v2/**", "anon");
         filterRuleMap.put("/swagger-resources/**", "anon");
