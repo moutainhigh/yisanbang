@@ -1,5 +1,6 @@
 package com.vtmer.yisanbang.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.vtmer.yisanbang.common.PageResponseMessage;
 import com.vtmer.yisanbang.common.ResponseMessage;
@@ -106,18 +107,13 @@ public class ColorSizeController {
     @ApiOperation(value = "根据商品id查找该商品的所有颜色")
     // 查找所有颜色
     public ResponseMessage selectAllColorById(@ApiParam(name = "goodsId", value = "商品Id", required = true)
-                                              @RequestParam(value = "goodsId", defaultValue = "5") Integer goodsId,
-                                              @ApiParam("查询页数(第几页)")
-                                              @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-                                              @ApiParam("单页数量")
-                                              @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
+                                              @RequestParam(value = "goodsId", defaultValue = "5") Integer goodsId) {
         List<ColorSizeDTO> colorSizeDtos = colorSizeService.selectAllByGoodsId(goodsId);
         if (colorSizeDtos != null) {
             List<String> list = colorSizeService.selectAllColorById(goodsId);
             if (list != null && !list.isEmpty()) {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
-                return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(uniqueList), "查找成功");
+                return ResponseMessage.newSuccessInstance(uniqueList, "查找成功");
             } else {
                 return ResponseMessage.newErrorInstance("查找失败");
             }
@@ -130,18 +126,13 @@ public class ColorSizeController {
     @ApiOperation(value = "根据商品id查找该商品的所有尺寸")
     // 查找所有尺寸
     public ResponseMessage selectAllSizeById(@ApiParam(name = "goodsId", value = "商品Id", required = true)
-                                             @RequestParam(value = "goodsId", defaultValue = "5") Integer goodsId,
-                                             @ApiParam("查询页数(第几页)")
-                                             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-                                             @ApiParam("单页数量")
-                                             @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
+                                             @RequestParam(value = "goodsId", defaultValue = "5") Integer goodsId) {
         List<ColorSizeDTO> colorSizeDtos = colorSizeService.selectAllByGoodsId(goodsId);
         if (colorSizeDtos != null) {
             List<String> list = colorSizeService.selectAllSizeById(goodsId);
             if (list != null && !list.isEmpty()) {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
-                return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(uniqueList), "查找成功");
+                return ResponseMessage.newSuccessInstance(uniqueList, "查找成功");
             } else {
                 return ResponseMessage.newErrorInstance("查找失败");
             }

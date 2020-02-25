@@ -176,6 +176,8 @@ public class GoodsController {
                                                 @ApiParam("单页数量")
                                                 @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
+        if (content == null)
+            return ResponseMessage.newErrorInstance("输入内容为空");
         List<GoodsDTO> goodsDTOS = goodsService.selectDtoByContent(content);
         if (goodsDTOS != null && !goodsDTOS.isEmpty()) {
             return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(goodsDTOS), "查找成功");

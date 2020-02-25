@@ -119,18 +119,13 @@ public class PartSizeController {
     @ApiOperation(value = "根据套装id查找该套装的所有部件")
     // 根据套装id查找该套装的所有部件
     public ResponseMessage selectAllPartById(@ApiParam(name = "suitId", value = "套装Id", required = true)
-                                             @RequestParam(value = "suitId", defaultValue = "5") Integer suitId,
-                                             @ApiParam("查询页数(第几页)")
-                                             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-                                             @ApiParam("单页数量")
-                                             @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
+                                             @RequestParam(value = "suitId", defaultValue = "5") Integer suitId) {
         List<PartSizeDTO> partSizeDtos = partSizeService.selectAllBySuitId(suitId);
         if (partSizeDtos != null) {
             List<String> list = partSizeService.selectAllPartById(suitId);
             if (list != null && !list.isEmpty()) {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
-                return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(uniqueList), "查找成功");
+                return ResponseMessage.newSuccessInstance(uniqueList, "查找成功");
             } else {
                 return ResponseMessage.newErrorInstance("查找失败");
             }
@@ -143,18 +138,13 @@ public class PartSizeController {
     @ApiOperation(value = "根据套装id查找该套装的所有尺寸")
     // 根据套装id查找该套装的所有尺寸
     public ResponseMessage selectAllSizeById(@ApiParam(name = "suitId", value = "套装Id", required = true)
-                                             @RequestParam(value = "suitId", defaultValue = "5") Integer suitId,
-                                             @ApiParam("查询页数(第几页)")
-                                             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-                                             @ApiParam("单页数量")
-                                             @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
+                                             @RequestParam(value = "suitId", defaultValue = "5") Integer suitId) {
         List<PartSizeDTO> partSizeDtos = partSizeService.selectAllBySuitId(suitId);
         if (partSizeDtos != null) {
             List<String> list = partSizeService.selectAllSizeById(suitId);
             if (list != null && !list.isEmpty()) {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
-                return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(uniqueList), "查找成功");
+                return ResponseMessage.newSuccessInstance(uniqueList, "查找成功");
             } else {
                 return ResponseMessage.newErrorInstance("查找失败");
             }
