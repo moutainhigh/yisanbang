@@ -41,7 +41,7 @@ public class GoodsAndSuitServiceImpl implements GoodsAndSuitService {
     }
 
     @Override
-    public List selectGoodsAndSuitByPriceAsc(List<GoodsDTO> goodsDTOList, List<SuitDTO> suitDTOList) {
+    public List selectGoodsAndSuitByPrice(List<GoodsDTO> goodsDTOList, List<SuitDTO> suitDTOList) {
         List objectList = new ArrayList<>();
         Iterator iterator1 = goodsDTOList.iterator();
         Iterator iterator2 = suitDTOList.iterator();
@@ -57,24 +57,7 @@ public class GoodsAndSuitServiceImpl implements GoodsAndSuitService {
     }
 
     @Override
-    public List selectGoodsAndSuitByPriceDec(List<GoodsDTO> goodsDTOList, List<SuitDTO> suitDTOList) {
-        List objectList = new ArrayList<>();
-        Iterator iterator1 = goodsDTOList.iterator();
-        Iterator iterator2 = suitDTOList.iterator();
-        while (iterator1.hasNext()) {
-            objectList.add(iterator1.next());
-        }
-        while (iterator2.hasNext()) {
-            objectList.add(iterator2.next());
-        }
-        ComparatorGoodsSuitByPrice comparatorGoodsSuit = new ComparatorGoodsSuitByPrice();
-        Collections.sort(objectList, comparatorGoodsSuit);
-        Collections.reverse(objectList);
-        return objectList;
-    }
-
-    @Override
-    public List selectGoodsAndSuitByTimeAsc(List<GoodsDTO> goodsDTOList, List<SuitDTO> suitDTOList) {
+    public List selectGoodsAndSuitByTime(List<GoodsDTO> goodsDTOList, List<SuitDTO> suitDTOList) {
         List objectList = new ArrayList<>();
         Iterator iterator1 = goodsDTOList.iterator();
         Iterator iterator2 = suitDTOList.iterator();
@@ -86,23 +69,6 @@ public class GoodsAndSuitServiceImpl implements GoodsAndSuitService {
         }
         ComparatorGoodsSuitByTime comparatorGoodsSuit = new ComparatorGoodsSuitByTime();
         Collections.sort(objectList, comparatorGoodsSuit);
-        return objectList;
-    }
-
-    @Override
-    public List selectGoodsAndSuitByTimeDec(List<GoodsDTO> goodsDTOList, List<SuitDTO> suitDTOList) {
-        List objectList = new ArrayList<>();
-        Iterator iterator1 = goodsDTOList.iterator();
-        Iterator iterator2 = suitDTOList.iterator();
-        while (iterator1.hasNext()) {
-            objectList.add(iterator1.next());
-        }
-        while (iterator2.hasNext()) {
-            objectList.add(iterator2.next());
-        }
-        ComparatorGoodsSuitByTime comparatorGoodsSuit = new ComparatorGoodsSuitByTime();
-        Collections.sort(objectList, comparatorGoodsSuit);
-        Collections.reverse(objectList);
         return objectList;
     }
 }

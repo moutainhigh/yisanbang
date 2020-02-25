@@ -47,9 +47,9 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Override
     // 根据商品名称查找商品
-    public GoodsDTO selectDtoByGoodsName(String goodsName) {
-        GoodsDTO goods = goodsMapper.selectDtoByGoodsName(goodsName);
-        if (goods != null) return goods;
+    public List<GoodsDTO> selectDtoByContent(String content) {
+        List<GoodsDTO> goodsDtos = goodsMapper.selectDtoByContent(content);
+        if (goodsDtos != null && !goodsDtos.isEmpty()) return goodsDtos;
         return null;
     }
 

@@ -10,14 +10,8 @@ public interface GoodsAndSuitService {
     public List selectGoodsAndSuit(List<GoodsDTO> goodsDTOList, List<SuitDTO> suitDTOList);
 
     // 根据价格从低到高显示单件商品与套装商品
-    public List selectGoodsAndSuitByPriceAsc(List<GoodsDTO> goodsDTOList, List<SuitDTO> suitDTOList);
-
-    // 根据价格从高到低显示单件商品与套装商品
-    public List selectGoodsAndSuitByPriceDec(List<GoodsDTO> goodsDTOList, List<SuitDTO> suitDTOList);
+    public List selectGoodsAndSuitByPrice(List<GoodsDTO> goodsDTOList, List<SuitDTO> suitDTOList);
 
     // 根据时间从低到高显示单件商品与套装商品
-    public List selectGoodsAndSuitByTimeAsc(List<GoodsDTO> goodsDTOList, List<SuitDTO> suitDTOList);
-
-    // 根据时间从高到低显示单件商品与套装商品
-    public List selectGoodsAndSuitByTimeDec(List<GoodsDTO> goodsDTOList, List<SuitDTO> suitDTOList);
+    public List selectGoodsAndSuitByTime(List<GoodsDTO> goodsDTOList, List<SuitDTO> suitDTOList);
 }

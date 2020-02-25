@@ -33,7 +33,7 @@ public interface SuitMapper {
     int updateDtoByPrimaryKey(SuitDTO record);
 
     // Dto
-    SuitDTO selectDtoBySuitName(String suitName);
+    List<SuitDTO> selectDtoByContent(String content);
 
     // Dto
     List<SuitDTO> selectAllDtoOrderByPrice();
@@ -43,6 +43,12 @@ public interface SuitMapper {
 
     // Dto
     List<SuitDTO> selectAllDtoBySortId(Integer sortId);
+
+    // Dto
+    List<SuitDTO> selectSuitBySortIdOrderByPrice(Integer sortId);
+
+    // Dto
+    List<SuitDTO> selectSuitBySortIdOrderByTime(Integer sortId);
 
     int hideSuit(Integer suitId);
 
