@@ -73,7 +73,7 @@ public class CarouselController {
     }
 
     @ApiOperation(value = "查询轮播图信息", notes = "(默认不分页，传入分页相关参数则返回分页信息)")
-    @GetMapping("/list")
+    @GetMapping("/get/list")
     public ResponseMessage getAllCarouselInfo(@ApiParam("查询页数(第几页)") @Param(value = "pageNum") Integer pageNum,
                                               @ApiParam("单页查询数量") @Param(value = "pageSize") Integer pageSize) {
         if (pageNum != null && pageSize != null && pageNum != 0 && pageSize != 0) {
@@ -93,7 +93,7 @@ public class CarouselController {
     }
 
     @ApiOperation("根据id查询轮播图信息")
-    @GetMapping("/{carouselId}")
+    @GetMapping("/get/{carouselId}")
     public ResponseMessage getAdInfo(@PathVariable("carouselId") Integer carouselId) {
         Carousel carousel = carouselService.listInfoById(carouselId);
         if (carousel != null) {

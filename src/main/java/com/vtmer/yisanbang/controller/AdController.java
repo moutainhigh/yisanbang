@@ -29,7 +29,7 @@ public class AdController {
     private AdService adService;
 
     @ApiOperation(value = "查询所有广告信息", notes = "(默认不分页，传入分页相关参数则返回分页信息)")
-    @GetMapping("/list")
+    @GetMapping("/get/list")
     public ResponseMessage getAllAdInfo(@ApiParam("查询页数(第几页)") @Param(value = "pageNum") Integer pageNum,
                                         @ApiParam("单页查询数量") @Param(value = "pageSize") Integer pageSize) {
         if (pageNum != null && pageSize != null && pageNum != 0 && pageSize != 0) {
@@ -49,7 +49,7 @@ public class AdController {
     }
 
     @ApiOperation("根据id查询广告信息")
-    @GetMapping("/{adId}")
+    @GetMapping("/get/{adId}")
     public ResponseMessage getAdInfo(@PathVariable("adId") Integer adId) {
         Ad ad = adService.listAdInfoByAdId(adId);
         if (ad != null) {
