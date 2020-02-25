@@ -92,8 +92,7 @@ public class SuitController {
                                                              @ApiParam("单页数量")
                                                              @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        List<SuitDTO> suitDtoList = suitService.selectSuitBySort(sortId);
-
+        List<SuitDTO> suitDtoList = suitService.selectSuitBySortIdOrderByPrice(sortId);
         if (suitDtoList != null && !suitDtoList.isEmpty()) {
             if (ifDec > 0)
                 Collections.reverse(suitDtoList);
@@ -114,10 +113,7 @@ public class SuitController {
                                                             @ApiParam("单页数量")
                                                             @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        List<SuitDTO> suitDtoList = suitService.selectSuitBySort(sortId);
-        if (ifDec > 0) {
-            Collections.reverse(suitDtoList);
-        }
+        List<SuitDTO> suitDtoList = suitService.selectSuitBySortIdOrderByTime(sortId);
         if (suitDtoList != null && !suitDtoList.isEmpty()) {
             if (ifDec > 0)
                 Collections.reverse(suitDtoList);
@@ -139,7 +135,6 @@ public class SuitController {
                                                  @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<SuitDTO> suitDtoList = suitService.selectSuitBySort(sortId);
-
         if (suitDtoList != null && !suitDtoList.isEmpty()) {
             if (ifDec > 0)
                 Collections.reverse(suitDtoList);

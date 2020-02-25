@@ -1,11 +1,15 @@
 package com.vtmer.yisanbang.service.impl;
 
+import com.vtmer.yisanbang.common.util.Comparator.ComparatorGoodsSuit;
+import com.vtmer.yisanbang.common.util.Comparator.ComparatorGoodsSuitByPrice;
+import com.vtmer.yisanbang.common.util.Comparator.ComparatorGoodsSuitByTime;
 import com.vtmer.yisanbang.dto.GoodsDTO;
 import com.vtmer.yisanbang.mapper.GoodsMapper;
 import com.vtmer.yisanbang.service.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -89,7 +93,11 @@ public class GoodsServiceImpl implements GoodsService {
     // 根据商品分类显示商品
     public List<GoodsDTO> selectAllDtoBySort(Integer sortId) {
         List<GoodsDTO> goodsDtos = goodsMapper.selectAllDtoBySort(sortId);
-        if (goodsDtos != null && !goodsDtos.isEmpty()) return goodsDtos;
+        if (goodsDtos != null && !goodsDtos.isEmpty()) {
+            ComparatorGoodsSuit comparatorGoodsSuit = new ComparatorGoodsSuit();
+            Collections.sort(goodsDtos,comparatorGoodsSuit);
+            return goodsDtos;
+        }
         return null;
     }
 
@@ -97,7 +105,11 @@ public class GoodsServiceImpl implements GoodsService {
     // 根据分类以及商品价格排序显示商品
     public List<GoodsDTO> selectAllDtoBySortOrderByPrice(Integer sortId) {
         List<GoodsDTO> goodsDtos = goodsMapper.selectAllDtoBySortOrderByPrice(sortId);
-        if (goodsDtos != null && !goodsDtos.isEmpty()) return goodsDtos;
+        if (goodsDtos != null && !goodsDtos.isEmpty()) {
+            ComparatorGoodsSuitByPrice comparatorGoodsSuitByPrice = new ComparatorGoodsSuitByPrice();
+            Collections.sort(goodsDtos,comparatorGoodsSuitByPrice);
+            return goodsDtos;
+        }
         return null;
     }
 
@@ -105,7 +117,11 @@ public class GoodsServiceImpl implements GoodsService {
     // 根据分类以及商品更新时间排序显示商品
     public List<GoodsDTO> selectAllDtoBySortOrderByTime(Integer sortId) {
         List<GoodsDTO> goodsDtos = goodsMapper.selectAllDtoBySortOrderByTime(sortId);
-        if (goodsDtos != null && !goodsDtos.isEmpty()) return goodsDtos;
+        if (goodsDtos != null && !goodsDtos.isEmpty()) {
+            ComparatorGoodsSuitByTime comparatorGoodsSuitByTime = new ComparatorGoodsSuitByTime();
+            Collections.sort(goodsDtos,comparatorGoodsSuitByTime);
+            return goodsDtos;
+        }
         return null;
     }
 
@@ -113,7 +129,11 @@ public class GoodsServiceImpl implements GoodsService {
     // 根据商品价格排序显示商品
     public List<GoodsDTO> selectAllDtoOrderByPrice() {
         List<GoodsDTO> goodsDtos = goodsMapper.selectAllDtoOrderByPrice();
-        if (goodsDtos != null && !goodsDtos.isEmpty()) return goodsDtos;
+        if (goodsDtos != null && !goodsDtos.isEmpty()) {
+            ComparatorGoodsSuitByPrice comparatorGoodsSuitByPrice = new ComparatorGoodsSuitByPrice();
+            Collections.sort(goodsDtos,comparatorGoodsSuitByPrice);
+            return goodsDtos;
+        }
         return null;
     }
 
@@ -121,7 +141,11 @@ public class GoodsServiceImpl implements GoodsService {
     // 根据商品更新时间排序显示商品
     public List<GoodsDTO> selectAllDtoOrderByTime() {
         List<GoodsDTO> goodsDtos = goodsMapper.selectAllDtoOrderByTime();
-        if (goodsDtos != null && !goodsDtos.isEmpty()) return goodsDtos;
+        if (goodsDtos != null && !goodsDtos.isEmpty()) {
+            ComparatorGoodsSuitByTime comparatorGoodsSuitByTime = new ComparatorGoodsSuitByTime();
+            Collections.sort(goodsDtos,comparatorGoodsSuitByTime);
+            return goodsDtos;
+        }
         return null;
     }
 

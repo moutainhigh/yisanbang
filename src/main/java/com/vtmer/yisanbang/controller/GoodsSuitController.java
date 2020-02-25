@@ -175,8 +175,6 @@ public class GoodsSuitController {
     // 根据名称与简介查找并显示单件商品与套装商品
     public ResponseMessage selectGoodsAndSuitBySortIdAndTimeDec(@ApiParam(name = "content", value = "查找内容", required = true)
                                                                 @RequestParam(value = "content", defaultValue = "学生") String content,
-                                                                @ApiParam(name = "ifDec", value = "降序标志", required = true)
-                                                                @RequestParam(value = "ifDec", defaultValue = "1") Integer ifDec,
                                                                 @ApiParam("查询页数(第几页)")
                                                                 @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
                                                                 @ApiParam("单页数量")
@@ -184,11 +182,9 @@ public class GoodsSuitController {
         List<GoodsDTO> goodsDTOS = goodsService.selectDtoByContent(content);
         List<SuitDTO> suitDTOS = suitService.selectSuitByContent(content);
         if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty()) {
-            List<Object> list = goodsAndSuitService.selectGoodsAndSuitByTime(goodsDTOS, suitDTOS);
+            List<Object> list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, suitDTOS);
             if (list != null && !list.isEmpty()) {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
-                if (ifDec > 0)
-                    Collections.reverse(uniqueList);
                 List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
                 return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(pager), "查找成功");
             } else return ResponseMessage.newErrorInstance("查找失败");
