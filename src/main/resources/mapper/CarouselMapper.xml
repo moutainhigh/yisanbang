@@ -42,12 +42,12 @@
     from carousel
     order by show_order asc
   </select>
-  <update id="updateAd2Show" parameterType="java.lang.Integer">
+  <update id="updateCarousel2Show" parameterType="java.lang.Integer">
     update carousel
     set is_show = 1
     where id = #{carouselId}
   </update>
-  <update id="updateAd2UnShow" parameterType="java.lang.Integer">
+  <update id="updateCarousel2UnShow" parameterType="java.lang.Integer">
     update carousel
     set is_show = 0
     where id = #{carouselId}
