@@ -36,10 +36,11 @@ public class GoodsController {
                                           @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<GoodsDTO> goodsDtos = goodsService.selectAllDto();
-        if (goodsDtos != null && !goodsDtos.isEmpty())
+        if (goodsDtos != null && !goodsDtos.isEmpty()) {
             return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(goodsDtos), "查找成功");
-        else
+        } else {
             return ResponseMessage.newErrorInstance("无商品信息，查找失败");
+        }
     }
 
     @GetMapping("/get/selectAllGoodsOrderByTime")
@@ -54,11 +55,13 @@ public class GoodsController {
         PageHelper.startPage(pageNum, pageSize);
         List<GoodsDTO> goodsDtos = goodsService.selectAllDtoOrderByTime();
         if (goodsDtos != null && !goodsDtos.isEmpty()) {
-            if (ifDec > 0)
+            if (ifDec > 0) {
                 Collections.reverse(goodsDtos);
+            }
             return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(goodsDtos), "查找成功");
-        } else
+        } else {
             return ResponseMessage.newErrorInstance("无商品信息，查找失败");
+        }
     }
 
     @GetMapping("/get/selectAllGoodsOrderByPrice")
@@ -73,11 +76,13 @@ public class GoodsController {
         PageHelper.startPage(pageNum, pageSize);
         List<GoodsDTO> goodsDtos = goodsService.selectAllDtoOrderByPrice();
         if (goodsDtos != null && !goodsDtos.isEmpty()) {
-            if (ifDec > 0)
+            if (ifDec > 0) {
                 Collections.reverse(goodsDtos);
+            }
             return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(goodsDtos), "查找成功");
-        } else
+        } else {
             return ResponseMessage.newErrorInstance("无商品信息，查找失败");
+        }
     }
 
     @GetMapping("/get/selectAllGoodsBySortId")
@@ -94,11 +99,13 @@ public class GoodsController {
         PageHelper.startPage(pageNum, pageSize);
         List<GoodsDTO> goodsDtos = goodsService.selectAllDtoBySort(sortId);
         if (goodsDtos != null && !goodsDtos.isEmpty()) {
-            if (ifDec > 0)
+            if (ifDec > 0) {
                 Collections.reverse(goodsDtos);
+            }
             return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(goodsDtos), "查找成功");
-        } else
+        } else {
             return ResponseMessage.newErrorInstance("无商品信息，查找失败");
+        }
     }
 
     @GetMapping("/get/selectAllGoodsBySortIdOrderByTime")
@@ -114,11 +121,13 @@ public class GoodsController {
         PageHelper.startPage(pageNum, pageSize);
         List<GoodsDTO> goodsDtos = goodsService.selectAllDtoBySortOrderByTime(sortId);
         if (goodsDtos != null && !goodsDtos.isEmpty()) {
-            if (ifDec > 0)
+            if (ifDec > 0) {
                 Collections.reverse(goodsDtos);
+            }
             return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(goodsDtos), "查找成功");
-        } else
+        } else {
             return ResponseMessage.newErrorInstance("无商品信息，查找失败");
+        }
     }
 
     @GetMapping("/get/selectAllGoodsBySortIdOrderByPrice")
@@ -135,11 +144,13 @@ public class GoodsController {
         PageHelper.startPage(pageNum, pageSize);
         List<GoodsDTO> goodsDtos = goodsService.selectAllDtoBySortOrderByPrice(sortId);
         if (goodsDtos != null && !goodsDtos.isEmpty()) {
-            if (ifDec > 0)
+            if (ifDec > 0) {
                 Collections.reverse(goodsDtos);
+            }
             return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(goodsDtos), "查找成功");
-        } else
+        } else {
             return ResponseMessage.newErrorInstance("无商品信息，查找失败");
+        }
     }
 
     @GetMapping("/get/selectGoodsById")
@@ -148,9 +159,11 @@ public class GoodsController {
     public ResponseMessage selectGoodsById(@ApiParam(name = "goodsId", value = "商品Id", required = true)
                                            @RequestParam(value = "goodsId", defaultValue = "5") Integer goodsId) {
         GoodsDTO goodsDto = goodsService.selectDtoByPrimaryKey(goodsId);
-        if (goodsDto != null)
+        if (goodsDto != null) {
             return ResponseMessage.newSuccessInstance(goodsDto, "查找成功");
-        else return ResponseMessage.newErrorInstance("该商品id错误");
+        } else {
+            return ResponseMessage.newErrorInstance("该商品id错误");
+        }
     }
 
     @GetMapping("/get/selectGoodsByContent")
@@ -164,9 +177,11 @@ public class GoodsController {
                                                 @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<GoodsDTO> goodsDTOS = goodsService.selectDtoByContent(content);
-        if (goodsDTOS != null && !goodsDTOS.isEmpty())
+        if (goodsDTOS != null && !goodsDTOS.isEmpty()) {
             return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(goodsDTOS), "查找成功");
-        else return ResponseMessage.newErrorInstance("该商品名称不存在");
+        } else {
+            return ResponseMessage.newErrorInstance("该商品名称不存在");
+        }
     }
 
     @PostMapping("/addGoods")
@@ -178,11 +193,16 @@ public class GoodsController {
         List<GoodsDTO> goodsDtos = goodsService.selectAllDto();
         if (goodsDtos != null && !goodsDtos.isEmpty()) {
             boolean judgeFlag = goodsService.judgeGoods(goodsDto, goodsDtos);
-            if (judgeFlag) return ResponseMessage.newErrorInstance("该商品名称已经存在");
+            if (judgeFlag) {
+                return ResponseMessage.newErrorInstance("该商品名称已经存在");
+            }
         }
         boolean addFlag = goodsService.addGoods(goodsDto);
-        if (addFlag) return ResponseMessage.newSuccessInstance("添加成功");
-        else return ResponseMessage.newErrorInstance("添加失败");
+        if (addFlag) {
+            return ResponseMessage.newSuccessInstance("添加成功");
+        } else {
+            return ResponseMessage.newErrorInstance("添加失败");
+        }
     }
 
     @DeleteMapping("/deleteGoods")
@@ -194,9 +214,14 @@ public class GoodsController {
         GoodsDTO goods = goodsService.selectDtoByPrimaryKey(goodsDto.getId());
         if (goods != null) {
             boolean deleteFlag = goodsService.deleteGoodsById(goodsDto.getId());
-            if (deleteFlag) return ResponseMessage.newSuccessInstance("删除成功");
-            else return ResponseMessage.newErrorInstance("删除失败");
-        } else return ResponseMessage.newSuccessInstance("该商品不存在");
+            if (deleteFlag) {
+                return ResponseMessage.newSuccessInstance("删除成功");
+            } else {
+                return ResponseMessage.newErrorInstance("删除失败");
+            }
+        } else {
+            return ResponseMessage.newSuccessInstance("该商品不存在");
+        }
     }
 
     @PutMapping("/updateGoods")
@@ -208,9 +233,14 @@ public class GoodsController {
         GoodsDTO goods = goodsService.selectDtoByPrimaryKey(goodsDto.getId());
         if (goods != null) {
             boolean updateFlag = goodsService.updateGoods(goodsDto);
-            if (updateFlag) return ResponseMessage.newSuccessInstance("更新成功");
-            else return ResponseMessage.newErrorInstance("更新失败");
-        } else return ResponseMessage.newSuccessInstance("该商品不存在");
+            if (updateFlag) {
+                return ResponseMessage.newSuccessInstance("更新成功");
+            } else {
+                return ResponseMessage.newErrorInstance("更新失败");
+            }
+        } else {
+            return ResponseMessage.newSuccessInstance("该商品不存在");
+        }
     }
 
     @PutMapping("/hideGoods")
@@ -222,9 +252,14 @@ public class GoodsController {
         GoodsDTO goods = goodsService.selectDtoByPrimaryKey(goodsDto.getId());
         if (goods != null) {
             boolean hideFlag = goodsService.hideGoods(goods);
-            if (hideFlag) return ResponseMessage.newSuccessInstance("修改成功");
-            else return ResponseMessage.newErrorInstance("修改失败");
-        } else return ResponseMessage.newErrorInstance("该商品不存在");
+            if (hideFlag) {
+                return ResponseMessage.newSuccessInstance("修改成功");
+            } else {
+                return ResponseMessage.newErrorInstance("修改失败");
+            }
+        } else {
+            return ResponseMessage.newErrorInstance("该商品不存在");
+        }
     }
 
     @PostMapping("/uploadGoodsPic")
@@ -232,7 +267,7 @@ public class GoodsController {
     public ResponseMessage uploadGoodsPic(@ApiParam("选择上传图片") MultipartFile pic) {
         String picType = pic.getOriginalFilename().substring(pic.getOriginalFilename().lastIndexOf(".") + 1);
         System.out.println(picType);
-        if (picType.equals("jpg") || picType.equals("JPG") || picType.equals("jpeg") || picType.equals("JPEG") || picType.equals("png") || picType.equals("PNG")) {
+        if ("jpg".equals(picType) || "JPG".equals(picType) || "jpeg".equals(picType) || "JPEG".equals(picType) || "png".equals(picType) || "PNG".equals(picType)) {
             String picName = UUID.randomUUID().toString();
             try {
                 String picPath = QiniuUpload.updateFile(pic, "goods/" + picName);

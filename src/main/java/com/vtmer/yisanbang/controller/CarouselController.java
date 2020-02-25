@@ -32,7 +32,7 @@ public class CarouselController {
     public ResponseMessage uploadPic(@ApiParam("选择上传图片") MultipartFile pic) {
         String picType = pic.getOriginalFilename().substring(pic.getOriginalFilename().lastIndexOf(".") + 1);
         System.out.println(picType);
-        if (picType.equals("jpg") || picType.equals("JPG") || picType.equals("jpeg") || picType.equals("JPEG") || picType.equals("png") || picType.equals("PNG")) {
+        if ("jpg".equals(picType) || "JPG".equals(picType) || "jpeg".equals(picType) || "JPEG".equals(picType) || "png".equals(picType) || "PNG".equals(picType)) {
             String picName = UUID.randomUUID().toString();
             try {
                 String picPath = QiniuUpload.updateFile(pic, "carousel/" + picName);

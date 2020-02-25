@@ -35,9 +35,11 @@ public class PartSizeController {
                                               @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<PartSizeDTO> partSizeDtos = partSizeService.selectAllBySuitId(suitId);
-        if (partSizeDtos != null && !partSizeDtos.isEmpty())
+        if (partSizeDtos != null && !partSizeDtos.isEmpty()) {
             return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(partSizeDtos), "查找成功");
-        else return ResponseMessage.newErrorInstance("查找失败");
+        } else {
+            return ResponseMessage.newErrorInstance("查找失败");
+        }
     }
 
     @GetMapping("/get/selectPartById")
@@ -46,9 +48,11 @@ public class PartSizeController {
     public ResponseMessage selectPartById(@ApiParam(name = "partSizeId", value = "部件尺寸Id", required = true)
                                           @RequestParam(value = "partSizeId", defaultValue = "5") Integer partSizeId) {
         PartSizeDTO partSizeDto = partSizeService.selectPartSizeById(partSizeId);
-        if (partSizeDto != null)
+        if (partSizeDto != null) {
             return ResponseMessage.newSuccessInstance(partSizeDto, "查找成功");
-        else return ResponseMessage.newErrorInstance("查找失败，该套装id不存在");
+        } else {
+            return ResponseMessage.newErrorInstance("查找失败，该套装id不存在");
+        }
     }
 
     @PostMapping("/addPartSize")
@@ -62,10 +66,15 @@ public class PartSizeController {
             return ResponseMessage.newErrorInstance("该套装部件尺寸id已经存在");
         }
         boolean judgeFlag = partSizeService.judgePartSize(partSizeDto);
-        if (judgeFlag) return ResponseMessage.newErrorInstance("该套装部件尺寸已经存在");
+        if (judgeFlag) {
+            return ResponseMessage.newErrorInstance("该套装部件尺寸已经存在");
+        }
         boolean addFlag = partSizeService.addPartSize(partSizeDto);
-        if (addFlag) return ResponseMessage.newSuccessInstance("添加成功");
-        else return ResponseMessage.newErrorInstance("添加失败");
+        if (addFlag) {
+            return ResponseMessage.newSuccessInstance("添加成功");
+        } else {
+            return ResponseMessage.newErrorInstance("添加失败");
+        }
     }
 
     @DeleteMapping("/deletePartSize")
@@ -77,9 +86,14 @@ public class PartSizeController {
         PartSizeDTO partSize = partSizeService.selectPartSizeById(partSizeDto.getId());
         if (partSize != null) {
             boolean deleteFlag = partSizeService.deletePartSize(partSizeDto.getId());
-            if (deleteFlag) return ResponseMessage.newSuccessInstance("删除成功");
-            else return ResponseMessage.newErrorInstance("删除失败");
-        } else return ResponseMessage.newErrorInstance("该部件尺寸id错误");
+            if (deleteFlag) {
+                return ResponseMessage.newSuccessInstance("删除成功");
+            } else {
+                return ResponseMessage.newErrorInstance("删除失败");
+            }
+        } else {
+            return ResponseMessage.newErrorInstance("该部件尺寸id错误");
+        }
     }
 
     @PutMapping("/updatePartSize")
@@ -91,9 +105,14 @@ public class PartSizeController {
         PartSizeDTO partSize = partSizeService.selectPartSizeById(partSizeDto.getId());
         if (partSize != null) {
             boolean updateFlag = partSizeService.updatePartSize(partSizeDto);
-            if (updateFlag) return ResponseMessage.newSuccessInstance("更新成功");
-            else return ResponseMessage.newErrorInstance("更新失败");
-        } else return ResponseMessage.newErrorInstance("该部件尺寸id错误");
+            if (updateFlag) {
+                return ResponseMessage.newSuccessInstance("更新成功");
+            } else {
+                return ResponseMessage.newErrorInstance("更新失败");
+            }
+        } else {
+            return ResponseMessage.newErrorInstance("该部件尺寸id错误");
+        }
     }
 
     @GetMapping("/get/selectAllPartById")
@@ -156,11 +175,14 @@ public class PartSizeController {
         List<PartSizeDTO> partSizeDtos = partSizeService.selectAllBySuitId(suitId);
         if (partSizeDtos != null && !partSizeDtos.isEmpty()) {
             Integer inventory = partSizeService.selectInventoryByPartSize(suitId, part, size);
-            if (inventory != null)
+            if (inventory != null) {
                 return ResponseMessage.newSuccessInstance(inventory, "查找成功");
-            else
+            } else {
                 return ResponseMessage.newErrorInstance("查找失败");
-        } else return ResponseMessage.newErrorInstance("该套装id错误，查找无结果");
+            }
+        } else {
+            return ResponseMessage.newErrorInstance("该套装id错误，查找无结果");
+        }
     }
 
     @GetMapping("/get/selectPriceByPartSize")
@@ -175,11 +197,14 @@ public class PartSizeController {
         List<PartSizeDTO> partSizeDtos = partSizeService.selectAllBySuitId(suitId);
         if (partSizeDtos != null && !partSizeDtos.isEmpty()) {
             Double price = partSizeService.selectPriceByPartSize(suitId, part, size);
-            if (price != null)
+            if (price != null) {
                 return ResponseMessage.newSuccessInstance(price, "查找成功");
-            else
+            } else {
                 return ResponseMessage.newErrorInstance("查找失败");
-        } else return ResponseMessage.newErrorInstance("该套装id错误，查找无结果");
+            }
+        } else {
+            return ResponseMessage.newErrorInstance("该套装id错误，查找无结果");
+        }
     }
 
     @GetMapping("/get/selectLowPriceById")
@@ -190,11 +215,14 @@ public class PartSizeController {
         List<PartSizeDTO> partSizeDtos = partSizeService.selectAllBySuitId(suitId);
         if (partSizeDtos != null && !partSizeDtos.isEmpty()) {
             Double lowPrice = partSizeService.selectLowPriceBySuitId(suitId);
-            if (lowPrice != null)
+            if (lowPrice != null) {
                 return ResponseMessage.newSuccessInstance(lowPrice, "查找成功");
-            else
+            } else {
                 return ResponseMessage.newErrorInstance("查找失败");
-        } else return ResponseMessage.newErrorInstance("该套装id错误，查找无结果");
+            }
+        } else {
+            return ResponseMessage.newErrorInstance("该套装id错误，查找无结果");
+        }
     }
 
     @GetMapping("/get/selectHighPriceById")
@@ -205,11 +233,14 @@ public class PartSizeController {
         List<PartSizeDTO> partSizeDtos = partSizeService.selectAllBySuitId(suitId);
         if (partSizeDtos != null && !partSizeDtos.isEmpty()) {
             Double highPrice = partSizeService.selecgHighPriceBySuitId(suitId);
-            if (highPrice != null)
+            if (highPrice != null) {
                 return ResponseMessage.newSuccessInstance(highPrice, "查找成功");
-            else
+            } else {
                 return ResponseMessage.newErrorInstance("查找失败");
-        } else return ResponseMessage.newErrorInstance("该套装id错误，查找无结果");
+            }
+        } else {
+            return ResponseMessage.newErrorInstance("该套装id错误，查找无结果");
+        }
     }
 
 }

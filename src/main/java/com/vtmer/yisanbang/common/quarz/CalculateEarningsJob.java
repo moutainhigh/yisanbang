@@ -31,6 +31,7 @@ public class CalculateEarningsJob implements Job {
     private OrderGoodsMapper orderGoodsMapper;
 
     // 计算收益
+    @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         logger.info("开始计算收益");
         // 获取已支付的未退款订单
@@ -48,7 +49,8 @@ public class CalculateEarningsJob implements Job {
         }
         Income income = new Income();
         List<Income> incomeList = incomeService.selectAll();
-        if (incomeList != null && incomeList.size() != 0) { // 说明数据库中已经有收益记录
+        if (incomeList != null && incomeList.size() != 0) {
+            // 说明数据库中已经有收益记录
             // 之前的销售信息
             double beforeTotalPrice = 0;
             Integer beforeTotalAmount = 0;

@@ -20,7 +20,9 @@ public class SuitDetailServiceImpl implements SuitDetailService {
     // 添加套装详细信息
     public boolean addSuitDetail(SuitDetailDTO suitDetailDto) {
         int addFlag = suitDetailMapper.insertDto(suitDetailDto);
-        if (addFlag > 0) return true;
+        if (addFlag > 0) {
+            return true;
+        }
         return false;
     }
 
@@ -28,7 +30,9 @@ public class SuitDetailServiceImpl implements SuitDetailService {
     // 删除套装详细信息
     public boolean deleteSuitDetail(Integer suitDetailId) {
         int deleteFlag = suitDetailMapper.deleteByPrimaryKey(suitDetailId);
-        if (deleteFlag > 0) return true;
+        if (deleteFlag > 0) {
+            return true;
+        }
         return false;
     }
 
@@ -36,7 +40,9 @@ public class SuitDetailServiceImpl implements SuitDetailService {
     // 更新套装详细信息
     public boolean updateSuitDetail(SuitDetailDTO suitDetailDto) {
         int updateFlag = suitDetailMapper.updateDtoByPrimaryKey(suitDetailDto);
-        if (updateFlag > 0) return true;
+        if (updateFlag > 0) {
+            return true;
+        }
         return false;
     }
 
@@ -44,8 +50,9 @@ public class SuitDetailServiceImpl implements SuitDetailService {
     // 查找所有套装详细信息
     public List<SuitDetailDTO> selectAllDto() {
         List<SuitDetailDTO> suitDetailDtoList = suitDetailMapper.selectAllDto();
-        if (suitDetailDtoList != null && !suitDetailDtoList.isEmpty())
+        if (suitDetailDtoList != null && !suitDetailDtoList.isEmpty()) {
             return suitDetailDtoList;
+        }
         return null;
     }
 
@@ -65,7 +72,9 @@ public class SuitDetailServiceImpl implements SuitDetailService {
     // 根据套装详细id查找套装详细信息
     public SuitDetailDTO selectSuitDetailByID(Integer suitDetailId) {
         SuitDetailDTO suitDetailDto = suitDetailMapper.selectDtoByPrimaryKey(suitDetailId);
-        if (suitDetailDto != null) return suitDetailDto;
+        if (suitDetailDto != null) {
+            return suitDetailDto;
+        }
         return null;
     }
 }

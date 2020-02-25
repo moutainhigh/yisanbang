@@ -24,7 +24,9 @@ public class ListSort {
                         return -1;
                     } else if (dt1 < dt2) {
                         return 1;
-                    } else return 0;
+                    } else {
+                        return 0;
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

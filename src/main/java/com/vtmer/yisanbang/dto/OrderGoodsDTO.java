@@ -36,7 +36,7 @@ public class OrderGoodsDTO {
     private Integer amount;
 
     @ApiModelProperty(hidden = true,value = "更新时间",example = "147515314")
-    private long updateTime;
+    private Long updateTime;
 
     @ApiModelProperty(readOnly = true,value = "是否勾选",example = "true")
     private Boolean whetherChosen = true;
@@ -57,5 +57,5 @@ public class OrderGoodsDTO {
     private String size;
 
     @ApiModelProperty(name ="afterTotalPrice",value = "单项商品优惠后的总价",readOnly = true,example = "12800")
-    private double afterTotalPrice;
+    private Double afterTotalPrice;
 }

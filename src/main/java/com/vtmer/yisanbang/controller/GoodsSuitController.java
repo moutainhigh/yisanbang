@@ -45,18 +45,23 @@ public class GoodsSuitController {
         List<SuitDTO> suitDTOS = suitService.selectAllShow();
         List<Object> list = null;
         if ((goodsDTOS != null && !goodsDTOS.isEmpty()) || (suitDTOS != null && !suitDTOS.isEmpty())) {
-            if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty())
+            if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty()) {
                 list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, suitDTOS);
-            else if ((goodsDTOS != null && !goodsDTOS.isEmpty()) && !(suitDTOS != null && !suitDTOS.isEmpty()))
+            } else if ((goodsDTOS != null && !goodsDTOS.isEmpty()) && !(suitDTOS != null && !suitDTOS.isEmpty())) {
                 list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, goodsDTOS);
-            else if (!(goodsDTOS != null && !goodsDTOS.isEmpty()) && (suitDTOS != null && !suitDTOS.isEmpty()))
+            } else if (!(goodsDTOS != null && !goodsDTOS.isEmpty()) && (suitDTOS != null && !suitDTOS.isEmpty())) {
                 list = goodsAndSuitService.selectGoodsAndSuit(suitDTOS, suitDTOS);
+            }
             if (list != null && !list.isEmpty()) {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
                 List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
                 return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(pager), "查找成功");
-            } else return ResponseMessage.newErrorInstance("查找失败");
-        } else return ResponseMessage.newErrorInstance("查找失败");
+            } else {
+                return ResponseMessage.newErrorInstance("查找失败");
+            }
+        } else {
+            return ResponseMessage.newErrorInstance("查找失败");
+        }
     }
 
     @GetMapping("/get/selectGoodsAndSuitByPrice")
@@ -72,20 +77,26 @@ public class GoodsSuitController {
         List<SuitDTO> suitDTOS = suitService.selectAllShow();
         List<Object> list = null;
         if ((goodsDTOS != null && !goodsDTOS.isEmpty()) || (suitDTOS != null && !suitDTOS.isEmpty())) {
-            if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty())
+            if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty()) {
                 list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, suitDTOS);
-            else if ((goodsDTOS != null && !goodsDTOS.isEmpty()) && !(suitDTOS != null && !suitDTOS.isEmpty()))
+            } else if ((goodsDTOS != null && !goodsDTOS.isEmpty()) && !(suitDTOS != null && !suitDTOS.isEmpty())) {
                 list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, goodsDTOS);
-            else if (!(goodsDTOS != null && !goodsDTOS.isEmpty()) && (suitDTOS != null && !suitDTOS.isEmpty()))
+            } else if (!(goodsDTOS != null && !goodsDTOS.isEmpty()) && (suitDTOS != null && !suitDTOS.isEmpty())) {
                 list = goodsAndSuitService.selectGoodsAndSuit(suitDTOS, suitDTOS);
+            }
             if (list != null && !list.isEmpty()) {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
-                if (ifDec > 0)
+                if (ifDec > 0) {
                     Collections.reverse(uniqueList);
+                }
                 List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
                 return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(pager), "查找成功");
-            } else return ResponseMessage.newErrorInstance("查找失败");
-        } else return ResponseMessage.newErrorInstance("查找失败");
+            } else {
+                return ResponseMessage.newErrorInstance("查找失败");
+            }
+        } else {
+            return ResponseMessage.newErrorInstance("查找失败");
+        }
     }
 
     @GetMapping("/get/selectGoodsAndSuitByTime")
@@ -101,20 +112,26 @@ public class GoodsSuitController {
         List<SuitDTO> suitDTOS = suitService.selectAllShow();
         List<Object> list = null;
         if ((goodsDTOS != null && !goodsDTOS.isEmpty()) || (suitDTOS != null && !suitDTOS.isEmpty())) {
-            if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty())
+            if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty()) {
                 list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, suitDTOS);
-            else if ((goodsDTOS != null && !goodsDTOS.isEmpty()) && !(suitDTOS != null && !suitDTOS.isEmpty()))
+            } else if ((goodsDTOS != null && !goodsDTOS.isEmpty()) && !(suitDTOS != null && !suitDTOS.isEmpty())) {
                 list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, goodsDTOS);
-            else if (!(goodsDTOS != null && !goodsDTOS.isEmpty()) && (suitDTOS != null && !suitDTOS.isEmpty()))
+            } else if (!(goodsDTOS != null && !goodsDTOS.isEmpty()) && (suitDTOS != null && !suitDTOS.isEmpty())) {
                 list = goodsAndSuitService.selectGoodsAndSuit(suitDTOS, suitDTOS);
+            }
             if (list != null && !list.isEmpty()) {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
-                if (ifDec > 0)
+                if (ifDec > 0) {
                     Collections.reverse(uniqueList);
+                }
                 List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
                 return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(pager), "查找成功");
-            } else return ResponseMessage.newErrorInstance("查找失败");
-        } else return ResponseMessage.newErrorInstance("查找失败");
+            } else {
+                return ResponseMessage.newErrorInstance("查找失败");
+            }
+        } else {
+            return ResponseMessage.newErrorInstance("查找失败");
+        }
     }
 
     @GetMapping("/get/selectGoodsAndSuitBySortId")
@@ -130,18 +147,23 @@ public class GoodsSuitController {
         List<SuitDTO> suitDTOS = suitService.selectSuitBySort(sortId);
         List<Object> list = null;
         if ((goodsDTOS != null && !goodsDTOS.isEmpty()) || (suitDTOS != null && !suitDTOS.isEmpty())) {
-            if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty())
+            if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty()) {
                 list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, suitDTOS);
-            else if ((goodsDTOS != null && !goodsDTOS.isEmpty()) && !(suitDTOS != null && !suitDTOS.isEmpty()))
+            } else if ((goodsDTOS != null && !goodsDTOS.isEmpty()) && !(suitDTOS != null && !suitDTOS.isEmpty())) {
                 list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, goodsDTOS);
-            else if (!(goodsDTOS != null && !goodsDTOS.isEmpty()) && (suitDTOS != null && !suitDTOS.isEmpty()))
+            } else if (!(goodsDTOS != null && !goodsDTOS.isEmpty()) && (suitDTOS != null && !suitDTOS.isEmpty())) {
                 list = goodsAndSuitService.selectGoodsAndSuit(suitDTOS, suitDTOS);
+            }
             if (list != null && !list.isEmpty()) {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
                 List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
                 return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(pager), "查找成功");
-            } else return ResponseMessage.newErrorInstance("查找失败");
-        } else return ResponseMessage.newErrorInstance("查找失败");
+            } else {
+                return ResponseMessage.newErrorInstance("查找失败");
+            }
+        } else {
+            return ResponseMessage.newErrorInstance("查找失败");
+        }
     }
 
     @GetMapping("/get/selectGoodsAndSuitBySortIdAndPrice")
@@ -159,20 +181,26 @@ public class GoodsSuitController {
         List<SuitDTO> suitDTOS = suitService.selectSuitBySortIdOrderByPrice(sortId);
         List<Object> list = null;
         if ((goodsDTOS != null && !goodsDTOS.isEmpty()) || (suitDTOS != null && !suitDTOS.isEmpty())) {
-            if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty())
+            if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty()) {
                 list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, suitDTOS);
-            else if ((goodsDTOS != null && !goodsDTOS.isEmpty()) && !(suitDTOS != null && !suitDTOS.isEmpty()))
+            } else if ((goodsDTOS != null && !goodsDTOS.isEmpty()) && !(suitDTOS != null && !suitDTOS.isEmpty())) {
                 list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, goodsDTOS);
-            else if (!(goodsDTOS != null && !goodsDTOS.isEmpty()) && (suitDTOS != null && !suitDTOS.isEmpty()))
+            } else if (!(goodsDTOS != null && !goodsDTOS.isEmpty()) && (suitDTOS != null && !suitDTOS.isEmpty())) {
                 list = goodsAndSuitService.selectGoodsAndSuit(suitDTOS, suitDTOS);
+            }
             if (list != null && !list.isEmpty()) {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
-                if (ifDec > 0)
+                if (ifDec > 0) {
                     Collections.reverse(uniqueList);
+                }
                 List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
                 return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(pager), "查找成功");
-            } else return ResponseMessage.newErrorInstance("查找失败");
-        } else return ResponseMessage.newErrorInstance("查找失败");
+            } else {
+                return ResponseMessage.newErrorInstance("查找失败");
+            }
+        } else {
+            return ResponseMessage.newErrorInstance("查找失败");
+        }
     }
 
     @GetMapping("/get/selectGoodsAndSuitBySortIdAndTime")
@@ -190,20 +218,26 @@ public class GoodsSuitController {
         List<SuitDTO> suitDTOS = suitService.selectSuitBySortIdOrderByTime(sortId);
         List<Object> list = null;
         if ((goodsDTOS != null && !goodsDTOS.isEmpty()) || (suitDTOS != null && !suitDTOS.isEmpty())) {
-            if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty())
+            if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty()) {
                 list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, suitDTOS);
-            else if ((goodsDTOS != null && !goodsDTOS.isEmpty()) && !(suitDTOS != null && !suitDTOS.isEmpty()))
+            } else if ((goodsDTOS != null && !goodsDTOS.isEmpty()) && !(suitDTOS != null && !suitDTOS.isEmpty())) {
                 list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, goodsDTOS);
-            else if (!(goodsDTOS != null && !goodsDTOS.isEmpty()) && (suitDTOS != null && !suitDTOS.isEmpty()))
+            } else if (!(goodsDTOS != null && !goodsDTOS.isEmpty()) && (suitDTOS != null && !suitDTOS.isEmpty())) {
                 list = goodsAndSuitService.selectGoodsAndSuit(suitDTOS, suitDTOS);
+            }
             if (list != null && !list.isEmpty()) {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
-                if (ifDec > 0)
+                if (ifDec > 0) {
                     Collections.reverse(uniqueList);
+                }
                 List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
                 return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(pager), "查找成功");
-            } else return ResponseMessage.newErrorInstance("查找失败");
-        } else return ResponseMessage.newErrorInstance("查找失败");
+            } else {
+                return ResponseMessage.newErrorInstance("查找失败");
+            }
+        } else {
+            return ResponseMessage.newErrorInstance("查找失败");
+        }
     }
 
     @GetMapping("/get/selectGoodsAndSuitByContent")
@@ -219,18 +253,23 @@ public class GoodsSuitController {
         List<SuitDTO> suitDTOS = suitService.selectSuitByContent(content);
         List<Object> list = null;
         if ((goodsDTOS != null && !goodsDTOS.isEmpty()) || (suitDTOS != null && !suitDTOS.isEmpty())) {
-            if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty())
+            if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty()) {
                 list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, suitDTOS);
-            else if ((goodsDTOS != null && !goodsDTOS.isEmpty()) && !(suitDTOS != null && !suitDTOS.isEmpty()))
+            } else if ((goodsDTOS != null && !goodsDTOS.isEmpty()) && !(suitDTOS != null && !suitDTOS.isEmpty())) {
                 list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, goodsDTOS);
-            else if (!(goodsDTOS != null && !goodsDTOS.isEmpty()) && (suitDTOS != null && !suitDTOS.isEmpty()))
+            } else if (!(goodsDTOS != null && !goodsDTOS.isEmpty()) && (suitDTOS != null && !suitDTOS.isEmpty())) {
                 list = goodsAndSuitService.selectGoodsAndSuit(suitDTOS, suitDTOS);
+            }
             if (list != null && !list.isEmpty()) {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
                 List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
                 return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(pager), "查找成功");
-            } else return ResponseMessage.newErrorInstance("查找失败");
-        } else return ResponseMessage.newErrorInstance("无结果，查找失败");
+            } else {
+                return ResponseMessage.newErrorInstance("查找失败");
+            }
+        } else {
+            return ResponseMessage.newErrorInstance("无结果，查找失败");
+        }
     }
 
 }

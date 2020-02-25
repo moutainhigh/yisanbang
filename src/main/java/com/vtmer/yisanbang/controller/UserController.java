@@ -33,7 +33,7 @@ public class UserController {
     @ApiOperation(value = "微信用户登录", notes = "执行成功后返回用户对应的token")
     @PostMapping("/login")
     public ResponseMessage wxAppletLogin(@ApiParam(name = "code", value = "微信登录接口返回的code", required = true) @RequestBody Map<String, String> request) {
-        if (!request.containsKey("code") || request.get("code") == null || request.get("code").equals("")) {
+        if (!request.containsKey("code") || request.get("code") == null || "".equals(request.get("code"))) {
             return ResponseMessage.newErrorInstance("缺少参数code或code不合法");
         }
         try {

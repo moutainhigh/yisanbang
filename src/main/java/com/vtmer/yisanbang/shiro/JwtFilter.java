@@ -40,7 +40,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
     protected boolean isLoginAttempt(ServletRequest request, ServletResponse response) {
         String auth = getAuthzHeader(request);
         // 如果auth不为null则需要验证
-        return auth != null && !auth.equals("");
+        return auth != null && !"".equals(auth);
     }
 
     /**
@@ -82,8 +82,9 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         logger.info("验证token成功，开始设置user对象进线程域");
         t1.set(jwtUtil.getUserInfoByToken(token));
         String openId = jwtUtil.getOpenIdByToken(token);
-        if (StringUtils.isNotBlank(token))
+        if (StringUtils.isNotBlank(token)) {
             return new UsernamePasswordToken(openId, "123456");
+        }
         return null;
     }
 
@@ -148,6 +149,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
 
     public static User getLoginUser() {
         User user = t1.get();
+        t1.remove();
         return user;
     }
 }

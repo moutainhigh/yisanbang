@@ -36,9 +36,11 @@ public class SuitDetailController {
                                      @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<SuitDetailDTO> suitDetailDtoList = suitDetailService.selectAllDto();
-        if (suitDetailDtoList != null && !suitDetailDtoList.isEmpty())
+        if (suitDetailDtoList != null && !suitDetailDtoList.isEmpty()) {
             return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(suitDetailDtoList), "查找成功");
-        else return ResponseMessage.newErrorInstance("查找失败");
+        } else {
+            return ResponseMessage.newErrorInstance("查找失败");
+        }
     }
 
     @GetMapping("/get/selectSuitDetailBySuitId")
@@ -52,9 +54,11 @@ public class SuitDetailController {
                                                     @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<SuitDetailDTO> suitDetailDtoList = suitDetailService.selectAllDtoBySuitId(suitId);
-        if (suitDetailDtoList != null && !suitDetailDtoList.isEmpty())
+        if (suitDetailDtoList != null && !suitDetailDtoList.isEmpty()) {
             return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(suitDetailDtoList), "查找成功");
-        else return ResponseMessage.newErrorInstance("查找失败");
+        } else {
+            return ResponseMessage.newErrorInstance("查找失败");
+        }
     }
 
     @GetMapping("/get/selectSuitDetailById")
@@ -63,8 +67,11 @@ public class SuitDetailController {
     public ResponseMessage selectSuitDetailById(@ApiParam(name = "suitDetailId", value = "套装详情Id", required = true)
                                                 @RequestParam(value = "suitDetailId", defaultValue = "5") Integer suitDetailId) {
         SuitDetailDTO suitDetailDto = suitDetailService.selectSuitDetailByID(suitDetailId);
-        if (suitDetailDto != null) return ResponseMessage.newSuccessInstance(suitDetailDto, "查找成功");
-        else return ResponseMessage.newErrorInstance("查找失败");
+        if (suitDetailDto != null) {
+            return ResponseMessage.newSuccessInstance(suitDetailDto, "查找成功");
+        } else {
+            return ResponseMessage.newErrorInstance("查找失败");
+        }
     }
 
     @PostMapping("/addSuitDetail")
@@ -74,8 +81,11 @@ public class SuitDetailController {
                                          @RequestBody
                                          @Validated(Insert.class) SuitDetailDTO suitDetailDto) {
         boolean addFlag = suitDetailService.addSuitDetail(suitDetailDto);
-        if (addFlag) return ResponseMessage.newSuccessInstance("添加成功");
-        else return ResponseMessage.newErrorInstance("添加失败");
+        if (addFlag) {
+            return ResponseMessage.newSuccessInstance("添加成功");
+        } else {
+            return ResponseMessage.newErrorInstance("添加失败");
+        }
     }
 
     @PutMapping("/updateSuitDetail")
@@ -87,9 +97,14 @@ public class SuitDetailController {
         SuitDetailDTO suitDetail = suitDetailService.selectSuitDetailByID(suitDetailDto.getId());
         if (suitDetail != null) {
             boolean updateFlag = suitDetailService.updateSuitDetail(suitDetailDto);
-            if (updateFlag) return ResponseMessage.newSuccessInstance("更新成功");
-            else return ResponseMessage.newErrorInstance("更新失败");
-        } else return ResponseMessage.newErrorInstance("该套装详情id错误");
+            if (updateFlag) {
+                return ResponseMessage.newSuccessInstance("更新成功");
+            } else {
+                return ResponseMessage.newErrorInstance("更新失败");
+            }
+        } else {
+            return ResponseMessage.newErrorInstance("该套装详情id错误");
+        }
     }
 
     @DeleteMapping("/deleteSuitDetail")
@@ -101,9 +116,14 @@ public class SuitDetailController {
         SuitDetailDTO suitDetail = suitDetailService.selectSuitDetailByID(suitDetailDto.getId());
         if (suitDetail != null) {
             boolean deleteFlag = suitDetailService.deleteSuitDetail(suitDetailDto.getId());
-            if (deleteFlag) return ResponseMessage.newSuccessInstance("删除成功");
-            else return ResponseMessage.newErrorInstance("删除失败");
-        } else return ResponseMessage.newErrorInstance("该套装详情id错误");
+            if (deleteFlag) {
+                return ResponseMessage.newSuccessInstance("删除成功");
+            } else {
+                return ResponseMessage.newErrorInstance("删除失败");
+            }
+        } else {
+            return ResponseMessage.newErrorInstance("该套装详情id错误");
+        }
     }
 
     @PostMapping("/uploadSuitDetailPic")
@@ -112,7 +132,7 @@ public class SuitDetailController {
     public ResponseMessage uploadSuitDetailPic(@ApiParam("选择上传图片") MultipartFile pic) {
         String picType = pic.getOriginalFilename().substring(pic.getOriginalFilename().lastIndexOf(".") + 1);
         System.out.println(picType);
-        if (picType.equals("jpg") || picType.equals("JPG") || picType.equals("jpeg") || picType.equals("JPEG") || picType.equals("png") || picType.equals("PNG")) {
+        if ("jpg".equals(picType) || "JPG".equals(picType) || "jpeg".equals(picType) || "JPEG".equals(picType) || "png".equals(picType) || "PNG".equals(picType)) {
             String picName = UUID.randomUUID().toString();
             try {
                 String picPath = QiniuUpload.updateFile(pic, "suitDetail/" + picName);

@@ -44,6 +44,7 @@ public class BusinessAddressServiceImpl implements BusinessAddressService {
         businessAddressMapper.updateByPrimaryKey(businessAddress);
     }
 
+    @Override
     @Transactional
     public void updateDefault(Integer id) {
         BusinessAddress businessAddress = businessAddressMapper.selectByPrimaryKey(id);
@@ -63,6 +64,7 @@ public class BusinessAddressServiceImpl implements BusinessAddressService {
         }
     }
 
+    @Override
     public List<BusinessAddress> selectAll() {
         return businessAddressMapper.selectAll();
     }

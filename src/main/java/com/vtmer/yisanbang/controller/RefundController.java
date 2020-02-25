@@ -147,9 +147,9 @@ public class RefundController {
         // request.setNotifyUrl(refundNotifyURL);
         try {
             WxPayRefundResult refundResult = this.wxPayService.refund(request);
-            if (refundResult.getReturnCode().equals("SUCCESS")) {
+            if ("SUCCESS".equals(refundResult.getReturnCode())) {
                 // 调用申请退款接口成功
-                if (refundResult.getResultCode().equals("SUCCESS")) {
+                if ("SUCCESS".equals(refundResult.getResultCode())) {
                     // 申请退款成功
                     Refund refund = refundService.selectByRefundNumber(refundNumber);
                     // 更新退款表状态为 退款成功
@@ -234,7 +234,7 @@ public class RefundController {
         try {
             WxPayRefundQueryResult result = this.wxPayService.refundQuery(request);
             // 如果请求成功
-            if (result.getReturnCode().equals("SUCCESS")) {
+            if ("SUCCESS".equals(result.getReturnCode())) {
                 List<WxPayRefundQueryResult.RefundRecord> refundRecords = result.getRefundRecords();
                 if (refundRecords!=null && refundRecords.size()!=0) {
                     // 因为只有一笔退款，退款金额即为订单金额，所以refundRecords.size为1 在循环中返回结果

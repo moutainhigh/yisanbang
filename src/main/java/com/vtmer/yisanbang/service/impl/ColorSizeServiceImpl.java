@@ -24,7 +24,9 @@ public class ColorSizeServiceImpl implements ColorSizeService {
     // 查找所有的颜色尺寸
     public List<ColorSizeDTO> selectALL() {
         List<ColorSizeDTO> colorSizeDtos = colorSizeMapper.selectAllDto();
-        if (colorSizeDtos != null) return colorSizeDtos;
+        if (colorSizeDtos != null) {
+            return colorSizeDtos;
+        }
         return null;
     }
 
@@ -32,7 +34,9 @@ public class ColorSizeServiceImpl implements ColorSizeService {
     // 添加颜色尺寸
     public boolean addColorSize(ColorSizeDTO colorSizeDto) {
         int insertFlag = colorSizeMapper.insertDto(colorSizeDto);
-        if (insertFlag > 0) return true;
+        if (insertFlag > 0) {
+            return true;
+        }
         return false;
     }
 
@@ -40,7 +44,9 @@ public class ColorSizeServiceImpl implements ColorSizeService {
     // 删除颜色尺寸
     public boolean deleteColorSize(Integer colorSizeId) {
         int deleteFlag = colorSizeMapper.deleteByPrimaryKey(colorSizeId);
-        if (deleteFlag > 0) return true;
+        if (deleteFlag > 0) {
+            return true;
+        }
         return false;
     }
 
@@ -48,7 +54,9 @@ public class ColorSizeServiceImpl implements ColorSizeService {
     // 更新颜色尺寸
     public boolean updateColorSize(ColorSizeDTO colorSizeDto) {
         int updateFlag = colorSizeMapper.updateDtoByPrimaryKey(colorSizeDto);
-        if (updateFlag > 0) return true;
+        if (updateFlag > 0) {
+            return true;
+        }
         return false;
     }
 
@@ -56,7 +64,9 @@ public class ColorSizeServiceImpl implements ColorSizeService {
     // 根据颜色尺寸id查找颜色尺寸
     public ColorSizeDTO selectColorSizeById(Integer colorSizeId) {
         ColorSizeDTO colorSizeDto = colorSizeMapper.selectDtoByPrimaryKey(colorSizeId);
-        if (colorSizeDto != null) return colorSizeDto;
+        if (colorSizeDto != null) {
+            return colorSizeDto;
+        }
         return null;
     }
 
@@ -64,7 +74,9 @@ public class ColorSizeServiceImpl implements ColorSizeService {
     // 根据商品id查找所有该商品的颜色尺寸
     public List<ColorSizeDTO> selectAllByGoodsId(Integer goodsId) {
         List<ColorSizeDTO> colorSizeDtos = colorSizeMapper.selectAllDtoByGoodsId(goodsId);
-        if (colorSizeDtos != null) return colorSizeDtos;
+        if (colorSizeDtos != null) {
+            return colorSizeDtos;
+        }
         return null;
     }
 
@@ -73,10 +85,13 @@ public class ColorSizeServiceImpl implements ColorSizeService {
     public boolean judgeColorSize(ColorSizeDTO colorSizeDto) {
         List<ColorSizeDTO> colorSizeDtoList = colorSizeMapper.selectAllDto();
         for (ColorSizeDTO colorSize : colorSizeDtoList) {
-            if (colorSize.getGoodsId() == colorSizeDto.getGoodsId())
-                if (colorSize.getSize().equals(colorSizeDto.getSize()))
-                    if (colorSize.getColor().equals(colorSizeDto.getColor()))
+            if (colorSize.getGoodsId().equals(colorSizeDto.getGoodsId())) {
+                if (colorSize.getSize().equals(colorSizeDto.getSize())) {
+                    if (colorSize.getColor().equals(colorSizeDto.getColor())) {
                         return true;
+                    }
+                }
+            }
         }
         return false;
     }
@@ -116,13 +131,16 @@ public class ColorSizeServiceImpl implements ColorSizeService {
     public Integer selectInventoryByColorSize(Integer goodsId, String Color, String Size) {
         List<ColorSizeDTO> colorSizeDtos = colorSizeMapper.selectAllDtoByGoodsId(goodsId);
         for (ColorSizeDTO colorSize : colorSizeDtos) {
-            if (colorSize.getColor().equals(Color))
-                if (colorSize.getSize().equals(Size))
+            if (colorSize.getColor().equals(Color)) {
+                if (colorSize.getSize().equals(Size)) {
                     return colorSize.getInventory();
+                }
+            }
         }
         return null;
     }
 
+    @Override
     public CartGoodsDTO setSkuById(CartGoodsDTO cartGoodsDTO) {
         ColorSizeDTO goodsSku = colorSizeMapper.selectDtoByPrimaryKey(cartGoodsDTO.getColorSizeId());
         // 商品尺寸
