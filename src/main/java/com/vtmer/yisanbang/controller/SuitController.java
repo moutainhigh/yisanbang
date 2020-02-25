@@ -45,30 +45,38 @@ public class SuitController {
     @GetMapping("/get/selectAllSuitOrderByTime")
     @ApiOperation(value = "根据套装更新时间顺序查找显示套装")
     // 根据套装更新时间顺序显示套装
-    public ResponseMessage selectAllSuitOrderByTime(@ApiParam("查询页数(第几页)")
+    public ResponseMessage selectAllSuitOrderByTime(@ApiParam(name = "ifDec", value = "降序标志", required = true)
+                                                    @RequestParam(value = "ifDec", defaultValue = "1") Integer ifDec,
+                                                    @ApiParam("查询页数(第几页)")
                                                     @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
                                                     @ApiParam("单页数量")
                                                     @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<SuitDTO> suitDtoList = suitService.selectSuitOrderByTime();
-        if (suitDtoList != null && !suitDtoList.isEmpty())
+        if (suitDtoList != null && !suitDtoList.isEmpty()) {
+            if (ifDec > 0)
+                Collections.reverse(suitDtoList);
             return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(suitDtoList), "查找成功");
-        else
+        } else
             return ResponseMessage.newErrorInstance("无商品信息，查找失败");
     }
 
     @GetMapping("/get/selectAllSuitOrderByPrice")
     @ApiOperation(value = "根据套装价格顺序查找显示套装")
     // 根据套装价格顺序显示套装
-    public ResponseMessage selectAllGoodsOrderByPrice(@ApiParam("查询页数(第几页)")
+    public ResponseMessage selectAllGoodsOrderByPrice(@ApiParam(name = "ifDec", value = "降序标志", required = true)
+                                                      @RequestParam(value = "ifDec", defaultValue = "1") Integer ifDec,
+                                                      @ApiParam("查询页数(第几页)")
                                                       @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
                                                       @ApiParam("单页数量")
                                                       @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<SuitDTO> suitDtoList = suitService.selectSuitOrderByPrice();
-        if (suitDtoList != null && !suitDtoList.isEmpty())
+        if (suitDtoList != null && !suitDtoList.isEmpty()) {
+            if (ifDec > 0)
+                Collections.reverse(suitDtoList);
             return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(suitDtoList), "查找成功");
-        else
+        } else
             return ResponseMessage.newErrorInstance("无商品信息，查找失败");
     }
 
@@ -85,12 +93,12 @@ public class SuitController {
                                                              @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<SuitDTO> suitDtoList = suitService.selectSuitBySort(sortId);
-        if (ifDec > 0) {
-            Collections.reverse(suitDtoList);
-        }
-        if (suitDtoList != null && !suitDtoList.isEmpty())
+
+        if (suitDtoList != null && !suitDtoList.isEmpty()) {
+            if (ifDec > 0)
+                Collections.reverse(suitDtoList);
             return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(suitDtoList), "查找成功");
-        else
+        } else
             return ResponseMessage.newErrorInstance("无套装信息，查找失败");
     }
 
@@ -110,9 +118,11 @@ public class SuitController {
         if (ifDec > 0) {
             Collections.reverse(suitDtoList);
         }
-        if (suitDtoList != null && !suitDtoList.isEmpty())
+        if (suitDtoList != null && !suitDtoList.isEmpty()) {
+            if (ifDec > 0)
+                Collections.reverse(suitDtoList);
             return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(suitDtoList), "查找成功");
-        else
+        } else
             return ResponseMessage.newErrorInstance("无套装信息，查找失败");
     }
 
@@ -129,12 +139,12 @@ public class SuitController {
                                                  @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<SuitDTO> suitDtoList = suitService.selectSuitBySort(sortId);
-        if (ifDec > 0) {
-            Collections.reverse(suitDtoList);
-        }
-        if (suitDtoList != null && !suitDtoList.isEmpty())
+
+        if (suitDtoList != null && !suitDtoList.isEmpty()) {
+            if (ifDec > 0)
+                Collections.reverse(suitDtoList);
             return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(suitDtoList), "查找成功");
-        else
+        } else
             return ResponseMessage.newErrorInstance("无套装信息，查找失败");
     }
 
@@ -142,11 +152,7 @@ public class SuitController {
     @ApiOperation(value = "根据套装id查找套装")
     // 根据套装id查找套装
     public ResponseMessage selectSuitById(@ApiParam(name = "suitId", value = "套装Id", required = true)
-                                          @RequestParam(value = "suitId", defaultValue = "5") Integer suitId,
-                                          @ApiParam("查询页数(第几页)")
-                                          @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-                                          @ApiParam("单页数量")
-                                          @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
+                                          @RequestParam(value = "suitId", defaultValue = "5") Integer suitId) {
         SuitDTO suitDto = suitService.selectSuitById(suitId);
         if (suitDto != null)
             return ResponseMessage.newSuccessInstance(suitDto, "查找成功");
@@ -162,9 +168,10 @@ public class SuitController {
                                                @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
                                                @ApiParam("单页数量")
                                                @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
         List<SuitDTO> suitDtoList = suitService.selectSuitByContent(content);
         if (suitDtoList != null && !suitDtoList.isEmpty())
-            return ResponseMessage.newSuccessInstance(suitDtoList, "查找成功");
+            return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(suitDtoList), "查找成功");
         else return ResponseMessage.newErrorInstance("该套装名称不存在");
     }
 

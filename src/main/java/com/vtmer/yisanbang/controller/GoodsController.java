@@ -45,30 +45,38 @@ public class GoodsController {
     @GetMapping("/get/selectAllGoodsOrderByTime")
     @ApiOperation(value = "根据商品更新时间顺序显示商品")
     // 根据商品更新时间顺序显示商品
-    public ResponseMessage selectAllGoodsOrderByTime(@ApiParam("查询页数(第几页)")
+    public ResponseMessage selectAllGoodsOrderByTime(@ApiParam(name = "ifDec", value = "降序标志", required = true)
+                                                     @RequestParam(value = "ifDec", defaultValue = "1") Integer ifDec,
+                                                     @ApiParam("查询页数(第几页)")
                                                      @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
                                                      @ApiParam("单页数量")
                                                      @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<GoodsDTO> goodsDtos = goodsService.selectAllDtoOrderByTime();
-        if (goodsDtos != null && !goodsDtos.isEmpty())
+        if (goodsDtos != null && !goodsDtos.isEmpty()) {
+            if (ifDec > 0)
+                Collections.reverse(goodsDtos);
             return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(goodsDtos), "查找成功");
-        else
+        } else
             return ResponseMessage.newErrorInstance("无商品信息，查找失败");
     }
 
     @GetMapping("/get/selectAllGoodsOrderByPrice")
     @ApiOperation(value = "根据商品价格顺序显示商品")
     // 根据商品价格顺序显示商品
-    public ResponseMessage selectAllGoodsOrderByPrice(@ApiParam("查询页数(第几页)")
+    public ResponseMessage selectAllGoodsOrderByPrice(@ApiParam(name = "ifDec", value = "降序标志", required = true)
+                                                      @RequestParam(value = "ifDec", defaultValue = "1") Integer ifDec,
+                                                      @ApiParam("查询页数(第几页)")
                                                       @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
                                                       @ApiParam("单页数量")
                                                       @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<GoodsDTO> goodsDtos = goodsService.selectAllDtoOrderByPrice();
-        if (goodsDtos != null && !goodsDtos.isEmpty())
+        if (goodsDtos != null && !goodsDtos.isEmpty()) {
+            if (ifDec > 0)
+                Collections.reverse(goodsDtos);
             return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(goodsDtos), "查找成功");
-        else
+        } else
             return ResponseMessage.newErrorInstance("无商品信息，查找失败");
     }
 
@@ -85,12 +93,11 @@ public class GoodsController {
                                                   @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<GoodsDTO> goodsDtos = goodsService.selectAllDtoBySort(sortId);
-        if (ifDec > 0) {
-            Collections.reverse(goodsDtos);
-        }
-        if (goodsDtos != null && !goodsDtos.isEmpty())
+        if (goodsDtos != null && !goodsDtos.isEmpty()) {
+            if (ifDec > 0)
+                Collections.reverse(goodsDtos);
             return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(goodsDtos), "查找成功");
-        else
+        } else
             return ResponseMessage.newErrorInstance("无商品信息，查找失败");
     }
 
@@ -106,12 +113,11 @@ public class GoodsController {
                                                              @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<GoodsDTO> goodsDtos = goodsService.selectAllDtoBySortOrderByTime(sortId);
-        if (ifDec > 0) {
-            Collections.reverse(goodsDtos);
-        }
-        if (goodsDtos != null && !goodsDtos.isEmpty())
+        if (goodsDtos != null && !goodsDtos.isEmpty()) {
+            if (ifDec > 0)
+                Collections.reverse(goodsDtos);
             return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(goodsDtos), "查找成功");
-        else
+        } else
             return ResponseMessage.newErrorInstance("无商品信息，查找失败");
     }
 
@@ -128,12 +134,11 @@ public class GoodsController {
                                                               @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<GoodsDTO> goodsDtos = goodsService.selectAllDtoBySortOrderByPrice(sortId);
-        if (ifDec > 0) {
-            Collections.reverse(goodsDtos);
-        }
-        if (goodsDtos != null && !goodsDtos.isEmpty())
+        if (goodsDtos != null && !goodsDtos.isEmpty()) {
+            if (ifDec > 0)
+                Collections.reverse(goodsDtos);
             return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(goodsDtos), "查找成功");
-        else
+        } else
             return ResponseMessage.newErrorInstance("无商品信息，查找失败");
     }
 
@@ -152,9 +157,15 @@ public class GoodsController {
     @ApiOperation(value = "根据商品名称与简介查找商品")
     // 根据商品名称与简介查找商品
     public ResponseMessage selectGoodsByContent(@ApiParam(name = "content", value = "查找内容", required = true)
-                                                @RequestParam(value = "content", defaultValue = "5") String content) {
+                                                @RequestParam(value = "content", defaultValue = "5") String content,
+                                                @ApiParam("查询页数(第几页)")
+                                                @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                                                @ApiParam("单页数量")
+                                                @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
         List<GoodsDTO> goodsDTOS = goodsService.selectDtoByContent(content);
-        if (goodsDTOS != null && !goodsDTOS.isEmpty()) return ResponseMessage.newSuccessInstance(goodsDTOS, "查找成功");
+        if (goodsDTOS != null && !goodsDTOS.isEmpty())
+            return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(goodsDTOS), "查找成功");
         else return ResponseMessage.newErrorInstance("该商品名称不存在");
     }
 

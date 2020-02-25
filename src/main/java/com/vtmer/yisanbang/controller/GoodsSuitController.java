@@ -53,29 +53,10 @@ public class GoodsSuitController {
         } else return ResponseMessage.newErrorInstance("查找失败");
     }
 
-    @GetMapping("/get/selectGoodsAndSuitByPriceAsc")
-    @ApiOperation(value = "根据价格从低到高显示单件商品与套装商品")
-    // 根据价格从低到高显示单件商品与套装商品
-    public ResponseMessage selectGoodsAndSuitByPriceAsc(@ApiParam("查询页数(第几页)")
-                                                        @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-                                                        @ApiParam("单页数量")
-                                                        @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
-        List<GoodsDTO> goodsDTOS = goodsService.selectAllShow();
-        List<SuitDTO> suitDTOS = suitService.selectAllShow();
-        if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty()) {
-            List<Object> list = goodsAndSuitService.selectGoodsAndSuitByPrice(goodsDTOS, suitDTOS);
-            if (list != null && !list.isEmpty()) {
-                List uniqueList = list.stream().distinct().collect(Collectors.toList());
-                List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
-                return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(pager), "查找成功");
-            } else return ResponseMessage.newErrorInstance("查找失败");
-        } else return ResponseMessage.newErrorInstance("查找失败");
-    }
-
-    @GetMapping("/get/selectGoodsAndSuitByPriceDec")
-    @ApiOperation(value = "根据价格从高到低显示单件商品与套装商品")
-    // 根据价格从高到低显示单件商品与套装商品
-    public ResponseMessage selectGoodsAndSuitByPriceDec(@ApiParam(name = "ifDec", value = "降序标志", required = true)
+    @GetMapping("/get/selectGoodsAndSuitByPrice")
+    @ApiOperation(value = "根据价格显示单件商品与套装商品")
+    // 根据价格显示单件商品与套装商品
+    public ResponseMessage selectGoodsAndSuitByPriceAsc(@ApiParam(name = "ifDec", value = "降序标志", required = true)
                                                         @RequestParam(value = "ifDec", defaultValue = "1") Integer ifDec,
                                                         @ApiParam("查询页数(第几页)")
                                                         @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
@@ -87,57 +68,31 @@ public class GoodsSuitController {
             List<Object> list = goodsAndSuitService.selectGoodsAndSuitByPrice(goodsDTOS, suitDTOS);
             if (list != null && !list.isEmpty()) {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
-                if (ifDec > 0) {
+                if (ifDec > 0)
                     Collections.reverse(uniqueList);
-                }
                 List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
                 return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(pager), "查找成功");
             } else return ResponseMessage.newErrorInstance("查找失败");
         } else return ResponseMessage.newErrorInstance("查找失败");
     }
 
-    @GetMapping("/get/selectGoodsAndSuitByTimeAsc")
-    @ApiOperation(value = "根据时间从低到高显示单件商品与套装商品")
-    // 根据时间从低到高显示单件商品与套装商品
-    public ResponseMessage selectGoodsAndSuitByTimeAsc(@ApiParam(name = "ifDec", value = "降序标志", required = true)
-                                                       @RequestParam(value = "ifDec", defaultValue = "1") Integer ifDec,
-                                                       @ApiParam("查询页数(第几页)")
-                                                       @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-                                                       @ApiParam("单页数量")
-                                                       @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
+    @GetMapping("/get/selectGoodsAndSuitByTime")
+    @ApiOperation(value = "根据时间显示单件商品与套装商品")
+    // 根据时间显示单件商品与套装商品
+    public ResponseMessage selectGoodsAndSuitByTime(@ApiParam(name = "ifDec", value = "降序标志", required = true)
+                                                    @RequestParam(value = "ifDec", defaultValue = "1") Integer ifDec,
+                                                    @ApiParam("查询页数(第几页)")
+                                                    @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                                                    @ApiParam("单页数量")
+                                                    @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         List<GoodsDTO> goodsDTOS = goodsService.selectAllShow();
         List<SuitDTO> suitDTOS = suitService.selectAllShow();
         if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty()) {
             List<Object> list = goodsAndSuitService.selectGoodsAndSuitByTime(goodsDTOS, suitDTOS);
             if (list != null && !list.isEmpty()) {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
-                if (ifDec > 0) {
+                if (ifDec > 0)
                     Collections.reverse(uniqueList);
-                }
-                List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
-                return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(pager), "查找成功");
-            } else return ResponseMessage.newErrorInstance("查找失败");
-        } else return ResponseMessage.newErrorInstance("查找失败");
-    }
-
-    @GetMapping("/get/selectGoodsAndSuitByTimeDec")
-    @ApiOperation(value = "根据时间从高到低显示单件商品与套装商品")
-    // 根据时间从高到低显示单件商品与套装商品
-    public ResponseMessage selectGoodsAndSuitByTimeDec(@ApiParam(name = "ifDec", value = "降序标志", required = true)
-                                                       @RequestParam(value = "ifDec", defaultValue = "1") Integer ifDec,
-                                                       @ApiParam("查询页数(第几页)")
-                                                       @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-                                                       @ApiParam("单页数量")
-                                                       @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
-        List<GoodsDTO> goodsDTOS = goodsService.selectAllShow();
-        List<SuitDTO> suitDTOS = suitService.selectAllShow();
-        if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty()) {
-            List<Object> list = goodsAndSuitService.selectGoodsAndSuitByTime(goodsDTOS, suitDTOS);
-            if (list != null && !list.isEmpty()) {
-                List uniqueList = list.stream().distinct().collect(Collectors.toList());
-                if (ifDec > 0) {
-                    Collections.reverse(uniqueList);
-                }
                 List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
                 return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(pager), "查找成功");
             } else return ResponseMessage.newErrorInstance("查找失败");
@@ -165,104 +120,50 @@ public class GoodsSuitController {
         } else return ResponseMessage.newErrorInstance("查找失败");
     }
 
-    @GetMapping("/get/selectGoodsAndSuitBySortIdAndPriceAsc")
-    @ApiOperation(value = "根据分类id与价格从低到高显示单件商品与套装商品")
-    // 根据分类id与价格从低到高显示单件商品与套装商品
-    public ResponseMessage selectGoodsAndSuitBySortIdAndPriceAsc(@ApiParam(name = "sortId", value = "分类Id", required = true)
-                                                                 @RequestParam(value = "sortId", defaultValue = "5") Integer sortId,
-                                                                 @ApiParam(name = "ifDec", value = "降序标志", required = true)
-                                                                 @RequestParam(value = "ifDec", defaultValue = "1") Integer ifDec,
-                                                                 @ApiParam("查询页数(第几页)")
-                                                                 @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-                                                                 @ApiParam("单页数量")
-                                                                 @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
+    @GetMapping("/get/selectGoodsAndSuitBySortIdAndPrice")
+    @ApiOperation(value = "根据分类id与价格显示单件商品与套装商品")
+    // 根据分类id与价格显示单件商品与套装商品
+    public ResponseMessage selectGoodsAndSuitBySortIdAndPrice(@ApiParam(name = "sortId", value = "分类Id", required = true)
+                                                              @RequestParam(value = "sortId", defaultValue = "5") Integer sortId,
+                                                              @ApiParam(name = "ifDec", value = "降序标志", required = true)
+                                                              @RequestParam(value = "ifDec", defaultValue = "1") Integer ifDec,
+                                                              @ApiParam("查询页数(第几页)")
+                                                              @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                                                              @ApiParam("单页数量")
+                                                              @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         List<GoodsDTO> goodsDTOS = goodsService.selectAllDtoBySortOrderByPrice(sortId);
         List<SuitDTO> suitDTOS = suitService.selectSuitBySortIdOrderByPrice(sortId);
         if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty()) {
             List<Object> list = goodsAndSuitService.selectGoodsAndSuitByPrice(goodsDTOS, suitDTOS);
             if (list != null && !list.isEmpty()) {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
-                if (ifDec > 0) {
+                if (ifDec > 0)
                     Collections.reverse(uniqueList);
-                }
                 List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
                 return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(pager), "查找成功");
             } else return ResponseMessage.newErrorInstance("查找失败");
         } else return ResponseMessage.newErrorInstance("查找失败");
     }
 
-    @GetMapping("/get/selectGoodsAndSuitBySortIdAndPriceDec")
-    @ApiOperation(value = "根据分类id与价格从高到低显示单件商品与套装商品")
-    // 根据分类id与价格从高到低显示单件商品与套装商品
-    public ResponseMessage selectGoodsAndSuitBySortIdAndPriceDec(@ApiParam(name = "sortId", value = "分类Id", required = true)
-                                                                 @RequestParam(value = "sortId", defaultValue = "5") Integer sortId,
-                                                                 @ApiParam(name = "ifDec", value = "降序标志", required = true)
-                                                                 @RequestParam(value = "ifDec", defaultValue = "1") Integer ifDec,
-                                                                 @ApiParam("查询页数(第几页)")
-                                                                 @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-                                                                 @ApiParam("单页数量")
-                                                                 @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
-        List<GoodsDTO> goodsDTOS = goodsService.selectAllDtoBySortOrderByPrice(sortId);
-        List<SuitDTO> suitDTOS = suitService.selectSuitBySortIdOrderByPrice(sortId);
-        if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty()) {
-            List<Object> list = goodsAndSuitService.selectGoodsAndSuitByPrice(goodsDTOS, suitDTOS);
-            if (list != null && !list.isEmpty()) {
-                List uniqueList = list.stream().distinct().collect(Collectors.toList());
-                if (ifDec > 0) {
-                    Collections.reverse(uniqueList);
-                }
-                List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
-                return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(pager), "查找成功");
-            } else return ResponseMessage.newErrorInstance("查找失败");
-        } else return ResponseMessage.newErrorInstance("查找失败");
-    }
-
-    @GetMapping("/get/selectGoodsAndSuitBySortIdAndTimeAsc")
-    @ApiOperation(value = "根据分类id与时间从低到高显示单件商品与套装商品")
-    // 根据分类id与时间从低到高显示单件商品与套装商品
-    public ResponseMessage selectGoodsAndSuitBySortIdAndTimeAsc(@ApiParam(name = "sortId", value = "分类Id", required = true)
-                                                                @RequestParam(value = "sortId", defaultValue = "5") Integer sortId,
-                                                                @ApiParam(name = "ifDec", value = "降序标志", required = true)
-                                                                @RequestParam(value = "ifDec", defaultValue = "1") Integer ifDec,
-                                                                @ApiParam("查询页数(第几页)")
-                                                                @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-                                                                @ApiParam("单页数量")
-                                                                @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
+    @GetMapping("/get/selectGoodsAndSuitBySortIdAndTime")
+    @ApiOperation(value = "根据分类id与时间显示单件商品与套装商品")
+    // 根据分类id与时间显示单件商品与套装商品
+    public ResponseMessage selectGoodsAndSuitBySortIdAndTime(@ApiParam(name = "sortId", value = "分类Id", required = true)
+                                                             @RequestParam(value = "sortId", defaultValue = "5") Integer sortId,
+                                                             @ApiParam(name = "ifDec", value = "降序标志", required = true)
+                                                             @RequestParam(value = "ifDec", defaultValue = "1") Integer ifDec,
+                                                             @ApiParam("查询页数(第几页)")
+                                                             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                                                             @ApiParam("单页数量")
+                                                             @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         List<GoodsDTO> goodsDTOS = goodsService.selectAllDtoBySortOrderByTime(sortId);
         List<SuitDTO> suitDTOS = suitService.selectSuitBySortIdOrderByTime(sortId);
         if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty()) {
             List<Object> list = goodsAndSuitService.selectGoodsAndSuitByTime(goodsDTOS, suitDTOS);
             if (list != null && !list.isEmpty()) {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
-                if (ifDec > 0) {
+                if (ifDec > 0)
                     Collections.reverse(uniqueList);
-                }
-                List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
-                return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(pager), "查找成功");
-            } else return ResponseMessage.newErrorInstance("查找失败");
-        } else return ResponseMessage.newErrorInstance("查找失败");
-    }
-
-    @GetMapping("/get/selectGoodsAndSuitBySortIdAndTimeDec")
-    @ApiOperation(value = "根据分类id与时间从高到低显示单件商品与套装商品")
-    // 根据分类id与时间从高到低显示单件商品与套装商品
-    public ResponseMessage selectGoodsAndSuitBySortIdAndTimeDec(@ApiParam(name = "sortId", value = "分类Id", required = true)
-                                                                @RequestParam(value = "sortId", defaultValue = "5") Integer sortId,
-                                                                @ApiParam(name = "ifDec", value = "降序标志", required = true)
-                                                                @RequestParam(value = "ifDec", defaultValue = "1") Integer ifDec,
-                                                                @ApiParam("查询页数(第几页)")
-                                                                @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-                                                                @ApiParam("单页数量")
-                                                                @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
-        List<GoodsDTO> goodsDTOS = goodsService.selectAllDtoBySortOrderByTime(sortId);
-        List<SuitDTO> suitDTOS = suitService.selectSuitBySortIdOrderByTime(sortId);
-        if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty()) {
-            List<Object> list = goodsAndSuitService.selectGoodsAndSuitByTime(goodsDTOS, suitDTOS);
-            if (list != null && !list.isEmpty()) {
-                List uniqueList = list.stream().distinct().collect(Collectors.toList());
-                if (ifDec > 0) {
-                    Collections.reverse(uniqueList);
-                }
                 List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
                 return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(pager), "查找成功");
             } else return ResponseMessage.newErrorInstance("查找失败");
@@ -274,6 +175,8 @@ public class GoodsSuitController {
     // 根据名称与简介查找并显示单件商品与套装商品
     public ResponseMessage selectGoodsAndSuitBySortIdAndTimeDec(@ApiParam(name = "content", value = "查找内容", required = true)
                                                                 @RequestParam(value = "content", defaultValue = "学生") String content,
+                                                                @ApiParam(name = "ifDec", value = "降序标志", required = true)
+                                                                @RequestParam(value = "ifDec", defaultValue = "1") Integer ifDec,
                                                                 @ApiParam("查询页数(第几页)")
                                                                 @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
                                                                 @ApiParam("单页数量")
@@ -284,6 +187,8 @@ public class GoodsSuitController {
             List<Object> list = goodsAndSuitService.selectGoodsAndSuitByTime(goodsDTOS, suitDTOS);
             if (list != null && !list.isEmpty()) {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
+                if (ifDec > 0)
+                    Collections.reverse(uniqueList);
                 List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
                 return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(pager), "查找成功");
             } else return ResponseMessage.newErrorInstance("查找失败");
