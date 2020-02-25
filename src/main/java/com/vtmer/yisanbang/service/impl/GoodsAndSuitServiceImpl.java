@@ -25,10 +25,10 @@ public class GoodsAndSuitServiceImpl implements GoodsAndSuitService {
     private SuitMapper suitMapper;
 
     @Override
-    public List selectGoodsAndSuit(List<GoodsDTO> goodsDTOList, List<SuitDTO> suitDTOList) {
+    public List selectGoodsAndSuit(List objectList1, List ObjectList2) {
         List objectList = new ArrayList<>();
-        Iterator iterator1 = goodsDTOList.iterator();
-        Iterator iterator2 = suitDTOList.iterator();
+        Iterator iterator1 = objectList1.iterator();
+        Iterator iterator2 = ObjectList2.iterator();
         while (iterator1.hasNext()) {
             objectList.add(iterator1.next());
         }
@@ -41,10 +41,10 @@ public class GoodsAndSuitServiceImpl implements GoodsAndSuitService {
     }
 
     @Override
-    public List selectGoodsAndSuitByPrice(List<GoodsDTO> goodsDTOList, List<SuitDTO> suitDTOList) {
+    public List selectGoodsAndSuitByPrice(List objectList1, List ObjectList2) {
         List objectList = new ArrayList<>();
-        Iterator iterator1 = goodsDTOList.iterator();
-        Iterator iterator2 = suitDTOList.iterator();
+        Iterator iterator1 = objectList1.iterator();
+        Iterator iterator2 = ObjectList2.iterator();
         while (iterator1.hasNext()) {
             objectList.add(iterator1.next());
         }
@@ -57,10 +57,10 @@ public class GoodsAndSuitServiceImpl implements GoodsAndSuitService {
     }
 
     @Override
-    public List selectGoodsAndSuitByTime(List<GoodsDTO> goodsDTOList, List<SuitDTO> suitDTOList) {
+    public List selectGoodsAndSuitByTime(List objectList1, List ObjectList2) {
         List objectList = new ArrayList<>();
-        Iterator iterator1 = goodsDTOList.iterator();
-        Iterator iterator2 = suitDTOList.iterator();
+        Iterator iterator1 = objectList1.iterator();
+        Iterator iterator2 = ObjectList2.iterator();
         while (iterator1.hasNext()) {
             objectList.add(iterator1.next());
         }

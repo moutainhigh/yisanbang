@@ -134,7 +134,7 @@ public class ColorSizeController {
         }
     }
 
-    @GetMapping("/get/selectInventoryByColorSize/{id}/{color}/{size}")
+    @GetMapping("/get/selectInventoryByColorSize")
     @ApiOperation(value = "根据颜色尺寸查找显示库存数量")
     // 根据颜色尺寸查找显示库存
     public ResponseMessage selectInventoryByColorSize(@ApiParam(name = "goodsId", value = "商品Id", required = true)
@@ -143,9 +143,6 @@ public class ColorSizeController {
                                                       @RequestParam(value = "color", defaultValue = "黑") String color,
                                                       @ApiParam(name = "size", value = "大小", required = true)
                                                       @RequestParam(value = "size", defaultValue = "S") String size) {
-        System.out.println(goodsId);
-        System.out.println(color);
-        System.out.println(size);
         ColorSizeDTO colorSizeDto = colorSizeService.selectColorSizeById(goodsId);
         if (colorSizeDto != null) {
             Integer inventory = colorSizeService.selectInventoryByColorSize(goodsId, color, size);

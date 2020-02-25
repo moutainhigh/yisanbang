@@ -43,8 +43,14 @@ public class GoodsSuitController {
                                               @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         List<GoodsDTO> goodsDTOS = goodsService.selectAllShow();
         List<SuitDTO> suitDTOS = suitService.selectAllShow();
-        if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty()) {
-            List<Object> list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, suitDTOS);
+        List<Object> list = null;
+        if ((goodsDTOS != null && !goodsDTOS.isEmpty()) || (suitDTOS != null && !suitDTOS.isEmpty())) {
+            if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty())
+                list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, suitDTOS);
+            else if ((goodsDTOS != null && !goodsDTOS.isEmpty()) && !(suitDTOS != null && !suitDTOS.isEmpty()))
+                list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, goodsDTOS);
+            else if (!(goodsDTOS != null && !goodsDTOS.isEmpty()) && (suitDTOS != null && !suitDTOS.isEmpty()))
+                list = goodsAndSuitService.selectGoodsAndSuit(suitDTOS, suitDTOS);
             if (list != null && !list.isEmpty()) {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
                 List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
@@ -64,8 +70,14 @@ public class GoodsSuitController {
                                                         @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         List<GoodsDTO> goodsDTOS = goodsService.selectAllShow();
         List<SuitDTO> suitDTOS = suitService.selectAllShow();
-        if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty()) {
-            List<Object> list = goodsAndSuitService.selectGoodsAndSuitByPrice(goodsDTOS, suitDTOS);
+        List<Object> list = null;
+        if ((goodsDTOS != null && !goodsDTOS.isEmpty()) || (suitDTOS != null && !suitDTOS.isEmpty())) {
+            if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty())
+                list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, suitDTOS);
+            else if ((goodsDTOS != null && !goodsDTOS.isEmpty()) && !(suitDTOS != null && !suitDTOS.isEmpty()))
+                list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, goodsDTOS);
+            else if (!(goodsDTOS != null && !goodsDTOS.isEmpty()) && (suitDTOS != null && !suitDTOS.isEmpty()))
+                list = goodsAndSuitService.selectGoodsAndSuit(suitDTOS, suitDTOS);
             if (list != null && !list.isEmpty()) {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
                 if (ifDec > 0)
@@ -87,8 +99,14 @@ public class GoodsSuitController {
                                                     @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         List<GoodsDTO> goodsDTOS = goodsService.selectAllShow();
         List<SuitDTO> suitDTOS = suitService.selectAllShow();
-        if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty()) {
-            List<Object> list = goodsAndSuitService.selectGoodsAndSuitByTime(goodsDTOS, suitDTOS);
+        List<Object> list = null;
+        if ((goodsDTOS != null && !goodsDTOS.isEmpty()) || (suitDTOS != null && !suitDTOS.isEmpty())) {
+            if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty())
+                list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, suitDTOS);
+            else if ((goodsDTOS != null && !goodsDTOS.isEmpty()) && !(suitDTOS != null && !suitDTOS.isEmpty()))
+                list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, goodsDTOS);
+            else if (!(goodsDTOS != null && !goodsDTOS.isEmpty()) && (suitDTOS != null && !suitDTOS.isEmpty()))
+                list = goodsAndSuitService.selectGoodsAndSuit(suitDTOS, suitDTOS);
             if (list != null && !list.isEmpty()) {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
                 if (ifDec > 0)
@@ -110,8 +128,14 @@ public class GoodsSuitController {
                                                       @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         List<GoodsDTO> goodsDTOS = goodsService.selectAllDtoBySort(sortId);
         List<SuitDTO> suitDTOS = suitService.selectSuitBySort(sortId);
-        if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty()) {
-            List<Object> list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, suitDTOS);
+        List<Object> list = null;
+        if ((goodsDTOS != null && !goodsDTOS.isEmpty()) || (suitDTOS != null && !suitDTOS.isEmpty())) {
+            if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty())
+                list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, suitDTOS);
+            else if ((goodsDTOS != null && !goodsDTOS.isEmpty()) && !(suitDTOS != null && !suitDTOS.isEmpty()))
+                list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, goodsDTOS);
+            else if (!(goodsDTOS != null && !goodsDTOS.isEmpty()) && (suitDTOS != null && !suitDTOS.isEmpty()))
+                list = goodsAndSuitService.selectGoodsAndSuit(suitDTOS, suitDTOS);
             if (list != null && !list.isEmpty()) {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
                 List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
@@ -133,8 +157,14 @@ public class GoodsSuitController {
                                                               @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         List<GoodsDTO> goodsDTOS = goodsService.selectAllDtoBySortOrderByPrice(sortId);
         List<SuitDTO> suitDTOS = suitService.selectSuitBySortIdOrderByPrice(sortId);
-        if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty()) {
-            List<Object> list = goodsAndSuitService.selectGoodsAndSuitByPrice(goodsDTOS, suitDTOS);
+        List<Object> list = null;
+        if ((goodsDTOS != null && !goodsDTOS.isEmpty()) || (suitDTOS != null && !suitDTOS.isEmpty())) {
+            if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty())
+                list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, suitDTOS);
+            else if ((goodsDTOS != null && !goodsDTOS.isEmpty()) && !(suitDTOS != null && !suitDTOS.isEmpty()))
+                list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, goodsDTOS);
+            else if (!(goodsDTOS != null && !goodsDTOS.isEmpty()) && (suitDTOS != null && !suitDTOS.isEmpty()))
+                list = goodsAndSuitService.selectGoodsAndSuit(suitDTOS, suitDTOS);
             if (list != null && !list.isEmpty()) {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
                 if (ifDec > 0)
@@ -158,8 +188,14 @@ public class GoodsSuitController {
                                                              @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         List<GoodsDTO> goodsDTOS = goodsService.selectAllDtoBySortOrderByTime(sortId);
         List<SuitDTO> suitDTOS = suitService.selectSuitBySortIdOrderByTime(sortId);
-        if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty()) {
-            List<Object> list = goodsAndSuitService.selectGoodsAndSuitByTime(goodsDTOS, suitDTOS);
+        List<Object> list = null;
+        if ((goodsDTOS != null && !goodsDTOS.isEmpty()) || (suitDTOS != null && !suitDTOS.isEmpty())) {
+            if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty())
+                list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, suitDTOS);
+            else if ((goodsDTOS != null && !goodsDTOS.isEmpty()) && !(suitDTOS != null && !suitDTOS.isEmpty()))
+                list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, goodsDTOS);
+            else if (!(goodsDTOS != null && !goodsDTOS.isEmpty()) && (suitDTOS != null && !suitDTOS.isEmpty()))
+                list = goodsAndSuitService.selectGoodsAndSuit(suitDTOS, suitDTOS);
             if (list != null && !list.isEmpty()) {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
                 if (ifDec > 0)
@@ -173,22 +209,28 @@ public class GoodsSuitController {
     @GetMapping("/get/selectGoodsAndSuitByContent")
     @ApiOperation(value = "根据名称与简介查找并显示单件商品与套装商品")
     // 根据名称与简介查找并显示单件商品与套装商品
-    public ResponseMessage selectGoodsAndSuitBySortIdAndTimeDec(@ApiParam(name = "content", value = "查找内容", required = true)
-                                                                @RequestParam(value = "content", defaultValue = "学生") String content,
-                                                                @ApiParam("查询页数(第几页)")
-                                                                @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-                                                                @ApiParam("单页数量")
-                                                                @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
+    public ResponseMessage selectGoodsAndSuitByContent(@ApiParam(name = "content", value = "查找内容", required = true)
+                                                       @RequestParam(value = "content", defaultValue = "学生") String content,
+                                                       @ApiParam("查询页数(第几页)")
+                                                       @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                                                       @ApiParam("单页数量")
+                                                       @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         List<GoodsDTO> goodsDTOS = goodsService.selectDtoByContent(content);
         List<SuitDTO> suitDTOS = suitService.selectSuitByContent(content);
-        if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty()) {
-            List<Object> list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, suitDTOS);
+        List<Object> list = null;
+        if ((goodsDTOS != null && !goodsDTOS.isEmpty()) || (suitDTOS != null && !suitDTOS.isEmpty())) {
+            if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty())
+                list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, suitDTOS);
+            else if ((goodsDTOS != null && !goodsDTOS.isEmpty()) && !(suitDTOS != null && !suitDTOS.isEmpty()))
+                list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, goodsDTOS);
+            else if (!(goodsDTOS != null && !goodsDTOS.isEmpty()) && (suitDTOS != null && !suitDTOS.isEmpty()))
+                list = goodsAndSuitService.selectGoodsAndSuit(suitDTOS, suitDTOS);
             if (list != null && !list.isEmpty()) {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
                 List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
                 return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(pager), "查找成功");
             } else return ResponseMessage.newErrorInstance("查找失败");
-        } else return ResponseMessage.newErrorInstance("查找失败");
+        } else return ResponseMessage.newErrorInstance("无结果，查找失败");
     }
 
 }
