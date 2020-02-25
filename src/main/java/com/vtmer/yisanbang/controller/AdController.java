@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.UUID;
 
+@SuppressWarnings({"ALL", "AlibabaUndefineMagicConstant"})
 @Api(tags = "广告接口")
 @RestController
 @RequestMapping("/ad")
@@ -62,7 +63,7 @@ public class AdController {
     public ResponseMessage uploadPic(@ApiParam("选择上传图片") MultipartFile pic) {
         String picType = pic.getOriginalFilename().substring(pic.getOriginalFilename().lastIndexOf(".") + 1);
         System.out.println(picType);
-        if (picType.equals("jpg") || picType.equals("JPG") || picType.equals("jpeg") || picType.equals("JPEG") || picType.equals("png") || picType.equals("PNG")) {
+        if ("jpg".equals(picType) || "JPG".equals(picType) || "jpeg".equals(picType) || "JPEG".equals(picType) || "png".equals(picType) || "PNG".equals(picType)) {
             String picName = UUID.randomUUID().toString();
             try {
                 String picPath = QiniuUpload.updateFile(pic, "ad/" + picName);

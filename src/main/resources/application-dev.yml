@@ -1,6 +1,5 @@
 server:
   port: 8088
-
 spring:
   profiles: dev
   datasource:
@@ -25,3 +24,8 @@ spring:
 swagger:
   host: 119.3.254.171:8088
   show: true
+
+logging:
+  level:
+    ROOT: info
+    com.example: trace

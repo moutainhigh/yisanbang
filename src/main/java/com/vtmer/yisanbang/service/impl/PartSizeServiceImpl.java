@@ -20,6 +20,7 @@ public class PartSizeServiceImpl implements PartSizeService {
     @Autowired
     private SuitMapper suitMapper;
 
+    @Override
     public CartGoodsDTO setSkuById(CartGoodsDTO cartGoodsDto) {
         PartSizeDTO suitSku = partSizeMapper.selectDtoByPrimaryKey(cartGoodsDto.getColorSizeId());
         // 套装尺寸

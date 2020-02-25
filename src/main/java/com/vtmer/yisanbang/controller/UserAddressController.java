@@ -94,7 +94,7 @@ public class UserAddressController {
                         Boolean flag = true;
                         for (int i = 0; i < userAddressDTOS.size(); i++) {
                             if (flag) {
-                                if (!userAddressDTOS.get(i).getId().equals(address.getId())) {
+                                if (userAddressDTOS.get(i).getId() != address.getId()) {
                                     UserAddressDTO addressDTO = userAddressDTOS.get(i);
                                     addressDTO.setIsDefault(true);
                                     userAddressService.updateUserAddressByAddressId(addressDTO);
@@ -137,7 +137,7 @@ public class UserAddressController {
                     Boolean flag = true;
                     for (int i = 0; i < userAddressDTOS.size(); i++) {
                         if (flag) {
-                            if (!userAddressDTOS.get(i).getId().equals(address.getId())) {
+                            if (userAddressDTOS.get(i).getId() != address.getId()) {
                                 UserAddressDTO addressDTO = userAddressDTOS.get(i);
                                 addressDTO.setIsDefault(true);
                                 userAddressService.updateUserAddressByAddressId(addressDTO);

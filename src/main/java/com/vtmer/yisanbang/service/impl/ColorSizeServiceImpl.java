@@ -140,6 +140,7 @@ public class ColorSizeServiceImpl implements ColorSizeService {
         return null;
     }
 
+    @Override
     public CartGoodsDTO setSkuById(CartGoodsDTO cartGoodsDTO) {
         ColorSizeDTO goodsSku = colorSizeMapper.selectDtoByPrimaryKey(cartGoodsDTO.getColorSizeId());
         // 商品尺寸

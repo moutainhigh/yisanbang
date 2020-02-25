@@ -112,7 +112,6 @@ public class UserServiceImpl implements UserService {
             WxAccount wxAccount = new WxAccount();
             wxAccount.setUserId(user.getId());
             wxAccount.setOpenId(user.getOpenId());
-            //wxAccount.setSessionKey(response.getSession_key());
             wxAccount.setSessionKey(sessionKey);
             String token = jwtUtil.createTokenByUser(wxAccount);
             logger.info("JWT返回自定义登录态token[{}]，并把token缓存到redis中", token);

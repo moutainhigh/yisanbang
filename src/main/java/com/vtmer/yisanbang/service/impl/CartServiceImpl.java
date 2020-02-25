@@ -111,6 +111,7 @@ public class CartServiceImpl implements CartService {
         return convertObjectListToCartVo(ObjectList);
     }
 
+    @Override
     public void addCartGoods(List<CartGoodsDTO> cartGoodsDTOList) {
         getUserIdAndSetKey();
         for (CartGoodsDTO cartGoodsDTO : cartGoodsDTOList) {
@@ -178,6 +179,7 @@ public class CartServiceImpl implements CartService {
 
     }
 
+    @Override
     @Transactional
     public void updateChosen(GoodsSkuDTO goodsSkuDto) {
         getUserIdAndSetKey();
@@ -203,6 +205,7 @@ public class CartServiceImpl implements CartService {
 
 
 
+    @Override
     @Transactional
     public void addOrSubtractAmount(CartGoodsDTO cartGoodsDto) {
         getUserIdAndSetKey();
@@ -267,6 +270,7 @@ public class CartServiceImpl implements CartService {
     /*
         根据购物车所有商品信息计算总价
     */
+    @Override
     public Map<String,Double> calculateTotalPrice(List<CartGoodsDTO> cartGoodsList) {
         setDiscount();
         HashMap<String, Double> priceMap = new HashMap<>();
@@ -278,7 +282,7 @@ public class CartServiceImpl implements CartService {
             // 单项商品总价
             double price = 0;
             // 如果勾选了，计算总价
-            if (cartGoodsDto.getWhetherChosen() == Boolean.TRUE) {
+            if (cartGoodsDto.getWhetherChosen().equals(Boolean.TRUE)) {
                 // 优惠前总价
                 price = cartGoodsDto.getPrice() * cartGoodsDto.getAmount();
                 cartGoodsDto.setTotalPrice(price);
@@ -298,6 +302,7 @@ public class CartServiceImpl implements CartService {
     }
 
     // 删除购物车中的勾选商品
+    @Override
     public boolean deleteCartGoodsByIsChosen() {
         getUserIdAndSetKey();
         if (!stringRedisTemplate.hasKey(key)) {

@@ -1,5 +1,6 @@
 package com.vtmer.yisanbang;
 
+import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @MapperScan("com.vtmer.yisanbang.mapper")
 @EnableTransactionManagement
 @EnableScheduling
+@EnableKnife4j
 @EnableConfigurationProperties
 public class YisanbangApplication {
 

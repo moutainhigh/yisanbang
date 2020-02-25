@@ -55,11 +55,12 @@ public class Swagger2Config {
     }
 
     private ApiInfo getApiInfo() {
-        Contact contact = new Contact("name","url","email");
+        Contact contact = new Contact("2018vtmer后台组@三只小菜鸟","url","709327956@qq.com");
         return new ApiInfoBuilder()
                 .title("【衣仨邦】微信小程序")
                 .description("项目描述：服饰电商小程序")
-                .version("版本1.2")
+                .version("版本2.0")
+                .termsOfServiceUrl("http://"+ host +"/")
                 .contact(contact)
                 .build();
     }

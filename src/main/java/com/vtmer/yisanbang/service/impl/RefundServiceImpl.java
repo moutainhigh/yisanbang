@@ -119,6 +119,7 @@ public class RefundServiceImpl implements RefundService {
      * @param orderId:订单Id
      * @return RefundVo:退款详情
      */
+    @Override
     public RefundVo getRefundVoByOrderId(Integer orderId) {
         Refund refund = refundMapper.selectByOrderId(orderId);
         if (refund == null) {
@@ -135,6 +136,7 @@ public class RefundServiceImpl implements RefundService {
      * @param status: 退款状态
      * @return List<RefundVo>
      */
+    @Override
     public List<RefundVo> getRefundVoListByStatus(Integer status) {
         if (!(status >= 0 && status <= 5)) {
             throw new RefundStatusNotFitException("传入退款状态参数超过范围");
@@ -182,7 +184,7 @@ public class RefundServiceImpl implements RefundService {
                 Boolean isGoods = refundGoods.getIsGoods();
                 for (OrderGoods orderGoods : orderGoodsList) {
                     // 由订单表设置退款商品的价格
-                    if (isGoods == orderGoods.getWhetherGoods() && sizeId.equals(orderGoods.getSizeId())) {
+                    if (isGoods.equals(orderGoods.getWhetherGoods()) && sizeId.equals(orderGoods.getSizeId())) {
                         // 商品单价
                         double price = orderGoods.getTotalPrice()/orderGoods.getAmount();
                         orderGoodsDTO.setPrice(price);
@@ -204,6 +206,7 @@ public class RefundServiceImpl implements RefundService {
      * @param agreeRefundDTO：退款编号
      * @return
      */
+    @Override
     public void setAgreeRefundDTOByRefundNumber(AgreeRefundDTO agreeRefundDTO) {
         String refundNumber = agreeRefundDTO.getRefundNumber();
         Refund refund = selectByRefundNumber(refundNumber);
@@ -230,6 +233,7 @@ public class RefundServiceImpl implements RefundService {
      * @param refundMap: orderId、status
      * @return
      */
+    @Override
     @Transactional
     public int updateRefundStatus(Map<String, Integer> refundMap) {
         Refund refund = refundMapper.selectByOrderId(refundMap.get("orderId"));
@@ -259,6 +263,7 @@ public class RefundServiceImpl implements RefundService {
      * @param refundNumber:退款编号
      * @return
      */
+    @Override
     public Refund selectByRefundNumber(String refundNumber) {
         return refundMapper.selectByRefundNumber(refundNumber);
     }
@@ -268,6 +273,7 @@ public class RefundServiceImpl implements RefundService {
      * @param refundNumber
      * @return
      */
+    @Override
     @Transactional
     public void deleteByRefundNumber(String refundNumber) {
         Integer userId = JwtFilter.getLoginUser().getId();

@@ -82,7 +82,7 @@ public class GoodsServiceImpl implements GoodsService {
     public boolean judgeGoods(GoodsDTO goods, List<GoodsDTO> goodsList) {
         for (GoodsDTO goodsDto : goodsList) {
             if (goodsDto.getName().equals(goods.getName())) {
-                if (goodsDto.getSortId().equals(goods.getSortId())) {
+                if (goodsDto.getSortId() == goods.getSortId()) {
                     return true;
                 }
             }

@@ -98,6 +98,7 @@ public class OrderServiceImpl implements OrderService {
      * @param
      * @return
      */
+    @Override
     public OrderDTO confirmCartOrder() {
         Integer userId = JwtFilter.getLoginUser().getId();
         setPostage();
@@ -114,7 +115,7 @@ public class OrderServiceImpl implements OrderService {
         }
         List<CartGoodsDTO> cartGoodsList = cartVo.getCartGoodsList();
         // IDEA推荐方式，删除为勾选的购物车商品
-        cartGoodsList.removeIf(cartGoodsDto -> cartGoodsDto.getWhetherChosen() == Boolean.FALSE);
+        cartGoodsList.removeIf(cartGoodsDto -> cartGoodsDto.getWhetherChosen().equals(Boolean.FALSE));
         orderDTO.setTotalPrice(cartVo.getTotalPrice());
         orderDTO.setBeforeTotalPrice(cartVo.getBeforeTotalPrice());
         ArrayList<OrderGoodsDTO> orderGoodsDTOArrayList = new ArrayList<>();
@@ -161,6 +162,7 @@ public class OrderServiceImpl implements OrderService {
      * @return openid、orderNumber
      * @throws DataIntegrityViolationException：库存不足抛出异常
      */
+    @Override
     @Transactional
     public Map<String, String> createCartOrder(OrderDTO orderDTO) {
         // 获取用户购物车清单
@@ -168,7 +170,7 @@ public class OrderServiceImpl implements OrderService {
         // 获取用户购物车商品列表
         List<CartGoodsDTO> cartGoodsList = cartVo.getCartGoodsList();
         // 删除未勾选商品,得到购物车勾选商品列表
-        cartGoodsList.removeIf(cartGoodsDto -> cartGoodsDto.getWhetherChosen() == Boolean.FALSE);
+        cartGoodsList.removeIf(cartGoodsDto -> cartGoodsDto.getWhetherChosen().equals(Boolean.FALSE));
         List<OrderGoodsDTO> orderGoodsDTOList = orderDTO.getOrderGoodsDTOList();
 
         // 第一步校验 —— 检查前端传递的订单总价和后台计算的订单总价是否一致
@@ -302,7 +304,7 @@ public class OrderServiceImpl implements OrderService {
             // 0代表减少库存
             inventoryMap.put("flag", 0);
             int res;
-            if (whetherGoods == Boolean.TRUE) {
+            if (whetherGoods.equals(Boolean.TRUE)) {
                 res = colorSizeMapper.updateInventoryByPrimaryKey(inventoryMap);
             } else {
                 res = partSizeMapper.updateInventoryByPrimaryKey(inventoryMap);
@@ -323,6 +325,7 @@ public class OrderServiceImpl implements OrderService {
      * @param status:status传入3时同时获取退款成功（3)的订单;status传入5查询所有订单
      * @return
      */
+    @Override
     @Transactional
     public List<OrderDTO> getUserOrderList(Integer status) {
         HashMap<String, Integer> orderMap = new HashMap<>();
@@ -373,6 +376,7 @@ public class OrderServiceImpl implements OrderService {
      * 0 —— 更新订单状态失败
      * 1 —— 更新订单状态成功
      */
+    @Override
     public int updateOrderStatus(String orderNumber) {
         Order order = orderMapper.selectByOrderNumber(orderNumber);
         Integer userId = JwtFilter.getLoginUser().getId();
@@ -408,6 +412,7 @@ public class OrderServiceImpl implements OrderService {
      * 0 —— 更新订单状态失败
      * 1 —— 更新订单状态成功
      */
+    @Override
     public void setOrderStatus(Map<String, Integer> orderMap) {
         Integer userId = JwtFilter.getLoginUser().getId();
         Integer orderId = orderMap.get("orderId");
@@ -436,6 +441,7 @@ public class OrderServiceImpl implements OrderService {
      * @param orderId
      * @return
      */
+    @Override
     public void deleteOrder(Integer orderId) {
         Integer userId = JwtFilter.getLoginUser().getId();
         Order order = orderMapper.selectByPrimaryKey(orderId);
@@ -460,6 +466,7 @@ public class OrderServiceImpl implements OrderService {
      *
      * @return 订单详情信息OrderDTO
      */
+    @Override
     public OrderDTO selectOrderDTOByOrderNumber(String orderNumber) {
         Order order = orderMapper.selectByOrderNumber(orderNumber);
         return getOrderDTOByOrder(order);
@@ -471,6 +478,7 @@ public class OrderServiceImpl implements OrderService {
      * @param orderNumber：订单号
      * @return order：订单基础信息
      */
+    @Override
     public Order selectOrderByOrderNumber(String orderNumber) {
         return orderMapper.selectByOrderNumber(orderNumber);
     }
@@ -481,6 +489,7 @@ public class OrderServiceImpl implements OrderService {
      * @param order：courierNumber、orderNumber
      * @return
      */
+    @Override
     @Transactional
     public void setCourierNumber(Order order) {
         String orderNumber = order.getOrderNumber();
@@ -557,11 +566,12 @@ public class OrderServiceImpl implements OrderService {
         return orderDTO;
     }
 
+    @Override
     public void setOrderGoodsDTO(OrderGoodsDTO orderGoodsDTO, Integer sizeId, Boolean isGoods) {
         orderGoodsDTO.setColorSizeId(sizeId);
         orderGoodsDTO.setWhetherGoods(isGoods);
         // 如果是普通商品
-        if (isGoods == Boolean.TRUE) {
+        if (isGoods.equals(Boolean.TRUE)) {
             ColorSize colorSize = colorSizeMapper.selectByPrimaryKey(sizeId);
             orderGoodsDTO.setSize(colorSize.getSize());
             orderGoodsDTO.setPartOrColor(colorSize.getColor());
@@ -586,6 +596,7 @@ public class OrderServiceImpl implements OrderService {
      * @param orderDTO:userAddress、orderNumber
      * @return
      */
+    @Override
     public void updateAddress(OrderDTO orderDTO) {
         Integer userId = JwtFilter.getLoginUser().getId();
         String orderNumber = orderDTO.getOrderNumber();
@@ -615,6 +626,7 @@ public class OrderServiceImpl implements OrderService {
      * @param orderNumber：订单编号
      * @return
      */
+    @Override
     @Transactional
     public void cancelOrder(String orderNumber) {
         Integer userId = JwtFilter.getLoginUser().getId();
@@ -646,6 +658,7 @@ public class OrderServiceImpl implements OrderService {
      * @param flag：1代表增加库存，0代表减少库存
      * @return 返回成功失败状态
      */
+    @Override
     public void updateInventory(String orderNumber, Integer flag) {
         Order order = orderMapper.selectByOrderNumber(orderNumber);
         // 库存归位
@@ -659,7 +672,7 @@ public class OrderServiceImpl implements OrderService {
             inventoryMap.put("amount", amount);
             // 1代表增加库存,0代表减少库存
             inventoryMap.put("flag", flag);
-            if (isGoods == Boolean.TRUE) {
+            if (isGoods.equals(Boolean.TRUE)) {
                 colorSizeMapper.updateInventoryByPrimaryKey(inventoryMap);
             } else {
                 partSizeMapper.updateInventoryByPrimaryKey(inventoryMap);
@@ -672,7 +685,9 @@ public class OrderServiceImpl implements OrderService {
         List<Order> payOrderList = orderMapper.getPayOrder();
         if (payOrderList != null) {
             return refundService.getUnRefundOrder(payOrderList);
-        } else return null;
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -706,13 +721,13 @@ public class OrderServiceImpl implements OrderService {
                         }
                         // 调用微信查询订单接口，确认用户是否真的未付款
                         WxPayOrderQueryResult wxPayOrderQueryResult = wxPayService.queryOrder(null, orderNumber);
-                        if (wxPayOrderQueryResult.getTradeState().equals("SUCCESS")) {
+                        if ("SUCCESS".equals(wxPayOrderQueryResult.getTradeState())) {
                             // 如果微信订单结果为已支付，说明程序错误，给予补偿,更新订单状态为待发货
                             Map<String, Integer> orderMap = new HashMap<>();
                             orderMap.put("orderId", order.getId());
                             orderMap.put("status", 1);
                             orderMapper.setOrderStatus(orderMap);
-                        } else if (wxPayOrderQueryResult.getTradeState().equals("NOTPAY")) {
+                        } else if ("NOTPAY".equals(wxPayOrderQueryResult.getTradeState())) {
                             // 如果结果为未支付，开始关闭订单操作
                             logger.info("开始关闭超时订单任务，订单编号[{}],下单时间[{}]", orderNumber, order.getCreateTime());
                             // 更待订单状态为交易关闭

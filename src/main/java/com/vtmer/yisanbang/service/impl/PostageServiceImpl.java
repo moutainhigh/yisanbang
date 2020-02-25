@@ -18,6 +18,7 @@ public class PostageServiceImpl implements PostageService {
      * get the postage
      * @return
      */
+    @Override
     public Postage get() {
         return postageMapper.select();
     }
@@ -27,6 +28,7 @@ public class PostageServiceImpl implements PostageService {
      * @param postage
      * @return
      */
+    @Override
     public void update(Postage postage) {
         Postage checkExist = get();
         if (checkExist == null) {
@@ -39,6 +41,7 @@ public class PostageServiceImpl implements PostageService {
      * delete the postage
      * @return
      */
+    @Override
     public void delete() {
         Postage postage = get();
         if (postage == null) {
@@ -53,6 +56,7 @@ public class PostageServiceImpl implements PostageService {
      * @param postage
      * @return
      */
+    @Override
     public void insert(Postage postage) {
         Postage checkExist = get();
         if (checkExist != null) {

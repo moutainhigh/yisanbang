@@ -84,7 +84,6 @@ public class SystemLogAspect {
 
     /**
      * 获取参数
-     *
      * @param request
      * @param osNos
      * @return

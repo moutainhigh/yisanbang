@@ -106,7 +106,6 @@ public class OrderController {
 
     /**
      * 创建购物车类订单
-     *
      * @param orderDTO：留言，用户收货地址，邮费
      * @return
      */
@@ -134,7 +133,6 @@ public class OrderController {
 
     /**
      * 通过订单号进行微信支付
-     *
      * @param orderNumber：orderNumber订单号
      * @return 返回前端调起微信支付所需的支付参数（5个参数和sign）
      */
@@ -194,7 +192,6 @@ public class OrderController {
 
     /**
      * 支付回调通知处理
-     *
      * @param xmlData 相关支付结果及用户信息(微信端提供)
      * @return 向微信服务端返回应答
      * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--申请退款(待商家处理) 5--退款中(待商家收货) 6--退款成功 7--退款失败 8--交易关闭 9--所有订单
@@ -236,7 +233,7 @@ public class OrderController {
                 return WxPayNotifyResponse.fail("返回的订单金额与商户侧的订单金额不一致");
             }
             // 如果交易成功(支付成功)
-            if (notifyResult.getResultCode().equals("SUCCESS")) {
+            if ("SUCCESS".equals(notifyResult.getResultCode())) {
                 if (order.getStatus() == 0) { // 判断订单状态，避免微信重复通知调用该接口，如果该订单的状态是未付款
                     int res = orderService.updateOrderStatus(order.getOrderNumber());// 更新该订单为待发货
                     logger.info("更新订单[{}]状态：[未付款]-->[待发货]", orderNumber);
@@ -304,7 +301,6 @@ public class OrderController {
      * 订单状态自增修改，适用于待付款、待发货、待收货类订单
      * 订单状态定义：status 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 0--待付款 1--待发货 2--待收货 状态订单 更新订单状态
-     *
      * @param orderNumber:订单编号
      * @return
      */
