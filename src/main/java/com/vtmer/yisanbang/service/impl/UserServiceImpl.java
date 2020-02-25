@@ -1,6 +1,5 @@
 package com.vtmer.yisanbang.service.impl;
 
-import com.vtmer.yisanbang.common.TokenInterceptor;
 import com.vtmer.yisanbang.common.exception.service.third.Code2SessionException;
 import com.vtmer.yisanbang.common.util.EncryptUtils;
 import com.vtmer.yisanbang.common.util.HttpUtil;
@@ -121,20 +120,6 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    @Override
-    public Integer getUserIdByToken(String token) {
-        String openId = jwtUtil.getOpenIdByToken(token);
-        User user = userMapper.selectUserByOpenId(openId);
-        if (null != user) {
-            return user.getId();
-        }
-        return null;
-    }
-
-    @Override
-    public String getOpenIdByUserId(Integer userId) {
-        return userMapper.selectOpenIdByUserId(userId);
-    }
 
     @Override
     public User selectByPrimaryKey(Integer userId) {

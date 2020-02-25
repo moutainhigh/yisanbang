@@ -92,10 +92,12 @@
     from goods
     where id = #{id,jdbcType=INTEGER}
   </select>
-    <select id="selectDtoByGoodsName" parameterType="java.lang.String" resultMap="GoodsMap">
+    <select id="selectDtoByContent" parameterType="java.lang.String" resultMap="GoodsMap">
     select id, sort_id, name, introduce, picture, price, is_show
     from goods
-    where name = #{name,jdbcType=VARCHAR} and is_show = true
+    where name like concat('%',#{content,jdbcType=VARCHAR},'%')
+    or introduce like concat('%',#{content,jdbcType=VARCHAR},'%')
+    and is_show = true
   </select>
     <select id="selectAllDto" resultMap="GoodsMap">
     select id, sort_id, name, introduce, picture, price, is_show, update_time

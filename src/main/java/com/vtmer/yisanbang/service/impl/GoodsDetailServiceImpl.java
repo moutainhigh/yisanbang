@@ -1,6 +1,8 @@
 package com.vtmer.yisanbang.service.impl;
 
 
+import com.vtmer.yisanbang.common.util.Comparator.ComparatorGoodsOrSuitDetail;
+import com.vtmer.yisanbang.domain.Collection;
 import com.vtmer.yisanbang.dto.GoodsDetailDTO;
 import com.vtmer.yisanbang.mapper.GoodsDetailMapper;
 import com.vtmer.yisanbang.service.GoodsDetailService;
@@ -8,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -51,7 +54,11 @@ public class GoodsDetailServiceImpl implements GoodsDetailService {
     // 根据商品id查找商品的所有商品详细信息
     public List<GoodsDetailDTO> selectAllDtoByGoodsId(Integer goodsId) {
         List<GoodsDetailDTO> goodsDetailDtos = goodsDetailMapper.selectAllDtoByGoodsId(goodsId);
-        if (goodsDetailDtos != null) return goodsDetailDtos;
+        if (goodsDetailDtos != null) {
+            ComparatorGoodsOrSuitDetail comparatorGoodsOrSuitDetail = new ComparatorGoodsOrSuitDetail();
+            Collections.sort(goodsDetailDtos,comparatorGoodsOrSuitDetail);
+            return goodsDetailDtos;
+        }
         return null;
     }
 

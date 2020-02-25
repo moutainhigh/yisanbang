@@ -1,5 +1,6 @@
 package com.vtmer.yisanbang.service.impl;
 
+import com.vtmer.yisanbang.common.util.Comparator.ComparatorGoodsOrSuitDetail;
 import com.vtmer.yisanbang.dto.SuitDetailDTO;
 import com.vtmer.yisanbang.mapper.SuitDetailMapper;
 import com.vtmer.yisanbang.service.SuitDetailService;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -51,8 +53,11 @@ public class SuitDetailServiceImpl implements SuitDetailService {
     // 根据套装id查找套装的所有套装详细信息
     public List<SuitDetailDTO> selectAllDtoBySuitId(Integer suitId) {
         List<SuitDetailDTO> suitDetailDtoList = suitDetailMapper.selectAllDtoBySuitId(suitId);
-        if (suitDetailDtoList != null && !suitDetailDtoList.isEmpty())
+        if (suitDetailDtoList != null && !suitDetailDtoList.isEmpty()) {
+            ComparatorGoodsOrSuitDetail comparatorGoodsOrSuitDetail = new ComparatorGoodsOrSuitDetail();
+            Collections.sort(suitDetailDtoList,comparatorGoodsOrSuitDetail);
             return suitDetailDtoList;
+        }
         return null;
     }
 

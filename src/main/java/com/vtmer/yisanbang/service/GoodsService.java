@@ -18,8 +18,8 @@ public interface GoodsService {
     // 查找所有商品
     public List<GoodsDTO> selectAllDto();
 
-    // 根据商品名称查找商品
-    public GoodsDTO selectDtoByGoodsName(String goodsName);
+    // 根据商品名称与简介查找商品
+    public List<GoodsDTO> selectDtoByContent(String content);
 
     // 根据商品id更新商品
     public boolean updateGoods(GoodsDTO goods);

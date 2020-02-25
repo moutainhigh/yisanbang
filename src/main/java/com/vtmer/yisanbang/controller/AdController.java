@@ -27,7 +27,7 @@ public class AdController {
     private AdService adService;
 
     @ApiOperation(value = "分页查询所有广告信息")
-    @GetMapping("/list")
+    @GetMapping("/get/list")
     public ResponseMessage getAllAdInfo(@ApiParam("查询页数(第几页)") @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
                                         @ApiParam("单页查询数量") @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
@@ -39,7 +39,7 @@ public class AdController {
     }
 
     @ApiOperation("根据id查询广告信息")
-    @GetMapping("/{adId}")
+    @GetMapping("/get/{adId}")
     public ResponseMessage getAdInfo(@PathVariable("adId") Integer adId) {
         Ad ad = adService.listAdInfoByAdId(adId);
         if (ad != null) {

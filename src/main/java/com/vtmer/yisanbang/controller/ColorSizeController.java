@@ -24,7 +24,7 @@ public class ColorSizeController {
     @Autowired
     private ColorSizeService colorSizeService;
 
-    @GetMapping("/selectAllColorSizeByGoodsId")
+    @GetMapping("/get/selectAllColorSizeByGoodsId")
     @ApiOperation(value = "根据商品id查找该商品的所有颜色尺寸")
     // 查找所有颜色尺寸通过商品id
     public ResponseMessage selectAllColorSizeByGoodsId(@ApiParam(name = "goodsId", value = "商品Id", required = true)
@@ -86,17 +86,22 @@ public class ColorSizeController {
         } else return ResponseMessage.newErrorInstance("该商品颜色尺寸不存在");
     }
 
-    @GetMapping("/selectAllColorById")
+    @GetMapping("/get/selectAllColorById")
     @ApiOperation(value = "根据商品id查找该商品的所有颜色")
     // 查找所有颜色
     public ResponseMessage selectAllColorById(@ApiParam(name = "goodsId", value = "商品Id", required = true)
-                                              @RequestParam(value = "goodsId", defaultValue = "5") Integer goodsId) {
+                                              @RequestParam(value = "goodsId", defaultValue = "5") Integer goodsId,
+                                              @ApiParam("查询页数(第几页)")
+                                              @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                                              @ApiParam("单页数量")
+                                              @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
         List<ColorSizeDTO> colorSizeDtos = colorSizeService.selectAllByGoodsId(goodsId);
         if (colorSizeDtos != null) {
             List<String> list = colorSizeService.selectAllColorById(goodsId);
             if (list != null && !list.isEmpty()) {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
-                return ResponseMessage.newSuccessInstance(uniqueList, "查找成功");
+                return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(uniqueList), "查找成功");
             } else {
                 return ResponseMessage.newErrorInstance("查找失败");
             }
@@ -105,17 +110,22 @@ public class ColorSizeController {
         }
     }
 
-    @GetMapping("/selectAllSizeById")
+    @GetMapping("/get/selectAllSizeById")
     @ApiOperation(value = "根据商品id查找该商品的所有尺寸")
     // 查找所有尺寸
     public ResponseMessage selectAllSizeById(@ApiParam(name = "goodsId", value = "商品Id", required = true)
-                                             @RequestParam(value = "goodsId", defaultValue = "5") Integer goodsId) {
+                                             @RequestParam(value = "goodsId", defaultValue = "5") Integer goodsId,
+                                             @ApiParam("查询页数(第几页)")
+                                             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                                             @ApiParam("单页数量")
+                                             @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
         List<ColorSizeDTO> colorSizeDtos = colorSizeService.selectAllByGoodsId(goodsId);
         if (colorSizeDtos != null) {
             List<String> list = colorSizeService.selectAllSizeById(goodsId);
             if (list != null && !list.isEmpty()) {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
-                return ResponseMessage.newSuccessInstance(uniqueList, "查找成功");
+                return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(uniqueList), "查找成功");
             } else {
                 return ResponseMessage.newErrorInstance("查找失败");
             }
@@ -124,12 +134,15 @@ public class ColorSizeController {
         }
     }
 
-    @GetMapping("/selectInventoryByColorSize/{id}/{color}/{size}")
+    @GetMapping("/get/selectInventoryByColorSize/{id}/{color}/{size}")
     @ApiOperation(value = "根据颜色尺寸查找显示库存数量")
     // 根据颜色尺寸查找显示库存
-    public ResponseMessage selectInventoryByColorSize(@ApiParam(name = "goodsId", value = "商品Id", required = true) @PathVariable("id") Integer goodsId,
-                                                      @ApiParam(name = "color", value = "颜色", required = true) @PathVariable("color") String color,
-                                                      @ApiParam(name = "size", value = "大小", required = true) @PathVariable("size") String size) {
+    public ResponseMessage selectInventoryByColorSize(@ApiParam(name = "goodsId", value = "商品Id", required = true)
+                                                      @RequestParam(value = "goodsId", defaultValue = "5") Integer goodsId,
+                                                      @ApiParam(name = "color", value = "颜色", required = true)
+                                                      @RequestParam(value = "color", defaultValue = "黑") String color,
+                                                      @ApiParam(name = "size", value = "大小", required = true)
+                                                      @RequestParam(value = "size", defaultValue = "S") String size) {
         System.out.println(goodsId);
         System.out.println(color);
         System.out.println(size);

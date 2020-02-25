@@ -1,9 +1,9 @@
 package com.vtmer.yisanbang.service.impl;
 
-import com.vtmer.yisanbang.common.TokenInterceptor;
 import com.vtmer.yisanbang.dto.UserAddressDTO;
 import com.vtmer.yisanbang.mapper.UserAddressMapper;
 import com.vtmer.yisanbang.service.UserAddressService;
+import com.vtmer.yisanbang.shiro.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,7 +55,7 @@ public class UserAddressServiceImpl implements UserAddressService {
 
     @Override
     public UserAddressDTO selectDefaultUserAddressByToken() {
-        Integer userId = TokenInterceptor.getLoginUser().getId();
+        Integer userId = JwtFilter.getLoginUser().getId();
         List<UserAddressDTO> userAddressDtos = userAddressMapper.selectAllByUserId(userId);
         for (UserAddressDTO addressDto : userAddressDtos) {
             if (addressDto.getIsDefault())

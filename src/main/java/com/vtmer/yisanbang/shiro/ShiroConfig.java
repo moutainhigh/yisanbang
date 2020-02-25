@@ -48,6 +48,31 @@ public class ShiroConfig {
         filterRuleMap.put("/admin/logout", "anon");
         filterRuleMap.put("/ad/list", "anon");
         filterRuleMap.put("/carousel/list", "anon");
+        // 管理员添加接口放行，方便测试
+        filterRuleMap.put("/admin/addAdmin", "anon");
+        // get接口放行...
+        // 分类模块接口放行
+        filterRuleMap.put("/sort/get/**","anon");
+        // 单间商品与套装商品管理接口放行
+        filterRuleMap.put("/goodsAndSuit/**","anon");
+        // 商品查询接口放行
+        filterRuleMap.put("/goods/get/**","anon");
+        // 商品详情接口放行
+        filterRuleMap.put("/goodsDetail/get/**","anon");
+        // 获取商家默认收货地址接口放行
+        filterRuleMap.put("/businessAddress/getDefault","anon");
+        // 套装接口放行
+        filterRuleMap.put("/suit/get/**","anon");
+        // 套装详情接口放行
+        filterRuleMap.put("/suitDetail/get/**","anon");
+        // 广告接口放行
+        filterRuleMap.put("/ad/get/**","anon");
+        // 轮播图接口放行
+        filterRuleMap.put("/carousel/get/**","anon");
+        // 部件尺寸管理接口放行
+        filterRuleMap.put("/partSize/get/**","anon");
+        // 颜色尺寸管理接口放行
+        filterRuleMap.put("/colorSize/get/**","anon");
         //swagger接口权限 开放
         filterRuleMap.put("/swagger-ui.html", "anon");
         filterRuleMap.put("/webjars/**", "anon");

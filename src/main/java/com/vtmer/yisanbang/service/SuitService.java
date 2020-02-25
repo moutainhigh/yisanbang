@@ -24,8 +24,8 @@ public interface SuitService {
     // 根据套装id查找套装
     public SuitDTO selectSuitById(Integer suitId);
 
-    // 根据套装名字查找套装
-    public SuitDTO selectSuitByName(String suitName);
+    // 根据套装名字与简介查找套装
+    public List<SuitDTO> selectSuitByContent(String content);
 
     // 根据套装的最低价格排序进行显示
     public List<SuitDTO> selectSuitOrderByPrice();
@@ -35,6 +35,13 @@ public interface SuitService {
 
     // 根据分类id显示套装
     public List<SuitDTO> selectSuitBySort(Integer sortId);
+
+    // 根据分类id与套装的最低价格排序进行显示
+    public List<SuitDTO> selectSuitBySortIdOrderByPrice(Integer sortId);
+
+    // 根据分类id与套装的时间排序进行显示
+    public List<SuitDTO> selectSuitBySortIdOrderByTime(Integer sortId);
+
 
     // 隐藏套装
     public boolean hideSuit(SuitDTO suitDto);
