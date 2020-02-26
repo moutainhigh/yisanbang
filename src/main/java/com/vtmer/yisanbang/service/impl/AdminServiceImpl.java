@@ -2,12 +2,15 @@ package com.vtmer.yisanbang.service.impl;
 
 import com.vtmer.yisanbang.common.util.EncryptUtils;
 import com.vtmer.yisanbang.domain.Admin;
+import com.vtmer.yisanbang.domain.Role;
 import com.vtmer.yisanbang.mapper.AdminMapper;
 import com.vtmer.yisanbang.mapper.AdminRoleMapper;
+import com.vtmer.yisanbang.mapper.RoleMapper;
 import com.vtmer.yisanbang.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,6 +21,9 @@ public class AdminServiceImpl implements AdminService {
 
     @Autowired
     private AdminRoleMapper adminRoleMapper;
+
+    @Autowired
+    private RoleMapper roleMapper;
 
     @Override
     public boolean addAdmin(Admin admin) {
@@ -69,15 +75,15 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Integer getAdminRole(String adminName) {
-        Integer adminId = adminMapper.selectAdminIdByName(adminName);
-        List<Integer>adminRole = adminRoleMapper.selectRoleIdByAdminId(adminId);
-        if (adminRole.contains(1)) {
-            return 1;
-    }else if (adminRole.contains(2)) {
-            return 2;
-    }
-        return null;
+    public List<Role> getRoleListByName(String name) {
+        ArrayList<Role> roleArrayList = new ArrayList<>();
+        Integer adminId = adminMapper.selectAdminIdByName(name);
+        List<Integer> RoleIdList = adminRoleMapper.selectRoleIdByAdminId(adminId);
+        for (Integer roleId : RoleIdList) {
+            Role role = roleMapper.selectByPrimaryKey(roleId);
+            roleArrayList.add(role);
+        }
+        return roleArrayList;
     }
 
 }

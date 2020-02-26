@@ -109,7 +109,7 @@
     <include refid="BaseColumnList"/>
     from `order`
   </select>
-  <select id="selectAllByUserIdAndStatus" resultType="com.vtmer.yisanbang.domain.Order">
+  <select id="selectAllByUserIdAndStatus" resultMap="BaseResultMap">
     select
     <include refid="BaseColumnList"/>
     from `order`
@@ -117,14 +117,14 @@
     <include refid="OrderCondition"/>
     order by update_time DESC
   </select>
-  <select id="selectByOrderNumber" resultType="com.vtmer.yisanbang.domain.Order">
+  <select id="selectByOrderNumber" resultMap="BaseResultMap">
     select
     <include refid="BaseColumnList"/>
     from `order`
     where order_number = #{orderNumber}
     and is_delete = 0
   </select>
-  <select id="getPayOrder" resultType="com.vtmer.yisanbang.domain.Order">
+  <select id="getPayOrder" resultMap="BaseResultMap">
     select
     <include refid="BaseColumnList"/>
     from `order`

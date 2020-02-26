@@ -8,10 +8,6 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
-  <resultMap id="CartDtoMap" type="com.vtmer.yisanbang.vo.CartVO">
-    <id column="id" jdbcType="INTEGER" property="cartId" />
-    <result column="total_price" jdbcType="VARCHAR" property="totalPrice" />
-  </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from cart
     where id = #{id,jdbcType=INTEGER}
@@ -24,7 +20,7 @@
   </insert>
   <insert id="replace" parameterType="com.vtmer.yisanbang.domain.Cart" useGeneratedKeys="true" keyProperty="id">
     REPLACE into cart (user_id, total_price) values
-    #{userId,jdbcType=INTEGER}, #{totalPrice,jdbcType=VARCHAR}
+    (#{userId,jdbcType=INTEGER},#{totalPrice,jdbcType=VARCHAR})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.vtmer.yisanbang.domain.Cart">
     update cart
@@ -34,11 +30,6 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateTotalPrice">
-    update cart
-    set total_price = #{totalPrice,jdbcType=VARCHAR}
-    where id = #{cartId,jdbcType=INTEGER}
-  </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select id, user_id, total_price, create_time, update_time
     from cart
@@ -47,11 +38,5 @@
   <select id="selectAll" resultMap="BaseResultMap">
     select id, user_id, total_price, create_time, update_time
     from cart
-  </select>
-  <select id="selectCartIdByUserId" resultType="java.lang.Integer">
-    select id from cart where user_id = #{id}
-  </select>
-  <select id="selectCartDtoByUserId" resultMap="CartDtoMap">
-    select id,total_price from cart where user_id = #{id}
   </select>
 </mapper>

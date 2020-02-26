@@ -2,6 +2,7 @@ package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.domain.Admin;
+import com.vtmer.yisanbang.domain.Role;
 import com.vtmer.yisanbang.dto.AddAdminDTO;
 import com.vtmer.yisanbang.dto.LoginDTO;
 import com.vtmer.yisanbang.dto.UpdatePwdDTO;
@@ -18,9 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Api(tags = "后台管理接口")
 @RestController
@@ -64,7 +63,7 @@ public class AdminController {
      * @param loginDto
      * @return
      */
-    @ApiOperation(value = "管理员登录", notes = "登录成功返回管理员名称和角色(1为超级管理员，2为普通管理员)")
+    @ApiOperation("管理员登录")
     @PostMapping("/login")
     public ResponseMessage login(@Validated @RequestBody LoginDTO loginDto) {
         /**
@@ -79,12 +78,8 @@ public class AdminController {
             subject.login(token);
             // System.out.println("登陆");
             // 登陆成功
-            // 查找管理员角色
-            Integer adminRole = adminService.getAdminRole(loginDto.getAdminName());
-            Map<String, Object> adminInfo = new HashMap <>();
-            adminInfo.put("adminName", loginDto.getAdminName());
-            adminInfo.put("adminRole", adminRole);
-            return ResponseMessage.newSuccessInstance(adminInfo,"登陆成功");
+            List<Role> roleList = adminService.getRoleListByName(loginDto.getAdminName());
+            return ResponseMessage.newSuccessInstance(roleList,"登陆成功,该账号的角色见data");
         } catch (UnknownAccountException e) {
             return ResponseMessage.newErrorInstance("登陆失败，用户名不存在");
         } catch (IncorrectCredentialsException e) {

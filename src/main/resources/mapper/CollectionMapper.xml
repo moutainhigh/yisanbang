@@ -51,7 +51,7 @@
     where 1=1
     <include refid="BaseCondition"/>
   </select>
-  <select id="selectAllByUserId" resultType="com.vtmer.yisanbang.domain.Collection">
+  <select id="selectAllByUserId" resultMap="BaseResultMap">
     select goods_id,is_goods from collection
     where user_id = #{userId}
     order by create_time DESC
