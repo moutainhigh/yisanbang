@@ -29,7 +29,7 @@ public class UserAddressController {
     /*
      * 根据用户id查看所有地址
      * */
-    @GetMapping("/listUserAddress")
+    @GetMapping("/get/listUserAddress")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
@@ -161,7 +161,7 @@ public class UserAddressController {
     /*
      * 查找默认地址
      * */
-    @GetMapping("/defaultUserAddress/{id}")
+    @GetMapping("/get/defaultUserAddress")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
