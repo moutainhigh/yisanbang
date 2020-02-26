@@ -23,4 +23,7 @@ public interface SuitDetailService {
     // 根据套装详细id查找套装详细信息
     public SuitDetailDTO selectSuitDetailByID(Integer suitDetailId);
 
+    // 删除套装的所有套装详情信息
+    public boolean deleteAllSuitDetailBySuitId(Integer suitId);
+
 }

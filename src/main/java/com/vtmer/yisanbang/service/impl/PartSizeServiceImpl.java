@@ -71,6 +71,21 @@ public class PartSizeServiceImpl implements PartSizeService {
     }
 
     @Override
+    public boolean deleteAllPartSizeBySuitId(Integer suitId) {
+        List<PartSizeDTO> oldPartSizeDtos = partSizeMapper.selectAllBySuitId(suitId);
+        if (oldPartSizeDtos != null && !oldPartSizeDtos.isEmpty()) {
+            for (PartSizeDTO partSizeDTO : oldPartSizeDtos) {
+                partSizeMapper.deleteByPrimaryKey(partSizeDTO.getId());
+            }
+        }
+        List<PartSizeDTO> partSizeDtos = partSizeMapper.selectAllBySuitId(suitId);
+        if (!(partSizeDtos != null && !partSizeDtos.isEmpty())) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     // 更新部件尺寸
     public boolean updatePartSize(PartSizeDTO partSizeDto) {
         int updateFlag = partSizeMapper.updateDtoByPrimaryKey(partSizeDto);

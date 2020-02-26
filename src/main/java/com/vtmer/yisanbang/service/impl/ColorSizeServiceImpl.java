@@ -51,6 +51,21 @@ public class ColorSizeServiceImpl implements ColorSizeService {
     }
 
     @Override
+    public boolean deleteAllColorSizeByGoodsId(Integer goodsId) {
+        List<ColorSizeDTO> oldColorSizeDtos = colorSizeMapper.selectAllDtoByGoodsId(goodsId);
+        if (oldColorSizeDtos != null && !oldColorSizeDtos.isEmpty()) {
+            for (ColorSizeDTO colorSizeDTO:oldColorSizeDtos) {
+                colorSizeMapper.deleteByPrimaryKey(colorSizeDTO.getId());
+            }
+        }
+        List<ColorSizeDTO> colorSizeDtos = colorSizeMapper.selectAllDtoByGoodsId(goodsId);
+        if (!(colorSizeDtos != null && !colorSizeDtos.isEmpty())) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     // 更新颜色尺寸
     public boolean updateColorSize(ColorSizeDTO colorSizeDto) {
         int updateFlag = colorSizeMapper.updateDtoByPrimaryKey(colorSizeDto);
@@ -74,7 +89,7 @@ public class ColorSizeServiceImpl implements ColorSizeService {
     // 根据商品id查找所有该商品的颜色尺寸
     public List<ColorSizeDTO> selectAllByGoodsId(Integer goodsId) {
         List<ColorSizeDTO> colorSizeDtos = colorSizeMapper.selectAllDtoByGoodsId(goodsId);
-        if (colorSizeDtos != null) {
+        if (colorSizeDtos != null && !colorSizeDtos.isEmpty()) {
             return colorSizeDtos;
         }
         return null;

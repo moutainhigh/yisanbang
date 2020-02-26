@@ -37,6 +37,9 @@ public class UserAddressController {
     public ResponseMessage listUserAddress() {
         Integer userId = JwtFilter.getLoginUser().getId();
         User user = userService.selectByPrimaryKey(userId);
+        if (userId != null) {
+            return ResponseMessage.newSuccessInstance(userId, "存在userId");
+        }
         List<UserAddressDTO> UserAdressDto = userAddressService.selectUserAddressByUserId(userId);
         if (user == null) {
             return ResponseMessage.newErrorInstance("该用户id错误");
@@ -60,6 +63,9 @@ public class UserAddressController {
                                              @Validated UserAddressDTO userAddress) {
         Integer userId = JwtFilter.getLoginUser().getId();
         userAddress.setUserId(userId);
+        if (userId != null) {
+            return ResponseMessage.newSuccessInstance(userAddress,"存在userId");
+        }
         List<UserAddressDTO> userAddressDtos = userAddressService.selectUserAddressByUserId(userAddress.getUserId());
         if (userAddressDtos != null && !userAddressDtos.isEmpty()) {
             boolean flag = userAddressService.JudegAddressContent(userAddress, userAddressDtos);
@@ -86,8 +92,6 @@ public class UserAddressController {
     public ResponseMessage updateUserAddress(@ApiParam(name = "用户地址Dto实体类", value = "传入Json格式", required = true)
                                              @RequestBody
                                              @Validated(Update.class) UserAddressDTO userAddress) {
-        Integer userId = JwtFilter.getLoginUser().getId();
-        userAddress.setUserId(userId);
         UserAddressDTO address = userAddressService.selectUserAddressDtoByAddressId(userAddress.getId());
         if (address != null) {
             UserAddressDTO userAddressDTO = userAddressService.selectDefaultUserAddress(userAddress.getUserId());
@@ -132,8 +136,6 @@ public class UserAddressController {
     public ResponseMessage deleteUserAddress(@ApiParam(name = "用户地址Dto实体类", value = "传入Json格式", required = true)
                                              @RequestBody
                                              @Validated(Delete.class) UserAddressDTO userAddress) {
-        Integer userId = JwtFilter.getLoginUser().getId();
-        userAddress.setUserId(userId);
         UserAddressDTO address = userAddressService.selectUserAddressDtoByAddressId(userAddress.getId());
         if (address != null) {
             UserAddressDTO userAddressDTO = userAddressService.selectDefaultUserAddress(userAddress.getUserId());
@@ -173,7 +175,8 @@ public class UserAddressController {
     })
     @ApiOperation(value = "根据用户id查看该用户的默认地址")
     public ResponseMessage selectDefaultUserAddress() {
-        UserAddressDTO addressDto = userAddressService.selectDefaultUserAddressByToken();
+        Integer userId = JwtFilter.getLoginUser().getId();
+        UserAddressDTO addressDto = userAddressService.selectDefaultUserAddress(userId);
         if (addressDto == null) {
             return ResponseMessage.newErrorInstance("无默认地址");
         } else {
@@ -192,8 +195,6 @@ public class UserAddressController {
     public ResponseMessage changeDefaultUserAddress(@ApiParam(name = "用户地址Dto实体类", value = "传入Json格式", required = true)
                                                     @RequestBody
                                                     @Validated(Update.class) UserAddressDTO userAddress) {
-        Integer userId = JwtFilter.getLoginUser().getId();
-        userAddress.setUserId(userId);
         UserAddressDTO addressDto = userAddressService.selectDefaultUserAddress(userAddress.getUserId());
         if (addressDto != null) {
             boolean changeFlag = userAddressService.changeDefaultUserAddress(addressDto, userAddress);

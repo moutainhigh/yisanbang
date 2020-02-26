@@ -22,4 +22,7 @@ public interface GoodsDetailService {
 
     // 根据商品详细id查找商品详细信息
     public GoodsDetailDTO selectGoodsDetailByID(Integer goodsDeteilId);
+
+    // 删除商品的所有商品详细信息
+    public boolean deleteAllGoodsDetailByGoodsId(Integer goodsId);
 }
