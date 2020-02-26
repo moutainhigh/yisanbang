@@ -17,7 +17,7 @@ public class UserAddressDTO {
     @ApiModelProperty(value = "用户地址id", example = "1")
     private Integer id;
 
-    @NotNull(message = "收货人id不可为空")
+    @NotNull(groups = {Update.class, Delete.class}, message = "收货人id不可为空")
     @ApiModelProperty(value = "用户id", example = "1")
     private Integer userId;
 
