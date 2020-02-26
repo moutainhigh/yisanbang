@@ -10,14 +10,19 @@ spring:
     # 如果存在多个数据源，监控的时候可以通过名字来区分开来
     name: mysql
     # 连接数据库的url
-    url: jdbc:mysql://localhost:3306/yi_san_bang?characterEncoding=utf-8&serverTimezone=GMT%2B8
+    url: jdbc:mysql://localhost:3306/yisanbang?characterEncoding=utf-8&serverTimezone=GMT%2B8
     # 连接数据库的账号
     username: root
     # 连接数据库的密码
-    password: 123456
+    password: a570911275
     # 使用druid数据源
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    elasticsearch:
+      cluster-name: myes
+      #      cluster-nodes: 127.0.0.1:9300
+      cluster-nodes: hadoop137:9300,hadoop138:9300,hadoop139:9300
   redis:
     host: 119.3.254.171
     port: 6379

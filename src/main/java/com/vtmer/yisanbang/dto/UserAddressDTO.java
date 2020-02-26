@@ -13,7 +13,7 @@ import javax.validation.constraints.Pattern;
 
 @ApiModel(value = "userAddress对象", description = "用户地址Dto对象")
 public class UserAddressDTO {
-    @NotNull(groups = {Update.class, Delete.class}, message = "收货人id不可为空")
+    @NotNull(groups = {Update.class, Delete.class}, message = "地址id不可为空")
     @ApiModelProperty(value = "用户地址id", example = "1")
     private Integer id;
 

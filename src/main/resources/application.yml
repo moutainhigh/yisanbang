@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: dev
+    active: dev 
   jackson:
     time-zone: GMT+8
   datasource:

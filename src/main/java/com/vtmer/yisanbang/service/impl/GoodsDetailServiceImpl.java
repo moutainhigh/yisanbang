@@ -1,15 +1,13 @@
 package com.vtmer.yisanbang.service.impl;
 
 
-import com.vtmer.yisanbang.common.util.Comparator.ComparatorGoodsOrSuitDetail;
-import com.vtmer.yisanbang.domain.Collection;
+import com.vtmer.yisanbang.common.util.comparator.ComparatorGoodsOrSuitDetail;
 import com.vtmer.yisanbang.dto.GoodsDetailDTO;
 import com.vtmer.yisanbang.mapper.GoodsDetailMapper;
 import com.vtmer.yisanbang.service.GoodsDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.util.Collections;
 import java.util.List;
 

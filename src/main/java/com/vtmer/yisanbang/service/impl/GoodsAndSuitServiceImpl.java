@@ -1,10 +1,8 @@
 package com.vtmer.yisanbang.service.impl;
 
-import com.vtmer.yisanbang.common.util.Comparator.ComparatorGoodsSuit;
-import com.vtmer.yisanbang.common.util.Comparator.ComparatorGoodsSuitByPrice;
-import com.vtmer.yisanbang.common.util.Comparator.ComparatorGoodsSuitByTime;
-import com.vtmer.yisanbang.dto.GoodsDTO;
-import com.vtmer.yisanbang.dto.SuitDTO;
+import com.vtmer.yisanbang.common.util.comparator.ComparatorGoodsSuit;
+import com.vtmer.yisanbang.common.util.comparator.ComparatorGoodsSuitByPrice;
+import com.vtmer.yisanbang.common.util.comparator.ComparatorGoodsSuitByTime;
 import com.vtmer.yisanbang.mapper.GoodsMapper;
 import com.vtmer.yisanbang.mapper.SuitMapper;
 import com.vtmer.yisanbang.service.GoodsAndSuitService;
