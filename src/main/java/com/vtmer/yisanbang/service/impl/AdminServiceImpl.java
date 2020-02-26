@@ -68,4 +68,16 @@ public class AdminServiceImpl implements AdminService {
         return adminMapper.selectGeneralAdmin();
     }
 
+    @Override
+    public Integer getAdminRole(String adminName) {
+        Integer adminId = adminMapper.selectAdminIdByName(adminName);
+        List<Integer>adminRole = adminRoleMapper.selectRoleIdByAdminId(adminId);
+        if (adminRole.contains(1)) {
+            return 1;
+    }else if (adminRole.contains(2)) {
+            return 2;
+    }
+        return null;
+    }
+
 }

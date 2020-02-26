@@ -24,4 +24,7 @@ public interface AdminService {
     // 查找所有普通管理员
     List<Admin> listAllGeneralAdmin();
 
+    // 查找管理员角色
+    Integer getAdminRole(String adminName);
+
 }
