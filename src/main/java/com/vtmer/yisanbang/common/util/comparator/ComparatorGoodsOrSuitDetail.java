@@ -1,4 +1,4 @@
-package com.vtmer.yisanbang.common.util.Comparator;
+package com.vtmer.yisanbang.common.util.comparator;
 
 import com.vtmer.yisanbang.dto.GoodsDetailDTO;
 import com.vtmer.yisanbang.dto.SuitDetailDTO;

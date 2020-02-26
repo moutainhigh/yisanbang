@@ -58,6 +58,8 @@ public class UserAddressController {
     public ResponseMessage insertUserAddress(@ApiParam(name = "用户地址Dto实体类", value = "传入Json格式", required = true)
                                              @RequestBody
                                              @Validated UserAddressDTO userAddress) {
+        Integer userId = JwtFilter.getLoginUser().getId();
+        userAddress.setUserId(userId);
         List<UserAddressDTO> userAddressDtos = userAddressService.selectUserAddressByUserId(userAddress.getUserId());
         if (userAddressDtos != null && !userAddressDtos.isEmpty()) {
             boolean flag = userAddressService.JudegAddressContent(userAddress, userAddressDtos);
@@ -84,6 +86,8 @@ public class UserAddressController {
     public ResponseMessage updateUserAddress(@ApiParam(name = "用户地址Dto实体类", value = "传入Json格式", required = true)
                                              @RequestBody
                                              @Validated(Update.class) UserAddressDTO userAddress) {
+        Integer userId = JwtFilter.getLoginUser().getId();
+        userAddress.setUserId(userId);
         UserAddressDTO address = userAddressService.selectUserAddressDtoByAddressId(userAddress.getId());
         if (address != null) {
             UserAddressDTO userAddressDTO = userAddressService.selectDefaultUserAddress(userAddress.getUserId());
@@ -128,6 +132,8 @@ public class UserAddressController {
     public ResponseMessage deleteUserAddress(@ApiParam(name = "用户地址Dto实体类", value = "传入Json格式", required = true)
                                              @RequestBody
                                              @Validated(Delete.class) UserAddressDTO userAddress) {
+        Integer userId = JwtFilter.getLoginUser().getId();
+        userAddress.setUserId(userId);
         UserAddressDTO address = userAddressService.selectUserAddressDtoByAddressId(userAddress.getId());
         if (address != null) {
             UserAddressDTO userAddressDTO = userAddressService.selectDefaultUserAddress(userAddress.getUserId());
@@ -186,6 +192,8 @@ public class UserAddressController {
     public ResponseMessage changeDefaultUserAddress(@ApiParam(name = "用户地址Dto实体类", value = "传入Json格式", required = true)
                                                     @RequestBody
                                                     @Validated(Update.class) UserAddressDTO userAddress) {
+        Integer userId = JwtFilter.getLoginUser().getId();
+        userAddress.setUserId(userId);
         UserAddressDTO addressDto = userAddressService.selectDefaultUserAddress(userAddress.getUserId());
         if (addressDto != null) {
             boolean changeFlag = userAddressService.changeDefaultUserAddress(addressDto, userAddress);
