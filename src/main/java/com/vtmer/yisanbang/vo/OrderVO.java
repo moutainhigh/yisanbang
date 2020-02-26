@@ -30,4 +30,5 @@ public class OrderVO extends OrderDTO {
 
     @ApiModelProperty(value = "订单创建时间")
     private Date createTime;
+
 }

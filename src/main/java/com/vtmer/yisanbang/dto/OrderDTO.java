@@ -23,7 +23,7 @@ public class OrderDTO {
     @ApiModelProperty(value = "优惠后总价",name = "totalPrice",required = true,example = "250")
     private Double totalPrice;
 
-    @ApiModelProperty(value = "订单商品列表",name = "cartGoodsList",required = true)
+    @ApiModelProperty(value = "订单商品列表",name = "cartGoodsList",required = true,notes = "创建订单时只需要标识为true的属性，以及数量")
     private List<OrderGoodsDTO> orderGoodsDTOList;
 
     // 留言

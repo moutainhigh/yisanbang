@@ -9,7 +9,7 @@ import java.util.Date;
 
 @ApiModel
 public class RefundExpress {
-    @ApiModelProperty(value = "退款收货单id",example = "1",readOnly = true)
+    @ApiModelProperty(value = "退款收货单id",example = "1")
     private Integer id;
 
     @NotNull(message = "refundId is null")

@@ -17,7 +17,7 @@ public class CartVO {
     @ApiModelProperty(value = "优惠前总价",example = "250")
     private double beforeTotalPrice;
 
-    @ApiModelProperty(value = "商品列表",name = "cartGoodsList",required = true)
+    @ApiModelProperty(value = "商品列表",name = "cartGoodsList",required = true,notes = "post时只有required = true才需要传递，数量看情况传~")
     private List<CartGoodsDTO> cartGoodsList;
 
 }

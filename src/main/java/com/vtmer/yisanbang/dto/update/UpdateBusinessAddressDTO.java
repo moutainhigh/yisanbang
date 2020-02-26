@@ -15,4 +15,7 @@ public class UpdateBusinessAddressDTO extends InsertBusinessAddressDTO {
     @ApiModelProperty(value = "商家收货地址id",example = "3",required = true)
     private Integer id;
 
+    @ApiModelProperty(example = "true",value = "是否是默认地址")
+    private Boolean whetherDefault;
+
 }

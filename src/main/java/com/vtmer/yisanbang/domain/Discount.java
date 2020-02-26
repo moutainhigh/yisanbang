@@ -11,7 +11,7 @@ import java.util.Date;
 @ApiModel
 public class Discount {
 
-    @ApiModelProperty(readOnly = true,example = "1")
+    @ApiModelProperty(example = "1",hidden = true)
     private Integer id;
 
     @NotNull(message = "amount is null")
