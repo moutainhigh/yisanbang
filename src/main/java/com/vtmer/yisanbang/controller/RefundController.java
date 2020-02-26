@@ -198,7 +198,6 @@ public class RefundController {
      * status全改变： 0 --> 1 or 3 or 4  and  1 --> 2   and  2 --> 3  and 0 1 2-->删除
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败
-     *
      * @param refundNumber:退款编号
      * @return
      */
@@ -222,7 +221,6 @@ public class RefundController {
 
     /**
      * 商家查询成功申请了退款(退款成功)的订单的退款状态
-     *
      * @param refundNumber：退款编号
      * @return
      */
@@ -279,7 +277,6 @@ public class RefundController {
      * 商家获取相应状态的退款订单
      * 退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败
      * 5 -- 获取所有退款订单
-     *
      * @param status：退款状态
      * @return List<RefundVo>
      */
@@ -308,7 +305,6 @@ public class RefundController {
     /**
      * 用户撤销退款，根据退款编号删除退款订单接口
      * 该接口应该由用户调用，商家不应该动客户的退款信息
-     *
      * @param refundNumber:退款编号
      * @return
      */

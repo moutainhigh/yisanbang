@@ -4,9 +4,11 @@ import com.vtmer.yisanbang.dto.insert.InsertBusinessAddressDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotNull;
 
+@EqualsAndHashCode(callSuper = true)
 @ApiModel
 @Data
 public class UpdateBusinessAddressDTO extends InsertBusinessAddressDTO {

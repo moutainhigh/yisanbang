@@ -79,7 +79,7 @@ public class OrderController {
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
-    @ApiOperation(value = "确认[直接购买]订单", notes = "点击[直接购买]，显示确认订单页面")
+    @ApiOperation(value = "确认[直接购买]订单", notes = "点击[直接购买]，显示确认订单页面，ps：商品数量也需要传递")
     public ResponseMessage<OrderVO> confirmDirectOrder(@RequestBody @NotEmpty(message = "订单集合为空") List<OrderGoodsDTO> orderGoodsDTOList) {
         OrderVO orderVO = orderService.confirmDirectOrder(orderGoodsDTOList);
         return ResponseMessage.newSuccessInstance(orderVO, "获取确认订单相关信息成功");
