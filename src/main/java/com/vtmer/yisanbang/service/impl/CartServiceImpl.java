@@ -17,7 +17,7 @@ import com.vtmer.yisanbang.service.CartService;
 import com.vtmer.yisanbang.service.ColorSizeService;
 import com.vtmer.yisanbang.service.PartSizeService;
 import com.vtmer.yisanbang.shiro.JwtFilter;
-import com.vtmer.yisanbang.vo.CartVo;
+import com.vtmer.yisanbang.vo.CartVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -96,7 +96,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public CartVo selectCartVo() {
+    public CartVO selectCartVo() {
         getUserIdAndSetKey();
         if (!stringRedisTemplate.hasKey(key)) {
             // 不存在直接返回
@@ -346,7 +346,7 @@ public class CartServiceImpl implements CartService {
                 // 判断是否有数据
                 if (!CollectionUtils.isEmpty(ObjectList)) {
                     // 有数据
-                    CartVo cartVo = convertObjectListToCartVo(ObjectList);
+                    CartVO cartVo = convertObjectListToCartVo(ObjectList);
                     // 封装cart并插入
                     Cart cart = new Cart();
                     cart.setUserId(userId);
@@ -371,13 +371,13 @@ public class CartServiceImpl implements CartService {
      * @param ObjectList
      * @return
      */
-    private CartVo convertObjectListToCartVo(List<Object> ObjectList) {
+    private CartVO convertObjectListToCartVo(List<Object> ObjectList) {
         // 查询购物车数据
         List<CartGoodsDTO> cartGoodsList;
         cartGoodsList = ObjectList.stream().map(o -> JSON.parseObject(o.toString(), CartGoodsDTO.class)).collect(Collectors.toList());
         // 计算总价
         Map<String, Double> priceMap = calculateTotalPrice(cartGoodsList);
-        CartVo cartVo = new CartVo();
+        CartVO cartVo = new CartVO();
         // 设置总价
         cartVo.setTotalPrice(priceMap.get("totalPrice"));
         cartVo.setBeforeTotalPrice(priceMap.get("beforeTotalPrice"));

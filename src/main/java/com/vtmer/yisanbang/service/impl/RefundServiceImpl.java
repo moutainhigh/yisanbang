@@ -8,7 +8,10 @@ import com.vtmer.yisanbang.common.exception.service.refund.RefundNotMatchUserExc
 import com.vtmer.yisanbang.common.exception.service.refund.RefundStatusNotFitException;
 import com.vtmer.yisanbang.common.util.OrderNumberUtil;
 import com.vtmer.yisanbang.domain.*;
-import com.vtmer.yisanbang.dto.*;
+import com.vtmer.yisanbang.dto.AgreeRefundDTO;
+import com.vtmer.yisanbang.dto.GoodsSkuDTO;
+import com.vtmer.yisanbang.dto.OrderGoodsDTO;
+import com.vtmer.yisanbang.dto.RefundDTO;
 import com.vtmer.yisanbang.mapper.OrderGoodsMapper;
 import com.vtmer.yisanbang.mapper.OrderMapper;
 import com.vtmer.yisanbang.mapper.RefundGoodsMapper;
@@ -16,6 +19,7 @@ import com.vtmer.yisanbang.mapper.RefundMapper;
 import com.vtmer.yisanbang.service.OrderService;
 import com.vtmer.yisanbang.service.RefundService;
 import com.vtmer.yisanbang.shiro.JwtFilter;
+import com.vtmer.yisanbang.vo.OrderVO;
 import com.vtmer.yisanbang.vo.RefundVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -168,8 +172,8 @@ public class RefundServiceImpl implements RefundService {
             Integer orderId = refund.getOrderId();
             Order order = orderMapper.selectByPrimaryKey(orderId);
             // 封装退款商品详情
-            OrderDTO orderDTO = orderService.selectOrderDTOByOrderNumber(order.getOrderNumber());
-            List<OrderGoodsDTO> orderGoodsDTOList = orderDTO.getOrderGoodsDTOList();
+            OrderVO orderVO = orderService.selectOrderVOByOrderNumber(order.getOrderNumber());
+            List<OrderGoodsDTO> orderGoodsDTOList = orderVO.getOrderGoodsDTOList();
             refundVo.setRefundGoodsList(orderGoodsDTOList);
         } else {
             // 如果是部分退

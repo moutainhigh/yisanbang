@@ -3,7 +3,7 @@ package com.vtmer.yisanbang.service.impl;
 import com.vtmer.yisanbang.domain.Income;
 import com.vtmer.yisanbang.mapper.IncomeMapper;
 import com.vtmer.yisanbang.service.IncomeService;
-import com.vtmer.yisanbang.vo.IncomeVo;
+import com.vtmer.yisanbang.vo.IncomeVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,14 +27,14 @@ public class IncomeServiceImpl implements IncomeService {
     }
 
     @Override
-    public IncomeVo getAll() {
+    public IncomeVO getAll() {
         List<Income> incomeList = incomeMapper.selectAll();
         if (incomeList == null) {
             return null;
         } else {
             double totalPrice = 0;
             Integer totalAmount = 0;
-            IncomeVo incomeVo = new IncomeVo();
+            IncomeVO incomeVo = new IncomeVO();
             for (Income income : incomeList) {
                 totalPrice += income.getTotalPrice();
                 totalAmount += income.getTotalAmount();

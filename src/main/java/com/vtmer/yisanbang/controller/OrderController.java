@@ -22,7 +22,8 @@ import com.vtmer.yisanbang.dto.OrderDTO;
 import com.vtmer.yisanbang.dto.OrderGoodsDTO;
 import com.vtmer.yisanbang.service.OrderService;
 import com.vtmer.yisanbang.shiro.JwtFilter;
-import com.vtmer.yisanbang.vo.UpdateUserAddressVo;
+import com.vtmer.yisanbang.vo.OrderVO;
+import com.vtmer.yisanbang.vo.UpdateUserAddressVO;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +56,6 @@ public class OrderController {
 
     /**
      * 点击去结算，显示确认订单页面
-     *
      * @return
      */
     @RequestLog(module = "订单", operationDesc = "确认购物车订单")
@@ -64,14 +64,14 @@ public class OrderController {
     })
     @ApiOperation(value = "确认购物车订单", notes = "点击去结算，显示确认订单页面")
     @GetMapping("confirmCartOrder")
-    public ResponseMessage<OrderDTO> confirmCartOrder() {
-        OrderDTO orderDTO;
+    public ResponseMessage<OrderVO> confirmCartOrder() {
+        OrderVO orderVO;
         try {
-            orderDTO = orderService.confirmCartOrder();
+            orderVO = orderService.confirmCartOrder();
         } catch (CartEmptyException e) {
             throw new ApiCartEmptyException(e.getMessage());
         }
-        return ResponseMessage.newSuccessInstance(orderDTO, "获取确认订单相关信息成功");
+        return ResponseMessage.newSuccessInstance(orderVO, "获取确认订单相关信息成功");
     }
 
     @RequestLog(module = "订单", operationDesc = "确认[直接购买]订单")
@@ -80,9 +80,9 @@ public class OrderController {
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @ApiOperation(value = "确认[直接购买]订单", notes = "点击[直接购买]，显示确认订单页面")
-    public ResponseMessage<OrderDTO> confirmDirectOrder(@RequestBody @NotEmpty(message = "订单集合为空") List<OrderGoodsDTO> orderGoodsDTOList) {
-        OrderDTO orderDTO = orderService.confirmDirectOrder(orderGoodsDTOList);
-        return ResponseMessage.newSuccessInstance(orderDTO, "获取确认订单相关信息成功");
+    public ResponseMessage<OrderVO> confirmDirectOrder(@RequestBody @NotEmpty(message = "订单集合为空") List<OrderGoodsDTO> orderGoodsDTOList) {
+        OrderVO orderVO = orderService.confirmDirectOrder(orderGoodsDTOList);
+        return ResponseMessage.newSuccessInstance(orderVO, "获取确认订单相关信息成功");
     }
 
     @RequestLog(module = "订单", operationDesc = "创建[直接购买]类订单")
@@ -155,13 +155,13 @@ public class OrderController {
     @GetMapping("/wxpay/{orderNumber}")
     public ResponseMessage wxpay(@ApiParam(name = "orderNumber", value = "订单编号", required = true)
                                  @NotBlank(message = "订单号传入为空") @PathVariable String orderNumber) {
-        OrderDTO orderDTO = orderService.selectOrderDTOByOrderNumber(orderNumber);
+        OrderVO orderVO = orderService.selectOrderVOByOrderNumber(orderNumber);
         User user = JwtFilter.getLoginUser();
-        if (orderDTO == null) {
+        if (orderVO == null) {
             throw new ApiOrderNotFoundException("找不到订单[" + orderNumber + "]");
         } else {
             Integer userId = user.getId();
-            if (!orderDTO.getUserAddress().getUserId().equals(userId)) {
+            if (!orderVO.getUserAddress().getUserId().equals(userId)) {
                 // 如果订单的userId和线程中的userId不匹配
                 throw new ApiOrderAndUserNotMatchException("订单和用户不匹配，即该订单不属于用户");
             }
@@ -173,7 +173,7 @@ public class OrderController {
             WxPayUnifiedOrderRequest orderRequest = new WxPayUnifiedOrderRequest();
             orderRequest.setBody("衣仨邦-服饰");
             orderRequest.setOutTradeNo(orderNumber);
-            double totalPrice = orderDTO.getTotalPrice();
+            double totalPrice = orderVO.getTotalPrice();
             orderRequest.setTotalFee(BaseWxPayRequest.yuanToFen(String.valueOf(totalPrice)));
             orderRequest.setOpenid(openId);
             orderRequest.setSpbillCreateIp(spbillCreateIp);
@@ -269,12 +269,12 @@ public class OrderController {
             notes = "订单状态定义：status 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单;\n" +
                     "退款状态定义：status 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败")
     @GetMapping("/getUserOrderList/status/{status}")
-    public ResponseMessage<List<OrderDTO>> getUserOrderList(@Max(value = 5, message = "订单标识最大值为5")
+    public ResponseMessage<List<OrderVO>> getUserOrderList(@Max(value = 5, message = "订单标识最大值为5")
                                                             @Min(value = 0, message = "订单标识最小值为0")
                                                             @ApiParam(name = "status", value = "订单状态标识", required = true) @PathVariable Integer status) {
-        List<OrderDTO> orderDTOList = orderService.getUserOrderList(status);
-        if (orderDTOList != null && orderDTOList.size() != 0) {
-            return ResponseMessage.newSuccessInstance(orderDTOList, "获取订单列表成功");
+        List<OrderVO> orderVOList = orderService.getUserOrderList(status);
+        if (orderVOList != null && orderVOList.size() != 0) {
+            return ResponseMessage.newSuccessInstance(orderVOList, "获取订单列表成功");
         } else {
             return ResponseMessage.newSuccessInstance("暂无该类型订单");
         }
@@ -288,12 +288,12 @@ public class OrderController {
             notes = "订单状态定义：status 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单;\n" +
                     "退款状态定义：status 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败")
     @GetMapping("/getOrderList/status/{status}")
-    public ResponseMessage<List<OrderDTO>> getOrderList(@Max(value = 5, message = "订单标识最大值为5")
+    public ResponseMessage<List<OrderVO>> getOrderList(@Max(value = 5, message = "订单标识最大值为5")
                                                         @Min(value = 0, message = "订单标识最小值为0")
                                                         @ApiParam(name = "status", value = "订单状态标识", required = true) @PathVariable Integer status) {
-        List<OrderDTO> orderDTOList = orderService.getOrderList(status);
-        if (orderDTOList != null && orderDTOList.size() != 0) {
-            return ResponseMessage.newSuccessInstance(orderDTOList, "获取订单列表成功");
+        List<OrderVO> orderVOList = orderService.getOrderList(status);
+        if (orderVOList != null && orderVOList.size() != 0) {
+            return ResponseMessage.newSuccessInstance(orderVOList, "获取订单列表成功");
         } else {
             return ResponseMessage.newSuccessInstance("暂无该类型订单");
         }
@@ -422,12 +422,12 @@ public class OrderController {
     })
     @ApiOperation(value = "修改收货地址", notes = "待付款、待发货状态适用")
     @PutMapping("/updateAddress")
-    public ResponseMessage updateAddress(@RequestBody @Validated UpdateUserAddressVo updateUserAddressVo) {
-        OrderDTO orderDTO = new OrderDTO();
-        orderDTO.setUserAddress(updateUserAddressVo.getUserAddress());
-        orderDTO.setOrderNumber(updateUserAddressVo.getOrderNumber());
+    public ResponseMessage updateAddress(@RequestBody @Validated UpdateUserAddressVO updateUserAddressVo) {
+        OrderVO orderVO = new OrderVO();
+        orderVO.setUserAddress(updateUserAddressVo.getUserAddress());
+        orderVO.setOrderNumber(updateUserAddressVo.getOrderNumber());
         try {
-            orderService.updateAddress(orderDTO);
+            orderService.updateAddress(orderVO);
         } catch (OrderNotFoundException e) {
             throw new ApiOrderNotFoundException(e.getMessage());
         } catch (OrderStatusNotFitException e) {

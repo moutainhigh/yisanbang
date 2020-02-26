@@ -2,14 +2,14 @@ package com.vtmer.yisanbang.service;
 
 import com.vtmer.yisanbang.dto.CartGoodsDTO;
 import com.vtmer.yisanbang.dto.GoodsSkuDTO;
-import com.vtmer.yisanbang.vo.CartVo;
+import com.vtmer.yisanbang.vo.CartVO;
 
 import java.util.List;
 import java.util.Map;
 
 public interface CartService {
 
-    CartVo selectCartVo();
+    CartVO selectCartVo();
 
     void addCartGoods(List<CartGoodsDTO> cartGoodsDTOList);
 
