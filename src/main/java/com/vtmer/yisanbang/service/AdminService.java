@@ -1,6 +1,7 @@
 package com.vtmer.yisanbang.service;
 
 import com.vtmer.yisanbang.domain.Admin;
+import com.vtmer.yisanbang.domain.Role;
 
 import java.util.List;
 
@@ -23,5 +24,7 @@ public interface AdminService {
 
     // 查找所有普通管理员
     List<Admin> listAllGeneralAdmin();
+
+    List<Role> getRoleListByName(String name);
 
 }

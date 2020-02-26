@@ -2,6 +2,7 @@ package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.domain.Admin;
+import com.vtmer.yisanbang.domain.Role;
 import com.vtmer.yisanbang.dto.AddAdminDTO;
 import com.vtmer.yisanbang.dto.LoginDTO;
 import com.vtmer.yisanbang.dto.UpdatePwdDTO;
@@ -77,7 +78,8 @@ public class AdminController {
             subject.login(token);
             // System.out.println("登陆");
             // 登陆成功
-            return ResponseMessage.newSuccessInstance("登陆成功");
+            List<Role> roleList = adminService.getRoleListByName(loginDto.getAdminName());
+            return ResponseMessage.newSuccessInstance(roleList,"登陆成功,该账号的角色见data");
         } catch (UnknownAccountException e) {
             return ResponseMessage.newErrorInstance("登陆失败，用户名不存在");
         } catch (IncorrectCredentialsException e) {
