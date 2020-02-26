@@ -15,7 +15,8 @@ import com.vtmer.yisanbang.service.CartService;
 import com.vtmer.yisanbang.service.OrderService;
 import com.vtmer.yisanbang.service.RefundService;
 import com.vtmer.yisanbang.shiro.JwtFilter;
-import com.vtmer.yisanbang.vo.CartVo;
+import com.vtmer.yisanbang.vo.CartVO;
+import com.vtmer.yisanbang.vo.OrderVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -94,46 +95,46 @@ public class OrderServiceImpl implements OrderService {
     /**
      * The user clicks the settlement button,and then confirm the order
      * used in cart
-     *
      * @param
      * @return
      */
     @Override
-    public OrderDTO confirmCartOrder() {
+    public OrderVO confirmCartOrder() {
         Integer userId = JwtFilter.getLoginUser().getId();
         setPostage();
-        OrderDTO orderDTO = new OrderDTO();
+        OrderVO orderVO = new OrderVO();
         // 获取用户购物车清单
-        CartVo cartVo = cartService.selectCartVo();
+        CartVO cartVo = cartService.selectCartVo();
         if (cartVo == null) {
             throw new CartEmptyException();
         }
-        if (cartVo.getTotalPrice() >= standardPrice) { // 包邮
-            orderDTO.setPostage((double) 0);
+        if (cartVo.getTotalPrice() >= standardPrice) {
+            // 包邮
+            orderVO.setPostage((double) 0);
         } else {  // 不包邮
-            orderDTO.setPostage(defaultPostage);
+            orderVO.setPostage(defaultPostage);
         }
         List<CartGoodsDTO> cartGoodsList = cartVo.getCartGoodsList();
         // IDEA推荐方式，删除为勾选的购物车商品
         cartGoodsList.removeIf(cartGoodsDto -> cartGoodsDto.getWhetherChosen().equals(Boolean.FALSE));
-        orderDTO.setTotalPrice(cartVo.getTotalPrice());
-        orderDTO.setBeforeTotalPrice(cartVo.getBeforeTotalPrice());
+        orderVO.setTotalPrice(cartVo.getTotalPrice());
+        orderVO.setBeforeTotalPrice(cartVo.getBeforeTotalPrice());
         ArrayList<OrderGoodsDTO> orderGoodsDTOArrayList = new ArrayList<>();
         for (CartGoodsDTO cartGoodsDTO : cartGoodsList) {
             OrderGoodsDTO orderGoodsDTO = new OrderGoodsDTO();
             BeanUtils.copyProperties(cartGoodsDTO, orderGoodsDTO);
             orderGoodsDTOArrayList.add(orderGoodsDTO);
         }
-        orderDTO.setOrderGoodsDTOList(orderGoodsDTOArrayList);
+        orderVO.setOrderGoodsDTOList(orderGoodsDTOArrayList);
         UserAddress userAddress = userAddressMapper.selectDefaultByUserId(userId);
-        orderDTO.setUserAddress(userAddress);
-        return orderDTO;
+        orderVO.setUserAddress(userAddress);
+        return orderVO;
     }
 
     @Override
-    public OrderDTO confirmDirectOrder(List<OrderGoodsDTO> orderGoodsDTOList) {
+    public OrderVO confirmDirectOrder(List<OrderGoodsDTO> orderGoodsDTOList) {
         Integer userId = JwtFilter.getLoginUser().getId();
-        OrderDTO orderDTO = new OrderDTO();
+        OrderVO orderVO = new OrderVO();
         // 优惠前总价
         double beforeTotalPrice = 0;
         // 优惠后总价
@@ -146,12 +147,12 @@ public class OrderServiceImpl implements OrderService {
             beforeTotalPrice += orderGoodsDTO.getAmount() * orderGoodsDTO.getPrice();
             totalPrice += orderGoodsDTO.getAfterTotalPrice();
         }
-        orderDTO.setBeforeTotalPrice(beforeTotalPrice);
-        orderDTO.setTotalPrice(totalPrice);
-        orderDTO.setOrderGoodsDTOList(orderGoodsDTOList);
+        orderVO.setBeforeTotalPrice(beforeTotalPrice);
+        orderVO.setTotalPrice(totalPrice);
+        orderVO.setOrderGoodsDTOList(orderGoodsDTOList);
         UserAddress userAddress = userAddressMapper.selectDefaultByUserId(userId);
-        orderDTO.setUserAddress(userAddress);
-        return orderDTO;
+        orderVO.setUserAddress(userAddress);
+        return orderVO;
     }
 
 
@@ -166,7 +167,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public Map<String, String> createCartOrder(OrderDTO orderDTO) {
         // 获取用户购物车清单
-        CartVo cartVo = cartService.selectCartVo();
+        CartVO cartVo = cartService.selectCartVo();
         // 获取用户购物车商品列表
         List<CartGoodsDTO> cartGoodsList = cartVo.getCartGoodsList();
         // 删除未勾选商品,得到购物车勾选商品列表
@@ -321,13 +322,12 @@ public class OrderServiceImpl implements OrderService {
      * 获取用户指定订单状态的订单
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败
-     *
      * @param status:status传入3时同时获取退款成功（3)的订单;status传入5查询所有订单
      * @return
      */
     @Override
     @Transactional
-    public List<OrderDTO> getUserOrderList(Integer status) {
+    public List<OrderVO> getUserOrderList(Integer status) {
         HashMap<String, Integer> orderMap = new HashMap<>();
         Integer userId = JwtFilter.getLoginUser().getId();
         orderMap.put("userId", userId);
@@ -336,7 +336,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDTO> getOrderList(Integer status) {
+    public List<OrderVO> getOrderList(Integer status) {
         HashMap<String, Integer> orderMap = new HashMap<>();
         // userId为null表示不把userId当查询条件
         orderMap.put("userId", null);
@@ -350,19 +350,19 @@ public class OrderServiceImpl implements OrderService {
      * @param orderMap
      * @return
      */
-    private ArrayList<OrderDTO> getOrderDTOArrayList(Map<String, Integer> orderMap) {
-        ArrayList<OrderDTO> orderDTOArrayList = new ArrayList<>();
+    private ArrayList<OrderVO> getOrderDTOArrayList(Map<String, Integer> orderMap) {
+        ArrayList<OrderVO> orderVOArrayList = new ArrayList<>();
         List<Order> orderList = orderMapper.selectAllByUserIdAndStatus(orderMap);
         for (Order order : orderList) {
-            OrderDTO orderDTO = getOrderDTOByOrder(order);
+            OrderVO orderVO = getOrderVOByOrder(order);
             Refund refund = refundMapper.selectByOrderId(order.getId());
             if (refund != null) { // 如果该订单有退款信息
                 // 设置退款状态
-                orderDTO.setRefundStatus(refund.getStatus());
+                orderVO.setRefundStatus(refund.getStatus());
             }
-            orderDTOArrayList.add(orderDTO);
+            orderVOArrayList.add(orderVO);
         }
-        return orderDTOArrayList;
+        return orderVOArrayList;
     }
 
     /**
@@ -405,7 +405,6 @@ public class OrderServiceImpl implements OrderService {
     /**
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 非 0--待付款 1--待发货 2--待收货 状态订单 设置订单状态
-     *
      * @param orderMap—— orderId、status
      * @return -2 —— 订单id不存在
      * -1 —— 将要修改的订单状态与原状态相同
@@ -467,9 +466,9 @@ public class OrderServiceImpl implements OrderService {
      * @return 订单详情信息OrderDTO
      */
     @Override
-    public OrderDTO selectOrderDTOByOrderNumber(String orderNumber) {
+    public OrderVO selectOrderVOByOrderNumber(String orderNumber) {
         Order order = orderMapper.selectByOrderNumber(orderNumber);
-        return getOrderDTOByOrder(order);
+        return getOrderVOByOrder(order);
     }
 
     /**
@@ -514,9 +513,9 @@ public class OrderServiceImpl implements OrderService {
      * @param order:订单表实体类
      * @return OrderVo
      */
-    private OrderDTO getOrderDTOByOrder(Order order) {
+    private OrderVO getOrderVOByOrder(Order order) {
 
-        OrderDTO orderDTO = new OrderDTO();
+        OrderVO orderVO = new OrderVO();
         UserAddress userAddress = new UserAddress();
         List<OrderGoodsDTO> orderGoodsDTOList = new ArrayList<>();
 
@@ -525,22 +524,22 @@ public class OrderServiceImpl implements OrderService {
         userAddress.setUserName(order.getUserName());
         userAddress.setPhoneNumber(order.getPhoneNumber());
         userAddress.setAddressName(order.getAddressName());
-        orderDTO.setUserAddress(userAddress);
+        orderVO.setUserAddress(userAddress);
 
         // 订单留言
-        orderDTO.setMessage(order.getMessage());
+        orderVO.setMessage(order.getMessage());
 
         // 订单邮费
-        orderDTO.setPostage(order.getPostage());
+        orderVO.setPostage(order.getPostage());
 
         // 订单编号
-        orderDTO.setOrderNumber(order.getOrderNumber());
+        orderVO.setOrderNumber(order.getOrderNumber());
 
         // 订单创建时间
-        orderDTO.setCreateTime(order.getCreateTime());
+        orderVO.setCreateTime(order.getCreateTime());
 
         // 订单商品信息封装a
-        orderDTO.setTotalPrice(order.getTotalPrice());
+        orderVO.setTotalPrice(order.getTotalPrice());
 
         // 根据订单id查询该订单的所有商品
         List<OrderGoods> orderGoodsList = orderGoodsMapper.selectByOrderId(order.getId());
@@ -562,8 +561,8 @@ public class OrderServiceImpl implements OrderService {
 
             orderGoodsDTOList.add(orderGoodsDTO);
         }
-        orderDTO.setOrderGoodsDTOList(orderGoodsDTOList);
-        return orderDTO;
+        orderVO.setOrderGoodsDTOList(orderGoodsDTOList);
+        return orderVO;
     }
 
     @Override
@@ -593,13 +592,13 @@ public class OrderServiceImpl implements OrderService {
     /**
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      *
-     * @param orderDTO:userAddress、orderNumber
+     * @param orderVO:userAddress、orderNumber
      * @return
      */
     @Override
-    public void updateAddress(OrderDTO orderDTO) {
+    public void updateAddress(OrderVO orderVO) {
         Integer userId = JwtFilter.getLoginUser().getId();
-        String orderNumber = orderDTO.getOrderNumber();
+        String orderNumber = orderVO.getOrderNumber();
         Order order = orderMapper.selectByOrderNumber(orderNumber);
         if (order == null) {
             throw new OrderNotFoundException();
@@ -611,7 +610,7 @@ public class OrderServiceImpl implements OrderService {
             throw new OrderStatusNotFitException("订单[{" + orderNumber + "}]的状态为[{" + order.getStatus() + "}]，不可修改收货地址");
         }
         // 正常执行逻辑
-        UserAddress userAddress = orderDTO.getUserAddress();
+        UserAddress userAddress = orderVO.getUserAddress();
         order.setPhoneNumber(userAddress.getPhoneNumber());
         order.setAddressName(userAddress.getAddressName());
         order.setUserName(userAddress.getUserName());

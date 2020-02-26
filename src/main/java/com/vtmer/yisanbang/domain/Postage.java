@@ -9,7 +9,7 @@ import java.util.Date;
 @ApiModel
 public class Postage {
 
-    @ApiModelProperty(readOnly = true,example = "1",value = "邮费设置id")
+    @ApiModelProperty(example = "1",value = "邮费设置id",hidden = true)
     private Integer id;
 
     @NotNull(message = "price(达标金额) is null")

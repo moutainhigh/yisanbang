@@ -9,10 +9,10 @@ import java.util.Date;
 @ApiModel
 public class Refund {
 
-    @ApiModelProperty(value = "退款id",example = "3",readOnly = true)
+    @ApiModelProperty(value = "退款id",example = "3")
     private Integer id;
 
-    @ApiModelProperty(value = "退款编号",example = "12345678998765432110",readOnly = true)
+    @ApiModelProperty(value = "退款编号",example = "12345678998765432110")
     private String refundNumber;
 
     @NotNull(message = "refundPrice is null")
@@ -23,19 +23,19 @@ public class Refund {
     private Integer userId;
 
     @NotNull(message = "orderId is null")
-    @ApiModelProperty(value = "订单id",example = "1",required = true)
+    @ApiModelProperty(value = "订单id",example = "1")
     private Integer orderId;
 
     @ApiModelProperty(value = "退款原因",example = "我不想要了")
     private String reason;
 
-    @ApiModelProperty(value = "退款状态",example = "2",readOnly = true)
+    @ApiModelProperty(value = "退款状态",example = "2")
     private Integer status;
 
     @ApiModelProperty(hidden = true)
     private Integer isReceived;
 
-    @ApiModelProperty(value = "退款单创建时间",readOnly = true)
+    @ApiModelProperty(value = "退款单创建时间")
     private Date createTime;
 
     @ApiModelProperty(hidden = true)

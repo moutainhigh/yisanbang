@@ -10,10 +10,10 @@ public class Income {
     @ApiModelProperty(hidden = true)
     private Integer id;
 
-    @ApiModelProperty(value = "总销售量",example = "10",readOnly = true)
+    @ApiModelProperty(value = "总销售量",example = "10")
     private Integer totalAmount;
 
-    @ApiModelProperty(value = "总销售金额",example = "1500",readOnly = true)
+    @ApiModelProperty(value = "总销售金额",example = "1500")
     private Double totalPrice;
 
     @ApiModelProperty(hidden = true)

@@ -4,7 +4,7 @@ import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.common.annotation.RequestLog;
 import com.vtmer.yisanbang.domain.Income;
 import com.vtmer.yisanbang.service.IncomeService;
-import com.vtmer.yisanbang.vo.IncomeVo;
+import com.vtmer.yisanbang.vo.IncomeVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -34,8 +34,8 @@ public class IncomeController {
     @RequestLog(module = "收益信息", operationDesc = "获取所有(每天)的收益记录")
     @ApiOperation(value = "获取所有(每天)的收益记录", notes = "其中包括总收益和总销售量")
     @GetMapping("/getAll")
-    public ResponseMessage<IncomeVo> getAll() {
-        IncomeVo incomeVo = incomeService.getAll();
+    public ResponseMessage<IncomeVO> getAll() {
+        IncomeVO incomeVo = incomeService.getAll();
         if (incomeVo != null) {
             return ResponseMessage.newSuccessInstance(incomeVo, "获取收益情况成功");
         } else {

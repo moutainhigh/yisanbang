@@ -3,15 +3,16 @@ package com.vtmer.yisanbang.service;
 import com.vtmer.yisanbang.domain.Order;
 import com.vtmer.yisanbang.dto.OrderDTO;
 import com.vtmer.yisanbang.dto.OrderGoodsDTO;
+import com.vtmer.yisanbang.vo.OrderVO;
 
 import java.util.List;
 import java.util.Map;
 
 public interface OrderService {
 
-    OrderDTO confirmCartOrder();
+    com.vtmer.yisanbang.vo.OrderVO confirmCartOrder();
 
-    OrderDTO confirmDirectOrder(List<OrderGoodsDTO> orderGoodsDTOList);
+    com.vtmer.yisanbang.vo.OrderVO confirmDirectOrder(List<OrderGoodsDTO> orderGoodsDTOList);
 
     Map<String,String> createCartOrder(OrderDTO orderDTO);
 
@@ -22,14 +23,14 @@ public interface OrderService {
      * @param status
      * @return
      */
-    List<OrderDTO> getUserOrderList(Integer status);
+    List<OrderVO> getUserOrderList(Integer status);
 
     /**
      * 获取商城的状态订单
      * @param status
      * @return
      */
-    List<OrderDTO> getOrderList(Integer status);
+    List<OrderVO> getOrderList(Integer status);
 
     int updateOrderStatus(String orderNumber);
 
@@ -37,7 +38,7 @@ public interface OrderService {
 
     void deleteOrder(Integer orderId);
 
-    OrderDTO selectOrderDTOByOrderNumber(String orderNumber);
+    OrderVO selectOrderVOByOrderNumber(String orderNumber);
 
     Order selectOrderByOrderNumber(String orderNumber);
 
@@ -45,7 +46,7 @@ public interface OrderService {
 
     void setOrderGoodsDTO(OrderGoodsDTO orderGoodsDTO, Integer sizeId, Boolean isGoods);
 
-    void updateAddress(OrderDTO orderDTO);
+    void updateAddress(OrderVO orderVO);
 
     void cancelOrder(String orderNumber);
 

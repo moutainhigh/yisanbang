@@ -12,7 +12,7 @@ import com.vtmer.yisanbang.mapper.GoodsMapper;
 import com.vtmer.yisanbang.mapper.SuitMapper;
 import com.vtmer.yisanbang.service.CollectionService;
 import com.vtmer.yisanbang.shiro.JwtFilter;
-import com.vtmer.yisanbang.vo.CollectionVo;
+import com.vtmer.yisanbang.vo.CollectionVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -82,18 +82,18 @@ public class CollectionServiceImpl implements CollectionService {
     }
 
     @Override
-    public List<CollectionVo> selectAllByUserId() {
+    public List<CollectionVO> selectAllByUserId() {
         Integer userId = JwtFilter.getLoginUser().getId();
         // 查询出goodsId、isGoods 集合
         List<Collection> collectionList = collectionMapper.selectAllByUserId(userId);
 
         // 如果查询出来不为空
         if (collectionList!=null && collectionList.size()!=0) {
-            List<CollectionVo> collectionVoList = new ArrayList<>();
+            List<CollectionVO> collectionVOList = new ArrayList<>();
             for (Collection collection : collectionList) {
                 int goodsId = collection.getGoodsId();
                 Boolean isGoods = collection.getWhetherGoods();
-                CollectionVo collectionVo = new CollectionVo();
+                CollectionVO collectionVo = new CollectionVO();
                 collectionVo.setGoodsId(goodsId);
                 collectionVo.setIsGoods(isGoods);
                 // 如果是普通商品
@@ -109,9 +109,9 @@ public class CollectionServiceImpl implements CollectionService {
                     collectionVo.setPicture(suit.getPicture());
                     collectionVo.setPrice(suit.getLowestPrice());
                 }
-                collectionVoList.add(collectionVo);
+                collectionVOList.add(collectionVo);
             } //end for
-            return collectionVoList;
+            return collectionVOList;
         } else {  // 收藏夹为空，返回null
             return null;
         }

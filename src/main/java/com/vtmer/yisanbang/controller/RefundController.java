@@ -83,6 +83,7 @@ public class RefundController {
 
     /**
      * 根据订单id获取退款详情接口
+     *
      * @param orderId: 订单id
      * @return
      */
@@ -109,6 +110,7 @@ public class RefundController {
      * 申请退款成功会更新订单表、退款表的状态，失败则返回相关信息
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败
+     *
      * @param agreeRefundDTO:退款编号（必填）、退款原因（商家选填，如无货）
      * @return
      */
@@ -118,8 +120,15 @@ public class RefundController {
             "退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败")
     @Transactional
     @PostMapping("/agree")
-    public ResponseMessage agreeRefund(@RequestBody @Validated AgreeRefundDTO agreeRefundDTO) {
-        String refundNumber = agreeRefundDTO.getRefundNumber();
+    public ResponseMessage agreeRefund(@ApiParam(value = "退款编号", example = "12345678998765432110")
+                                       @NotBlank(message = "refundNumber is null")
+                                       @RequestParam String refundNumber,
+                                       @ApiParam(value = "退款原因(非必需),若商户传入，会在下发给用户的退款消息中体现退款原因", example = "西装无货")
+                                       @NotBlank(message = "refundDesc is null")
+                                       @RequestParam(required = false) String refundDesc) {
+        AgreeRefundDTO agreeRefundDTO = new AgreeRefundDTO();
+        agreeRefundDTO.setRefundNumber(refundNumber);
+        agreeRefundDTO.setRefundDesc(refundDesc);
         try {
             refundService.setAgreeRefundDTOByRefundNumber(agreeRefundDTO);
         } catch (RefundNotFoundException e) {
@@ -138,8 +147,6 @@ public class RefundController {
         request.setTotalFee(BaseWxPayRequest.yuanToFen(agreeRefundDTO.getTotalFee()));
         // 退款金额
         request.setRefundFee(BaseWxPayRequest.yuanToFen(agreeRefundDTO.getRefundFee()));
-        // 退款原因
-        String refundDesc = agreeRefundDTO.getRefundDesc();
         if (refundDesc != null) { // 如果退款原因不为null
             request.setRefundDesc(refundDesc);
         }
@@ -157,12 +164,12 @@ public class RefundController {
                     refundMap.put("orderId", refund.getOrderId());
                     refundMap.put("status", 3);
                     refundService.updateRefundStatus(refundMap);
-                    logger.info("退款单[{}]状态更新为[退款成功]",refundNumber);
+                    logger.info("退款单[{}]状态更新为[退款成功]", refundNumber);
                     // 更新订单表状态为 已完成
                     HashMap<String, Integer> orderMap = new HashMap<>();
                     orderMap.put("orderId", refund.getOrderId());
                     orderMap.put("status", 3);
-                    logger.info("订单id[{}]状态更新为[已完成]",refund.getOrderId());
+                    logger.info("订单id[{}]状态更新为[已完成]", refund.getOrderId());
                     orderService.setOrderStatus(orderMap);
                     // 库存归位
                     String orderNumber = refundResult.getOutRefundNo();
@@ -191,6 +198,7 @@ public class RefundController {
      * status全改变： 0 --> 1 or 3 or 4  and  1 --> 2   and  2 --> 3  and 0 1 2-->删除
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败
+     *
      * @param refundNumber:退款编号
      * @return
      */
@@ -214,6 +222,7 @@ public class RefundController {
 
     /**
      * 商家查询成功申请了退款(退款成功)的订单的退款状态
+     *
      * @param refundNumber：退款编号
      * @return
      */
@@ -226,7 +235,7 @@ public class RefundController {
         Refund refund = refundService.selectByRefundNumber(refundNumber);
         if (refund == null) {
             throw new ApiRefundNotFoundException("找不到该退款单");
-        }else if (refund.getStatus() != 3) { // 如果退款状态不为 退款成功(3)
+        } else if (refund.getStatus() != 3) { // 如果退款状态不为 退款成功(3)
             throw new ApiOrderStatusNotFitException("该退款编号还未成功申请退款");
         }
         WxPayRefundQueryRequest request = new WxPayRefundQueryRequest();
@@ -236,7 +245,7 @@ public class RefundController {
             // 如果请求成功
             if ("SUCCESS".equals(result.getReturnCode())) {
                 List<WxPayRefundQueryResult.RefundRecord> refundRecords = result.getRefundRecords();
-                if (refundRecords!=null && refundRecords.size()!=0) {
+                if (refundRecords != null && refundRecords.size() != 0) {
                     // 因为只有一笔退款，退款金额即为订单金额，所以refundRecords.size为1 在循环中返回结果
                     for (WxPayRefundQueryResult.RefundRecord refundRecord : refundRecords) {
                         // 订单退款状态
@@ -270,6 +279,7 @@ public class RefundController {
      * 商家获取相应状态的退款订单
      * 退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败
      * 5 -- 获取所有退款订单
+     *
      * @param status：退款状态
      * @return List<RefundVo>
      */
@@ -298,6 +308,7 @@ public class RefundController {
     /**
      * 用户撤销退款，根据退款编号删除退款订单接口
      * 该接口应该由用户调用，商家不应该动客户的退款信息
+     *
      * @param refundNumber:退款编号
      * @return
      */
@@ -325,6 +336,7 @@ public class RefundController {
 
     /**
      * 商家拒绝退款申请 status 0-->4
+     *
      * @param refundNumber:退款编号
      * @return
      */
@@ -348,6 +360,7 @@ public class RefundController {
     /**
      * 用户填写退款发货单
      * status 1-->2
+     *
      * @param refundExpress:refundId、expressCompany(选填)、courierNumber(快递单号)
      * @return
      */
@@ -377,6 +390,7 @@ public class RefundController {
      * 用户申请退款接口：
      * 退款商品传null代表全退，此时可不传退款金额
      * 部分退需要传退款金额，退款商品信息
+     *
      * @param refundDTO：refund，refundGoodsList 退款原因，退款金额，订单id，退款商品:sizeId、isGoods
      * @return
      */
