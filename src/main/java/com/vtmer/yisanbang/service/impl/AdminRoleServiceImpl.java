@@ -20,7 +20,7 @@ public class AdminRoleServiceImpl implements AdminRoleService {
 
     @Override
     public boolean setGeneralAdmin(Integer adminId) {
-        if (adminRoleMapper.insert(new AdminRole(adminId, 1)) != 0) {
+        if (adminRoleMapper.insert(new AdminRole(adminId, 2)) != 0) {
             return true;
         }
         return false;
