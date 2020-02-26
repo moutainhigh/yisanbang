@@ -89,7 +89,7 @@ public class OrderController {
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
-    @ApiOperation(value = "创建[直接购买]类订单", notes = "用户从商品页面选择直接购买确认订单，点击提交订单后调用,若是订单中的某件商品数量超过库存，会返回【库存不足】的提示，返回订单编号和用户openid")
+    @ApiOperation(value = "创建[直接购买]类订单", notes = "用户从商品页面选择直接购买确认订单，点击提交订单后调用,若是订单中的某件商品数量超过库存，会返回【库存不足】的提示，返回订单编号orderNumber和用户openid")
     @PostMapping("/insertDirectOrder")
     public ResponseMessage insertDirectOrder(@RequestBody @Validated({Insert.class}) OrderDTO orderDTO) {
         Map<String, String> orderMap;
