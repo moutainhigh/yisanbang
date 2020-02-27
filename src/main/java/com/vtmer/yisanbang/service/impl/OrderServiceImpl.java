@@ -73,7 +73,16 @@ public class OrderServiceImpl implements OrderService {
     private WxPayService wxPayService;
 
     @Autowired
+    private DiscountMapper discountMapper;
+
+    @Autowired
     private RedisTemplate<String, String> redisTemplate;
+
+    // 满X件打折
+    private int discountAmount;
+
+    // 打折率
+    private double discountRate;
 
     // Free the postage after standardPrice
     private double standardPrice;
@@ -89,6 +98,18 @@ public class OrderServiceImpl implements OrderService {
         } else {  // 达标金额和邮费都默认为0
             standardPrice = 0;
             defaultPostage = 0;
+        }
+    }
+
+    // 设置优惠信息
+    private void setDiscount() {
+        Discount discount = discountMapper.select();
+        if (discount !=null) {
+            discountAmount = discount.getAmount();
+            discountRate = discount.getDiscountRate();
+        } else {  // 如果未设置优惠，则默认达标数量为0，优惠*1,，即无打折
+            discountAmount = 0;
+            discountRate = 1;
         }
     }
 
@@ -165,7 +186,7 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     @Transactional
-    public Map<String, String> createCartOrder(OrderDTO orderDTO) {
+    public String createCartOrder(OrderDTO orderDTO) {
         // 获取用户购物车清单
         CartVO cartVo = cartService.selectCartVo();
         // 获取用户购物车商品列表
@@ -215,11 +236,11 @@ public class OrderServiceImpl implements OrderService {
 
         // 校验完成，开始下单逻辑
         // 生成order
-        Map<String, String> orderMap = createOrder(orderDTO);
+        String orderNumber = createOrder(orderDTO);
         // 删除购物车勾选项
         cartService.deleteCartGoodsByIsChosen();
         // 返回订单编号和openid
-        return orderMap;
+        return orderNumber;
     }
 
     /**
@@ -228,43 +249,27 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     @Override
-    public Map<String, String> createDirectOrder(OrderDTO orderDTO) {
+    public String createDirectOrder(OrderDTO orderDTO) {
         // 获取用户订单商品列表和优惠后的总价
         Double totalPrice = orderDTO.getTotalPrice();
         List<OrderGoodsDTO> orderGoodsDTOList = orderDTO.getOrderGoodsDTOList();
         // 前端传递的订单总价，在后台校验一遍
-        List<CartGoodsDTO> cartGoodsList = new ArrayList<>();
-        // 购物车商品DTO和订单商品DTO类似，我们在这里转换为购物车商品DTO，调用购物车的计算总价服务
-        for (OrderGoodsDTO orderGoodsDTO : orderGoodsDTOList) {
-            CartGoodsDTO cartGoodsDTO = new CartGoodsDTO();
-            BeanUtils.copyProperties(orderGoodsDTO,cartGoodsDTO);
-            cartGoodsList.add(cartGoodsDTO);
-        }
-        // 后台计算订单总价，map中包括优惠前和优惠后的总价，这里我们只需要优惠后的总价
-        Map<String, Double> priceMap = cartService.calculateTotalPrice(cartGoodsList);
-        Double totalPrice1 = priceMap.get("totalPrice");
-        if (!totalPrice1.equals(totalPrice)) {
+        double totalPriceCheck = calculateTotalPrice(orderGoodsDTOList);
+        if (!totalPrice.equals(totalPriceCheck)) {
             // 如果前端传递的优惠后订单总价和后台计算的优惠后订单总价不一致，说明出现了问题，抛出异常
             throw new OrderPriceNotMatchException();
         }
-
         // 创建订单
         return createOrder(orderDTO);
     }
 
-    private Map<String,String> createOrder(OrderDTO orderDTO) {
+    private String createOrder(OrderDTO orderDTO) {
         UserAddress userAddress = orderDTO.getUserAddress();
         double postage = orderDTO.getPostage();
         String message = orderDTO.getMessage();
         User user = JwtFilter.getLoginUser();
-        // 返回map
-        HashMap<String, String> orderMap = new HashMap<>();
-        // 从登录信息中拿到openId
-        String openId = user.getOpenId();
-        orderMap.put("openId", openId);
         // 生成订单编号
         String orderNumber = OrderNumberUtil.getOrderNumber();
-        orderMap.put("orderNumber", orderNumber);
         // 生成order
         Order order = new Order();
         order.setUserId(user.getId());
@@ -315,7 +320,25 @@ public class OrderServiceImpl implements OrderService {
                 throw new InventoryNotEnoughException("商品库存不足--商品skuId：" + colorSizeId + ",是否是普通商品:" + whetherGoods + ",需要数量" + amount);
             }
         } // end for
-        return orderMap;
+        return orderNumber;
+    }
+
+    /**
+     * 根据前端传递过来的订单商品列表计算总价
+     * @param orderGoodsDTOList：商品总价
+     * @return：订单总价
+     */
+    private double calculateTotalPrice(List<OrderGoodsDTO> orderGoodsDTOList) {
+        // 订单总价
+        double totalPrice = 0;
+        for (OrderGoodsDTO orderGoodsDTO : orderGoodsDTOList) {
+            int sizeId = orderGoodsDTO.getColorSizeId();
+            boolean whetherGoods = orderGoodsDTO.getWhetherGoods();
+            int amount = orderGoodsDTO.getAmount();
+            setOrderGoodsDTO(orderGoodsDTO,sizeId, whetherGoods);
+            totalPrice += orderGoodsDTO.getAfterTotalPrice();
+        }
+        return totalPrice;
     }
 
     /**
@@ -561,6 +584,7 @@ public class OrderServiceImpl implements OrderService {
             Goods goods = goodsMapper.selectByPrimaryKey(colorSize.getGoodsId());
             orderGoodsDTO.setTitle(goods.getName());
             orderGoodsDTO.setPicture(goods.getPicture());
+            orderGoodsDTO.setPrice(goods.getPrice());
         } else { // 如果是套装散件
             PartSize partSize = partSizeMapper.selectByPrimaryKey(sizeId);
             orderGoodsDTO.setSize(partSize.getSize());
@@ -569,7 +593,15 @@ public class OrderServiceImpl implements OrderService {
             orderGoodsDTO.setTitle(suit.getName());
             orderGoodsDTO.setPicture(suit.getPicture());
             orderGoodsDTO.setId(suit.getId());
+            orderGoodsDTO.setPrice(partSize.getPrice());
         }
+        double totalPrice = orderGoodsDTO.getAmount() * orderGoodsDTO.getPrice();
+        if (orderGoodsDTO.getAmount() >= discountAmount) {
+            // 如果符合优惠条件
+            totalPrice *= discountRate;
+        }
+        // 计算了优惠的单项商品总价
+        orderGoodsDTO.setAfterTotalPrice(totalPrice);
     }
 
     /**

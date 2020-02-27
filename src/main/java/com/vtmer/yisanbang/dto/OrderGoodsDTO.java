@@ -28,7 +28,7 @@ public class OrderGoodsDTO extends GoodsSkuDTO{
     @ApiModelProperty(value = "商品图片",example = "/imageUrl")
     private String picture;
 
-    @ApiModelProperty(value = "加入购物车的价格",example = "1280")
+    @ApiModelProperty(value = "商品单价",example = "1280")
     private Double price;
 
     @ApiModelProperty(value = "部件名称或者颜色",example = "上衣or黑色")
