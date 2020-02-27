@@ -19,9 +19,6 @@ public class OrderGoodsDTO extends GoodsSkuDTO{
     @ApiModelProperty(hidden = true,value = "更新时间",example = "147515314")
     private Long updateTime;
 
-    @ApiModelProperty(value = "是否勾选",example = "true")
-    private Boolean whetherChosen = true;
-
     @ApiModelProperty(value = "商品标题",example = "经典两粒扣男式西服套装")
     private String title;
 

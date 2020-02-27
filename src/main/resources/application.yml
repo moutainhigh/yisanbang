@@ -76,13 +76,17 @@ logging:
 
 wx:
   pay:
+    appId: wx447bdd8f7d850c06
     mchId: 1577486831 #微信支付商户号
     mchKey: 0e796fe11c6bad89236bf1696a7353ee #微信支付商户密钥
     payNotifyURL: http://119.3.254.171:8088/order/wxNotify
-    #refundNotifyURL: http://119.3.254.171:8088/refund/wxNotify
+    refundNotifyURL:  #http://119.3.254.171:8088/refund/wxNotify
     tradeType: JSAPI
     keyPath: # p12证书的位置，可以指定绝对路径，也可以指定类路径（以classpath:开头）
     spbillCreateIp: 119.3.254.171 #服务器IP地址
+  applet:
+    appid: wx447bdd8f7d850c06
+    appsecret: 1f8dc966cc30761d60394178a5d58301
 
 pagehelper:
   helper-dialect: mysql
