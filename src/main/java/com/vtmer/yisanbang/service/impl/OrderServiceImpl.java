@@ -104,7 +104,7 @@ public class OrderServiceImpl implements OrderService {
     // 设置优惠信息
     private void setDiscount() {
         Discount discount = discountMapper.select();
-        if (discount !=null) {
+        if (discount != null) {
             discountAmount = discount.getAmount();
             discountRate = discount.getDiscountRate();
         } else {  // 如果未设置优惠，则默认达标数量为0，优惠*1,，即无打折
@@ -116,6 +116,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      * The user clicks the settlement button,and then confirm the order
      * used in cart
+     *
      * @param
      * @return
      */
@@ -164,7 +165,7 @@ public class OrderServiceImpl implements OrderService {
             Integer sizeId = orderGoodsDTO.getColorSizeId();
             Boolean whetherGoods = orderGoodsDTO.getWhetherGoods();
             // 设置商品属性
-            setOrderGoodsDTO(orderGoodsDTO,sizeId,whetherGoods);
+            setOrderGoodsDTO(orderGoodsDTO, sizeId, whetherGoods);
             beforeTotalPrice += orderGoodsDTO.getAmount() * orderGoodsDTO.getPrice();
             totalPrice += orderGoodsDTO.getAfterTotalPrice();
         }
@@ -245,6 +246,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 创建直接下单类订单
+     *
      * @param orderDTO
      * @return
      */
@@ -252,7 +254,7 @@ public class OrderServiceImpl implements OrderService {
     public String createDirectOrder(OrderDTO orderDTO) {
         // 获取用户订单商品列表和优惠后的总价
         Double totalPrice = orderDTO.getTotalPrice();
-        logger.info("前端传递的订单总价为[{}]",totalPrice);
+        logger.info("前端传递的订单总价为[{}]", totalPrice);
         List<OrderGoodsDTO> orderGoodsDTOList = orderDTO.getOrderGoodsDTOList();
         // 前端传递的订单总价，在后台校验一遍
         double totalPriceCheck = calculateTotalPrice(orderGoodsDTOList);
@@ -327,6 +329,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 根据前端传递过来的订单商品列表计算总价
+     *
      * @param orderGoodsDTOList：商品总价
      * @return：订单总价
      */
@@ -336,11 +339,11 @@ public class OrderServiceImpl implements OrderService {
         for (OrderGoodsDTO orderGoodsDTO : orderGoodsDTOList) {
             int sizeId = orderGoodsDTO.getColorSizeId();
             boolean whetherGoods = orderGoodsDTO.getWhetherGoods();
-            setOrderGoodsDTO(orderGoodsDTO,sizeId, whetherGoods);
-            logger.info("单项商品总价为[{}]",orderGoodsDTO.getAfterTotalPrice());
+            setOrderGoodsDTO(orderGoodsDTO, sizeId, whetherGoods);
+            logger.info("单项商品总价为[{}]", orderGoodsDTO.getAfterTotalPrice());
             totalPrice += orderGoodsDTO.getAfterTotalPrice();
         }
-        logger.info("后台计算的订单总价为[{}]",totalPrice);
+        logger.info("后台计算的订单总价为[{}]", totalPrice);
         return totalPrice;
     }
 
@@ -348,6 +351,7 @@ public class OrderServiceImpl implements OrderService {
      * 获取用户指定订单状态的订单
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败
+     *
      * @param status:status传入3时同时获取退款成功（3)的订单;status传入5查询所有订单
      * @return
      */
@@ -372,6 +376,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 根据标识获取相应订单列表
+     *
      * @param orderMap
      * @return
      */
@@ -393,6 +398,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 通过订单表实体类获取订单详情VO对象
+     *
      * @param order:订单表实体类
      * @return OrderVo
      */
@@ -408,7 +414,7 @@ public class OrderServiceImpl implements OrderService {
         userAddress.setAddressName(order.getAddressName());
         orderVO.setUserAddress(userAddress);
 
-        BeanUtils.copyProperties(order,orderVO);
+        BeanUtils.copyProperties(order, orderVO);
         // 根据订单id查询该订单的所有商品
         List<OrderGoods> orderGoodsList = orderGoodsMapper.selectByOrderId(order.getId());
 
@@ -432,6 +438,7 @@ public class OrderServiceImpl implements OrderService {
         orderVO.setOrderGoodsDTOList(orderGoodsDTOList);
         return orderVO;
     }
+
     /**
      * 订单状态自增修改
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
@@ -472,6 +479,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 非 0--待付款 1--待发货 2--待收货 状态订单 设置订单状态
+     *
      * @param orderMap—— orderId、status
      * @return -2 —— 订单id不存在
      * -1 —— 将要修改的订单状态与原状态相同
@@ -610,6 +618,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
+     *
      * @param orderVO:userAddress、orderNumber
      * @return
      */
@@ -639,6 +648,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 用户取消订单
+     *
      * @param orderNumber：订单编号
      * @return
      */
@@ -669,6 +679,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 更新订单商品库存
+     *
      * @param orderNumber：订单编号
      * @param flag：1代表增加库存，0代表减少库存
      * @return 返回成功失败状态
@@ -710,8 +721,8 @@ public class OrderServiceImpl implements OrderService {
     public void orderTimeOutLogic() {
         BoundZSetOperations<String, String> zSetOps = redisTemplate.boundZSetOps("OrderNumber");
         Cursor<ZSetOperations.TypedTuple<String>> cursor;
-        try {
-            while (true) {
+        while (true) {
+            try {
                 cursor = zSetOps.scan(ScanOptions.NONE);
                 if (!cursor.hasNext()) {
                     logger.debug("当前没有等待的订单取消任务");
@@ -758,14 +769,14 @@ public class OrderServiceImpl implements OrderService {
                         }
                     } // end if
                 } // end if 取消订单
-            } // end while
-        } catch (WxPayException wxPayEx) {
-            logger.warn("调用微信查询订单和关闭订单出错[{}]", wxPayEx.getMessage());
-        } catch (InterruptedException e) {
-            logger.warn("Interrupted!订单超时自动取消任务出现异常[{}]", e.getMessage());
-            // clean up state...
-            Thread.currentThread().interrupt();
-        }
+            } catch (WxPayException wxPayEx) {
+                logger.warn("调用微信查询订单和关闭订单出错[{}]", wxPayEx.getMessage());
+            } catch (InterruptedException e) {
+                logger.warn("Interrupted!订单超时自动取消任务出现异常[{}]", e.getMessage());
+                // clean up state...
+                Thread.currentThread().interrupt();
+            }
+        } // end while
     }
 
 }
