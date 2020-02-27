@@ -37,9 +37,6 @@ public class UserAddressController {
     public ResponseMessage listUserAddress() {
         Integer userId = JwtFilter.getLoginUser().getId();
         User user = userService.selectByPrimaryKey(userId);
-        if (userId != null) {
-            return ResponseMessage.newSuccessInstance(userId, "存在userId");
-        }
         List<UserAddressDTO> UserAdressDto = userAddressService.selectUserAddressByUserId(userId);
         if (user == null) {
             return ResponseMessage.newErrorInstance("该用户id错误");
