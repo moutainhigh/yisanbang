@@ -24,7 +24,7 @@ public class GlobalExceptionHandler {
      * 默认统一异常处理方法
      * @ExceptionHandler 注解用来配置需要拦截的异常类型, 也可以是自定义异常
      */
-    @ExceptionHandler(Exception.class)
+/*    @ExceptionHandler(Exception.class)
     public ResponseMessage<ErrorDTO> runtimeExceptionHandler(Exception exception, HttpServletResponse response) {
         ErrorDTO errorDTO = new ErrorDTO();
         if(exception instanceof ApiException){//api异常
@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
         }
         errorDTO.setTip(exception.getMessage());
         return (ResponseMessage<ErrorDTO>) ResponseMessage.newErrorInstance(errorDTO,response.getStatus());
-    }
+    }*/
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseMessage handleBindException(MethodArgumentNotValidException ex) {
