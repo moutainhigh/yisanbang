@@ -85,7 +85,7 @@ public class CartServiceImpl implements CartService {
             discountRate = discount.getDiscountRate();
         } else {  // 如果未设置优惠，则默认达标数量为0，优惠*1,，即无打折
             discountAmount = 0;
-            discountRate = 1;
+            discountRate = 1.0;
         }
     }
 

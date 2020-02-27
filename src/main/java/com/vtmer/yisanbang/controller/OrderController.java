@@ -19,6 +19,7 @@ import com.vtmer.yisanbang.domain.User;
 import com.vtmer.yisanbang.dto.DeliverGoodsDTO;
 import com.vtmer.yisanbang.dto.OrderDTO;
 import com.vtmer.yisanbang.dto.OrderGoodsDTO;
+import com.vtmer.yisanbang.dto.WxMiniPayOrderResult;
 import com.vtmer.yisanbang.service.OrderService;
 import com.vtmer.yisanbang.shiro.JwtFilter;
 import com.vtmer.yisanbang.vo.OrderVO;
@@ -113,7 +114,7 @@ public class OrderController {
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
-    @ApiOperation(value = "创建购物车订单", notes = "用户从购物车页面确认订单，点击提交订单后调用,若是订单中的某件商品数量超过库存，会返回【库存不足】的提示，返回订单编号和用户openid")
+    @ApiOperation(value = "创建购物车订单", notes = "用户从购物车页面确认订单，点击提交订单后调用,若是订单中的某件商品数量超过库存，会返回【库存不足】的提示，返回订单编号")
     @PostMapping("/insertCartOrder")
     public ResponseMessage insertCartOrder(@RequestBody @Validated({Insert.class}) OrderDTO orderDTO) {
         String orderNumber;
@@ -128,7 +129,7 @@ public class OrderController {
         } catch (Exception e) {
             throw new ApiException(e);
         }
-        return ResponseMessage.newSuccessInstance(orderNumber, "创建订单成功，返回订单编号和openId");
+        return ResponseMessage.newSuccessInstance(orderNumber, "创建订单成功，返回订单编号");
     }
 
     /**
@@ -140,19 +141,19 @@ public class OrderController {
     @ApiOperation(value = "微信支付", notes = "通过订单号进行微信支付，返回前端调起微信支付所需的支付参数（5个参数和sign）")
     @ApiResponses({
             @ApiResponse(code = 200, message = "ResponseMessage => \n 'data:" +
-                    "{\n'appId':'wxd678efh567hg6787'" +
-                    "\n'timeStamp':'1490840662'" +
-                    "\n'nonceStr':'5K8264ILTKCH16CQ2502SI8ZNMTM67VS'" +
-                    "\n'packageValue':'prepay_id=wx2017033010242291fcfe0db70013231072'" +
+                    "{\n'appId':'wx447bdd8f7d850c06'" +
+                    "\n'timeStamp':'1582775722'" +
+                    "\n'nonceStr':'1582775722610'" +
+                    "\n'packageValue':'prepay_id=wx271155232900316ea37868391248216100'" +
                     "\n'signType':'MD5'" +
-                    "\n'paySign':' MD5(appId=wxd678efh567hg6787&nonceStr=5K8264ILTKCH16CQ2502SI8ZNMTM67VS&package=prepay_id=wx2017033010242291fcfe0db70013231072&signType=MD5&timeStamp=1490840662&key=qazwsxedcrfvtgbyhnujmikolp111111) = 22D9B4E54AB1950F51E0649E8810ACD6'" +
+                    "\n'paySign':'E701685506E03A8CA71D1E9A8009DDAF'" +
                     "\n}")
     })
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @GetMapping("/wxpay/{orderNumber}")
-    public ResponseMessage wxpay(@ApiParam(name = "orderNumber", value = "订单编号", required = true)
+    public ResponseMessage<WxMiniPayOrderResult> wxpay(@ApiParam(name = "orderNumber", value = "订单编号", required = true)
                                  @NotBlank(message = "订单号传入为空") @PathVariable String orderNumber) {
         OrderVO orderVO = orderService.selectOrderVOByOrderNumber(orderNumber);
         User user = JwtFilter.getLoginUser();
@@ -176,19 +177,18 @@ public class OrderController {
             orderRequest.setTotalFee(BaseWxPayRequest.yuanToFen(String.valueOf(totalPrice)));
             orderRequest.setOpenid(openId);
             orderRequest.setSpbillCreateIp(spbillCreateIp);
-            orderRequest.setTimeStart("yyyyMMddHHmmss");
-            orderRequest.setTimeExpire("yyyyMMddHHmmss");
             logger.info("调用微信支付接口，调用参数[{}]", orderRequest);
             Object orderResponse = wxPayService.createOrder(orderRequest);
             logger.info("调用微信支付接口，返回参数[{}]", orderResponse);
-            return ResponseMessage.newSuccessInstance(orderResponse, "返回支付参数");
+            WxMiniPayOrderResult wxMiniPayOrderResult = new WxMiniPayOrderResult();
+            BeanUtils.copyProperties("orderResponse","wxMiniPayOrderResult");
+            return ResponseMessage.newSuccessInstance(wxMiniPayOrderResult, "返回支付参数");
         } catch (WxPayException e) {
             logger.error("微信支付失败！订单号：{},原因:{}", orderNumber, e.getMessage());
             throw new ApiException(e);
         }
 
     }
-
 
     /**
      * 支付回调通知处理
@@ -256,7 +256,6 @@ public class OrderController {
     /**
      * 列出用户相关状态所有订单
      * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
-     *
      * @param status：订单状态标识
      * @return
      */

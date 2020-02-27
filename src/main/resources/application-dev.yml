@@ -27,12 +27,6 @@ swagger:
 
 logging:
   level:
-    ROOT: debug
+    ROOT: info
     com.example: trace
 
-wx:
-  pay:
-    appId: wx447bdd8f7d850c06
-  applet:
-    appid: wx447bdd8f7d850c06
-    appsecret: 1f8dc966cc30761d60394178a5d58301
