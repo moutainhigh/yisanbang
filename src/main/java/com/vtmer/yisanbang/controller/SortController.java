@@ -5,6 +5,7 @@ import com.vtmer.yisanbang.common.PageResponseMessage;
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.domain.Sort;
 import com.vtmer.yisanbang.dto.SortDTO;
+import com.vtmer.yisanbang.dto.SuitSortWithChildrenSort;
 import com.vtmer.yisanbang.service.SortService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -89,9 +90,8 @@ public class SortController {
 
     }
 
-    /*
-    @ApiOperation("查询所有职业装一级分类及其所包含二级分类")
-    @GetMapping("/suitSortWithChild")
+    @ApiOperation(value = "查询所有职业装一级分类及其所包含二级分类", notes = "返回分类id，名称，显示排序，是否显示")
+    @GetMapping("/get/suitSortWithChild")
     public ResponseMessage getAllSuitSortWithChildInfo() {
         List<SuitSortWithChildrenSort> sorts = sortService.listAllSuitSortWithChildren();
         if (sorts != null) {
@@ -99,7 +99,6 @@ public class SortController {
         }
         return ResponseMessage.newErrorInstance("查询所有职业装一级分类及其所包含二级分类失败");
     }
-     */
 
     @ApiOperation("根据id修改分类信息")
     @PutMapping("/{sortId}")
