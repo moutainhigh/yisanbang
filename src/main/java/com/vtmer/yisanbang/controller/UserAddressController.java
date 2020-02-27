@@ -60,9 +60,6 @@ public class UserAddressController {
                                              @Validated UserAddressDTO userAddress) {
         Integer userId = JwtFilter.getLoginUser().getId();
         userAddress.setUserId(userId);
-        if (userId != null) {
-            return ResponseMessage.newSuccessInstance(userAddress,"存在userId");
-        }
         List<UserAddressDTO> userAddressDtos = userAddressService.selectUserAddressByUserId(userId);
         if (userAddressDtos != null && !userAddressDtos.isEmpty()) {
             boolean flag = userAddressService.JudegAddressContent(userAddress, userAddressDtos);
