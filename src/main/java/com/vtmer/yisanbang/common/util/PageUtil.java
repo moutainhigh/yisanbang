@@ -24,7 +24,9 @@ public class PageUtil {
         } else {
             totalPage = totalRecord / pageSize;
         }
-
+        if (pageIndex > totalPage) {
+            return null;
+        }
         System.out.println("总页数:" + totalPage);
 
         // 当前第几页数据

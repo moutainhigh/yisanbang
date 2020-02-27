@@ -16,7 +16,7 @@ public class InsertBusinessAddressDTO {
     private String addressName;
 
     @NotBlank(message = "联系号码不能为空")
-    @Pattern(regexp = "^1([34578])\\d{9}$",message = "手机号码格式不正确")
+    @Pattern(regexp = "^1([345789])\\d{9}$",message = "手机号码格式不正确")
     @ApiModelProperty(value = "电话号码",example = "17666289644",required = true)
     private String phoneNumber;
 

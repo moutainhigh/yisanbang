@@ -27,7 +27,7 @@ public class UserAddress {
     private String addressName;
 
     @NotBlank(groups = {Insert.class, Update.class},message = "联系号码不能为空")
-    @Pattern(groups = {Insert.class, Update.class},regexp = "^1([34578])\\d{9}$",message = "手机号码格式不正确")
+    @Pattern(groups = {Insert.class, Update.class},regexp = "^1([345789])\\d{9}$",message = "手机号码格式不正确")
     @ApiModelProperty(name = "phoneNumber",value = "用户电话号码",required = true,example = "17666289644")
     private String phoneNumber;
 
