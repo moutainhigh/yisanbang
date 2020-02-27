@@ -66,7 +66,7 @@ public class UserAddressController {
         if (userId != null) {
             return ResponseMessage.newSuccessInstance(userAddress,"存在userId");
         }
-        List<UserAddressDTO> userAddressDtos = userAddressService.selectUserAddressByUserId(userAddress.getUserId());
+        List<UserAddressDTO> userAddressDtos = userAddressService.selectUserAddressByUserId(userId);
         if (userAddressDtos != null && !userAddressDtos.isEmpty()) {
             boolean flag = userAddressService.JudegAddressContent(userAddress, userAddressDtos);
             if (flag) {
