@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: dev 
+    active: dev
   jackson:
     time-zone: GMT+8
   datasource:
@@ -78,7 +78,7 @@ wx:
   pay:
     appId: wx447bdd8f7d850c06
     mchId: 1577486831 #微信支付商户号
-    mchKey: #微信支付商户密钥
+    mchKey: 0e796fe11c6bad89236bf1696a7353ee #微信支付商户密钥
     payNotifyURL: http://119.3.254.171:8088/order/wxNotify
     refundNotifyURL: http://119.3.254.171:8088/refund/wxNotify
     tradeType: JSAPI
