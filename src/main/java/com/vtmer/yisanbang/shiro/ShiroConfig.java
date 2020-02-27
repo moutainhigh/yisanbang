@@ -60,7 +60,7 @@ public class ShiroConfig {
         // 商品详情接口放行
         filterRuleMap.put("/goodsDetail/get/**","anon");
         // 用户地址接口放行
-        filterRuleMap.put("/userAddress/get/**","anon");
+        //filterRuleMap.put("/userAddress/get/**","anon");
         // 获取商家默认收货地址接口放行
         filterRuleMap.put("/businessAddress/getDefault","anon");
         // 套装接口放行
