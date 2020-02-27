@@ -15,7 +15,7 @@ public class UserAddress {
     @ApiModelProperty(hidden = true)
     private Integer id;
 
-    @ApiModelProperty(name = "userId",value = "用户id", readOnly = true,example = "1")
+    @ApiModelProperty(name = "userId",value = "用户id",example = "1")
     private Integer userId;
 
     @NotBlank(groups = {Insert.class, Update.class},message = "联系人姓名为空")

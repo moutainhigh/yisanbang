@@ -73,11 +73,12 @@ public class SystemLogAspect {
             status = 1;
         } catch (Throwable e) {
             status = 2;
+            throw new RuntimeException(e);
         } finally {
             // 后置通知
             logger.info("后置通知>>>>>>>>>>>>>>>操作模块：" + module + ",操作方法：" + methodTarget + "，操作行为：" + desc + ",操作结果：" + status + "!(操作成功:1,操作失败:2)<<<<<<<<<<<<<<<<");
         }
-        return null;
+        return result;
     }
 
     /**
