@@ -109,7 +109,7 @@ public class OrderServiceImpl implements OrderService {
             discountRate = discount.getDiscountRate();
         } else {  // 如果未设置优惠，则默认达标数量为0，优惠*1,，即无打折
             discountAmount = 0;
-            discountRate = 1;
+            discountRate = 1.0;
         }
     }
 
@@ -252,11 +252,13 @@ public class OrderServiceImpl implements OrderService {
     public String createDirectOrder(OrderDTO orderDTO) {
         // 获取用户订单商品列表和优惠后的总价
         Double totalPrice = orderDTO.getTotalPrice();
+        logger.info("前端传递的订单总价为[{}]",totalPrice);
         List<OrderGoodsDTO> orderGoodsDTOList = orderDTO.getOrderGoodsDTOList();
         // 前端传递的订单总价，在后台校验一遍
         double totalPriceCheck = calculateTotalPrice(orderGoodsDTOList);
         if (!totalPrice.equals(totalPriceCheck)) {
             // 如果前端传递的优惠后订单总价和后台计算的优惠后订单总价不一致，说明出现了问题，抛出异常
+            logger.info("前后端订单总价不一致");
             throw new OrderPriceNotMatchException();
         }
         // 创建订单
@@ -334,10 +336,11 @@ public class OrderServiceImpl implements OrderService {
         for (OrderGoodsDTO orderGoodsDTO : orderGoodsDTOList) {
             int sizeId = orderGoodsDTO.getColorSizeId();
             boolean whetherGoods = orderGoodsDTO.getWhetherGoods();
-            int amount = orderGoodsDTO.getAmount();
             setOrderGoodsDTO(orderGoodsDTO,sizeId, whetherGoods);
+            logger.info("单项商品总价为[{}]",orderGoodsDTO.getAfterTotalPrice());
             totalPrice += orderGoodsDTO.getAfterTotalPrice();
         }
+        logger.info("后台计算的订单总价为[{}]",totalPrice);
         return totalPrice;
     }
 
@@ -573,6 +576,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void setOrderGoodsDTO(OrderGoodsDTO orderGoodsDTO, Integer sizeId, Boolean isGoods) {
+        setDiscount();
         orderGoodsDTO.setColorSizeId(sizeId);
         orderGoodsDTO.setWhetherGoods(isGoods);
         // 如果是普通商品

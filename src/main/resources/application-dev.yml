@@ -27,6 +27,6 @@ swagger:
 
 logging:
   level:
-    ROOT: debug
+    ROOT: info
     com.example: trace
 
