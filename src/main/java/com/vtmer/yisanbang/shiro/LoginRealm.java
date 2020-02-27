@@ -63,13 +63,12 @@ public class LoginRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-        logger.info("进入认证流程...");
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
         // 1.判断用户名是否存在
-        logger.info("判断用户名是否存在");
         String CorrectPassword = adminMapper.selectPasswordByName(token.getUsername());
         if (CorrectPassword == null) {
             // 用户名不存在
+            logger.info("无效的token请求，数据库中找不到该用户");
             return null; // Shiro底层会抛出UnKnowAccountException
         }
         // 2.判断密码是否正确
