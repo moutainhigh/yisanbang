@@ -86,4 +86,9 @@ public class AdminServiceImpl implements AdminService {
         return roleArrayList;
     }
 
+    @Override
+    public int getAdminIdByName(String name) {
+        return adminMapper.selectAdminIdByName(name);
+    }
+
 }

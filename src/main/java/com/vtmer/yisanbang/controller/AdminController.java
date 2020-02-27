@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Api(tags = "后台管理接口")
@@ -78,8 +79,12 @@ public class AdminController {
             subject.login(token);
             // System.out.println("登陆");
             // 登陆成功
+            int adminId = adminService.getAdminIdByName(loginDto.getAdminName());
             List<Role> roleList = adminService.getRoleListByName(loginDto.getAdminName());
-            return ResponseMessage.newSuccessInstance(roleList,"登陆成功,该账号的角色见data");
+            HashMap<String,Object> adminInfo = new HashMap<>();
+            adminInfo.put("adminId",adminId);
+            adminInfo.put("roleList",roleList);
+            return ResponseMessage.newSuccessInstance(adminInfo,"登陆成功");
         } catch (UnknownAccountException e) {
             return ResponseMessage.newErrorInstance("登陆失败，用户名不存在");
         } catch (IncorrectCredentialsException e) {
