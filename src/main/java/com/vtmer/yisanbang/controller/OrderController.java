@@ -9,7 +9,6 @@ import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.github.binarywang.wxpay.util.SignUtils;
 import com.vtmer.yisanbang.common.ResponseMessage;
-import com.vtmer.yisanbang.common.annotation.RequestLog;
 import com.vtmer.yisanbang.common.exception.api.ApiException;
 import com.vtmer.yisanbang.common.exception.api.order.*;
 import com.vtmer.yisanbang.common.exception.service.cart.OrderGoodsCartGoodsNotMatchException;
@@ -58,7 +57,7 @@ public class OrderController {
      * 点击去结算，显示确认订单页面
      * @return
      */
-    @RequestLog(module = "订单", operationDesc = "确认购物车订单")
+    //@RequestLog(module = "订单", operationDesc = "确认购物车订单")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
@@ -74,7 +73,7 @@ public class OrderController {
         return ResponseMessage.newSuccessInstance(orderVO, "获取确认订单相关信息成功");
     }
 
-    @RequestLog(module = "订单", operationDesc = "确认[直接购买]订单")
+    //@RequestLog(module = "订单", operationDesc = "确认[直接购买]订单")
     @GetMapping("confirmDirectOrder")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
@@ -85,16 +84,16 @@ public class OrderController {
         return ResponseMessage.newSuccessInstance(orderVO, "获取确认订单相关信息成功");
     }
 
-    @RequestLog(module = "订单", operationDesc = "创建[直接购买]类订单")
+    //@RequestLog(module = "订单", operationDesc = "创建[直接购买]类订单")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @ApiOperation(value = "创建[直接购买]类订单", notes = "用户从商品页面选择直接购买确认订单，点击提交订单后调用,若是订单中的某件商品数量超过库存，会返回【库存不足】的提示，返回订单编号orderNumber和用户openid")
     @PostMapping("/insertDirectOrder")
     public ResponseMessage insertDirectOrder(@RequestBody @Validated({Insert.class}) OrderDTO orderDTO) {
-        Map<String, String> orderMap;
+        String orderNumber;
         try {
-            orderMap = orderService.createDirectOrder(orderDTO);
+            orderNumber = orderService.createDirectOrder(orderDTO);
         } catch (InventoryNotEnoughException e) {
             throw new ApiInventoryNotEnoughException(e.getMessage());
         } catch (OrderPriceNotMatchException e) {
@@ -102,7 +101,7 @@ public class OrderController {
         } catch (Exception e) {
             throw new ApiException(e);
         }
-        return ResponseMessage.newSuccessInstance(orderMap, "创建订单成功，返回订单编号和openId");
+        return ResponseMessage.newSuccessInstance(orderNumber,"创建订单成功，返回订单编号和openId");
     }
 
     /**
@@ -110,16 +109,16 @@ public class OrderController {
      * @param orderDTO：留言，用户收货地址，邮费
      * @return
      */
-    @RequestLog(module = "订单", operationDesc = "创建购物车类订单")
+    //@RequestLog(module = "订单", operationDesc = "创建购物车类订单")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @ApiOperation(value = "创建购物车订单", notes = "用户从购物车页面确认订单，点击提交订单后调用,若是订单中的某件商品数量超过库存，会返回【库存不足】的提示，返回订单编号和用户openid")
     @PostMapping("/insertCartOrder")
     public ResponseMessage insertCartOrder(@RequestBody @Validated({Insert.class}) OrderDTO orderDTO) {
-        Map<String, String> orderMap;
+        String orderNumber;
         try {
-            orderMap = orderService.createCartOrder(orderDTO);
+            orderNumber = orderService.createCartOrder(orderDTO);
         } catch (InventoryNotEnoughException e) {
             throw new ApiInventoryNotEnoughException(e.getMessage());
         } catch (OrderGoodsCartGoodsNotMatchException e) {
@@ -129,7 +128,7 @@ public class OrderController {
         } catch (Exception e) {
             throw new ApiException(e);
         }
-        return ResponseMessage.newSuccessInstance(orderMap, "创建订单成功，返回订单编号和openId");
+        return ResponseMessage.newSuccessInstance(orderNumber, "创建订单成功，返回订单编号和openId");
     }
 
     /**
@@ -137,7 +136,7 @@ public class OrderController {
      * @param orderNumber：orderNumber订单号
      * @return 返回前端调起微信支付所需的支付参数（5个参数和sign）
      */
-    @RequestLog(module = "订单", operationDesc = "微信支付")
+    //@RequestLog(module = "订单", operationDesc = "微信支付")
     @ApiOperation(value = "微信支付", notes = "通过订单号进行微信支付，返回前端调起微信支付所需的支付参数（5个参数和sign）")
     @ApiResponses({
             @ApiResponse(code = 200, message = "ResponseMessage => \n 'data:" +
@@ -207,7 +206,7 @@ public class OrderController {
      * 特别提醒：商户系统对于支付结果通知的内容一定要做签名验证,并校验返回的订单金额是否与商户侧的订单金额一致，防止数据泄漏导致出现“假通知”，造成资金损失。
      */
     @ApiIgnore
-    @RequestLog(module = "订单", operationDesc = "支付回调通知处理")
+    //@RequestLog(module = "订单", operationDesc = "支付回调通知处理")
     @PostMapping("/wxNotify")
     public String parseOrderNotifyResult(@RequestBody String xmlData) {
         try {
@@ -261,7 +260,7 @@ public class OrderController {
      * @param status：订单状态标识
      * @return
      */
-    @RequestLog(module = "订单", operationDesc = "获取用户相关状态的所有订单")
+    //@RequestLog(module = "订单", operationDesc = "获取用户相关状态的所有订单")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
@@ -283,7 +282,7 @@ public class OrderController {
     /**
      * @param status
      */
-    @RequestLog(module = "订单", operationDesc = "获取商城中相关状态的所有订单")
+    //@RequestLog(module = "订单", operationDesc = "获取商城中相关状态的所有订单")
     @ApiOperation(value = "获取商城中相关状态的所有订单",
             notes = "订单状态定义：status 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单;\n" +
                     "退款状态定义：status 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败")
@@ -306,7 +305,7 @@ public class OrderController {
      * @param orderNumber:订单编号
      * @return
      */
-    @RequestLog(module = "订单", operationDesc = "确认收货")
+    //@RequestLog(module = "订单", operationDesc = "确认收货")
     @ApiOperation(value = "确认收货", notes = "订单状态定义：status 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单\n"
             + "修改订单状态为下一状态，适用于'确认收货'按钮")
     @ApiImplicitParams({
@@ -364,8 +363,8 @@ public class OrderController {
      * @param orderId：订单id
      * @return
      */
-    @RequestLog(module = "订单", operationDesc = "删除订单")
-    @ApiOperation(value = "删除订单", notes = "暂时无用，用户没有删除订单按钮emm")
+    //@RequestLog(module = "订单", operationDesc = "删除订单")
+    @ApiOperation(value = "删除订单", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
@@ -392,7 +391,7 @@ public class OrderController {
      * @param deliverGoodsDTO:orderNumber and courierNumber
      * @return
      */
-    @RequestLog(module = "订单", operationDesc = "商家发货")
+    //@RequestLog(module = "订单", operationDesc = "商家发货")
     @ApiOperation(value = "商家发货", notes = "商家发货设置快递编号，需要订单编号")
     @PutMapping("/setCourierNumber")
     public ResponseMessage setCourierNumber(@RequestBody @Validated DeliverGoodsDTO deliverGoodsDTO) {
@@ -416,7 +415,7 @@ public class OrderController {
      * @param updateUserAddressVo:用户地址UserAddress、订单编号orderNumber
      * @return
      */
-    @RequestLog(module = "订单", operationDesc = "修改收货地址")
+    //@RequestLog(module = "订单", operationDesc = "修改收货地址")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
@@ -446,7 +445,7 @@ public class OrderController {
      * @param orderNumber：订单编号
      * @return
      */
-    @RequestLog(module = "订单", operationDesc = "取消订单")
+    //@RequestLog(module = "订单", operationDesc = "取消订单")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })

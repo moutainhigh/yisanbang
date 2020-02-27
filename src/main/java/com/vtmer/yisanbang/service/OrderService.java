@@ -14,9 +14,9 @@ public interface OrderService {
 
     com.vtmer.yisanbang.vo.OrderVO confirmDirectOrder(List<OrderGoodsDTO> orderGoodsDTOList);
 
-    Map<String,String> createCartOrder(OrderDTO orderDTO);
+    String createCartOrder(OrderDTO orderDTO);
 
-    Map<String,String> createDirectOrder(OrderDTO orderDTO);
+    String createDirectOrder(OrderDTO orderDTO);
 
     /**
      * 获取用户的状态订单

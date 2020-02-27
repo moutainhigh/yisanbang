@@ -165,7 +165,7 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     @Transactional
-    public Map<String, String> createCartOrder(OrderDTO orderDTO) {
+    public String createCartOrder(OrderDTO orderDTO) {
         // 获取用户购物车清单
         CartVO cartVo = cartService.selectCartVo();
         // 获取用户购物车商品列表
@@ -215,11 +215,11 @@ public class OrderServiceImpl implements OrderService {
 
         // 校验完成，开始下单逻辑
         // 生成order
-        Map<String, String> orderMap = createOrder(orderDTO);
+        String orderNumber = createOrder(orderDTO);
         // 删除购物车勾选项
         cartService.deleteCartGoodsByIsChosen();
         // 返回订单编号和openid
-        return orderMap;
+        return orderNumber;
     }
 
     /**
@@ -228,7 +228,7 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     @Override
-    public Map<String, String> createDirectOrder(OrderDTO orderDTO) {
+    public String createDirectOrder(OrderDTO orderDTO) {
         // 获取用户订单商品列表和优惠后的总价
         Double totalPrice = orderDTO.getTotalPrice();
         List<OrderGoodsDTO> orderGoodsDTOList = orderDTO.getOrderGoodsDTOList();
@@ -239,6 +239,7 @@ public class OrderServiceImpl implements OrderService {
             CartGoodsDTO cartGoodsDTO = new CartGoodsDTO();
             BeanUtils.copyProperties(orderGoodsDTO,cartGoodsDTO);
             cartGoodsList.add(cartGoodsDTO);
+            // TODO 添加商品单价
         }
         // 后台计算订单总价，map中包括优惠前和优惠后的总价，这里我们只需要优惠后的总价
         Map<String, Double> priceMap = cartService.calculateTotalPrice(cartGoodsList);
@@ -252,19 +253,13 @@ public class OrderServiceImpl implements OrderService {
         return createOrder(orderDTO);
     }
 
-    private Map<String,String> createOrder(OrderDTO orderDTO) {
+    private String createOrder(OrderDTO orderDTO) {
         UserAddress userAddress = orderDTO.getUserAddress();
         double postage = orderDTO.getPostage();
         String message = orderDTO.getMessage();
         User user = JwtFilter.getLoginUser();
-        // 返回map
-        HashMap<String, String> orderMap = new HashMap<>();
-        // 从登录信息中拿到openId
-        String openId = user.getOpenId();
-        orderMap.put("openId", openId);
         // 生成订单编号
         String orderNumber = OrderNumberUtil.getOrderNumber();
-        orderMap.put("orderNumber", orderNumber);
         // 生成order
         Order order = new Order();
         order.setUserId(user.getId());
@@ -315,7 +310,7 @@ public class OrderServiceImpl implements OrderService {
                 throw new InventoryNotEnoughException("商品库存不足--商品skuId：" + colorSizeId + ",是否是普通商品:" + whetherGoods + ",需要数量" + amount);
             }
         } // end for
-        return orderMap;
+        return orderNumber;
     }
 
     /**
