@@ -15,6 +15,9 @@ public interface PartSizeService {
     // 删除部件尺寸
     public boolean deletePartSize(Integer partSizeId);
 
+    // 删除套装的所有部件尺寸散件
+    public boolean deleteAllPartSizeBySuitId(Integer suitId);
+
     // 更新部件尺寸
     public boolean updatePartSize(PartSizeDTO partSizeDto);
 

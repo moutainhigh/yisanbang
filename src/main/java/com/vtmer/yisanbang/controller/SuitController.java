@@ -7,6 +7,8 @@ import com.vtmer.yisanbang.common.qiniu.QiniuUpload;
 import com.vtmer.yisanbang.common.valid.group.Delete;
 import com.vtmer.yisanbang.common.valid.group.Update;
 import com.vtmer.yisanbang.dto.SuitDTO;
+import com.vtmer.yisanbang.service.PartSizeService;
+import com.vtmer.yisanbang.service.SuitDetailService;
 import com.vtmer.yisanbang.service.SuitService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,6 +28,12 @@ import java.util.UUID;
 public class SuitController {
     @Autowired
     private SuitService suitService;
+
+    @Autowired
+    private SuitDetailService suitDetailService;
+
+    @Autowired
+    private PartSizeService partSizeService;
 
     @GetMapping("/get/selectAllSuit")
     @ApiOperation(value = "查找显示所有套装")
@@ -218,7 +226,9 @@ public class SuitController {
         SuitDTO suit = suitService.selectSuitById(suitDto.getId());
         if (suit != null) {
             boolean deleteFlag = suitService.deleteSuitById(suitDto.getId());
-            if (deleteFlag) {
+            boolean deleteSuitDetaileFlag = suitDetailService.deleteAllSuitDetailBySuitId(suitDto.getId());
+            boolean deletePartSizeFlag = partSizeService.deleteAllPartSizeBySuitId(suitDto.getId());
+            if (deleteFlag && deletePartSizeFlag && deleteSuitDetaileFlag) {
                 return ResponseMessage.newSuccessInstance("删除成功");
             } else {
                 return ResponseMessage.newErrorInstance("删除失败");

@@ -61,7 +61,7 @@ public class SuitDetailServiceImpl implements SuitDetailService {
         List<SuitDetailDTO> suitDetailDtoList = suitDetailMapper.selectAllDtoBySuitId(suitId);
         if (suitDetailDtoList != null && !suitDetailDtoList.isEmpty()) {
             ComparatorGoodsOrSuitDetail comparatorGoodsOrSuitDetail = new ComparatorGoodsOrSuitDetail();
-            Collections.sort(suitDetailDtoList,comparatorGoodsOrSuitDetail);
+            Collections.sort(suitDetailDtoList, comparatorGoodsOrSuitDetail);
             return suitDetailDtoList;
         }
         return null;
@@ -75,5 +75,20 @@ public class SuitDetailServiceImpl implements SuitDetailService {
             return suitDetailDto;
         }
         return null;
+    }
+
+    @Override
+    public boolean deleteAllSuitDetailBySuitId(Integer suitId) {
+        List<SuitDetailDTO> oldSuitDetailDtoList = suitDetailMapper.selectAllDtoBySuitId(suitId);
+        if (oldSuitDetailDtoList != null && !oldSuitDetailDtoList.isEmpty()) {
+            for (SuitDetailDTO suitDetailDTO : oldSuitDetailDtoList) {
+                suitDetailMapper.deleteByPrimaryKey(suitDetailDTO.getId());
+            }
+        }
+        List<SuitDetailDTO> suitDetailDtoList = suitDetailMapper.selectAllDtoBySuitId(suitId);
+        if (!(suitDetailDtoList != null && !suitDetailDtoList.isEmpty())) {
+            return true;
+        }
+        return false;
     }
 }

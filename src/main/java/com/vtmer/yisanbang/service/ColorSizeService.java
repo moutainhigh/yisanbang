@@ -15,6 +15,9 @@ public interface ColorSizeService {
     // 删除颜色尺寸
     public boolean deleteColorSize(Integer colorSizeId);
 
+    // 删除商品的所有颜色尺寸
+    public boolean deleteAllColorSizeByGoodsId(Integer goodsId);
+
     // 更新颜色尺寸
     public boolean updateColorSize(ColorSizeDTO colorSizeDto);
 

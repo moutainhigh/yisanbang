@@ -50,7 +50,7 @@ public class GoodsDetailServiceImpl implements GoodsDetailService {
     // 查找所有商品详细信息
     public List<GoodsDetailDTO> selectAllDto() {
         List<GoodsDetailDTO> goodsDetailDtos = goodsDetailMapper.selectAllDto();
-        if (goodsDetailDtos != null) {
+        if (goodsDetailDtos != null && !goodsDetailDtos.isEmpty()) {
             return goodsDetailDtos;
         }
         return null;
@@ -60,9 +60,9 @@ public class GoodsDetailServiceImpl implements GoodsDetailService {
     // 根据商品id查找商品的所有商品详细信息
     public List<GoodsDetailDTO> selectAllDtoByGoodsId(Integer goodsId) {
         List<GoodsDetailDTO> goodsDetailDtos = goodsDetailMapper.selectAllDtoByGoodsId(goodsId);
-        if (goodsDetailDtos != null) {
+        if (goodsDetailDtos != null && !goodsDetailDtos.isEmpty()) {
             ComparatorGoodsOrSuitDetail comparatorGoodsOrSuitDetail = new ComparatorGoodsOrSuitDetail();
-            Collections.sort(goodsDetailDtos,comparatorGoodsOrSuitDetail);
+            Collections.sort(goodsDetailDtos, comparatorGoodsOrSuitDetail);
             return goodsDetailDtos;
         }
         return null;
@@ -76,5 +76,20 @@ public class GoodsDetailServiceImpl implements GoodsDetailService {
             return goodsDetailDto;
         }
         return null;
+    }
+
+    @Override
+    public boolean deleteAllGoodsDetailByGoodsId(Integer goodsId) {
+        List<GoodsDetailDTO> oldGoodsDetailDtos = goodsDetailMapper.selectAllDtoByGoodsId(goodsId);
+        if (oldGoodsDetailDtos != null && !oldGoodsDetailDtos.isEmpty()) {
+            for (GoodsDetailDTO goodsDetailDTO : oldGoodsDetailDtos) {
+                goodsDetailMapper.deleteByPrimaryKey(goodsDetailDTO.getId());
+            }
+        }
+        List<GoodsDetailDTO> goodsDetailDtos = goodsDetailMapper.selectAllDtoByGoodsId(goodsId);
+        if (!(goodsDetailDtos != null && !goodsDetailDtos.isEmpty())) {
+            return true;
+        }
+        return false;
     }
 }

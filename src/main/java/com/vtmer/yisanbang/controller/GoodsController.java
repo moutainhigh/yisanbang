@@ -7,6 +7,9 @@ import com.vtmer.yisanbang.common.qiniu.QiniuUpload;
 import com.vtmer.yisanbang.common.valid.group.Delete;
 import com.vtmer.yisanbang.common.valid.group.Update;
 import com.vtmer.yisanbang.dto.GoodsDTO;
+import com.vtmer.yisanbang.dto.GoodsDetailDTO;
+import com.vtmer.yisanbang.service.ColorSizeService;
+import com.vtmer.yisanbang.service.GoodsDetailService;
 import com.vtmer.yisanbang.service.GoodsService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,6 +29,12 @@ import java.util.UUID;
 public class GoodsController {
     @Autowired
     private GoodsService goodsService;
+
+    @Autowired
+    private ColorSizeService colorSizeService;
+
+    @Autowired
+    private GoodsDetailService goodsDetailService;
 
     @GetMapping("/get/selectAllGoods")
     @ApiOperation(value = "查找所有商品")
@@ -217,7 +226,10 @@ public class GoodsController {
         GoodsDTO goods = goodsService.selectDtoByPrimaryKey(goodsDto.getId());
         if (goods != null) {
             boolean deleteFlag = goodsService.deleteGoodsById(goodsDto.getId());
-            if (deleteFlag) {
+            boolean deleteGoodsDeteilFlag = goodsDetailService.deleteAllGoodsDetailByGoodsId(goodsDto.getId());
+            boolean deleteColorSizeFlag = colorSizeService.deleteAllColorSizeByGoodsId(goodsDto.getId());
+
+            if (deleteFlag && deleteColorSizeFlag && deleteGoodsDeteilFlag) {
                 return ResponseMessage.newSuccessInstance("删除成功");
             } else {
                 return ResponseMessage.newErrorInstance("删除失败");
