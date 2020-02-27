@@ -1,7 +1,7 @@
 package com.vtmer.yisanbang.common.aop;
 
-import com.vtmer.yisanbang.common.util.JwtUtil;
 import com.vtmer.yisanbang.common.annotation.RequestLog;
+import com.vtmer.yisanbang.common.util.JwtUtil;
 import com.vtmer.yisanbang.domain.User;
 import com.vtmer.yisanbang.shiro.JwtFilter;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -54,31 +54,30 @@ public class SystemLogAspect {
         logger.info("前置通知>>>>>>>>>>>>>>>操作模块：[" + module + "],操作方法：[" + methodTarget + "]，操作行为：[" + desc + "]<<<<<<<<<<<<<<<<");
         //打印当前的请求路径
         logger.info("RequestMapping:[{}]",request.getRequestURI());
-        //这里是从token中获取用户信息，打印当前的访问用户，代码不通用
+        //这里是从token中获取用户信息，打印当前的访问用户
         String token = request.getHeader(JwtUtil.TOKEN_HEADER);
         if (token != null) {
             User user = JwtFilter.getLoginUser();
             logger.info("Current UserId is:[{}]",user.getId());
         }
-        //打印请求参数，如果需要打印其他的信息可以到request中去拿
-        logger.info("RequestParam:{}", Arrays.toString(point.getArgs()));
-
-        Object result;
+        if (Arrays.toString(point.getArgs()).equals("")) {
+            //打印请求参数，如果需要打印其他的信息可以到request中去拿
+            logger.info("RequestParam:{}", Arrays.toString(point.getArgs()));
+        }
         // 返回通知(操作成功:1,操作失败:2)
-        Integer status = 0;
+        int status = 0;
         try {
-            result = point.proceed();
+            point.proceed();
             // 设置请求结果
             // 返回通知(操作成功:1,操作失败:2)
             status = 1;
         } catch (Throwable e) {
             status = 2;
-            throw new RuntimeException(e);
         } finally {
             // 后置通知
             logger.info("后置通知>>>>>>>>>>>>>>>操作模块：" + module + ",操作方法：" + methodTarget + "，操作行为：" + desc + ",操作结果：" + status + "!(操作成功:1,操作失败:2)<<<<<<<<<<<<<<<<");
         }
-        return result;
+        return null;
     }
 
     /**
