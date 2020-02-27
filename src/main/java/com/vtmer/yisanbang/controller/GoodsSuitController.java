@@ -1,5 +1,6 @@
 package com.vtmer.yisanbang.controller;
 
+import com.vtmer.yisanbang.common.GoodsPageResponseMessage;
 import com.vtmer.yisanbang.common.PageResponseMessage;
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.common.util.PageUtil;
@@ -56,7 +57,7 @@ public class GoodsSuitController {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
                 List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
                 if (pager != null && !pager.isEmpty()) {
-                    return ResponseMessage.newSuccessInstance(pager, "查找成功");
+                    return ResponseMessage.newSuccessInstance(GoodsPageResponseMessage.restPage(pageNum,pageSize,pager), "查找成功");
                 }else{
                     return ResponseMessage.newErrorInstance("所选页码超出最大页码");
                 }
@@ -95,7 +96,7 @@ public class GoodsSuitController {
                 }
                 List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
                 if (pager != null && !pager.isEmpty()) {
-                    return ResponseMessage.newSuccessInstance(pager, "查找成功");
+                    return ResponseMessage.newSuccessInstance(GoodsPageResponseMessage.restPage(pageNum,pageSize,pager), "查找成功");
                 }else{
                     return ResponseMessage.newErrorInstance("所选页码超出最大页码");
                 }
@@ -134,7 +135,7 @@ public class GoodsSuitController {
                 }
                 List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
                 if (pager != null && !pager.isEmpty()) {
-                    return ResponseMessage.newSuccessInstance(pager, "查找成功");
+                    return ResponseMessage.newSuccessInstance(GoodsPageResponseMessage.restPage(pageNum,pageSize,pager), "查找成功");
                 }else{
                     return ResponseMessage.newErrorInstance("所选页码超出最大页码");
                 }
@@ -170,7 +171,7 @@ public class GoodsSuitController {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
                 List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
                 if (pager != null && !pager.isEmpty()) {
-                    return ResponseMessage.newSuccessInstance(pager, "查找成功");
+                    return ResponseMessage.newSuccessInstance(GoodsPageResponseMessage.restPage(pageNum,pageSize,pager), "查找成功");
                 }else{
                     return ResponseMessage.newErrorInstance("所选页码超出最大页码");
                 }
@@ -211,7 +212,7 @@ public class GoodsSuitController {
                 }
                 List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
                 if (pager != null && !pager.isEmpty()) {
-                    return ResponseMessage.newSuccessInstance(pager, "查找成功");
+                    return ResponseMessage.newSuccessInstance(GoodsPageResponseMessage.restPage(pageNum,pageSize,pager), "查找成功");
                 }else{
                     return ResponseMessage.newErrorInstance("所选页码超出最大页码");
                 }
@@ -252,7 +253,7 @@ public class GoodsSuitController {
                 }
                 List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
                 if (pager != null && !pager.isEmpty()) {
-                    return ResponseMessage.newSuccessInstance(pager, "查找成功");
+                    return ResponseMessage.newSuccessInstance(GoodsPageResponseMessage.restPage(pageNum,pageSize,pager), "查找成功");
                 }else{
                     return ResponseMessage.newErrorInstance("所选页码超出最大页码");
                 }
@@ -291,7 +292,7 @@ public class GoodsSuitController {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
                 List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
                 if (pager != null && !pager.isEmpty()) {
-                    return ResponseMessage.newSuccessInstance(pager, "查找成功");
+                    return ResponseMessage.newSuccessInstance(GoodsPageResponseMessage.restPage(pageNum,pageSize,pager), "查找成功");
                 }else{
                     return ResponseMessage.newErrorInstance("所选页码超出最大页码");
                 }
