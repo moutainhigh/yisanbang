@@ -55,7 +55,7 @@ public class GoodsSuitController {
             if (list != null && !list.isEmpty()) {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
                 List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
-                return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(pager), "查找成功");
+                return ResponseMessage.newSuccessInstance(pager, "查找成功");
             } else {
                 return ResponseMessage.newErrorInstance("查找失败");
             }
@@ -90,7 +90,7 @@ public class GoodsSuitController {
                     Collections.reverse(uniqueList);
                 }
                 List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
-                return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(pager), "查找成功");
+                return ResponseMessage.newSuccessInstance(pager, "查找成功");
             } else {
                 return ResponseMessage.newErrorInstance("查找失败");
             }
@@ -125,7 +125,7 @@ public class GoodsSuitController {
                     Collections.reverse(uniqueList);
                 }
                 List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
-                return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(pager), "查找成功");
+                return ResponseMessage.newSuccessInstance(pager, "查找成功");
             } else {
                 return ResponseMessage.newErrorInstance("查找失败");
             }
@@ -157,7 +157,7 @@ public class GoodsSuitController {
             if (list != null && !list.isEmpty()) {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
                 List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
-                return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(pager), "查找成功");
+                return ResponseMessage.newSuccessInstance(pager, "查找成功");
             } else {
                 return ResponseMessage.newErrorInstance("查找失败");
             }
@@ -194,7 +194,7 @@ public class GoodsSuitController {
                     Collections.reverse(uniqueList);
                 }
                 List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
-                return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(pager), "查找成功");
+                return ResponseMessage.newSuccessInstance(pager, "查找成功");
             } else {
                 return ResponseMessage.newErrorInstance("查找失败");
             }
@@ -231,7 +231,7 @@ public class GoodsSuitController {
                     Collections.reverse(uniqueList);
                 }
                 List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
-                return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(pager), "查找成功");
+                return ResponseMessage.newSuccessInstance(pager, "查找成功");
             } else {
                 return ResponseMessage.newErrorInstance("查找失败");
             }
@@ -266,7 +266,7 @@ public class GoodsSuitController {
             if (list != null && !list.isEmpty()) {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
                 List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
-                return ResponseMessage.newSuccessInstance(PageResponseMessage.restPage(pager), "查找成功");
+                return ResponseMessage.newSuccessInstance(pager, "查找成功");
             } else {
                 return ResponseMessage.newErrorInstance("查找失败");
             }
