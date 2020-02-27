@@ -59,6 +59,6 @@
     <select id="selectGeneralAdmin" resultMap="BaseResultMap">
         select id, name, create_time, update_time
         from admin
-        where id not in (select admin_id from admin_role where role_id = 2)
+        where id in (select admin_id from admin_role where role_id = 2)
     </select>
 </mapper>
