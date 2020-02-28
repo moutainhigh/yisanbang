@@ -641,18 +641,30 @@ public class OrderServiceImpl implements OrderService {
         // 如果是普通商品
         if (Boolean.TRUE.equals(isGoods)) {
             ColorSize colorSize = colorSizeMapper.selectByPrimaryKey(sizeId);
+            if (colorSize == null) {
+                throw new OrderGoodsNotExistException();
+            }
             orderGoodsDTO.setSize(colorSize.getSize());
             orderGoodsDTO.setPartOrColor(colorSize.getColor());
             orderGoodsDTO.setId(colorSize.getGoodsId());
             Goods goods = goodsMapper.selectByPrimaryKey(colorSize.getGoodsId());
+            if (goods == null) {
+                throw new OrderGoodsNotExistException();
+            }
             orderGoodsDTO.setTitle(goods.getName());
             orderGoodsDTO.setPicture(goods.getPicture());
             orderGoodsDTO.setPrice(goods.getPrice());
         } else { // 如果是套装散件
             PartSize partSize = partSizeMapper.selectByPrimaryKey(sizeId);
+            if (partSize == null) {
+                throw new OrderGoodsNotExistException();
+            }
             orderGoodsDTO.setSize(partSize.getSize());
             orderGoodsDTO.setPartOrColor(partSize.getPart());
             Suit suit = suitMapper.selectByPrimaryKey(partSize.getSuitId());
+            if (suit == null) {
+                throw new OrderGoodsNotExistException();
+            }
             orderGoodsDTO.setTitle(suit.getName());
             orderGoodsDTO.setPicture(suit.getPicture());
             orderGoodsDTO.setId(suit.getId());

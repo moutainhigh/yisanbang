@@ -291,7 +291,14 @@ public class OrderController {
     public ResponseMessage<List<OrderVO>> getUserOrderList(@Max(value = 5, message = "订单标识最大值为5")
                                                            @Min(value = 0, message = "订单标识最小值为0")
                                                            @ApiParam(name = "status", value = "订单状态标识", required = true) @PathVariable Integer status) {
-        List<OrderVO> orderVOList = orderService.getUserOrderList(status);
+        List<OrderVO> orderVOList;
+        try {
+            orderVOList = orderService.getUserOrderList(status);
+        } catch (OrderGoodsNotExistException e) {
+            throw new ApiOrderGoodsNotExistException(e.getMessage());
+        } catch (Exception e) {
+            throw new ApiException(e);
+        }
         if (orderVOList != null && orderVOList.size() != 0) {
             return ResponseMessage.newSuccessInstance(orderVOList, "获取订单列表成功");
         } else {
@@ -310,7 +317,14 @@ public class OrderController {
     public ResponseMessage<List<OrderVO>> getOrderList(@Max(value = 5, message = "订单标识最大值为5")
                                                        @Min(value = 0, message = "订单标识最小值为0")
                                                        @ApiParam(name = "status", value = "订单状态标识", required = true) @PathVariable Integer status) {
-        List<OrderVO> orderVOList = orderService.getOrderList(status);
+        List<OrderVO> orderVOList;
+        try {
+            orderVOList = orderService.getOrderList(status);
+        } catch (OrderGoodsNotExistException e) {
+            throw new ApiOrderGoodsNotExistException(e.getMessage());
+        } catch (Exception e) {
+            throw new ApiException(e);
+        }
         if (orderVOList != null && orderVOList.size() != 0) {
             return ResponseMessage.newSuccessInstance(orderVOList, "获取订单列表成功");
         } else {

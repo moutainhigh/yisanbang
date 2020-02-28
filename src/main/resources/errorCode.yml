@@ -28,7 +28,7 @@ refund:
   refundStatusNotFitErrorCode: 10002L # 退款订单状态不适配接口
   RefundNotMatchUserErrorCode: 10003L # 该退款单不属于目前的用户
   DuplicateApplyRefundErrorCode: 10004L # 重复申请退款
-  refundGoodsNotFoundErrorCode: 10005L # 重复申请退款
+  refundGoodsNotFoundErrorCode: 10005L # 退款商品不存在
 shiro:
   unknownAccountExceptionErrorCode: 10001L # shiro认证账号密码不正确
 third:
