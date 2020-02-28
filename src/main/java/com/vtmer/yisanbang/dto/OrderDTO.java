@@ -28,7 +28,7 @@ public class OrderDTO {
 
     // 留言
     @NotNull(message = "订单留言为空")
-    @ApiModelProperty(value = "订单留言",required = false,example = "不要发货，我钱多")
+    @ApiModelProperty(value = "订单留言",required = true,example = "不要发货，我钱多",notes = "若订单留言为空传空字符串")
     private String message;
 
     @NotNull(groups = {Insert.class},message = "邮费金额为空")

@@ -242,6 +242,7 @@ public class OrderController {
             String totalFee = BaseWxPayResult.fenToYuan(notifyResult.getTotalFee());
             Double totalPrice = Double.parseDouble(totalFee);
 
+            /*
             // 验证签名
             String sign = notifyResult.getSign();
             boolean checkSignRes = SignUtils.checkSign(xmlData, "MD5", sign);
@@ -249,6 +250,8 @@ public class OrderController {
                 logger.warn("微信支付回调——签名验证有误");
                 return WxPayNotifyResponse.fail("签名验证有误");
             }
+
+             */
 
             // 校验返回的订单金额是否与商户侧的订单金额一致
             if (!order.getTotalPrice().equals(totalPrice)) { // 返回的订单金额与商户侧的订单金额不一致
