@@ -10,9 +10,9 @@ import java.util.Map;
 
 public interface OrderService {
 
-    com.vtmer.yisanbang.vo.OrderVO confirmCartOrder();
+    OrderVO confirmCartOrder();
 
-    com.vtmer.yisanbang.vo.OrderVO confirmDirectOrder(List<OrderGoodsDTO> orderGoodsDTOList);
+    OrderVO confirmDirectOrder(List<OrderGoodsDTO> orderGoodsDTOList);
 
     String createCartOrder(OrderDTO orderDTO);
 

@@ -56,7 +56,7 @@ public class SystemLogAspect {
         String token = request.getHeader(JwtUtil.TOKEN_HEADER);
         if (token != null) {
             Integer userIdByToken = JwtUtil.getUserIdByToken(token);
-            logger.info("Current token is:[{}]",userIdByToken);
+            logger.info("Current userId is:[{}]",userIdByToken);
         }
         if (Arrays.toString(point.getArgs()).equals("")) {
             //打印请求参数，如果需要打印其他的信息可以到request中去拿

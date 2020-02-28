@@ -57,6 +57,7 @@ public class OrderController {
 
     /**
      * 点击去结算，显示确认订单页面
+     *
      * @return
      */
     @RequestLog(module = "订单", operationDesc = "确认购物车订单")
@@ -71,6 +72,10 @@ public class OrderController {
             orderVO = orderService.confirmCartOrder();
         } catch (CartEmptyException e) {
             throw new ApiCartEmptyException(e.getMessage());
+        } catch (OrderGoodsNotExistException e) {
+            throw new ApiOrderGoodsNotExistException(e.getMessage());
+        } catch (Exception e) {
+            throw new ApiException(e);
         }
         return ResponseMessage.newSuccessInstance(orderVO, "获取确认订单相关信息成功");
     }
@@ -82,7 +87,14 @@ public class OrderController {
     })
     @ApiOperation(value = "确认[直接购买]订单", notes = "点击[直接购买]，显示确认订单页面，ps：商品数量也需要传递")
     public ResponseMessage<OrderVO> confirmDirectOrder(@RequestBody @NotEmpty(message = "订单集合为空") List<OrderGoodsDTO> orderGoodsDTOList) {
-        OrderVO orderVO = orderService.confirmDirectOrder(orderGoodsDTOList);
+        OrderVO orderVO;
+        try {
+            orderVO = orderService.confirmDirectOrder(orderGoodsDTOList);
+        } catch (OrderGoodsNotExistException e) {
+            throw new ApiOrderGoodsNotExistException(e.getMessage());
+        } catch (Exception e) {
+            throw new ApiException(e);
+        }
         return ResponseMessage.newSuccessInstance(orderVO, "获取确认订单相关信息成功");
     }
 
@@ -100,14 +112,17 @@ public class OrderController {
             throw new ApiInventoryNotEnoughException(e.getMessage());
         } catch (OrderPriceNotMatchException e) {
             throw new ApiOrderPriceNotMatchException(e.getMessage());
+        } catch (OrderGoodsNotExistException e) {
+            throw new ApiOrderGoodsNotExistException(e.getMessage());
         } catch (Exception e) {
             throw new ApiException(e);
         }
-        return ResponseMessage.newSuccessInstance(orderNumber,"创建订单成功，返回订单编号和openId");
+        return ResponseMessage.newSuccessInstance(orderNumber, "创建订单成功，返回订单编号和openId");
     }
 
     /**
      * 创建购物车类订单
+     *
      * @param orderDTO：留言，用户收货地址，邮费
      * @return
      */
@@ -127,6 +142,8 @@ public class OrderController {
             throw new ApiOrderGoodsCartGoodsNotMatchException(e.getMessage());
         } catch (OrderPriceNotMatchException e) {
             throw new ApiOrderPriceNotMatchException(e.getMessage());
+        } catch (OrderGoodsNotExistException e) {
+            throw new ApiOrderGoodsNotExistException(e.getMessage());
         } catch (Exception e) {
             throw new ApiException(e);
         }
@@ -135,6 +152,7 @@ public class OrderController {
 
     /**
      * 通过订单号进行微信支付
+     *
      * @param orderNumber：orderNumber订单号
      * @return 返回前端调起微信支付所需的支付参数（5个参数和sign）
      */
@@ -155,7 +173,7 @@ public class OrderController {
     })
     @GetMapping("/wxpay/{orderNumber}")
     public ResponseMessage<WxMiniPayOrderResult> wxpay(@ApiParam(name = "orderNumber", value = "订单编号", required = true)
-                                 @NotBlank(message = "订单号传入为空") @PathVariable String orderNumber) {
+                                                       @NotBlank(message = "订单号传入为空") @PathVariable String orderNumber) {
         OrderVO orderVO = orderService.selectOrderVOByOrderNumber(orderNumber);
         User user = JwtFilter.getLoginUser();
         if (orderVO == null) {
@@ -182,7 +200,7 @@ public class OrderController {
             Object orderResponse = wxPayService.createOrder(orderRequest);
             logger.info("调用微信支付接口，返回参数[{}]", orderResponse);
             WxMiniPayOrderResult wxMiniPayOrderResult = new WxMiniPayOrderResult();
-            BeanUtils.copyProperties("orderResponse","wxMiniPayOrderResult");
+            BeanUtils.copyProperties("orderResponse", "wxMiniPayOrderResult");
             return ResponseMessage.newSuccessInstance(wxMiniPayOrderResult, "返回支付参数");
         } catch (WxPayException e) {
             logger.error("微信支付失败！订单号：{},原因:{}", orderNumber, e.getMessage());
@@ -193,6 +211,7 @@ public class OrderController {
 
     /**
      * 支付回调通知处理
+     *
      * @param xmlData 相关支付结果及用户信息(微信端提供)
      * @return 向微信服务端返回应答
      * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--申请退款(待商家处理) 5--退款中(待商家收货) 6--退款成功 7--退款失败 8--交易关闭 9--所有订单
@@ -257,6 +276,7 @@ public class OrderController {
     /**
      * 列出用户相关状态所有订单
      * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
+     *
      * @param status：订单状态标识
      * @return
      */
@@ -269,8 +289,8 @@ public class OrderController {
                     "退款状态定义：status 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败")
     @GetMapping("/getUserOrderList/status/{status}")
     public ResponseMessage<List<OrderVO>> getUserOrderList(@Max(value = 5, message = "订单标识最大值为5")
-                                                            @Min(value = 0, message = "订单标识最小值为0")
-                                                            @ApiParam(name = "status", value = "订单状态标识", required = true) @PathVariable Integer status) {
+                                                           @Min(value = 0, message = "订单标识最小值为0")
+                                                           @ApiParam(name = "status", value = "订单状态标识", required = true) @PathVariable Integer status) {
         List<OrderVO> orderVOList = orderService.getUserOrderList(status);
         if (orderVOList != null && orderVOList.size() != 0) {
             return ResponseMessage.newSuccessInstance(orderVOList, "获取订单列表成功");
@@ -288,8 +308,8 @@ public class OrderController {
                     "退款状态定义：status 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败")
     @GetMapping("/getOrderList/status/{status}")
     public ResponseMessage<List<OrderVO>> getOrderList(@Max(value = 5, message = "订单标识最大值为5")
-                                                        @Min(value = 0, message = "订单标识最小值为0")
-                                                        @ApiParam(name = "status", value = "订单状态标识", required = true) @PathVariable Integer status) {
+                                                       @Min(value = 0, message = "订单标识最小值为0")
+                                                       @ApiParam(name = "status", value = "订单状态标识", required = true) @PathVariable Integer status) {
         List<OrderVO> orderVOList = orderService.getOrderList(status);
         if (orderVOList != null && orderVOList.size() != 0) {
             return ResponseMessage.newSuccessInstance(orderVOList, "获取订单列表成功");
@@ -302,6 +322,7 @@ public class OrderController {
      * 订单状态自增修改，适用于待付款、待发货、待收货类订单
      * 订单状态定义：status 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 0--待付款 1--待发货 2--待收货 状态订单 更新订单状态
+     *
      * @param orderNumber:订单编号
      * @return
      */

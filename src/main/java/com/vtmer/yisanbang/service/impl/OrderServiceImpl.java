@@ -130,12 +130,6 @@ public class OrderServiceImpl implements OrderService {
         if (cartVo == null) {
             throw new CartEmptyException();
         }
-        if (cartVo.getTotalPrice() >= standardPrice) {
-            // 包邮
-            orderVO.setPostage((double) 0);
-        } else {  // 不包邮
-            orderVO.setPostage(defaultPostage);
-        }
         List<CartGoodsDTO> cartGoodsList = cartVo.getCartGoodsList();
         // IDEA推荐方式，删除为勾选的购物车商品
         cartGoodsList.removeIf(cartGoodsDto -> cartGoodsDto.getWhetherChosen().equals(Boolean.FALSE));
@@ -147,7 +141,17 @@ public class OrderServiceImpl implements OrderService {
             BeanUtils.copyProperties(cartGoodsDTO, orderGoodsDTO);
             orderGoodsDTOArrayList.add(orderGoodsDTO);
         }
+        boolean check = judgeGoodsExist(orderGoodsDTOArrayList);
+        if (!check) {
+            throw new OrderGoodsNotExistException();
+        }
         orderVO.setOrderGoodsDTOList(orderGoodsDTOArrayList);
+        if (cartVo.getTotalPrice() >= standardPrice) {
+            // 包邮
+            orderVO.setPostage((double) 0);
+        } else {  // 不包邮
+            orderVO.setPostage(defaultPostage);
+        }
         UserAddress userAddress = userAddressMapper.selectDefaultByUserId(userId);
         orderVO.setUserAddress(userAddress);
         return orderVO;
@@ -155,6 +159,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderVO confirmDirectOrder(List<OrderGoodsDTO> orderGoodsDTOList) {
+        boolean check = judgeGoodsExist(orderGoodsDTOList);
+        if (!check) {
+            throw new OrderGoodsNotExistException();
+        }
         Integer userId = JwtFilter.getLoginUser().getId();
         OrderVO orderVO = new OrderVO();
         // 优惠前总价
@@ -188,13 +196,17 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public String createCartOrder(OrderDTO orderDTO) {
+        List<OrderGoodsDTO> orderGoodsDTOList = orderDTO.getOrderGoodsDTOList();
+        boolean check = judgeGoodsExist(orderGoodsDTOList);
+        if (!check) {
+            throw new OrderGoodsNotExistException();
+        }
         // 获取用户购物车清单
         CartVO cartVo = cartService.selectCartVo();
         // 获取用户购物车商品列表
         List<CartGoodsDTO> cartGoodsList = cartVo.getCartGoodsList();
         // 删除未勾选商品,得到购物车勾选商品列表
         cartGoodsList.removeIf(cartGoodsDto -> cartGoodsDto.getWhetherChosen().equals(Boolean.FALSE));
-        List<OrderGoodsDTO> orderGoodsDTOList = orderDTO.getOrderGoodsDTOList();
 
         // 第一步校验 —— 检查前端传递的订单总价和后台计算的订单总价是否一致
         // 前端传递的订单总价
@@ -214,7 +226,7 @@ public class OrderServiceImpl implements OrderService {
         // 遍历订单商品列表
         for (OrderGoodsDTO orderGoodsDTO : orderGoodsDTOList) {
             // 默认为false
-            Boolean checkOrderGoods = false;
+            boolean checkOrderGoods = false;
             Integer orderColorSizeId = orderGoodsDTO.getColorSizeId();
             Boolean orderWhetherGoods = orderGoodsDTO.getWhetherGoods();
             Integer orderAmount = orderGoodsDTO.getAmount();
@@ -244,6 +256,38 @@ public class OrderServiceImpl implements OrderService {
         return orderNumber;
     }
 
+    private boolean judgeGoodsExist(List<OrderGoodsDTO> orderGoodsDTOList) {
+        boolean check = true;
+        for (OrderGoodsDTO orderGoodsDTO : orderGoodsDTOList) {
+            boolean whetherGoods = orderGoodsDTO.getWhetherGoods();
+            Integer sizeId = orderGoodsDTO.getColorSizeId();
+            if (whetherGoods) {
+                // 如果是普通商品
+                ColorSize colorSize = colorSizeMapper.selectByPrimaryKey(sizeId);
+                if (colorSize == null) {
+                    // 如果该颜色尺寸不存在
+                    check = false;
+                }
+                Goods goods = goodsMapper.selectByPrimaryKey(colorSize.getGoodsId());
+                if (goods == null) {
+                    // 如果商品不存在
+                    check = false;
+                }
+            } else {
+                PartSize partSize = partSizeMapper.selectByPrimaryKey(sizeId);
+                if (partSize == null) {
+                    // 该部件尺寸不存在
+                    check = false;
+                }
+                Suit suit = suitMapper.selectByPrimaryKey(partSize.getSuitId());
+                if (suit == null) {
+                    check = false;
+                }
+            }
+        }
+        return check;
+    }
+
     /**
      * 创建直接下单类订单
      *
@@ -252,10 +296,17 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public String createDirectOrder(OrderDTO orderDTO) {
+        // 判断直接下单的商品是否存在
+        List<OrderGoodsDTO> orderGoodsDTOList = orderDTO.getOrderGoodsDTOList();
+        boolean check = judgeGoodsExist(orderGoodsDTOList);
+        if (!check) {
+            // 如果商品或商品SKU不存在
+            throw new OrderGoodsNotExistException();
+        }
         // 获取用户订单商品列表和优惠后的总价
         Double totalPrice = orderDTO.getTotalPrice();
         logger.info("前端传递的订单总价为[{}]", totalPrice);
-        List<OrderGoodsDTO> orderGoodsDTOList = orderDTO.getOrderGoodsDTOList();
+
         // 前端传递的订单总价，在后台校验一遍
         double totalPriceCheck = calculateTotalPrice(orderGoodsDTOList);
         if (!totalPrice.equals(totalPriceCheck)) {
