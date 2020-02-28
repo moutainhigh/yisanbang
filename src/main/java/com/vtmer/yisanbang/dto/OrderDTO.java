@@ -27,6 +27,7 @@ public class OrderDTO {
     private List<OrderGoodsDTO> orderGoodsDTOList;
 
     // 留言
+    @NotNull(message = "订单留言为空")
     @ApiModelProperty(value = "订单留言",required = false,example = "不要发货，我钱多")
     private String message;
 
