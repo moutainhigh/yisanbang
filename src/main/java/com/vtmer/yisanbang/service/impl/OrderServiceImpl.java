@@ -520,7 +520,6 @@ public class OrderServiceImpl implements OrderService {
             if (status >= 0 && status < 3) { // 如果订单状态是待付款、待发货、待收货
                 // 更新订单状态
                 int res = orderMapper.updateOrderStatus(order.getId());
-                logger.info("更新订单[{}]状态：[待收货]-->[已完成]", orderNumber);
                 return res;
             } else {
                 // 订单状态不能自增修改
