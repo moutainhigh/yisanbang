@@ -2,9 +2,13 @@ package com.vtmer.yisanbang.common.aop;
 
 import com.vtmer.yisanbang.common.annotation.RequestLog;
 import com.vtmer.yisanbang.common.util.JwtUtil;
+import com.vtmer.yisanbang.domain.User;
+import com.vtmer.yisanbang.shiro.JwtFilter;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
@@ -36,8 +40,8 @@ public class SystemLogAspect {
     /**
      * 配置controller环绕通知,使用在方法aspect()上注册的切入点
      */
-    @Around("controllerAspect()")
-    public Object aroundMethod(ProceedingJoinPoint point) throws Throwable {
+    @Before("controllerAspect()")
+    public void aroundMethod(JoinPoint point) throws Throwable {
         if (logger.isDebugEnabled()) {
             logger.info(">>>>>>>>>>>>>>>进入日志切面<<<<<<<<<<<<<<<<");
         }
@@ -56,26 +60,12 @@ public class SystemLogAspect {
         String token = request.getHeader(JwtUtil.TOKEN_HEADER);
         if (token != null) {
             Integer userIdByToken = JwtUtil.getUserIdByToken(token);
-            logger.info("Current userId is:[{}]",userIdByToken);
+            logger.info("Current UserId is:[{}]",userIdByToken);
         }
         if (Arrays.toString(point.getArgs()).equals("")) {
             //打印请求参数，如果需要打印其他的信息可以到request中去拿
             logger.info("RequestParam:{}", Arrays.toString(point.getArgs()));
         }
-        // 返回通知(操作成功:1,操作失败:2)
-        int status = 0;
-        try {
-            point.proceed();
-            // 设置请求结果
-            // 返回通知(操作成功:1,操作失败:2)
-            status = 1;
-        } catch (Throwable e) {
-            status = 2;
-        } finally {
-            // 后置通知
-            logger.info("后置通知>>>>>>>>>>>>>>>操作模块：" + module + ",操作方法：" + methodTarget + "，操作行为：" + desc + ",操作结果：" + status + "!(操作成功:1,操作失败:2)<<<<<<<<<<<<<<<<");
-        }
-        return null;
     }
 
     /**
