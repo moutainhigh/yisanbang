@@ -339,7 +339,7 @@ public class RefundController {
      */
     @RequestLog(module = "退款", operationDesc = "商家拒绝退款申请")
     @ApiOperation(value = "商家拒绝退款申请", notes = "商家拒绝退款申请调用，退款状态：【待商家处理】-->【退款失败】")
-    @PutMapping("/refuseApplication")
+    @PutMapping("/refuseApplication/{refundNumber}")
     public ResponseMessage refuseApplication(@ApiParam(name = "refundNumber", value = "退款编号", example = "12345678998765432110", required = true)
                                              @NotBlank(message = "退款编号为空") @PathVariable String refundNumber) {
         try {

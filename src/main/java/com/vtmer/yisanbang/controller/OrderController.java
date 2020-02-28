@@ -2,6 +2,8 @@ package com.vtmer.yisanbang.controller;
 
 import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
 import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
+import com.github.binarywang.wxpay.bean.order.WxPayAppOrderResult;
+import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.github.binarywang.wxpay.bean.request.BaseWxPayRequest;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.bean.result.BaseWxPayResult;
@@ -197,10 +199,10 @@ public class OrderController {
             orderRequest.setOpenid(openId);
             orderRequest.setSpbillCreateIp(spbillCreateIp);
             logger.info("调用微信支付接口，调用参数[{}]", orderRequest);
-            Object orderResponse = wxPayService.createOrder(orderRequest);
-            logger.info("调用微信支付接口，返回参数[{}]", orderResponse);
+            WxPayMpOrderResult wxPayMpOrderResult = wxPayService.createOrder(orderRequest);
+            logger.info("调用微信支付接口，返回参数[{}]", wxPayMpOrderResult);
             WxMiniPayOrderResult wxMiniPayOrderResult = new WxMiniPayOrderResult();
-            BeanUtils.copyProperties("orderResponse", "wxMiniPayOrderResult");
+            BeanUtils.copyProperties(wxPayMpOrderResult, wxMiniPayOrderResult);
             return ResponseMessage.newSuccessInstance(wxMiniPayOrderResult, "返回支付参数");
         } catch (WxPayException e) {
             logger.error("微信支付失败！订单号：{},原因:{}", orderNumber, e.getMessage());

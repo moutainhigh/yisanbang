@@ -30,6 +30,7 @@ public class OrderDTO {
     @ApiModelProperty(value = "订单留言",required = false,example = "不要发货，我钱多")
     private String message;
 
+    @NotNull(groups = {Insert.class},message = "邮费金额为空")
     @ApiModelProperty(value = "邮费",example = "8",notes = "提交订单时需要传邮费")
     private Double postage;
 

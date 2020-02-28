@@ -290,10 +290,10 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 创建直接下单类订单
-     *
      * @param orderDTO
      * @return
      */
+    @Transactional
     @Override
     public String createDirectOrder(OrderDTO orderDTO) {
         // 判断直接下单的商品是否存在
@@ -348,9 +348,24 @@ public class OrderServiceImpl implements OrderService {
         for (OrderGoodsDTO orderGoodsDTO : orderGoodsDTOList) {
             // 生成orderGoods
             OrderGoods orderGoods = new OrderGoods();
-            Boolean whetherGoods = orderGoodsDTO.getWhetherGoods();
+            boolean whetherGoods = orderGoodsDTO.getWhetherGoods();
             Integer amount = orderGoodsDTO.getAmount();
             Integer colorSizeId = orderGoodsDTO.getColorSizeId();
+            // 商品库存
+            int inventory = 0;
+            if (whetherGoods) {
+                // 如果是普通商品
+                ColorSize colorSize = colorSizeMapper.selectByPrimaryKey(colorSizeId);
+                inventory = colorSize.getInventory();
+            } else {
+                PartSize partSize = partSizeMapper.selectByPrimaryKey(colorSizeId);
+                inventory = partSize.getInventory();
+            }
+            if (inventory < amount) {
+                // 如果下单商品库存不足
+                logger.info("商品库存不足--商品skuId[{}],是否是普通商品[{}],需要数量[{}],库存数量[{}]",colorSizeId,whetherGoods,amount,inventory);
+                throw new InventoryNotEnoughException("商品库存不足--商品skuId：" + colorSizeId + ",是否是普通商品:" + whetherGoods + ",需要数量" + amount);
+            }
             orderGoods.setOrderId(order.getId());
             orderGoods.setWhetherGoods(whetherGoods);
             orderGoods.setAmount(amount);
@@ -364,15 +379,10 @@ public class OrderServiceImpl implements OrderService {
             inventoryMap.put("sizeId", colorSizeId);
             // 0代表减少库存
             inventoryMap.put("flag", 0);
-            int res;
-            if (whetherGoods.equals(Boolean.TRUE)) {
-                res = colorSizeMapper.updateInventoryByPrimaryKey(inventoryMap);
+            if (Boolean.TRUE.equals(whetherGoods)) {
+                colorSizeMapper.updateInventoryByPrimaryKey(inventoryMap);
             } else {
-                res = partSizeMapper.updateInventoryByPrimaryKey(inventoryMap);
-            }
-            if (res == 0) {
-                // 如果更新失败，说明库存不足
-                throw new InventoryNotEnoughException("商品库存不足--商品skuId：" + colorSizeId + ",是否是普通商品:" + whetherGoods + ",需要数量" + amount);
+                partSizeMapper.updateInventoryByPrimaryKey(inventoryMap);
             }
         } // end for
         return orderNumber;
