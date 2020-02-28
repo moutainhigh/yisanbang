@@ -549,16 +549,12 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public void setOrderStatus(Map<String, Integer> orderMap) {
-        Integer userId = JwtFilter.getLoginUser().getId();
         Integer orderId = orderMap.get("orderId");
         Integer status = orderMap.get("status");
         Order order = orderMapper.selectByPrimaryKey(orderId);
         if (order != null) {
             // 如果该订单存在
-            if (!userId.equals(order.getUserId())) {
-                // 订单和用户不匹配
-                throw new OrderAndUserNotMatchException("订单和用户不匹配--订单编号：" + order.getOrderNumber() + ",用户id：" + userId);
-            } else if (status.equals(order.getStatus())) {
+            if (status.equals(order.getStatus())) {
                 // 如果将要修改的订单状态与原状态相同
                 throw new OrderStatusNotFitException("将要修改的订单状态与原状态相同");
             } else { // 更新订单状态
