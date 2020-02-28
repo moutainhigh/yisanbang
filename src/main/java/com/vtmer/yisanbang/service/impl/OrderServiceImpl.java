@@ -514,13 +514,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public int updateOrderStatus(String orderNumber) {
         Order order = orderMapper.selectByOrderNumber(orderNumber);
-        Integer userId = JwtFilter.getLoginUser().getId();
         if (order != null) {
             // 如果该订单存在
-            if (!userId.equals(order.getUserId())) {
-                // 订单和用户不匹配
-                throw new OrderAndUserNotMatchException("订单和用户不匹配--订单编号：" + orderNumber + ",用户id：" + userId);
-            }
             Integer status = order.getStatus();
             if (status >= 0 && status < 3) { // 如果订单状态是待付款、待发货、待收货
                 // 更新订单状态

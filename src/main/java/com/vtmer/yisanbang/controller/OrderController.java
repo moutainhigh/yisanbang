@@ -261,7 +261,7 @@ public class OrderController {
             // 如果交易成功(支付成功)
             if ("SUCCESS".equals(notifyResult.getResultCode())) {
                 if (order.getStatus() == 0) { // 判断订单状态，避免微信重复通知调用该接口，如果该订单的状态是未付款
-                    int res = orderService.updateOrderStatus(order.getOrderNumber());// 更新该订单为待发货
+                    int res = orderService.updateOrderStatus(orderNumber);// 更新该订单为待发货
                     logger.info("更新订单[{}]状态：[未付款]-->[待发货]", orderNumber);
                     if (res == 0) { // 如果更新订单状态失败
                         logger.warn("更新订单[{}]状态：[未付款]-->[待发货]出现异常", orderNumber);
