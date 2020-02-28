@@ -256,7 +256,7 @@ public class OrderServiceImpl implements OrderService {
         return orderNumber;
     }
 
-    private boolean judgeGoodsExist(List<OrderGoodsDTO> orderGoodsDTOList) {
+    public boolean judgeGoodsExist(List<OrderGoodsDTO> orderGoodsDTOList) {
         boolean check = true;
         for (OrderGoodsDTO orderGoodsDTO : orderGoodsDTOList) {
             boolean whetherGoods = orderGoodsDTO.getWhetherGoods();

@@ -19,6 +19,13 @@ public interface OrderService {
     String createDirectOrder(OrderDTO orderDTO);
 
     /**
+     * 判断订单中商品是否是否存在
+     * @param orderGoodsDTOList
+     * @return
+     */
+    boolean judgeGoodsExist(List<OrderGoodsDTO> orderGoodsDTOList);
+
+    /**
      * 获取用户的状态订单
      * @param status
      * @return
