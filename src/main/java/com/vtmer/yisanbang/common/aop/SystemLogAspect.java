@@ -2,8 +2,6 @@ package com.vtmer.yisanbang.common.aop;
 
 import com.vtmer.yisanbang.common.annotation.RequestLog;
 import com.vtmer.yisanbang.common.util.JwtUtil;
-import com.vtmer.yisanbang.domain.User;
-import com.vtmer.yisanbang.shiro.JwtFilter;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -57,8 +55,8 @@ public class SystemLogAspect {
         //这里是从token中获取用户信息，打印当前的访问用户
         String token = request.getHeader(JwtUtil.TOKEN_HEADER);
         if (token != null) {
-            User user = JwtFilter.getLoginUser();
-            logger.info("Current UserId is:[{}]",user.getId());
+            Integer userIdByToken = JwtUtil.getUserIdByToken(token);
+            logger.info("Current token is:[{}]",userIdByToken);
         }
         if (Arrays.toString(point.getArgs()).equals("")) {
             //打印请求参数，如果需要打印其他的信息可以到request中去拿

@@ -146,6 +146,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
 
     public static User getLoginUser() {
         User user = t1.get();
+        t1.remove();
         return user;
     }
 }

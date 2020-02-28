@@ -64,7 +64,7 @@ public class OrderController {
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @ApiOperation(value = "确认购物车订单", notes = "点击去结算，显示确认订单页面")
-    @GetMapping("confirmCartOrder")
+    @PostMapping("confirmCartOrder")
     public ResponseMessage<OrderVO> confirmCartOrder() {
         OrderVO orderVO;
         try {
@@ -75,8 +75,8 @@ public class OrderController {
         return ResponseMessage.newSuccessInstance(orderVO, "获取确认订单相关信息成功");
     }
 
-    //@RequestLog(module = "订单", operationDesc = "确认[直接购买]订单")
-    @GetMapping("confirmDirectOrder")
+    @RequestLog(module = "订单", operationDesc = "确认[直接购买]订单")
+    @PostMapping("confirmDirectOrder")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
@@ -207,7 +207,7 @@ public class OrderController {
      * 特别提醒：商户系统对于支付结果通知的内容一定要做签名验证,并校验返回的订单金额是否与商户侧的订单金额一致，防止数据泄漏导致出现“假通知”，造成资金损失。
      */
     @ApiIgnore
-    //@RequestLog(module = "订单", operationDesc = "支付回调通知处理")
+    @RequestLog(module = "订单", operationDesc = "支付回调通知处理")
     @PostMapping("/wxNotify")
     public String parseOrderNotifyResult(@RequestBody String xmlData) {
         try {

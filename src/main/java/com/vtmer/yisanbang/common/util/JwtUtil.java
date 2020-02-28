@@ -118,7 +118,7 @@ public class JwtUtil {
     /**
      * 根据token获取userId
      */
-    public Integer getUserIdByToken(String token) throws JWTDecodeException {
+    public static Integer getUserIdByToken(String token) throws JWTDecodeException {
         return JWT.decode(token).getClaim("userId").asInt();
     }
 
