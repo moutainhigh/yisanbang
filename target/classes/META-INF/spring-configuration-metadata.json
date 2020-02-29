@@ -1,0 +1,54 @@
+{
+  "groups": [
+    {
+      "name": "wx.pay",
+      "type": "com.vtmer.yisanbang.common.config.WxPayProperties",
+      "sourceType": "com.vtmer.yisanbang.common.config.WxPayProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "wx.pay.app-id",
+      "type": "java.lang.String",
+      "description": "设置小程序的appId",
+      "sourceType": "com.vtmer.yisanbang.common.config.WxPayProperties"
+    },
+    {
+      "name": "wx.pay.key-path",
+      "type": "java.lang.String",
+      "description": "apiclient_cert.p12文件的绝对路径，或者如果放在项目中，请以classpath:开头指定",
+      "sourceType": "com.vtmer.yisanbang.common.config.WxPayProperties"
+    },
+    {
+      "name": "wx.pay.mch-id",
+      "type": "java.lang.String",
+      "description": "微信支付商户号",
+      "sourceType": "com.vtmer.yisanbang.common.config.WxPayProperties"
+    },
+    {
+      "name": "wx.pay.mch-key",
+      "type": "java.lang.String",
+      "description": "微信支付商户密钥1",
+      "sourceType": "com.vtmer.yisanbang.common.config.WxPayProperties"
+    },
+    {
+      "name": "wx.pay.pay-notify-u-r-l",
+      "type": "java.lang.String",
+      "description": "payNotifyURL:异步接收微信支付结果通知的回调地址，通知url必须为外网可访问的url，不能携带参数。",
+      "sourceType": "com.vtmer.yisanbang.common.config.WxPayProperties"
+    },
+    {
+      "name": "wx.pay.refund-notify-u-r-l",
+      "type": "java.lang.String",
+      "description": "refundNotifyURL:异步接收微信退款结果通知的回调地址，通知url必须为外网可访问的url，不能携带参数。",
+      "sourceType": "com.vtmer.yisanbang.common.config.WxPayProperties"
+    },
+    {
+      "name": "wx.pay.trade-type",
+      "type": "java.lang.String",
+      "description": "tradeType：交易类型，小程序为JSAPI",
+      "sourceType": "com.vtmer.yisanbang.common.config.WxPayProperties"
+    }
+  ],
+  "hints": []
+}

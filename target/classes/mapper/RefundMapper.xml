@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vtmer.yisanbang.mapper.RefundMapper">
+  <sql id="BaseColumnList">
+    id,refund_price,refund_number, user_id, order_id, reason, status,is_received, create_time, update_time
+  </sql>
+  <resultMap id="BaseResultMap" type="com.vtmer.yisanbang.domain.Refund">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="refund_number" jdbcType="VARCHAR" property="refundNumber" />
+    <result column="refund_price" jdbcType="DOUBLE" property="refundPrice" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="order_id" jdbcType="INTEGER" property="orderId" />
+    <result column="reason" jdbcType="VARCHAR" property="reason" />
+    <result column="status" jdbcType="BIT" property="status" />
+    <result column="is_received" jdbcType="TINYINT" property="whetherReceived"/>
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from refund
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByRefundNumber" parameterType="java.lang.String">
+    delete from refund
+    where refund_number = #{refundNumber}
+  </delete>
+  <delete id="deleteByOrderId" parameterType="java.lang.Integer">
+    delete from refund
+    where order_id = #{orderId}
+  </delete>
+  <insert id="insert" parameterType="com.vtmer.yisanbang.domain.Refund" useGeneratedKeys="true" keyProperty="id">
+    insert into refund (refund_number, user_id,refund_price,
+      order_id, reason,is_received)
+    values (#{refundNumber,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER},#{refundPrice,jdbcType=DOUBLE},
+      #{orderId,jdbcType=INTEGER}, #{reason,jdbcType=VARCHAR}, #{whetherReceived,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.vtmer.yisanbang.domain.Refund">
+    update refund
+    set refund_number = #{refundNumber,jdbcType=VARCHAR},
+      refund_price = #{refundPrice,jdbcType=DOUBLE},
+      user_id = #{userId,jdbcType=INTEGER},
+      order_id = #{orderId,jdbcType=INTEGER},
+      reason = #{reason,jdbcType=VARCHAR},
+      status = #{status,jdbcType=BIT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateReasonByOrderId">
+    update refund
+    set reason = #{reason}
+    where order_id = #{orderId}
+  </update>
+  <update id="updateStatusByOrderId">
+    update refund
+    set status = #{status}
+    where order_id = #{orderId}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id,refund_price, refund_number, user_id, order_id, reason, status, create_time, update_time
+    from refund
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, refund_price,refund_number, user_id, order_id, reason, status, create_time, update_time
+    from refund
+  </select>
+  <select id="selectByOrderId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="BaseColumnList"/>
+    from refund
+    where order_id = #{orderId}
+  </select>
+  <select id="selectByRefundNumber" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="BaseColumnList"/>
+    from refund
+    where refund_number = #{refundNumber,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByStatus" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="BaseColumnList"/>
+    from refund
+    <if test="status!=5">
+      where status = #{status}
+    </if>
+  </select>
+</mapper>
