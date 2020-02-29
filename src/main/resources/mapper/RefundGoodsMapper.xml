@@ -8,7 +8,7 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="refund_id" jdbcType="INTEGER" property="refundId" />
     <result column="size_id" jdbcType="INTEGER" property="sizeId" />
-    <result column="is_goods" jdbcType="BIT" property="isGoods" />
+    <result column="is_goods" jdbcType="TINYINT" property="whetherGoods" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
@@ -23,13 +23,13 @@
   <insert id="insert" parameterType="com.vtmer.yisanbang.domain.RefundGoods">
     insert into refund_goods ( refund_id, size_id, is_goods)
     values (#{refundId,jdbcType=INTEGER}, #{sizeId,jdbcType=INTEGER},
-      #{isGoods,jdbcType=BIT})
+      #{whetherGoods,jdbcType=TINYINT})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.vtmer.yisanbang.domain.RefundGoods">
     update refund_goods
     set refund_id = #{refundId,jdbcType=INTEGER},
       size_id = #{sizeId,jdbcType=INTEGER},
-      is_goods = #{isGoods,jdbcType=BIT},
+      is_goods = #{whetherGoods,jdbcType=BIT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
@@ -45,7 +45,7 @@
     <include refid="BaseColumnList"/>
     from refund_goods
   </select>
-  <select id="selectByRefundId" resultType="com.vtmer.yisanbang.domain.RefundGoods">
+  <select id="selectByRefundId" resultMap="BaseResultMap">
     select
     <include refid="BaseColumnList"/>
     from refund_goods

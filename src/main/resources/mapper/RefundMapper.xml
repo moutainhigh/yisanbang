@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.vtmer.yisanbang.mapper.RefundMapper">
   <sql id="BaseColumnList">
-    id, refund_price,refund_number, user_id, order_id, reason, status,is_received, create_time, update_time
+    id,refund_price,refund_number, user_id, order_id, reason, status,is_received, create_time, update_time
   </sql>
   <resultMap id="BaseResultMap" type="com.vtmer.yisanbang.domain.Refund">
     <id column="id" jdbcType="INTEGER" property="id" />
@@ -12,7 +12,7 @@
     <result column="order_id" jdbcType="INTEGER" property="orderId" />
     <result column="reason" jdbcType="VARCHAR" property="reason" />
     <result column="status" jdbcType="BIT" property="status" />
-    <result column="is_received" jdbcType="INTEGER" property="isReceived"/>
+    <result column="is_received" jdbcType="TINYINT" property="whetherReceived"/>
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
@@ -32,7 +32,7 @@
     insert into refund (refund_number, user_id,refund_price,
       order_id, reason,is_received)
     values (#{refundNumber,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER},#{refundPrice,jdbcType=DOUBLE},
-      #{orderId,jdbcType=INTEGER}, #{reason,jdbcType=VARCHAR}, #{isReceived,jdbcType=INTEGER})
+      #{orderId,jdbcType=INTEGER}, #{reason,jdbcType=VARCHAR}, #{whetherReceived,jdbcType=INTEGER})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.vtmer.yisanbang.domain.Refund">
     update refund
@@ -65,19 +65,19 @@
     select id, refund_price,refund_number, user_id, order_id, reason, status, create_time, update_time
     from refund
   </select>
-  <select id="selectByOrderId" parameterType="java.lang.Integer" resultType="com.vtmer.yisanbang.domain.Refund">
+  <select id="selectByOrderId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
     <include refid="BaseColumnList"/>
     from refund
     where order_id = #{orderId}
   </select>
-  <select id="selectByRefundNumber" parameterType="java.lang.String" resultType="com.vtmer.yisanbang.domain.Refund">
+  <select id="selectByRefundNumber" parameterType="java.lang.String" resultMap="BaseResultMap">
     select
     <include refid="BaseColumnList"/>
     from refund
     where refund_number = #{refundNumber,jdbcType=VARCHAR}
   </select>
-  <select id="selectByStatus" parameterType="java.lang.Integer" resultType="com.vtmer.yisanbang.domain.Refund">
+  <select id="selectByStatus" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
     <include refid="BaseColumnList"/>
     from refund

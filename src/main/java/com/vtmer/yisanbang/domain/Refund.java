@@ -2,11 +2,13 @@ package com.vtmer.yisanbang.domain;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @ApiModel
+@Data
 public class Refund {
 
     @ApiModelProperty(value = "退款id",example = "3")
@@ -33,7 +35,7 @@ public class Refund {
     private Integer status;
 
     @ApiModelProperty(hidden = true)
-    private Integer isReceived;
+    private Boolean whetherReceived;
 
     @ApiModelProperty(value = "退款单创建时间")
     private Date createTime;
@@ -41,83 +43,4 @@ public class Refund {
     @ApiModelProperty(hidden = true)
     private Date updateTime;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getRefundNumber() {
-        return refundNumber;
-    }
-
-    public void setRefundNumber(String refundNumber) {
-        this.refundNumber = refundNumber == null ? null : refundNumber.trim();
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public Integer getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(Integer orderId) {
-        this.orderId = orderId;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason == null ? null : reason.trim();
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public Double getRefundPrice() {
-        return refundPrice;
-    }
-
-    public void setRefundPrice(Double refundPrice) {
-        this.refundPrice = refundPrice;
-    }
-
-    public Integer getIsReceived() {
-        return isReceived;
-    }
-
-    public void setIsReceived(Integer isReceived) {
-        this.isReceived = isReceived;
-    }
 }

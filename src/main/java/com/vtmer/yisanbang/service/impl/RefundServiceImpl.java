@@ -25,7 +25,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.Valid;
 import java.util.*;
 
 @Service
@@ -94,10 +93,10 @@ public class RefundServiceImpl implements RefundService {
         // 退款商品不为空
         if (refundGoodsList != null && refundGoodsList.size() != 0) {
             // 设置为已收货类退款订单
-            refund.setIsReceived(1);
+            refund.setWhetherReceived(true);
         } else {
             // 未传退款商品，说明是未收货，全退
-            refund.setIsReceived(0);
+            refund.setWhetherReceived(false);
         }
         refund.setUserId(userId);
         String refundNumber;
@@ -112,7 +111,7 @@ public class RefundServiceImpl implements RefundService {
         refund.setRefundNumber(refundNumber);
         // 设置退款金额
         // 如果是未收货订单，直接设置退款金额为订单金额
-        if (refund.getIsReceived() == 0) {
+        if (refund.getWhetherReceived().equals(false)) {
             refund.setRefundPrice(order.getTotalPrice());
         }
         // 如果是已收货订单，部分部分退款；此时的退款金额不需要设置，前端传递
@@ -122,7 +121,7 @@ public class RefundServiceImpl implements RefundService {
             for (GoodsSkuDTO goodsSkuDto : refundGoodsList) {
                 RefundGoods refundGoods = new RefundGoods();
                 refundGoods.setRefundId(refund.getId());
-                refundGoods.setIsGoods(goodsSkuDto.getWhetherGoods());
+                refundGoods.setWhetherGoods(goodsSkuDto.getWhetherGoods());
                 refundGoods.setSizeId(goodsSkuDto.getColorSizeId());
                 refundGoodsMapper.insert(refundGoods);
             }
@@ -179,7 +178,8 @@ public class RefundServiceImpl implements RefundService {
         // 封装退款相关信息
         refundVo.setRefund(refund);
         // 如果该退款是未收到货类型退款(全退),则从订单表中查询退款商品详情
-        if (refund.getIsReceived() == 0) {
+        if (Boolean.TRUE.equals(refund.getWhetherReceived())) {
+            logger.info("全退类型订单");
             Integer orderId = refund.getOrderId();
             Order order = orderMapper.selectByPrimaryKey(orderId);
             // 封装退款商品详情
@@ -187,16 +187,17 @@ public class RefundServiceImpl implements RefundService {
             List<OrderGoodsDTO> orderGoodsDTOList = orderVO.getOrderGoodsDTOList();
             refundVo.setRefundGoodsList(orderGoodsDTOList);
         } else {
+            logger.info("部分退订单");
             // 如果是部分退
             List<OrderGoodsDTO> refundGoodsList1 = new ArrayList<>();
-            // 查询退款订单的商品详情
+            // 查询订单商品详情
             List<OrderGoods> orderGoodsList = orderGoodsMapper.selectByOrderId(refund.getOrderId());
             // 查询退款商品详情
             List<RefundGoods> refundGoodsList = refundGoodsMapper.selectByRefundId(refund.getId());
             for (RefundGoods refundGoods : refundGoodsList) {
                 OrderGoodsDTO orderGoodsDTO = new OrderGoodsDTO();
                 Integer sizeId = refundGoods.getSizeId();
-                Boolean isGoods = refundGoods.getIsGoods();
+                Boolean isGoods = refundGoods.getWhetherGoods();
                 for (OrderGoods orderGoods : orderGoodsList) {
                     // 由订单表设置退款商品的价格
                     if (isGoods.equals(orderGoods.getWhetherGoods()) && sizeId.equals(orderGoods.getSizeId())) {
@@ -227,7 +228,7 @@ public class RefundServiceImpl implements RefundService {
         Refund refund = selectByRefundNumber(refundNumber);
         if (refund == null) {
             throw new RefundNotFoundException();
-        } else if (refund.getStatus() != 2 && refund.getIsReceived() == 1) {
+        } else if (refund.getStatus() != 2 && refund.getWhetherReceived().equals(true)) {
             throw new RefundStatusNotFitException();
         }
         //订单id
@@ -303,7 +304,7 @@ public class RefundServiceImpl implements RefundService {
             throw new RefundNotMatchUserException("退款单["+refundNumber+"]不属于用户["+userId+"]");
         }
         // 开始撤销退款逻辑
-        if (refund.getIsReceived() == 1) { // 如果是已收到货的部分退款,删除该退款编号下的所有退款商品
+        if (refund.getWhetherReceived() == true) { // 如果是已收到货的部分退款,删除该退款编号下的所有退款商品
             refundGoodsMapper.deleteByRefundId(refund.getId());
         }
         refundMapper.deleteByRefundNumber(refundNumber);
