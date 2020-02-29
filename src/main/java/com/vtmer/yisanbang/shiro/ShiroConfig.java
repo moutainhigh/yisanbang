@@ -49,7 +49,7 @@ public class ShiroConfig {
         filterRuleMap.put("/ad/list", "anon");
         filterRuleMap.put("/carousel/list", "anon");
         // 管理员添加接口放行，方便测试
-        filterRuleMap.put("/admin/addAdmin", "anon");
+        //filterRuleMap.put("/admin/addAdmin", "anon");
         // get接口放行...
         // 分类模块接口放行
         filterRuleMap.put("/sort/get/**","anon");
