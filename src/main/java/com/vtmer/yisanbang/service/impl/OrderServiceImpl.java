@@ -553,7 +553,6 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void setOrderStatus(Map<String, Integer> orderMap) {
         Integer orderId = orderMap.get("orderId");
-        Integer status = orderMap.get("status");
         Order order = orderMapper.selectByPrimaryKey(orderId);
         if (order != null) {
             // 更新订单状态
@@ -763,7 +762,7 @@ public class OrderServiceImpl implements OrderService {
             inventoryMap.put("amount", amount);
             // 1代表增加库存,0代表减少库存
             inventoryMap.put("flag", flag);
-            if (isGoods.equals(Boolean.TRUE)) {
+            if (Boolean.TRUE.equals(isGoods)) {
                 colorSizeMapper.updateInventoryByPrimaryKey(inventoryMap);
             } else {
                 partSizeMapper.updateInventoryByPrimaryKey(inventoryMap);

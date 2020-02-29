@@ -166,10 +166,10 @@ public class RefundController {
                     HashMap<String, Integer> orderMap = new HashMap<>();
                     orderMap.put("orderId", refund.getOrderId());
                     orderMap.put("status", 3);
-                    logger.info("订单id[{}]状态更新为[已完成]", refund.getOrderId());
                     orderService.setOrderStatus(orderMap);
+                    logger.info("订单id[{}]状态更新为[已完成]", refund.getOrderId());
                     // 库存归位
-                    String orderNumber = refundResult.getOutRefundNo();
+                    String orderNumber = refundResult.getOutTradeNo();
                     // 1 代表增加库存
                     orderService.updateInventory(orderNumber, 1);
                     return ResponseMessage.newSuccessInstance("微信退款成功");
