@@ -89,9 +89,9 @@ public class RefundController {
     @GetMapping("/getByOrderId/{orderId}")
     public ResponseMessage<RefundVo> getByOrderId(@ApiParam(value = "订单id", example = "1", required = true, name = "orderId")
                                                   @NotNull(message = "订单id为空") @PathVariable Integer orderId) {
-        RefundVo refundVo = null;
+        RefundVo refundVo;
         try {
-            refundService.getRefundVoByOrderId(orderId);
+            refundVo = refundService.getRefundVoByOrderId(orderId);
         } catch (RefundNotFoundException e) {
             throw new ApiRefundNotFoundException(e.getMessage());
         } catch (Exception e) {

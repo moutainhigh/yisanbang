@@ -178,8 +178,7 @@ public class RefundServiceImpl implements RefundService {
         // 封装退款相关信息
         refundVo.setRefund(refund);
         // 如果该退款是未收到货类型退款(全退),则从订单表中查询退款商品详情
-        if (Boolean.TRUE.equals(refund.getWhetherReceived())) {
-            logger.info("全退类型订单");
+        if (Boolean.FALSE.equals(refund.getWhetherReceived())) {
             Integer orderId = refund.getOrderId();
             Order order = orderMapper.selectByPrimaryKey(orderId);
             // 封装退款商品详情
@@ -187,7 +186,6 @@ public class RefundServiceImpl implements RefundService {
             List<OrderGoodsDTO> orderGoodsDTOList = orderVO.getOrderGoodsDTOList();
             refundVo.setRefundGoodsList(orderGoodsDTOList);
         } else {
-            logger.info("部分退订单");
             // 如果是部分退
             List<OrderGoodsDTO> refundGoodsList1 = new ArrayList<>();
             // 查询订单商品详情
