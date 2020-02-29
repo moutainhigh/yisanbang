@@ -293,6 +293,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 创建直接下单类订单
+     *
      * @param orderDTO
      * @return
      */
@@ -347,6 +348,7 @@ public class OrderServiceImpl implements OrderService {
         int minute30Later = (int) (cal.getTimeInMillis() / 1000);
         // score为超时时间戳，zset集合值orderId4的分数
         zSetOps.add(order.getOrderNumber(), minute30Later);
+
         List<OrderGoodsDTO> orderGoodsDTOList = orderDTO.getOrderGoodsDTOList();
         for (OrderGoodsDTO orderGoodsDTO : orderGoodsDTOList) {
             // 生成orderGoods
@@ -366,7 +368,7 @@ public class OrderServiceImpl implements OrderService {
             }
             if (inventory < amount) {
                 // 如果下单商品库存不足
-                logger.info("商品库存不足--商品skuId[{}],是否是普通商品[{}],需要数量[{}],库存数量[{}]",colorSizeId,whetherGoods,amount,inventory);
+                logger.info("商品库存不足--商品skuId[{}],是否是普通商品[{}],需要数量[{}],库存数量[{}]", colorSizeId, whetherGoods, amount, inventory);
                 throw new InventoryNotEnoughException("商品库存不足--商品skuId：" + colorSizeId + ",是否是普通商品:" + whetherGoods + ",需要数量" + amount);
             }
             orderGoods.setOrderId(order.getId());
@@ -415,7 +417,6 @@ public class OrderServiceImpl implements OrderService {
      * 获取用户指定订单状态的订单
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败
-     *
      * @param status:status传入3时同时获取退款成功（3)的订单;status传入5查询所有订单
      * @return
      */
@@ -440,7 +441,6 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 根据标识获取相应订单列表
-     *
      * @param orderMap
      * @return
      */
@@ -471,7 +471,11 @@ public class OrderServiceImpl implements OrderService {
         UserAddress userAddress = new UserAddress();
         List<OrderGoodsDTO> orderGoodsDTOList = new ArrayList<>();
 
+        // 订单id
         orderVO.setOrderId(order.getId());
+
+        // 订单状态
+        orderVO.setOrderStatus(order.getStatus());
 
         // 用户地址封装
         userAddress.setUserId(order.getUserId());
@@ -549,16 +553,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void setOrderStatus(Map<String, Integer> orderMap) {
         Integer orderId = orderMap.get("orderId");
-        Integer status = orderMap.get("status");
         Order order = orderMapper.selectByPrimaryKey(orderId);
         if (order != null) {
-            // 如果该订单存在
-            if (status.equals(order.getStatus())) {
-                // 如果将要修改的订单状态与原状态相同
-                throw new OrderStatusNotFitException("将要修改的订单状态与原状态相同");
-            } else { // 更新订单状态
-                orderMapper.setOrderStatus(orderMap);
-            }
+            // 更新订单状态
+            orderMapper.setOrderStatus(orderMap);
         } else {
             // 订单不存在
             throw new OrderNotFoundException();
@@ -567,7 +565,6 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 删除订单 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
-     *
      * @param orderId
      * @return
      */
@@ -716,7 +713,6 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 用户取消订单
-     *
      * @param orderNumber：订单编号
      * @return
      */
@@ -766,7 +762,7 @@ public class OrderServiceImpl implements OrderService {
             inventoryMap.put("amount", amount);
             // 1代表增加库存,0代表减少库存
             inventoryMap.put("flag", flag);
-            if (isGoods.equals(Boolean.TRUE)) {
+            if (Boolean.TRUE.equals(isGoods)) {
                 colorSizeMapper.updateInventoryByPrimaryKey(inventoryMap);
             } else {
                 partSizeMapper.updateInventoryByPrimaryKey(inventoryMap);

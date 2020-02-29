@@ -34,7 +34,7 @@ public class Refund {
     @ApiModelProperty(value = "退款状态",example = "2")
     private Integer status;
 
-    @ApiModelProperty(hidden = true)
+    @ApiModelProperty(hidden = true,value = "是否收到货")
     private Boolean whetherReceived;
 
     @ApiModelProperty(value = "退款单创建时间")

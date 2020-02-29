@@ -4,12 +4,14 @@ import com.vtmer.yisanbang.common.valid.group.Insert;
 import com.vtmer.yisanbang.common.valid.group.Update;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 @ApiModel
+@Data
 public class UserAddress {
 
     @ApiModelProperty(hidden = true)
@@ -31,7 +33,7 @@ public class UserAddress {
     @ApiModelProperty(name = "phoneNumber",value = "用户电话号码",required = true,example = "17666289644")
     private String phoneNumber;
 
-    @ApiModelProperty(readOnly = true)
+    @ApiModelProperty(readOnly = true,value = "是否是默认收货地址")
     private Boolean isDefault;
 
     @ApiModelProperty(hidden = true)
@@ -40,67 +42,4 @@ public class UserAddress {
     @ApiModelProperty(hidden = true)
     private Date updateTime;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName == null ? null : userName.trim();
-    }
-
-    public String getAddressName() {
-        return addressName;
-    }
-
-    public void setAddressName(String addressName) {
-        this.addressName = addressName == null ? null : addressName.trim();
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber == null ? null : phoneNumber.trim();
-    }
-
-    public Boolean getIsDefault() {
-        return isDefault;
-    }
-
-    public void setIsDefault(Boolean isDefault) {
-        this.isDefault = isDefault;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
 }

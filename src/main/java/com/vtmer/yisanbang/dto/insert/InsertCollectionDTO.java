@@ -12,7 +12,7 @@ public class InsertCollectionDTO {
     @ApiModelProperty(value = "商品id",example = "4",required = true)
     private Integer goodsId;
 
-    @NotNull(message = "isGoods is null")
+    @NotNull(message = "whetherGoods is null")
     @ApiModelProperty(value = "是否是普通商品",example = "true",required = true)
-    private Boolean isGoods;
+    private Boolean whetherGoods;
 }
