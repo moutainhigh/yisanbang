@@ -20,6 +20,7 @@ public class OrderDTO {
     @ApiModelProperty(value = "用户默认收货地址信息",required = true,example = "广东工业大学教学三号楼创客基地E102")
     private UserAddress userAddress;
 
+    @NotNull(message = "优惠后总价为空")
     @ApiModelProperty(value = "优惠后总价",name = "totalPrice",required = true,example = "250")
     private Double totalPrice;
 

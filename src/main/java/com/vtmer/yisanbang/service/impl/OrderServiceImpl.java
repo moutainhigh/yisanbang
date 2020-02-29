@@ -470,6 +470,8 @@ public class OrderServiceImpl implements OrderService {
         UserAddress userAddress = new UserAddress();
         List<OrderGoodsDTO> orderGoodsDTOList = new ArrayList<>();
 
+        orderVO.setOrderId(order.getId());
+
         // 用户地址封装
         userAddress.setUserId(order.getUserId());
         userAddress.setUserName(order.getUserName());
