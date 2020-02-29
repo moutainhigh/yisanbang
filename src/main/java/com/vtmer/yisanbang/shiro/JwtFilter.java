@@ -60,7 +60,6 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
                 logger.error("Error occurs when login",e);
             }
         }
-        logger.info("shiro认证登录结果为[{}]",super.isAccessAllowed(request,response,mappedValue));
         return super.isAccessAllowed(request,response,mappedValue);
     }
 
@@ -73,13 +72,11 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         // 因为是先走shiro认证，再走JWT认证，在这里先要认证token的正确性，对了再去获取openid，否则会抛出异常
         // com.auth0.jwt.exceptions.JWTDecodeException: The token was expected to have 3 parts, but got 1.
         // 在这里有两种情况会返回false，一是token过期，二是token不正确，这两种的处理方案都是一致的，让用户去重新请求登录接口，获取新的token
-        logger.info("鉴权token为[{}]", token);
         boolean res = jwtUtil.verifyToken(token);
         if (!res) {
             // 如果token认证失败，直接返回null，进入isAccessAllowed（）的异常处理逻辑，抛出IllegalStateException异常并捕获
             return null;
         }
-        logger.info("验证token成功，开始设置user对象进线程域");
         t1.set(jwtUtil.getUserInfoByToken(token));
         String openId = jwtUtil.getOpenIdByToken(token);
         if (StringUtils.isNotBlank(token)) {

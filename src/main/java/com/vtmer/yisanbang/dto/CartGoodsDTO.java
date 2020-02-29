@@ -13,7 +13,7 @@ public class CartGoodsDTO extends GoodsSkuDTO {
     @ApiModelProperty(value = "商品id",example = "2")
     private Integer id;
 
-    @ApiModelProperty(value = "用户id",example = "1")
+    @ApiModelProperty(value = "用户id",example = "1",hidden = true)
     private Integer userId;
 
     @ApiModelProperty(hidden = true,value = "更新时间",example = "147515314")

@@ -2,6 +2,8 @@ package com.vtmer.yisanbang.controller;
 
 import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
 import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
+import com.github.binarywang.wxpay.bean.order.WxPayAppOrderResult;
+import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.github.binarywang.wxpay.bean.request.BaseWxPayRequest;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.bean.result.BaseWxPayResult;
@@ -9,6 +11,7 @@ import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.github.binarywang.wxpay.util.SignUtils;
 import com.vtmer.yisanbang.common.ResponseMessage;
+import com.vtmer.yisanbang.common.annotation.RequestLog;
 import com.vtmer.yisanbang.common.exception.api.ApiException;
 import com.vtmer.yisanbang.common.exception.api.order.*;
 import com.vtmer.yisanbang.common.exception.service.cart.OrderGoodsCartGoodsNotMatchException;
@@ -56,36 +59,48 @@ public class OrderController {
 
     /**
      * 点击去结算，显示确认订单页面
+     *
      * @return
      */
-    //@RequestLog(module = "订单", operationDesc = "确认购物车订单")
+    @RequestLog(module = "订单", operationDesc = "确认购物车订单")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @ApiOperation(value = "确认购物车订单", notes = "点击去结算，显示确认订单页面")
-    @GetMapping("confirmCartOrder")
+    @PostMapping("confirmCartOrder")
     public ResponseMessage<OrderVO> confirmCartOrder() {
         OrderVO orderVO;
         try {
             orderVO = orderService.confirmCartOrder();
         } catch (CartEmptyException e) {
             throw new ApiCartEmptyException(e.getMessage());
+        } catch (OrderGoodsNotExistException e) {
+            throw new ApiOrderGoodsNotExistException(e.getMessage());
+        } catch (Exception e) {
+            throw new ApiException(e);
         }
         return ResponseMessage.newSuccessInstance(orderVO, "获取确认订单相关信息成功");
     }
 
-    //@RequestLog(module = "订单", operationDesc = "确认[直接购买]订单")
-    @GetMapping("confirmDirectOrder")
+    @RequestLog(module = "订单", operationDesc = "确认[直接购买]订单")
+    @PostMapping("confirmDirectOrder")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @ApiOperation(value = "确认[直接购买]订单", notes = "点击[直接购买]，显示确认订单页面，ps：商品数量也需要传递")
     public ResponseMessage<OrderVO> confirmDirectOrder(@RequestBody @NotEmpty(message = "订单集合为空") List<OrderGoodsDTO> orderGoodsDTOList) {
-        OrderVO orderVO = orderService.confirmDirectOrder(orderGoodsDTOList);
+        OrderVO orderVO;
+        try {
+            orderVO = orderService.confirmDirectOrder(orderGoodsDTOList);
+        } catch (OrderGoodsNotExistException e) {
+            throw new ApiOrderGoodsNotExistException(e.getMessage());
+        } catch (Exception e) {
+            throw new ApiException(e);
+        }
         return ResponseMessage.newSuccessInstance(orderVO, "获取确认订单相关信息成功");
     }
 
-    //@RequestLog(module = "订单", operationDesc = "创建[直接购买]类订单")
+    @RequestLog(module = "订单", operationDesc = "创建[直接购买]类订单")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
@@ -99,18 +114,21 @@ public class OrderController {
             throw new ApiInventoryNotEnoughException(e.getMessage());
         } catch (OrderPriceNotMatchException e) {
             throw new ApiOrderPriceNotMatchException(e.getMessage());
+        } catch (OrderGoodsNotExistException e) {
+            throw new ApiOrderGoodsNotExistException(e.getMessage());
         } catch (Exception e) {
             throw new ApiException(e);
         }
-        return ResponseMessage.newSuccessInstance(orderNumber,"创建订单成功，返回订单编号和openId");
+        return ResponseMessage.newSuccessInstance(orderNumber, "创建订单成功，返回订单编号和openId");
     }
 
     /**
      * 创建购物车类订单
+     *
      * @param orderDTO：留言，用户收货地址，邮费
      * @return
      */
-    //@RequestLog(module = "订单", operationDesc = "创建购物车类订单")
+    @RequestLog(module = "订单", operationDesc = "创建购物车类订单")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
@@ -126,6 +144,8 @@ public class OrderController {
             throw new ApiOrderGoodsCartGoodsNotMatchException(e.getMessage());
         } catch (OrderPriceNotMatchException e) {
             throw new ApiOrderPriceNotMatchException(e.getMessage());
+        } catch (OrderGoodsNotExistException e) {
+            throw new ApiOrderGoodsNotExistException(e.getMessage());
         } catch (Exception e) {
             throw new ApiException(e);
         }
@@ -137,7 +157,7 @@ public class OrderController {
      * @param orderNumber：orderNumber订单号
      * @return 返回前端调起微信支付所需的支付参数（5个参数和sign）
      */
-    //@RequestLog(module = "订单", operationDesc = "微信支付")
+    @RequestLog(module = "订单", operationDesc = "微信支付")
     @ApiOperation(value = "微信支付", notes = "通过订单号进行微信支付，返回前端调起微信支付所需的支付参数（5个参数和sign）")
     @ApiResponses({
             @ApiResponse(code = 200, message = "ResponseMessage => \n 'data:" +
@@ -154,7 +174,7 @@ public class OrderController {
     })
     @GetMapping("/wxpay/{orderNumber}")
     public ResponseMessage<WxMiniPayOrderResult> wxpay(@ApiParam(name = "orderNumber", value = "订单编号", required = true)
-                                 @NotBlank(message = "订单号传入为空") @PathVariable String orderNumber) {
+                                                       @NotBlank(message = "订单号传入为空") @PathVariable String orderNumber) {
         OrderVO orderVO = orderService.selectOrderVOByOrderNumber(orderNumber);
         User user = JwtFilter.getLoginUser();
         if (orderVO == null) {
@@ -178,20 +198,27 @@ public class OrderController {
             orderRequest.setOpenid(openId);
             orderRequest.setSpbillCreateIp(spbillCreateIp);
             logger.info("调用微信支付接口，调用参数[{}]", orderRequest);
-            Object orderResponse = wxPayService.createOrder(orderRequest);
-            logger.info("调用微信支付接口，返回参数[{}]", orderResponse);
+            WxPayMpOrderResult wxPayMpOrderResult = wxPayService.createOrder(orderRequest);
+            logger.info("调用微信支付接口，返回参数[{}]", wxPayMpOrderResult);
             WxMiniPayOrderResult wxMiniPayOrderResult = new WxMiniPayOrderResult();
-            BeanUtils.copyProperties("orderResponse","wxMiniPayOrderResult");
+            BeanUtils.copyProperties(wxPayMpOrderResult, wxMiniPayOrderResult);
             return ResponseMessage.newSuccessInstance(wxMiniPayOrderResult, "返回支付参数");
         } catch (WxPayException e) {
+            if ("ORDERPAID".equals(e.getErrCode())) {
+                // 如果是已支付订单
+                logger.error("微信支付失败！订单号：{},原因:{}", orderNumber, e.getMessage());
+                throw new ApiOrderPaidException("订单已支付,无需重复支付");
+            }
             logger.error("微信支付失败！订单号：{},原因:{}", orderNumber, e.getMessage());
             throw new ApiException(e);
+
         }
 
     }
 
     /**
      * 支付回调通知处理
+     *
      * @param xmlData 相关支付结果及用户信息(微信端提供)
      * @return 向微信服务端返回应答
      * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--申请退款(待商家处理) 5--退款中(待商家收货) 6--退款成功 7--退款失败 8--交易关闭 9--所有订单
@@ -206,7 +233,7 @@ public class OrderController {
      * 特别提醒：商户系统对于支付结果通知的内容一定要做签名验证,并校验返回的订单金额是否与商户侧的订单金额一致，防止数据泄漏导致出现“假通知”，造成资金损失。
      */
     @ApiIgnore
-    //@RequestLog(module = "订单", operationDesc = "支付回调通知处理")
+    @RequestLog(module = "订单", operationDesc = "支付回调通知处理")
     @PostMapping("/wxNotify")
     public String parseOrderNotifyResult(@RequestBody String xmlData) {
         try {
@@ -220,6 +247,7 @@ public class OrderController {
             String totalFee = BaseWxPayResult.fenToYuan(notifyResult.getTotalFee());
             Double totalPrice = Double.parseDouble(totalFee);
 
+            /*
             // 验证签名
             String sign = notifyResult.getSign();
             boolean checkSignRes = SignUtils.checkSign(xmlData, "MD5", sign);
@@ -227,6 +255,8 @@ public class OrderController {
                 logger.warn("微信支付回调——签名验证有误");
                 return WxPayNotifyResponse.fail("签名验证有误");
             }
+
+             */
 
             // 校验返回的订单金额是否与商户侧的订单金额一致
             if (!order.getTotalPrice().equals(totalPrice)) { // 返回的订单金额与商户侧的订单金额不一致
@@ -236,7 +266,7 @@ public class OrderController {
             // 如果交易成功(支付成功)
             if ("SUCCESS".equals(notifyResult.getResultCode())) {
                 if (order.getStatus() == 0) { // 判断订单状态，避免微信重复通知调用该接口，如果该订单的状态是未付款
-                    int res = orderService.updateOrderStatus(order.getOrderNumber());// 更新该订单为待发货
+                    int res = orderService.updateOrderStatus(orderNumber);// 更新该订单为待发货
                     logger.info("更新订单[{}]状态：[未付款]-->[待发货]", orderNumber);
                     if (res == 0) { // 如果更新订单状态失败
                         logger.warn("更新订单[{}]状态：[未付款]-->[待发货]出现异常", orderNumber);
@@ -256,10 +286,11 @@ public class OrderController {
     /**
      * 列出用户相关状态所有订单
      * status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
+     *
      * @param status：订单状态标识
      * @return
      */
-    //@RequestLog(module = "订单", operationDesc = "获取用户相关状态的所有订单")
+    @RequestLog(module = "订单", operationDesc = "获取用户相关状态的所有订单")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
@@ -268,9 +299,16 @@ public class OrderController {
                     "退款状态定义：status 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败")
     @GetMapping("/getUserOrderList/status/{status}")
     public ResponseMessage<List<OrderVO>> getUserOrderList(@Max(value = 5, message = "订单标识最大值为5")
-                                                            @Min(value = 0, message = "订单标识最小值为0")
-                                                            @ApiParam(name = "status", value = "订单状态标识", required = true) @PathVariable Integer status) {
-        List<OrderVO> orderVOList = orderService.getUserOrderList(status);
+                                                           @Min(value = 0, message = "订单标识最小值为0")
+                                                           @ApiParam(name = "status", value = "订单状态标识", required = true) @PathVariable Integer status) {
+        List<OrderVO> orderVOList;
+        try {
+            orderVOList = orderService.getUserOrderList(status);
+        } catch (OrderGoodsNotExistException e) {
+            throw new ApiOrderGoodsNotExistException(e.getMessage());
+        } catch (Exception e) {
+            throw new ApiException(e);
+        }
         if (orderVOList != null && orderVOList.size() != 0) {
             return ResponseMessage.newSuccessInstance(orderVOList, "获取订单列表成功");
         } else {
@@ -281,15 +319,22 @@ public class OrderController {
     /**
      * @param status
      */
-    //@RequestLog(module = "订单", operationDesc = "获取商城中相关状态的所有订单")
+    @RequestLog(module = "订单", operationDesc = "获取商城中相关状态的所有订单")
     @ApiOperation(value = "获取商城中相关状态的所有订单",
             notes = "订单状态定义：status 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单;\n" +
                     "退款状态定义：status 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败")
     @GetMapping("/getOrderList/status/{status}")
     public ResponseMessage<List<OrderVO>> getOrderList(@Max(value = 5, message = "订单标识最大值为5")
-                                                        @Min(value = 0, message = "订单标识最小值为0")
-                                                        @ApiParam(name = "status", value = "订单状态标识", required = true) @PathVariable Integer status) {
-        List<OrderVO> orderVOList = orderService.getOrderList(status);
+                                                       @Min(value = 0, message = "订单标识最小值为0")
+                                                       @ApiParam(name = "status", value = "订单状态标识", required = true) @PathVariable Integer status) {
+        List<OrderVO> orderVOList;
+        try {
+            orderVOList = orderService.getOrderList(status);
+        } catch (OrderGoodsNotExistException e) {
+            throw new ApiOrderGoodsNotExistException(e.getMessage());
+        } catch (Exception e) {
+            throw new ApiException(e);
+        }
         if (orderVOList != null && orderVOList.size() != 0) {
             return ResponseMessage.newSuccessInstance(orderVOList, "获取订单列表成功");
         } else {
@@ -304,7 +349,7 @@ public class OrderController {
      * @param orderNumber:订单编号
      * @return
      */
-    //@RequestLog(module = "订单", operationDesc = "确认收货")
+    @RequestLog(module = "订单", operationDesc = "确认收货")
     @ApiOperation(value = "确认收货", notes = "订单状态定义：status 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单\n"
             + "修改订单状态为下一状态，适用于'确认收货'按钮")
     @ApiImplicitParams({
@@ -362,7 +407,7 @@ public class OrderController {
      * @param orderId：订单id
      * @return
      */
-    //@RequestLog(module = "订单", operationDesc = "删除订单")
+    @RequestLog(module = "订单", operationDesc = "删除订单")
     @ApiOperation(value = "删除订单", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
@@ -390,7 +435,7 @@ public class OrderController {
      * @param deliverGoodsDTO:orderNumber and courierNumber
      * @return
      */
-    //@RequestLog(module = "订单", operationDesc = "商家发货")
+    @RequestLog(module = "订单", operationDesc = "商家发货")
     @ApiOperation(value = "商家发货", notes = "商家发货设置快递编号，需要订单编号")
     @PutMapping("/setCourierNumber")
     public ResponseMessage setCourierNumber(@RequestBody @Validated DeliverGoodsDTO deliverGoodsDTO) {
@@ -414,7 +459,7 @@ public class OrderController {
      * @param updateUserAddressVo:用户地址UserAddress、订单编号orderNumber
      * @return
      */
-    //@RequestLog(module = "订单", operationDesc = "修改收货地址")
+    @RequestLog(module = "订单", operationDesc = "修改收货地址")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
@@ -444,7 +489,7 @@ public class OrderController {
      * @param orderNumber：订单编号
      * @return
      */
-    //@RequestLog(module = "订单", operationDesc = "取消订单")
+    @RequestLog(module = "订单", operationDesc = "取消订单")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })

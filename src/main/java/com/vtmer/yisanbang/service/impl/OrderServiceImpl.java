@@ -26,6 +26,7 @@ import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -104,7 +105,7 @@ public class OrderServiceImpl implements OrderService {
     // 设置优惠信息
     private void setDiscount() {
         Discount discount = discountMapper.select();
-        if (discount !=null) {
+        if (discount != null) {
             discountAmount = discount.getAmount();
             discountRate = discount.getDiscountRate();
         } else {  // 如果未设置优惠，则默认达标数量为0，优惠*1,，即无打折
@@ -116,6 +117,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      * The user clicks the settlement button,and then confirm the order
      * used in cart
+     *
      * @param
      * @return
      */
@@ -125,15 +127,9 @@ public class OrderServiceImpl implements OrderService {
         setPostage();
         OrderVO orderVO = new OrderVO();
         // 获取用户购物车清单
-        CartVO cartVo = cartService.selectCartVo();
+        CartVO cartVo = cartService.selectCartVo(userId);
         if (cartVo == null) {
             throw new CartEmptyException();
-        }
-        if (cartVo.getTotalPrice() >= standardPrice) {
-            // 包邮
-            orderVO.setPostage((double) 0);
-        } else {  // 不包邮
-            orderVO.setPostage(defaultPostage);
         }
         List<CartGoodsDTO> cartGoodsList = cartVo.getCartGoodsList();
         // IDEA推荐方式，删除为勾选的购物车商品
@@ -146,7 +142,17 @@ public class OrderServiceImpl implements OrderService {
             BeanUtils.copyProperties(cartGoodsDTO, orderGoodsDTO);
             orderGoodsDTOArrayList.add(orderGoodsDTO);
         }
+        boolean check = judgeGoodsExist(orderGoodsDTOArrayList);
+        if (!check) {
+            throw new OrderGoodsNotExistException();
+        }
         orderVO.setOrderGoodsDTOList(orderGoodsDTOArrayList);
+        if (cartVo.getTotalPrice() >= standardPrice) {
+            // 包邮
+            orderVO.setPostage((double) 0);
+        } else {  // 不包邮
+            orderVO.setPostage(defaultPostage);
+        }
         UserAddress userAddress = userAddressMapper.selectDefaultByUserId(userId);
         orderVO.setUserAddress(userAddress);
         return orderVO;
@@ -154,6 +160,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderVO confirmDirectOrder(List<OrderGoodsDTO> orderGoodsDTOList) {
+        boolean check = judgeGoodsExist(orderGoodsDTOList);
+        if (!check) {
+            throw new OrderGoodsNotExistException();
+        }
         Integer userId = JwtFilter.getLoginUser().getId();
         OrderVO orderVO = new OrderVO();
         // 优惠前总价
@@ -164,7 +174,7 @@ public class OrderServiceImpl implements OrderService {
             Integer sizeId = orderGoodsDTO.getColorSizeId();
             Boolean whetherGoods = orderGoodsDTO.getWhetherGoods();
             // 设置商品属性
-            setOrderGoodsDTO(orderGoodsDTO,sizeId,whetherGoods);
+            setOrderGoodsDTO(orderGoodsDTO, sizeId, whetherGoods);
             beforeTotalPrice += orderGoodsDTO.getAmount() * orderGoodsDTO.getPrice();
             totalPrice += orderGoodsDTO.getAfterTotalPrice();
         }
@@ -187,20 +197,25 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public String createCartOrder(OrderDTO orderDTO) {
+        int userId = JwtFilter.getLoginUser().getId();
+        List<OrderGoodsDTO> orderGoodsDTOList = orderDTO.getOrderGoodsDTOList();
+        boolean check = judgeGoodsExist(orderGoodsDTOList);
+        if (!check) {
+            throw new OrderGoodsNotExistException();
+        }
         // 获取用户购物车清单
-        CartVO cartVo = cartService.selectCartVo();
+        CartVO cartVo = cartService.selectCartVo(userId);
         // 获取用户购物车商品列表
         List<CartGoodsDTO> cartGoodsList = cartVo.getCartGoodsList();
         // 删除未勾选商品,得到购物车勾选商品列表
         cartGoodsList.removeIf(cartGoodsDto -> cartGoodsDto.getWhetherChosen().equals(Boolean.FALSE));
-        List<OrderGoodsDTO> orderGoodsDTOList = orderDTO.getOrderGoodsDTOList();
 
         // 第一步校验 —— 检查前端传递的订单总价和后台计算的订单总价是否一致
         // 前端传递的订单总价
-        double totalPrice = orderDTO.getTotalPrice();
+        Double totalPrice = orderDTO.getTotalPrice();
         // 后台从redis中取出的购物车总价
-        double totalPrice1 = cartVo.getTotalPrice();
-        if (totalPrice != totalPrice1) {
+        Double totalPrice1 = cartVo.getTotalPrice();
+        if (!totalPrice.equals(totalPrice1)) {
             // 如果二者不一致，抛出异常
             throw new OrderPriceNotMatchException();
         }
@@ -213,7 +228,7 @@ public class OrderServiceImpl implements OrderService {
         // 遍历订单商品列表
         for (OrderGoodsDTO orderGoodsDTO : orderGoodsDTOList) {
             // 默认为false
-            Boolean checkOrderGoods = false;
+            boolean checkOrderGoods = false;
             Integer orderColorSizeId = orderGoodsDTO.getColorSizeId();
             Boolean orderWhetherGoods = orderGoodsDTO.getWhetherGoods();
             Integer orderAmount = orderGoodsDTO.getAmount();
@@ -243,17 +258,58 @@ public class OrderServiceImpl implements OrderService {
         return orderNumber;
     }
 
+    @Override
+    public boolean judgeGoodsExist(List<OrderGoodsDTO> orderGoodsDTOList) {
+        boolean check = true;
+        for (OrderGoodsDTO orderGoodsDTO : orderGoodsDTOList) {
+            boolean whetherGoods = orderGoodsDTO.getWhetherGoods();
+            Integer sizeId = orderGoodsDTO.getColorSizeId();
+            if (whetherGoods) {
+                // 如果是普通商品
+                ColorSize colorSize = colorSizeMapper.selectByPrimaryKey(sizeId);
+                if (colorSize == null) {
+                    // 如果该颜色尺寸不存在
+                    check = false;
+                }
+                Goods goods = goodsMapper.selectByPrimaryKey(colorSize.getGoodsId());
+                if (goods == null) {
+                    // 如果商品不存在
+                    check = false;
+                }
+            } else {
+                PartSize partSize = partSizeMapper.selectByPrimaryKey(sizeId);
+                if (partSize == null) {
+                    // 该部件尺寸不存在
+                    check = false;
+                }
+                Suit suit = suitMapper.selectByPrimaryKey(partSize.getSuitId());
+                if (suit == null) {
+                    check = false;
+                }
+            }
+        }
+        return check;
+    }
+
     /**
      * 创建直接下单类订单
      * @param orderDTO
      * @return
      */
+    @Transactional
     @Override
     public String createDirectOrder(OrderDTO orderDTO) {
+        // 判断直接下单的商品是否存在
+        List<OrderGoodsDTO> orderGoodsDTOList = orderDTO.getOrderGoodsDTOList();
+        boolean check = judgeGoodsExist(orderGoodsDTOList);
+        if (!check) {
+            // 如果商品或商品SKU不存在
+            throw new OrderGoodsNotExistException();
+        }
         // 获取用户订单商品列表和优惠后的总价
         Double totalPrice = orderDTO.getTotalPrice();
-        logger.info("前端传递的订单总价为[{}]",totalPrice);
-        List<OrderGoodsDTO> orderGoodsDTOList = orderDTO.getOrderGoodsDTOList();
+        logger.info("前端传递的订单总价为[{}]", totalPrice);
+
         // 前端传递的订单总价，在后台校验一遍
         double totalPriceCheck = calculateTotalPrice(orderGoodsDTOList);
         if (!totalPrice.equals(totalPriceCheck)) {
@@ -295,9 +351,24 @@ public class OrderServiceImpl implements OrderService {
         for (OrderGoodsDTO orderGoodsDTO : orderGoodsDTOList) {
             // 生成orderGoods
             OrderGoods orderGoods = new OrderGoods();
-            Boolean whetherGoods = orderGoodsDTO.getWhetherGoods();
+            boolean whetherGoods = orderGoodsDTO.getWhetherGoods();
             Integer amount = orderGoodsDTO.getAmount();
             Integer colorSizeId = orderGoodsDTO.getColorSizeId();
+            // 商品库存
+            int inventory = 0;
+            if (whetherGoods) {
+                // 如果是普通商品
+                ColorSize colorSize = colorSizeMapper.selectByPrimaryKey(colorSizeId);
+                inventory = colorSize.getInventory();
+            } else {
+                PartSize partSize = partSizeMapper.selectByPrimaryKey(colorSizeId);
+                inventory = partSize.getInventory();
+            }
+            if (inventory < amount) {
+                // 如果下单商品库存不足
+                logger.info("商品库存不足--商品skuId[{}],是否是普通商品[{}],需要数量[{}],库存数量[{}]",colorSizeId,whetherGoods,amount,inventory);
+                throw new InventoryNotEnoughException("商品库存不足--商品skuId：" + colorSizeId + ",是否是普通商品:" + whetherGoods + ",需要数量" + amount);
+            }
             orderGoods.setOrderId(order.getId());
             orderGoods.setWhetherGoods(whetherGoods);
             orderGoods.setAmount(amount);
@@ -311,15 +382,10 @@ public class OrderServiceImpl implements OrderService {
             inventoryMap.put("sizeId", colorSizeId);
             // 0代表减少库存
             inventoryMap.put("flag", 0);
-            int res;
-            if (whetherGoods.equals(Boolean.TRUE)) {
-                res = colorSizeMapper.updateInventoryByPrimaryKey(inventoryMap);
+            if (Boolean.TRUE.equals(whetherGoods)) {
+                colorSizeMapper.updateInventoryByPrimaryKey(inventoryMap);
             } else {
-                res = partSizeMapper.updateInventoryByPrimaryKey(inventoryMap);
-            }
-            if (res == 0) {
-                // 如果更新失败，说明库存不足
-                throw new InventoryNotEnoughException("商品库存不足--商品skuId：" + colorSizeId + ",是否是普通商品:" + whetherGoods + ",需要数量" + amount);
+                partSizeMapper.updateInventoryByPrimaryKey(inventoryMap);
             }
         } // end for
         return orderNumber;
@@ -327,6 +393,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 根据前端传递过来的订单商品列表计算总价
+     *
      * @param orderGoodsDTOList：商品总价
      * @return：订单总价
      */
@@ -336,11 +403,11 @@ public class OrderServiceImpl implements OrderService {
         for (OrderGoodsDTO orderGoodsDTO : orderGoodsDTOList) {
             int sizeId = orderGoodsDTO.getColorSizeId();
             boolean whetherGoods = orderGoodsDTO.getWhetherGoods();
-            setOrderGoodsDTO(orderGoodsDTO,sizeId, whetherGoods);
-            logger.info("单项商品总价为[{}]",orderGoodsDTO.getAfterTotalPrice());
+            setOrderGoodsDTO(orderGoodsDTO, sizeId, whetherGoods);
+            logger.info("单项商品总价为[{}]", orderGoodsDTO.getAfterTotalPrice());
             totalPrice += orderGoodsDTO.getAfterTotalPrice();
         }
-        logger.info("后台计算的订单总价为[{}]",totalPrice);
+        logger.info("后台计算的订单总价为[{}]", totalPrice);
         return totalPrice;
     }
 
@@ -348,6 +415,7 @@ public class OrderServiceImpl implements OrderService {
      * 获取用户指定订单状态的订单
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败
+     *
      * @param status:status传入3时同时获取退款成功（3)的订单;status传入5查询所有订单
      * @return
      */
@@ -372,6 +440,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 根据标识获取相应订单列表
+     *
      * @param orderMap
      * @return
      */
@@ -393,6 +462,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 通过订单表实体类获取订单详情VO对象
+     *
      * @param order:订单表实体类
      * @return OrderVo
      */
@@ -401,6 +471,8 @@ public class OrderServiceImpl implements OrderService {
         UserAddress userAddress = new UserAddress();
         List<OrderGoodsDTO> orderGoodsDTOList = new ArrayList<>();
 
+        orderVO.setOrderId(order.getId());
+
         // 用户地址封装
         userAddress.setUserId(order.getUserId());
         userAddress.setUserName(order.getUserName());
@@ -408,7 +480,7 @@ public class OrderServiceImpl implements OrderService {
         userAddress.setAddressName(order.getAddressName());
         orderVO.setUserAddress(userAddress);
 
-        BeanUtils.copyProperties(order,orderVO);
+        BeanUtils.copyProperties(order, orderVO);
         // 根据订单id查询该订单的所有商品
         List<OrderGoods> orderGoodsList = orderGoodsMapper.selectByOrderId(order.getId());
 
@@ -432,6 +504,7 @@ public class OrderServiceImpl implements OrderService {
         orderVO.setOrderGoodsDTOList(orderGoodsDTOList);
         return orderVO;
     }
+
     /**
      * 订单状态自增修改
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
@@ -446,18 +519,12 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public int updateOrderStatus(String orderNumber) {
         Order order = orderMapper.selectByOrderNumber(orderNumber);
-        Integer userId = JwtFilter.getLoginUser().getId();
         if (order != null) {
             // 如果该订单存在
-            if (!userId.equals(order.getUserId())) {
-                // 订单和用户不匹配
-                throw new OrderAndUserNotMatchException("订单和用户不匹配--订单编号：" + orderNumber + ",用户id：" + userId);
-            }
             Integer status = order.getStatus();
             if (status >= 0 && status < 3) { // 如果订单状态是待付款、待发货、待收货
                 // 更新订单状态
                 int res = orderMapper.updateOrderStatus(order.getId());
-                logger.info("更新订单[{}]状态：[待收货]-->[已完成]", orderNumber);
                 return res;
             } else {
                 // 订单状态不能自增修改
@@ -472,6 +539,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 非 0--待付款 1--待发货 2--待收货 状态订单 设置订单状态
+     *
      * @param orderMap—— orderId、status
      * @return -2 —— 订单id不存在
      * -1 —— 将要修改的订单状态与原状态相同
@@ -480,16 +548,12 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public void setOrderStatus(Map<String, Integer> orderMap) {
-        Integer userId = JwtFilter.getLoginUser().getId();
         Integer orderId = orderMap.get("orderId");
         Integer status = orderMap.get("status");
         Order order = orderMapper.selectByPrimaryKey(orderId);
         if (order != null) {
             // 如果该订单存在
-            if (!userId.equals(order.getUserId())) {
-                // 订单和用户不匹配
-                throw new OrderAndUserNotMatchException("订单和用户不匹配--订单编号：" + order.getOrderNumber() + ",用户id：" + userId);
-            } else if (status.equals(order.getStatus())) {
+            if (status.equals(order.getStatus())) {
                 // 如果将要修改的订单状态与原状态相同
                 throw new OrderStatusNotFitException("将要修改的订单状态与原状态相同");
             } else { // 更新订单状态
@@ -582,18 +646,30 @@ public class OrderServiceImpl implements OrderService {
         // 如果是普通商品
         if (Boolean.TRUE.equals(isGoods)) {
             ColorSize colorSize = colorSizeMapper.selectByPrimaryKey(sizeId);
+            if (colorSize == null) {
+                throw new OrderGoodsNotExistException();
+            }
             orderGoodsDTO.setSize(colorSize.getSize());
             orderGoodsDTO.setPartOrColor(colorSize.getColor());
             orderGoodsDTO.setId(colorSize.getGoodsId());
             Goods goods = goodsMapper.selectByPrimaryKey(colorSize.getGoodsId());
+            if (goods == null) {
+                throw new OrderGoodsNotExistException();
+            }
             orderGoodsDTO.setTitle(goods.getName());
             orderGoodsDTO.setPicture(goods.getPicture());
             orderGoodsDTO.setPrice(goods.getPrice());
         } else { // 如果是套装散件
             PartSize partSize = partSizeMapper.selectByPrimaryKey(sizeId);
+            if (partSize == null) {
+                throw new OrderGoodsNotExistException();
+            }
             orderGoodsDTO.setSize(partSize.getSize());
             orderGoodsDTO.setPartOrColor(partSize.getPart());
             Suit suit = suitMapper.selectByPrimaryKey(partSize.getSuitId());
+            if (suit == null) {
+                throw new OrderGoodsNotExistException();
+            }
             orderGoodsDTO.setTitle(suit.getName());
             orderGoodsDTO.setPicture(suit.getPicture());
             orderGoodsDTO.setId(suit.getId());
@@ -610,6 +686,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
+     *
      * @param orderVO:userAddress、orderNumber
      * @return
      */
@@ -639,6 +716,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 用户取消订单
+     *
      * @param orderNumber：订单编号
      * @return
      */
@@ -669,6 +747,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 更新订单商品库存
+     *
      * @param orderNumber：订单编号
      * @param flag：1代表增加库存，0代表减少库存
      * @return 返回成功失败状态
@@ -710,8 +789,8 @@ public class OrderServiceImpl implements OrderService {
     public void orderTimeOutLogic() {
         BoundZSetOperations<String, String> zSetOps = redisTemplate.boundZSetOps("OrderNumber");
         Cursor<ZSetOperations.TypedTuple<String>> cursor;
-        try {
-            while (true) {
+        while (true) {
+            try {
                 cursor = zSetOps.scan(ScanOptions.NONE);
                 if (!cursor.hasNext()) {
                     logger.debug("当前没有等待的订单取消任务");
@@ -758,14 +837,14 @@ public class OrderServiceImpl implements OrderService {
                         }
                     } // end if
                 } // end if 取消订单
-            } // end while
-        } catch (WxPayException wxPayEx) {
-            logger.warn("调用微信查询订单和关闭订单出错[{}]", wxPayEx.getMessage());
-        } catch (InterruptedException e) {
-            logger.warn("Interrupted!订单超时自动取消任务出现异常[{}]", e.getMessage());
-            // clean up state...
-            Thread.currentThread().interrupt();
-        }
+            } catch (WxPayException wxPayEx) {
+                logger.warn("调用微信查询订单和关闭订单出错[{}]", wxPayEx.getMessage());
+            } catch (InterruptedException e) {
+                logger.warn("Interrupted!订单超时自动取消任务出现异常[{}]", e.getMessage());
+                // clean up state...
+                Thread.currentThread().interrupt();
+            }
+        } // end while
     }
 
 }

@@ -10,6 +10,7 @@ import com.vtmer.yisanbang.common.valid.group.Update;
 import com.vtmer.yisanbang.dto.CartGoodsDTO;
 import com.vtmer.yisanbang.dto.GoodsSkuDTO;
 import com.vtmer.yisanbang.service.CartService;
+import com.vtmer.yisanbang.shiro.JwtFilter;
 import com.vtmer.yisanbang.vo.CartVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -45,7 +46,8 @@ public class CartController {
     @ApiOperation(value = "获取用户的购物车商品列表")
     @GetMapping("/listCartGoods")
     public ResponseMessage<CartVO> listCartGoods() {
-        CartVO cartVo = cartService.selectCartVo();
+        int userId = JwtFilter.getLoginUser().getId();
+        CartVO cartVo = cartService.selectCartVo(userId);
         if (cartVo !=null) {
             return ResponseMessage.newSuccessInstance(cartVo,"获取购物车商品列表成功");
         } else {

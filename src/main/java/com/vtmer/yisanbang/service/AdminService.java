@@ -27,4 +27,6 @@ public interface AdminService {
 
     List<Role> getRoleListByName(String name);
 
+    int getAdminIdByName(String name);
+
 }

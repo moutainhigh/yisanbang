@@ -3,6 +3,7 @@ spring:
     active: dev
   jackson:
     time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
   datasource:
     # 扩展插件
     # 监控统计用的filter:stat 日志用的filter:log4j 防御sql注入的filter:wall
@@ -82,7 +83,7 @@ wx:
     payNotifyURL: http://119.3.254.171:8088/order/wxNotify
     refundNotifyURL:  #http://119.3.254.171:8088/refund/wxNotify
     tradeType: JSAPI
-    keyPath: # p12证书的位置，可以指定绝对路径，也可以指定类路径（以classpath:开头）
+    keyPath: /target/apiclient_cert.p12
     spbillCreateIp: 119.3.254.171 #服务器IP地址
   applet:
     appid: wx447bdd8f7d850c06

@@ -19,10 +19,7 @@ import com.vtmer.yisanbang.common.exception.api.refund.ApiRefundNotMatchUserExce
 import com.vtmer.yisanbang.common.exception.api.refund.ApiRefundStatusNotFitException;
 import com.vtmer.yisanbang.common.exception.service.order.OrderAndUserNotMatchException;
 import com.vtmer.yisanbang.common.exception.service.order.OrderNotFoundException;
-import com.vtmer.yisanbang.common.exception.service.refund.DuplicateApplyRefundException;
-import com.vtmer.yisanbang.common.exception.service.refund.RefundNotFoundException;
-import com.vtmer.yisanbang.common.exception.service.refund.RefundNotMatchUserException;
-import com.vtmer.yisanbang.common.exception.service.refund.RefundStatusNotFitException;
+import com.vtmer.yisanbang.common.exception.service.refund.*;
 import com.vtmer.yisanbang.domain.Refund;
 import com.vtmer.yisanbang.domain.RefundExpress;
 import com.vtmer.yisanbang.dto.AgreeRefundDTO;
@@ -111,14 +108,14 @@ public class RefundController {
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败
      *
-     * @param agreeRefundDTO:退款编号（必填）、退款原因（商家选填，如无货）
+     * @param
      * @return
      */
     @RequestLog(module = "商家同意退款", operationDesc = "商家同意退款")
     @ApiOperation(value = "退款接口", notes = "商家同意退款则调用该接口，" +
             "只有在【待商家处理】或【待商家收货】的退款状态下可调用，调用成功后退款金额将原路退回给用户\n" +
             "退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败")
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @PostMapping("/agree")
     public ResponseMessage agreeRefund(@ApiParam(value = "退款编号", example = "12345678998765432110")
                                        @NotBlank(message = "refundNumber is null")
@@ -198,6 +195,7 @@ public class RefundController {
      * status全改变： 0 --> 1 or 3 or 4  and  1 --> 2   and  2 --> 3  and 0 1 2-->删除
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败
+     *
      * @param refundNumber:退款编号
      * @return
      */
@@ -221,6 +219,7 @@ public class RefundController {
 
     /**
      * 商家查询成功申请了退款(退款成功)的订单的退款状态
+     *
      * @param refundNumber：退款编号
      * @return
      */
@@ -259,6 +258,7 @@ public class RefundController {
                                         "导致原路退款银行卡失败, 可前往商户平台（pay.weixin.qq.com）-交易中心，手动处理此笔退款。");
                             case "REFUNDCLOSE": // 退款关闭
                                 return ResponseMessage.newSuccessInstance("退款关闭");
+                            default: return ResponseMessage.newErrorInstance("查询退款单状态失败，请稍后重试");
                         } // end switch
                     } // end for
                 } // end for
@@ -277,6 +277,7 @@ public class RefundController {
      * 商家获取相应状态的退款订单
      * 退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败
      * 5 -- 获取所有退款订单
+     *
      * @param status：退款状态
      * @return List<RefundVo>
      */
@@ -305,6 +306,7 @@ public class RefundController {
     /**
      * 用户撤销退款，根据退款编号删除退款订单接口
      * 该接口应该由用户调用，商家不应该动客户的退款信息
+     *
      * @param refundNumber:退款编号
      * @return
      */
@@ -338,7 +340,7 @@ public class RefundController {
      */
     @RequestLog(module = "退款", operationDesc = "商家拒绝退款申请")
     @ApiOperation(value = "商家拒绝退款申请", notes = "商家拒绝退款申请调用，退款状态：【待商家处理】-->【退款失败】")
-    @PutMapping("/refuseApplication")
+    @PutMapping("/refuseApplication/{refundNumber}")
     public ResponseMessage refuseApplication(@ApiParam(name = "refundNumber", value = "退款编号", example = "12345678998765432110", required = true)
                                              @NotBlank(message = "退款编号为空") @PathVariable String refundNumber) {
         try {
@@ -405,6 +407,8 @@ public class RefundController {
             throw new ApiDuplicateApplyRefundException(e.getMessage());
         } catch (OrderAndUserNotMatchException e) {
             throw new ApiOrderAndUserNotMatchException(e.getMessage());
+        } catch (RefundGoodsNotFoundException e) {
+            throw new ApiRefundNotFoundException(e.getMessage());
         } catch (Exception e) {
             throw new ApiException(e);
         }

@@ -10,13 +10,20 @@ import java.util.Map;
 
 public interface OrderService {
 
-    com.vtmer.yisanbang.vo.OrderVO confirmCartOrder();
+    OrderVO confirmCartOrder();
 
-    com.vtmer.yisanbang.vo.OrderVO confirmDirectOrder(List<OrderGoodsDTO> orderGoodsDTOList);
+    OrderVO confirmDirectOrder(List<OrderGoodsDTO> orderGoodsDTOList);
 
     String createCartOrder(OrderDTO orderDTO);
 
     String createDirectOrder(OrderDTO orderDTO);
+
+    /**
+     * 判断订单中商品是否是否存在
+     * @param orderGoodsDTOList
+     * @return
+     */
+    boolean judgeGoodsExist(List<OrderGoodsDTO> orderGoodsDTOList);
 
     /**
      * 获取用户的状态订单

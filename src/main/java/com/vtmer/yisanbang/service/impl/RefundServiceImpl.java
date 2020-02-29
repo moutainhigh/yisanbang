@@ -2,10 +2,7 @@ package com.vtmer.yisanbang.service.impl;
 
 import com.vtmer.yisanbang.common.exception.service.order.OrderAndUserNotMatchException;
 import com.vtmer.yisanbang.common.exception.service.order.OrderNotFoundException;
-import com.vtmer.yisanbang.common.exception.service.refund.DuplicateApplyRefundException;
-import com.vtmer.yisanbang.common.exception.service.refund.RefundNotFoundException;
-import com.vtmer.yisanbang.common.exception.service.refund.RefundNotMatchUserException;
-import com.vtmer.yisanbang.common.exception.service.refund.RefundStatusNotFitException;
+import com.vtmer.yisanbang.common.exception.service.refund.*;
 import com.vtmer.yisanbang.common.util.OrderNumberUtil;
 import com.vtmer.yisanbang.domain.*;
 import com.vtmer.yisanbang.dto.AgreeRefundDTO;
@@ -23,10 +20,12 @@ import com.vtmer.yisanbang.vo.OrderVO;
 import com.vtmer.yisanbang.vo.RefundVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.Valid;
 import java.util.*;
 
 @Service
@@ -67,6 +66,19 @@ public class RefundServiceImpl implements RefundService {
         } else if (!order.getUserId().equals(userId)) {
             throw new OrderAndUserNotMatchException("订单["+order.getOrderNumber()+"]不属于用户["+userId+"]");
         }
+        // 判断退款商品是否存在
+        List<GoodsSkuDTO> refundGoodsList = refundDTO.getRefundGoodsList();
+        List<OrderGoodsDTO> orderGoodsDTOList = new ArrayList<>();
+        for (GoodsSkuDTO goodsSkuDTO : refundGoodsList) {
+            OrderGoodsDTO orderGoodsDTO = new OrderGoodsDTO();
+            BeanUtils.copyProperties(goodsSkuDTO,orderGoodsDTO);
+            orderGoodsDTOList.add(orderGoodsDTO);
+        }
+        boolean check = orderService.judgeGoodsExist(orderGoodsDTOList);
+        if (!check) {
+            // 如果退款商品不存在
+            throw new RefundGoodsNotFoundException();
+        }
         // 查询原退款基础信息
         Refund refund1 = refundMapper.selectByOrderId(orderId);
         // 如果该orderId在退款信息表中存在，说明之前申请过退款并被商家拒绝了或是重复申请
@@ -79,7 +91,6 @@ public class RefundServiceImpl implements RefundService {
                 refundGoodsMapper.deleteByRefundId(refund1.getId());
             }
         }
-        List<GoodsSkuDTO> refundGoodsList = refundDTO.getRefundGoodsList();
         // 退款商品不为空
         if (refundGoodsList != null && refundGoodsList.size() != 0) {
             // 设置为已收货类退款订单

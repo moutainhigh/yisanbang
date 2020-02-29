@@ -28,7 +28,6 @@ public class IncomeController {
 
     /**
      * 获取所有的收益记录
-     *
      * @return
      */
     @RequestLog(module = "收益信息", operationDesc = "获取所有(每天)的收益记录")

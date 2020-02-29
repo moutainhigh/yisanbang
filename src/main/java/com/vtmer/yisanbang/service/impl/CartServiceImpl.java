@@ -96,8 +96,9 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public CartVO selectCartVo() {
-        getUserIdAndSetKey();
+    public CartVO selectCartVo(int userId) {
+        key = REDIS_CART + ":" + userId;
+        hashOperations = stringRedisTemplate.boundHashOps(key);
         if (!stringRedisTemplate.hasKey(key)) {
             // 不存在直接返回
             return null;
@@ -180,7 +181,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor=Exception.class)
     public void updateChosen(GoodsSkuDTO goodsSkuDto) {
         getUserIdAndSetKey();
         Boolean isGoods = goodsSkuDto.getWhetherGoods();
@@ -206,7 +207,7 @@ public class CartServiceImpl implements CartService {
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor=Exception.class)
     public void addOrSubtractAmount(CartGoodsDTO cartGoodsDto) {
         getUserIdAndSetKey();
         Boolean isGoods = cartGoodsDto.getWhetherGoods();
@@ -229,7 +230,7 @@ public class CartServiceImpl implements CartService {
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor=Exception.class)
     public void updateAmount(CartGoodsDTO cartGoodsDto) {
         getUserIdAndSetKey();
         Boolean isGoods = cartGoodsDto.getWhetherGoods();
@@ -251,7 +252,7 @@ public class CartServiceImpl implements CartService {
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor=Exception.class)
     public void deleteCartGoods(List<GoodsSkuDTO> goodsSkuDTOList) {
         getUserIdAndSetKey();
         for (GoodsSkuDTO goodsSkuDto : goodsSkuDTOList) {
@@ -332,7 +333,7 @@ public class CartServiceImpl implements CartService {
      * 购物车数据持久化到数据库
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor=Exception.class)
     public void cartDataPersistence() {
         List<User> userList = userMapper.selectAll();
         for (User user : userList) {
@@ -352,6 +353,11 @@ public class CartServiceImpl implements CartService {
                     cart.setUserId(userId);
                     cart.setTotalPrice(cartVo.getTotalPrice());
                     cartMapper.insert(cart);
+                    if (cart.getId() == null) {
+                        // 说明该用户的购物车数据在之前已经持久化到数据库中了，刚刚执行的是update
+                        // 那么根据userId查询数据库重新拿到cartId
+                        cart = cartMapper.selectByUserId(userId);
+                    }
                     List<CartGoodsDTO> cartGoodsList = cartVo.getCartGoodsList();
                     for (CartGoodsDTO cartGoodsDTO : cartGoodsList) {
                         CartGoods cartGoods = new CartGoods();

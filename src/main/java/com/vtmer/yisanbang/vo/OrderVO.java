@@ -18,6 +18,9 @@ import java.util.Date;
 @ApiModel(value = "创建订单DTO")
 public class OrderVO extends OrderDTO {
 
+    @ApiModelProperty(value = "订单id",example = "6")
+    private Integer orderId;
+
     @ApiModelProperty(value = "优惠前总价",example = "520")
     private Double beforeTotalPrice;
     // 订单编号
