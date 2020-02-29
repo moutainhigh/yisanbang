@@ -154,7 +154,6 @@ public class OrderController {
 
     /**
      * 通过订单号进行微信支付
-     *
      * @param orderNumber：orderNumber订单号
      * @return 返回前端调起微信支付所需的支付参数（5个参数和sign）
      */
@@ -205,8 +204,14 @@ public class OrderController {
             BeanUtils.copyProperties(wxPayMpOrderResult, wxMiniPayOrderResult);
             return ResponseMessage.newSuccessInstance(wxMiniPayOrderResult, "返回支付参数");
         } catch (WxPayException e) {
+            if ("ORDERPAID".equals(e.getErrCode())) {
+                // 如果是已支付订单
+                logger.error("微信支付失败！订单号：{},原因:{}", orderNumber, e.getMessage());
+                throw new ApiOrderPaidException("订单已支付,无需重复支付");
+            }
             logger.error("微信支付失败！订单号：{},原因:{}", orderNumber, e.getMessage());
             throw new ApiException(e);
+
         }
 
     }
