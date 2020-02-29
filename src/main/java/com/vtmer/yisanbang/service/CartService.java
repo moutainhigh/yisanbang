@@ -9,7 +9,7 @@ import java.util.Map;
 
 public interface CartService {
 
-    CartVO selectCartVo();
+    CartVO selectCartVo(int userId);
 
     void addCartGoods(List<CartGoodsDTO> cartGoodsDTOList);
 

@@ -96,8 +96,9 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public CartVO selectCartVo() {
-        getUserIdAndSetKey();
+    public CartVO selectCartVo(int userId) {
+        key = REDIS_CART + ":" + userId;
+        hashOperations = stringRedisTemplate.boundHashOps(key);
         if (!stringRedisTemplate.hasKey(key)) {
             // 不存在直接返回
             return null;

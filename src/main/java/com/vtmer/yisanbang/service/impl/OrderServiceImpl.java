@@ -127,7 +127,7 @@ public class OrderServiceImpl implements OrderService {
         setPostage();
         OrderVO orderVO = new OrderVO();
         // 获取用户购物车清单
-        CartVO cartVo = cartService.selectCartVo();
+        CartVO cartVo = cartService.selectCartVo(userId);
         if (cartVo == null) {
             throw new CartEmptyException();
         }
@@ -197,13 +197,14 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public String createCartOrder(OrderDTO orderDTO) {
+        int userId = JwtFilter.getLoginUser().getId();
         List<OrderGoodsDTO> orderGoodsDTOList = orderDTO.getOrderGoodsDTOList();
         boolean check = judgeGoodsExist(orderGoodsDTOList);
         if (!check) {
             throw new OrderGoodsNotExistException();
         }
         // 获取用户购物车清单
-        CartVO cartVo = cartService.selectCartVo();
+        CartVO cartVo = cartService.selectCartVo(userId);
         // 获取用户购物车商品列表
         List<CartGoodsDTO> cartGoodsList = cartVo.getCartGoodsList();
         // 删除未勾选商品,得到购物车勾选商品列表
