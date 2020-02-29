@@ -62,10 +62,7 @@ public class SystemLogAspect {
             Integer userIdByToken = JwtUtil.getUserIdByToken(token);
             logger.info("Current UserId is:[{}]",userIdByToken);
         }
-        if (Arrays.toString(point.getArgs()).equals("")) {
-            //打印请求参数，如果需要打印其他的信息可以到request中去拿
-            logger.info("RequestParam:{}", Arrays.toString(point.getArgs()));
-        }
+        logger.info("RequestParam:{}", Arrays.toString(point.getArgs()));
     }
 
     /**
