@@ -388,7 +388,6 @@ public class RefundController {
      * 用户申请退款接口：
      * 退款商品传null代表全退，此时可不传退款金额
      * 部分退需要传退款金额，退款商品信息
-     *
      * @param refundDTO：refund，refundGoodsList 退款原因，退款金额，订单id，退款商品:sizeId、isGoods
      * @return
      */

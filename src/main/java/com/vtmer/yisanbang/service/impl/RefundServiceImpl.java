@@ -355,16 +355,16 @@ public class RefundServiceImpl implements RefundService {
         Refund refund = selectByRefundNumber(refundNumber);
         if (refund == null) {
             throw new RefundNotFoundException();
-        } else if (refund.getStatus() != 0) {
-            // 如果退款状态不为“待商家处理”
-            throw new RefundStatusNotFitException("该退款单["+refundNumber+"]的退款状态不为[待商家处理]，不可进行[拒绝退款申请]操作");
+        } else if (refund.getStatus() == 3) {
+            // 如果退款状态为“退款成功”
+            throw new RefundStatusNotFitException("该退款单["+refundNumber+"]的退款状态为[退款成功]，不可进行[拒绝退款申请]操作");
         }
         // 更改退款状态
         HashMap<String, Integer> refundMap = new HashMap<>();
         refundMap.put("orderId", refund.getOrderId());
         refundMap.put("status", 4);
         updateRefundStatus(refundMap);
-        logger.info("退款单[{}]状态更新：[待商家处理]-->[退款失败]",refundNumber);
+        logger.info("退款单[{}]状态更新：[{}]-->[退款失败]",refundNumber,refund.getStatus());
     }
 
     @Override
