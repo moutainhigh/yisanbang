@@ -352,6 +352,11 @@ public class CartServiceImpl implements CartService {
                     cart.setUserId(userId);
                     cart.setTotalPrice(cartVo.getTotalPrice());
                     cartMapper.insert(cart);
+                    if (cart.getId() == null) {
+                        // 说明该用户的购物车数据在之前已经持久化到数据库中了，刚刚执行的是update
+                        // 那么根据userId查询数据库重新拿到cartId
+                        cart = cartMapper.selectByUserId(userId);
+                    }
                     List<CartGoodsDTO> cartGoodsList = cartVo.getCartGoodsList();
                     for (CartGoodsDTO cartGoodsDTO : cartGoodsList) {
                         CartGoods cartGoods = new CartGoods();

@@ -83,7 +83,7 @@ wx:
     payNotifyURL: http://119.3.254.171:8088/order/wxNotify
     refundNotifyURL:  #http://119.3.254.171:8088/refund/wxNotify
     tradeType: JSAPI
-    keyPath: # p12证书的位置，可以指定绝对路径，也可以指定类路径（以classpath:开头）
+    keyPath: /target/apiclient_cert.p12
     spbillCreateIp: 119.3.254.171 #服务器IP地址
   applet:
     appid: wx447bdd8f7d850c06
