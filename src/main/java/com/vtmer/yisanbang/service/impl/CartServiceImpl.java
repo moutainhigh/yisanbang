@@ -180,7 +180,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor=Exception.class)
     public void updateChosen(GoodsSkuDTO goodsSkuDto) {
         getUserIdAndSetKey();
         Boolean isGoods = goodsSkuDto.getWhetherGoods();
@@ -206,7 +206,7 @@ public class CartServiceImpl implements CartService {
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor=Exception.class)
     public void addOrSubtractAmount(CartGoodsDTO cartGoodsDto) {
         getUserIdAndSetKey();
         Boolean isGoods = cartGoodsDto.getWhetherGoods();
@@ -229,7 +229,7 @@ public class CartServiceImpl implements CartService {
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor=Exception.class)
     public void updateAmount(CartGoodsDTO cartGoodsDto) {
         getUserIdAndSetKey();
         Boolean isGoods = cartGoodsDto.getWhetherGoods();
@@ -251,7 +251,7 @@ public class CartServiceImpl implements CartService {
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor=Exception.class)
     public void deleteCartGoods(List<GoodsSkuDTO> goodsSkuDTOList) {
         getUserIdAndSetKey();
         for (GoodsSkuDTO goodsSkuDto : goodsSkuDTOList) {
@@ -332,7 +332,7 @@ public class CartServiceImpl implements CartService {
      * 购物车数据持久化到数据库
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor=Exception.class)
     public void cartDataPersistence() {
         List<User> userList = userMapper.selectAll();
         for (User user : userList) {

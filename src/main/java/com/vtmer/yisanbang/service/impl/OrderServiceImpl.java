@@ -26,6 +26,7 @@ import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -210,10 +211,10 @@ public class OrderServiceImpl implements OrderService {
 
         // 第一步校验 —— 检查前端传递的订单总价和后台计算的订单总价是否一致
         // 前端传递的订单总价
-        double totalPrice = orderDTO.getTotalPrice();
+        Double totalPrice = orderDTO.getTotalPrice();
         // 后台从redis中取出的购物车总价
-        double totalPrice1 = cartVo.getTotalPrice();
-        if (totalPrice != totalPrice1) {
+        Double totalPrice1 = cartVo.getTotalPrice();
+        if (!totalPrice.equals(totalPrice1)) {
             // 如果二者不一致，抛出异常
             throw new OrderPriceNotMatchException();
         }
@@ -256,6 +257,7 @@ public class OrderServiceImpl implements OrderService {
         return orderNumber;
     }
 
+    @Override
     public boolean judgeGoodsExist(List<OrderGoodsDTO> orderGoodsDTOList) {
         boolean check = true;
         for (OrderGoodsDTO orderGoodsDTO : orderGoodsDTOList) {

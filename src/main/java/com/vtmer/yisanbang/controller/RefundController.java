@@ -115,7 +115,7 @@ public class RefundController {
     @ApiOperation(value = "退款接口", notes = "商家同意退款则调用该接口，" +
             "只有在【待商家处理】或【待商家收货】的退款状态下可调用，调用成功后退款金额将原路退回给用户\n" +
             "退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败")
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @PostMapping("/agree")
     public ResponseMessage agreeRefund(@ApiParam(value = "退款编号", example = "12345678998765432110")
                                        @NotBlank(message = "refundNumber is null")
@@ -258,6 +258,7 @@ public class RefundController {
                                         "导致原路退款银行卡失败, 可前往商户平台（pay.weixin.qq.com）-交易中心，手动处理此笔退款。");
                             case "REFUNDCLOSE": // 退款关闭
                                 return ResponseMessage.newSuccessInstance("退款关闭");
+                            default: return ResponseMessage.newErrorInstance("查询退款单状态失败，请稍后重试");
                         } // end switch
                     } // end for
                 } // end for
