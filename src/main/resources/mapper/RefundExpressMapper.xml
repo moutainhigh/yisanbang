@@ -14,11 +14,11 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.vtmer.yisanbang.domain.RefundExpress">
-    insert into refund_express (id, refund_id, express_company, 
-      courier_number, create_time, update_time
+    insert into refund_express (refund_id, express_company,
+      courier_number
       )
-    values (#{id,jdbcType=INTEGER}, #{refundId,jdbcType=INTEGER}, #{expressCompany,jdbcType=VARCHAR}, 
-      #{courierNumber,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+    values ( #{refundId,jdbcType=INTEGER}, #{expressCompany,jdbcType=VARCHAR},
+      #{courierNumber,jdbcType=VARCHAR}
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.vtmer.yisanbang.domain.RefundExpress">
@@ -38,5 +38,10 @@
   <select id="selectAll" resultMap="BaseResultMap">
     select id, refund_id, express_company, courier_number, create_time, update_time
     from refund_express
+  </select>
+  <select id="selectByRefundId" resultMap="BaseResultMap">
+    select id, refund_id, express_company, courier_number, create_time, update_time
+    from refund_express
+    where refund_id = #{refundId}
   </select>
 </mapper>

@@ -9,10 +9,7 @@ import com.vtmer.yisanbang.dto.AgreeRefundDTO;
 import com.vtmer.yisanbang.dto.GoodsSkuDTO;
 import com.vtmer.yisanbang.dto.OrderGoodsDTO;
 import com.vtmer.yisanbang.dto.RefundDTO;
-import com.vtmer.yisanbang.mapper.OrderGoodsMapper;
-import com.vtmer.yisanbang.mapper.OrderMapper;
-import com.vtmer.yisanbang.mapper.RefundGoodsMapper;
-import com.vtmer.yisanbang.mapper.RefundMapper;
+import com.vtmer.yisanbang.mapper.*;
 import com.vtmer.yisanbang.service.OrderService;
 import com.vtmer.yisanbang.service.RefundService;
 import com.vtmer.yisanbang.shiro.JwtFilter;
@@ -46,6 +43,9 @@ public class RefundServiceImpl implements RefundService {
 
     @Autowired
     private OrderGoodsMapper orderGoodsMapper;
+
+    @Autowired
+    private RefundExpressMapper refundExpressMapper;
 
     /**
      * 申请退款,同时修改订单表状态，因此开启事务
@@ -177,6 +177,13 @@ public class RefundServiceImpl implements RefundService {
         RefundVo refundVo = new RefundVo();
         // 封装退款相关信息
         refundVo.setRefund(refund);
+        // 封装用户退款发货单信息
+        RefundExpress refundExpress = refundExpressMapper.selectByRefundId(refund.getId());
+        if (refundExpress != null) {
+            refundVo.setRefundExpress(refundExpress);
+        } else {
+            refundVo.setRefundExpress(null);
+        }
         // 如果该退款是未收到货类型退款(全退),则从订单表中查询退款商品详情
         if (Boolean.FALSE.equals(refund.getWhetherReceived())) {
             Integer orderId = refund.getOrderId();
@@ -371,6 +378,9 @@ public class RefundServiceImpl implements RefundService {
         } else if (!refund.getUserId().equals(userId)) {
             throw new RefundNotMatchUserException("退款单["+refund.getRefundNumber()+"]不属于用户["+userId+"]");
         }
+        // 执行添加退款单逻辑
+        // 插入用户退货单信息
+        refundExpressMapper.insert(refundExpress);
         HashMap<String, Integer> refundMap = new HashMap<>();
         refundMap.put("orderId", refund.getOrderId());
         refundMap.put("status", 2);

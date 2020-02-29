@@ -1,6 +1,7 @@
 package com.vtmer.yisanbang.vo;
 
 import com.vtmer.yisanbang.domain.Refund;
+import com.vtmer.yisanbang.domain.RefundExpress;
 import com.vtmer.yisanbang.dto.OrderGoodsDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -25,4 +26,6 @@ public class RefundVo {
     @ApiModelProperty(value = "退款商品列表")
     private List<OrderGoodsDTO> RefundGoodsList;
 
+    @ApiModelProperty(value = "用户填写的退款发货单信息")
+    private RefundExpress refundExpress;
 }
