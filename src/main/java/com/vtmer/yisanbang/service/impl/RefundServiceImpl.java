@@ -83,7 +83,7 @@ public class RefundServiceImpl implements RefundService {
         Refund refund1 = refundMapper.selectByOrderId(orderId);
         // 如果该orderId在退款信息表中存在，说明之前申请过退款并被商家拒绝了或是重复申请
         if (refund1 != null) {
-            if (refund1.getStatus() == 0) {  // 重复申请
+            if (refund1.getStatus()!=4) {  // 重复申请
                 throw new DuplicateApplyRefundException();
             } else if (refund1.getStatus() == 4) { // 之前申请过退款并被商家拒绝了
                 // 删除之前的退款信息，再插入新的退款基础信息
