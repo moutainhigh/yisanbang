@@ -4,7 +4,11 @@ import com.vtmer.yisanbang.common.util.comparator.ComparatorGoodsSuit;
 import com.vtmer.yisanbang.common.util.comparator.ComparatorGoodsSuitByPrice;
 import com.vtmer.yisanbang.common.util.comparator.ComparatorGoodsSuitByTime;
 import com.vtmer.yisanbang.dto.SuitDTO;
+import com.vtmer.yisanbang.dto.SuitDetailDTO;
+import com.vtmer.yisanbang.mapper.PartSizeMapper;
+import com.vtmer.yisanbang.mapper.SuitDetailMapper;
 import com.vtmer.yisanbang.mapper.SuitMapper;
+import com.vtmer.yisanbang.service.SuitDetailService;
 import com.vtmer.yisanbang.service.SuitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +20,12 @@ import java.util.List;
 public class SuitServiceImpl implements SuitService {
     @Autowired
     private SuitMapper suitMapper;
+
+    @Autowired
+    private SuitDetailMapper suitDetailMapper;
+
+    @Autowired
+    private PartSizeMapper partSizeMapper;
 
     @Override
     // 查找所有套装
@@ -168,6 +178,18 @@ public class SuitServiceImpl implements SuitService {
     public List<SuitDTO> selectAllShow() {
         List<SuitDTO> suitList = suitMapper.selectAllShowDto();
         if (suitList != null && !suitList.isEmpty()) {
+            for (SuitDTO suitDTO : suitList) {
+                List<SuitDetailDTO> suitDetailDTOS = suitDetailMapper.selectAllDtoBySuitId(suitDTO.getId());
+                if (!(suitDetailDTOS != null && !suitDetailDTOS.isEmpty())){
+                    suitDTO.setIsShow(false);
+                    suitMapper.updateDtoByPrimaryKey(suitDTO);
+                }
+                partSizeMapper.selectAllBySuitId(suitDTO.getId());
+                if (!(suitDetailDTOS != null && !suitDetailDTOS.isEmpty())){
+                    suitDTO.setIsShow(false);
+                    suitMapper.updateDtoByPrimaryKey(suitDTO);
+                }
+            }
             return suitList;
         }
         return null;

@@ -3,10 +3,16 @@ package com.vtmer.yisanbang.service.impl;
 import com.vtmer.yisanbang.common.util.comparator.ComparatorGoodsSuit;
 import com.vtmer.yisanbang.common.util.comparator.ComparatorGoodsSuitByPrice;
 import com.vtmer.yisanbang.common.util.comparator.ComparatorGoodsSuitByTime;
+import com.vtmer.yisanbang.dto.ColorSizeDTO;
 import com.vtmer.yisanbang.dto.GoodsDTO;
+import com.vtmer.yisanbang.dto.GoodsDetailDTO;
+import com.vtmer.yisanbang.mapper.ColorSizeMapper;
+import com.vtmer.yisanbang.mapper.GoodsDetailMapper;
 import com.vtmer.yisanbang.mapper.GoodsMapper;
 import com.vtmer.yisanbang.service.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -16,6 +22,12 @@ import java.util.List;
 public class GoodsServiceImpl implements GoodsService {
     @Autowired
     private GoodsMapper goodsMapper;
+
+    @Autowired
+    private GoodsDetailMapper goodsDetailMapper;
+
+    @Autowired
+    private ColorSizeMapper colorSizeMapper;
 
     @Override
     // 添加商品
@@ -113,7 +125,7 @@ public class GoodsServiceImpl implements GoodsService {
         List<GoodsDTO> goodsDtos = goodsMapper.selectAllDtoBySort(sortId);
         if (goodsDtos != null && !goodsDtos.isEmpty()) {
             ComparatorGoodsSuit comparatorGoodsSuit = new ComparatorGoodsSuit();
-            Collections.sort(goodsDtos,comparatorGoodsSuit);
+            Collections.sort(goodsDtos, comparatorGoodsSuit);
             return goodsDtos;
         }
         return null;
@@ -125,7 +137,7 @@ public class GoodsServiceImpl implements GoodsService {
         List<GoodsDTO> goodsDtos = goodsMapper.selectAllDtoBySortOrderByPrice(sortId);
         if (goodsDtos != null && !goodsDtos.isEmpty()) {
             ComparatorGoodsSuitByPrice comparatorGoodsSuitByPrice = new ComparatorGoodsSuitByPrice();
-            Collections.sort(goodsDtos,comparatorGoodsSuitByPrice);
+            Collections.sort(goodsDtos, comparatorGoodsSuitByPrice);
             return goodsDtos;
         }
         return null;
@@ -137,7 +149,7 @@ public class GoodsServiceImpl implements GoodsService {
         List<GoodsDTO> goodsDtos = goodsMapper.selectAllDtoBySortOrderByTime(sortId);
         if (goodsDtos != null && !goodsDtos.isEmpty()) {
             ComparatorGoodsSuitByTime comparatorGoodsSuitByTime = new ComparatorGoodsSuitByTime();
-            Collections.sort(goodsDtos,comparatorGoodsSuitByTime);
+            Collections.sort(goodsDtos, comparatorGoodsSuitByTime);
             return goodsDtos;
         }
         return null;
@@ -149,7 +161,7 @@ public class GoodsServiceImpl implements GoodsService {
         List<GoodsDTO> goodsDtos = goodsMapper.selectAllDtoOrderByPrice();
         if (goodsDtos != null && !goodsDtos.isEmpty()) {
             ComparatorGoodsSuitByPrice comparatorGoodsSuitByPrice = new ComparatorGoodsSuitByPrice();
-            Collections.sort(goodsDtos,comparatorGoodsSuitByPrice);
+            Collections.sort(goodsDtos, comparatorGoodsSuitByPrice);
             return goodsDtos;
         }
         return null;
@@ -161,7 +173,7 @@ public class GoodsServiceImpl implements GoodsService {
         List<GoodsDTO> goodsDtos = goodsMapper.selectAllDtoOrderByTime();
         if (goodsDtos != null && !goodsDtos.isEmpty()) {
             ComparatorGoodsSuitByTime comparatorGoodsSuitByTime = new ComparatorGoodsSuitByTime();
-            Collections.sort(goodsDtos,comparatorGoodsSuitByTime);
+            Collections.sort(goodsDtos, comparatorGoodsSuitByTime);
             return goodsDtos;
         }
         return null;
@@ -169,9 +181,21 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Override
     public List<GoodsDTO> selectAllShow() {
-        List<GoodsDTO> goodsDtos = goodsMapper.selectAllShowDto();
-        if (goodsDtos != null && !goodsDtos.isEmpty()) {
-            return goodsDtos;
+        List<GoodsDTO> goodsDTOS = goodsMapper.selectAllShowDto();
+        if (goodsDTOS != null && !goodsDTOS.isEmpty()) {
+            for (GoodsDTO goodsDTO : goodsDTOS) {
+                List<GoodsDetailDTO> goodsDetailDTOS = goodsDetailMapper.selectAllDtoByGoodsId(goodsDTO.getId());
+                if (!(goodsDetailDTOS != null && !goodsDetailDTOS.isEmpty())) {
+                    goodsDTO.setIsShow(false);
+                    goodsMapper.updateDtoByPrimaryKey(goodsDTO);
+                }
+                List<ColorSizeDTO> colorSizeDTOS = colorSizeMapper.selectAllDtoByGoodsId(goodsDTO.getId());
+                if (!(colorSizeDTOS != null && !colorSizeDTOS.isEmpty())){
+                    goodsDTO.setIsShow(false);
+                    goodsMapper.updateDtoByPrimaryKey(goodsDTO);
+                }
+            }
+            return goodsDTOS;
         }
         return null;
     }
