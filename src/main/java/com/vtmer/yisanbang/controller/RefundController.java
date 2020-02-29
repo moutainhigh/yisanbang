@@ -287,7 +287,6 @@ public class RefundController {
     @GetMapping("/getByStatus/{status}")
     public ResponseMessage<List<RefundVo>> getByStatus(@ApiParam(value = "退款状态", example = "3", required = true)
                                                        @PathVariable Integer status) {
-
         List<RefundVo> refundVoList;
         try {
             refundVoList = refundService.getRefundVoListByStatus(status);

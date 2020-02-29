@@ -50,6 +50,7 @@ public class RefundServiceImpl implements RefundService {
     /**
      * 申请退款,同时修改订单表状态，因此开启事务
      * 当该订单申请过退款，再次发起申请时，更新该订单退款信息，因此退款信息表中orderId唯一
+     *
      * @param refundDTO：orderId,reason,refundGoodsList
      * @return
      */
@@ -63,14 +64,14 @@ public class RefundServiceImpl implements RefundService {
         if (order == null) {  // 该订单不存在
             throw new OrderNotFoundException();
         } else if (!order.getUserId().equals(userId)) {
-            throw new OrderAndUserNotMatchException("订单["+order.getOrderNumber()+"]不属于用户["+userId+"]");
+            throw new OrderAndUserNotMatchException("订单[" + order.getOrderNumber() + "]不属于用户[" + userId + "]");
         }
         // 判断退款商品是否存在
         List<GoodsSkuDTO> refundGoodsList = refundDTO.getRefundGoodsList();
         List<OrderGoodsDTO> orderGoodsDTOList = new ArrayList<>();
         for (GoodsSkuDTO goodsSkuDTO : refundGoodsList) {
             OrderGoodsDTO orderGoodsDTO = new OrderGoodsDTO();
-            BeanUtils.copyProperties(goodsSkuDTO,orderGoodsDTO);
+            BeanUtils.copyProperties(goodsSkuDTO, orderGoodsDTO);
             orderGoodsDTOList.add(orderGoodsDTO);
         }
         boolean check = orderService.judgeGoodsExist(orderGoodsDTOList);
@@ -84,7 +85,7 @@ public class RefundServiceImpl implements RefundService {
         if (refund1 != null) {
             if (refund1.getStatus() == 0) {  // 重复申请
                 throw new DuplicateApplyRefundException();
-            } else if (refund1.getStatus() == 4){ // 之前申请过退款并被商家拒绝了
+            } else if (refund1.getStatus() == 4) { // 之前申请过退款并被商家拒绝了
                 // 删除之前的退款信息，再插入新的退款基础信息
                 refundMapper.deleteByOrderId(orderId);
                 refundGoodsMapper.deleteByRefundId(refund1.getId());
@@ -117,7 +118,7 @@ public class RefundServiceImpl implements RefundService {
         // 如果是已收货订单，部分部分退款；此时的退款金额不需要设置，前端传递
         refundMapper.insert(refund);
         // 插入退款商品数据
-        if (refundGoodsList != null && refundGoodsList.size()!=0) {
+        if (refundGoodsList != null && refundGoodsList.size() != 0) {
             for (GoodsSkuDTO goodsSkuDto : refundGoodsList) {
                 RefundGoods refundGoods = new RefundGoods();
                 refundGoods.setRefundId(refund.getId());
@@ -130,6 +131,7 @@ public class RefundServiceImpl implements RefundService {
 
     /**
      * 根据订单id查询退款详情
+     *
      * @param orderId:订单Id
      * @return RefundVo:退款详情
      */
@@ -147,6 +149,7 @@ public class RefundServiceImpl implements RefundService {
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败
      * 5 -- 获取所有退款订单
+     *
      * @param status: 退款状态
      * @return List<RefundVo>
      */
@@ -164,12 +167,12 @@ public class RefundServiceImpl implements RefundService {
             RefundVo refundVo = getRefundVoByRefund(refund);
             refundVoList.add(refundVo);
         }
-
         return refundVoList;
     }
 
     /**
      * 由退款基础信息封装退款详情信息
+     *
      * @param refund：退款基础信息
      * @return RefundVo：退款详情信息
      */
@@ -200,22 +203,21 @@ public class RefundServiceImpl implements RefundService {
             // 查询退款商品详情
             List<RefundGoods> refundGoodsList = refundGoodsMapper.selectByRefundId(refund.getId());
             for (RefundGoods refundGoods : refundGoodsList) {
-                OrderGoodsDTO orderGoodsDTO = new OrderGoodsDTO();
                 Integer sizeId = refundGoods.getSizeId();
                 Boolean isGoods = refundGoods.getWhetherGoods();
                 for (OrderGoods orderGoods : orderGoodsList) {
                     // 由订单表设置退款商品的价格
                     if (isGoods.equals(orderGoods.getWhetherGoods()) && sizeId.equals(orderGoods.getSizeId())) {
+                        OrderGoodsDTO orderGoodsDTO = new OrderGoodsDTO();
                         // 商品单价
-                        double price = orderGoods.getTotalPrice()/orderGoods.getAmount();
+                        double price = orderGoods.getTotalPrice() / orderGoods.getAmount();
                         orderGoodsDTO.setPrice(price);
                         orderGoodsDTO.setAmount(orderGoods.getAmount());
                         orderGoodsDTO.setAfterTotalPrice(orderGoods.getTotalPrice());
+                        orderService.setOrderGoodsDTO(orderGoodsDTO, sizeId, isGoods);
+                        refundGoodsList1.add(orderGoodsDTO);
                     }
                 } // end for orderGoodsList
-                // 设置退款商品基础信息
-                orderService.setOrderGoodsDTO(orderGoodsDTO,sizeId,isGoods);
-                refundGoodsList1.add(orderGoodsDTO);
             } // end for refundGoodsList
             refundVo.setRefundGoodsList(refundGoodsList1);
         }
@@ -224,6 +226,7 @@ public class RefundServiceImpl implements RefundService {
 
     /**
      * 根据退款编号获取申请退款所需参数
+     *
      * @param agreeRefundDTO：退款编号
      * @return
      */
@@ -251,6 +254,7 @@ public class RefundServiceImpl implements RefundService {
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成（交易成功） 4--交易关闭 5--所有订单
      * 退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败
      * 0 --> 1 or 3 or 4  and  1 --> 2 or 4  and 2 --> 3 or 4
+     *
      * @param refundMap: orderId、status
      * @return
      */
@@ -262,10 +266,10 @@ public class RefundServiceImpl implements RefundService {
         // 如果欲更新的状态与原状态相同
         if (refund.getStatus().equals(status)) {
             return -1;
-        // 如果退款单原状态为0，欲更新的状态为2，即待商家处理更新到待商家收货，报错
-        } else if (refund.getStatus()==0 && status==2) {
+            // 如果退款单原状态为0，欲更新的状态为2，即待商家处理更新到待商家收货，报错
+        } else if (refund.getStatus() == 0 && status == 2) {
             return -2;
-        // 如果原退款状态大于欲修改的退款状态，报错，退款状态不可回溯
+            // 如果原退款状态大于欲修改的退款状态，报错，退款状态不可回溯
         } else if (refund.getStatus() > status) {
             return -3;
         }
@@ -273,7 +277,7 @@ public class RefundServiceImpl implements RefundService {
         refundMapper.updateStatusByOrderId(refundMap);
         // 更新订单表状态 —— 只有更新为退款成功，才需要更新订单表状态为已完成
         if (status == 3) {
-            refundMap.put("status",3);
+            refundMap.put("status", 3);
             orderService.setOrderStatus(refundMap);
         }
         return 1;
@@ -281,6 +285,7 @@ public class RefundServiceImpl implements RefundService {
 
     /**
      * 根据退款编号获取退款基本信息
+     *
      * @param refundNumber:退款编号
      * @return
      */
@@ -291,6 +296,7 @@ public class RefundServiceImpl implements RefundService {
 
     /**
      * 根据退款编号删除退款信息
+     *
      * @param refundNumber
      * @return
      */
@@ -301,12 +307,12 @@ public class RefundServiceImpl implements RefundService {
         Refund refund = refundMapper.selectByRefundNumber(refundNumber);
         if (refund == null) {
             throw new RefundNotFoundException();
-        } else if (refund.getStatus()!=0 || refund.getStatus()!=1) {
+        } else if (refund.getStatus() != 0 || refund.getStatus() != 1) {
             // 如果退款状态不为[待商家处理]、[待用户发货]，则不可撤销退款申请
             throw new RefundStatusNotFitException("退款状态不为[待商家处理]、[待用户发货]，不可撤销退款申请");
-        } else if(!refund.getUserId().equals(userId)) {
+        } else if (!refund.getUserId().equals(userId)) {
             // 检验是否是该用户的退款单
-            throw new RefundNotMatchUserException("退款单["+refundNumber+"]不属于用户["+userId+"]");
+            throw new RefundNotMatchUserException("退款单[" + refundNumber + "]不属于用户[" + userId + "]");
         }
         // 开始撤销退款逻辑
         if (refund.getWhetherReceived() == true) { // 如果是已收到货的部分退款,删除该退款编号下的所有退款商品
@@ -327,7 +333,7 @@ public class RefundServiceImpl implements RefundService {
         while (iterator.hasNext()) {
             Order order = iterator.next();
             Refund refund = refundMapper.selectByOrderId(order.getId());
-            if (refund!=null && refund.getStatus() == 3) {
+            if (refund != null && refund.getStatus() == 3) {
                 iterator.remove();
             }
         }
@@ -347,7 +353,7 @@ public class RefundServiceImpl implements RefundService {
         refundMap.put("orderId", refund.getOrderId());
         refundMap.put("status", 1);
         updateRefundStatus(refundMap);
-        logger.info("退款单[{}]状态更新：[待商家处理]-->[待用户发货]",refundNumber);
+        logger.info("退款单[{}]状态更新：[待商家处理]-->[待用户发货]", refundNumber);
     }
 
     @Override
@@ -357,14 +363,14 @@ public class RefundServiceImpl implements RefundService {
             throw new RefundNotFoundException();
         } else if (refund.getStatus() == 3) {
             // 如果退款状态为“退款成功”
-            throw new RefundStatusNotFitException("该退款单["+refundNumber+"]的退款状态为[退款成功]，不可进行[拒绝退款申请]操作");
+            throw new RefundStatusNotFitException("该退款单[" + refundNumber + "]的退款状态为[退款成功]，不可进行[拒绝退款申请]操作");
         }
         // 更改退款状态
         HashMap<String, Integer> refundMap = new HashMap<>();
         refundMap.put("orderId", refund.getOrderId());
         refundMap.put("status", 4);
         updateRefundStatus(refundMap);
-        logger.info("退款单[{}]状态更新：[{}]-->[退款失败]",refundNumber,refund.getStatus());
+        logger.info("退款单[{}]状态更新：[{}]-->[退款失败]", refundNumber, refund.getStatus());
     }
 
     @Override
@@ -376,7 +382,7 @@ public class RefundServiceImpl implements RefundService {
         } else if (refund.getStatus() != 1) {
             throw new RefundStatusNotFitException("该退款单退款状态不为[待用户发货],不可填写退货单号");
         } else if (!refund.getUserId().equals(userId)) {
-            throw new RefundNotMatchUserException("退款单["+refund.getRefundNumber()+"]不属于用户["+userId+"]");
+            throw new RefundNotMatchUserException("退款单[" + refund.getRefundNumber() + "]不属于用户[" + userId + "]");
         }
         // 执行添加退款单逻辑
         // 插入用户退货单信息
@@ -385,6 +391,6 @@ public class RefundServiceImpl implements RefundService {
         refundMap.put("orderId", refund.getOrderId());
         refundMap.put("status", 2);
         updateRefundStatus(refundMap);
-        logger.info("退款单[{}]状态更新：[待用户发货]-->[待商家收货]",refund.getRefundNumber());
+        logger.info("退款单[{}]状态更新：[待用户发货]-->[待商家收货]", refund.getRefundNumber());
     }
 }
