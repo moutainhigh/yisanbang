@@ -368,12 +368,12 @@ public class RefundServiceImpl implements RefundService {
             throw new RefundNotFoundException();
         } else if (refund.getStatus() != 1) {
             throw new RefundStatusNotFitException("该退款单退款状态不为[待用户发货],不可填写退货单号");
-        } else if (refund.getUserId().equals(userId)) {
+        } else if (!refund.getUserId().equals(userId)) {
             throw new RefundNotMatchUserException("退款单["+refund.getRefundNumber()+"]不属于用户["+userId+"]");
         }
         HashMap<String, Integer> refundMap = new HashMap<>();
         refundMap.put("orderId", refund.getOrderId());
-        refundMap.put("status", 1);
+        refundMap.put("status", 2);
         updateRefundStatus(refundMap);
         logger.info("退款单[{}]状态更新：[待用户发货]-->[待商家收货]",refund.getRefundNumber());
     }
