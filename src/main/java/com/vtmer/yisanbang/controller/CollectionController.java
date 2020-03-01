@@ -16,17 +16,22 @@ import com.vtmer.yisanbang.dto.insert.InsertCollectionDTO;
 import com.vtmer.yisanbang.service.CollectionService;
 import com.vtmer.yisanbang.vo.CollectionVO;
 import io.swagger.annotations.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Api(tags = "用户收藏夹接口",value = "用户部分")
 @RestController
 @RequestMapping("/collection")
 public class CollectionController {
+
+    private final Logger logger = LoggerFactory.getLogger(CollectionController.class);
 
     @Autowired
     private CollectionService collectionService;
@@ -59,18 +64,16 @@ public class CollectionController {
     /**
      * 删除收藏接口
      *
-     * @param collectionIdList：收藏id list集合
+     * @param paramMap：收藏id Map集合
      * @return
      */
     @RequestLog(module = "收藏夹", operationDesc = "批量删除收藏夹中的商品")
-    @ApiImplicitParams({
-            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
-    })
     @ApiOperation(value = "批量删除收藏商品")
     @DeleteMapping("/delete")
     public ResponseMessage delete(@RequestBody
                                   @ApiParam(name = "collectionIdList", value = "收藏夹id列表", example = "[1,2,3]")
-                                          List<Integer> collectionIdList) {
+                                          HashMap<String,Object> paramMap) {
+        List<Integer> collectionIdList = (List<Integer>)paramMap.get("collectionIdList");
         if (collectionIdList != null && collectionIdList.size() != 0) {
             try {
                 collectionService.delete(collectionIdList);
