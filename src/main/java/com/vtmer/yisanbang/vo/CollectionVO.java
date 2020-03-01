@@ -8,6 +8,9 @@ import lombok.Data;
 @Data
 public class CollectionVO {
 
+    @ApiModelProperty(value = "收藏夹id",example = "3")
+    private Integer collectionId;
+
     @ApiModelProperty(value = "商品id",example = "2")
     private Integer goodsId;
 
