@@ -21,6 +21,7 @@ order:
   orderGoodsCartGoodsNotMatchErrorCode: 10007L # 下购物车订单的商品列表和购物车勾选商品列表不一致
   orderGoodsNotExisErrorCode: 10008L # 订单商品不存在
   orderPaidErrorCode: 10009L # 订单已支付,无需重复支付
+  orderAlreadyRemindErrorCode: 10010L # 订单已提醒发货，请勿重复提交
 postage:
   postageSettingsExistErrorCode: 10001L # 邮费设置已经存在
   postageSettingsNotFoundErrorCode: 10002L # 找不到邮费设置信息

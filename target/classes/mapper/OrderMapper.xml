@@ -4,7 +4,7 @@
     <cache type="com.vtmer.yisanbang.common.RedisCache"/>
     <sql id="BaseColumnList">
         id, order_number, user_id, user_name, phone_number, total_price, address_name,
-    status,postage,  courier_number, message, is_delete,create_time,update_time
+     status,postage, courier_number, message, is_remind,is_delete,create_time,update_time
     </sql>
     <sql id="OrderCondition">
         and is_delete = 0
@@ -31,6 +31,7 @@
         <result column="courier_number" jdbcType="VARCHAR" property="courierNumber"/>
         <result column="message" jdbcType="VARCHAR" property="message"/>
         <result column="is_delete" jdbcType="TINYINT" property="whetherDelete"/>
+        <result column="is_remind" jdbcType="TINYINT" property="whetherRemind"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
@@ -65,6 +66,11 @@
             create_time    = #{createTime,jdbcType=TIMESTAMP},
             update_time    = #{updateTime,jdbcType=TIMESTAMP}
         where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateRemind">
+        update `order`
+        set is_remind = 1
+        where order_number = #{orderNumber,jdbcType=VARCHAR}
     </update>
     <update id="updateOrderStatus">
         update `order`

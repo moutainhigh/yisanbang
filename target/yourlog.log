@@ -2361,3 +2361,391 @@ java.lang.NullPointerException: null
 2020-03-01 17:29:56.519  INFO 14733 --- [http-nio-8089-exec-7] c.v.y.common.aop.SystemLogAspect         : 前置通知>>>>>>>>>>>>>>>操作模块：[商品分类],操作方法：[com.vtmer.yisanbang.controller.SortController.getAllSuitSortInfo()]，操作行为：[查询职业装分类]<<<<<<<<<<<<<<<<
 2020-03-01 17:29:56.519  INFO 14733 --- [http-nio-8089-exec-7] c.v.y.common.aop.SystemLogAspect         : RequestMapping:[/sort/get/suitSort/2]
 2020-03-01 17:29:56.519  INFO 14733 --- [http-nio-8089-exec-7] c.v.y.common.aop.SystemLogAspect         : RequestParam:[2, null, null]
+2020-03-01 18:26:49.162  INFO 15968 --- [restartedMain] c.vtmer.yisanbang.YisanbangApplication   : Starting YisanbangApplication on kVanzT-MBP.lan with PID 15968 (/Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/target/classes started by eeatem in /Users/eeatem/IdeaProjects/yisanbang_web/yisanbang)
+2020-03-01 18:26:49.166  INFO 15968 --- [restartedMain] c.vtmer.yisanbang.YisanbangApplication   : The following profiles are active: test
+2020-03-01 18:26:49.269  INFO 15968 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2020-03-01 18:26:49.269  INFO 15968 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2020-03-01 18:26:50.529  INFO 15968 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-03-01 18:26:50.530  INFO 15968 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2020-03-01 18:26:50.564  INFO 15968 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 29ms. Found 0 JDBC repository interfaces.
+2020-03-01 18:26:50.580  INFO 15968 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-03-01 18:26:50.581  INFO 15968 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-03-01 18:26:50.606  INFO 15968 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 15ms. Found 0 Redis repository interfaces.
+2020-03-01 18:26:50.993  INFO 15968 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:26:51.209  INFO 15968 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'mybatis-org.mybatis.spring.boot.autoconfigure.MybatisProperties' of type [org.mybatis.spring.boot.autoconfigure.MybatisProperties] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:26:51.230  INFO 15968 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration' of type [org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration$$EnhancerBySpringCGLIB$$63321d06] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:26:51.236  INFO 15968 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure' of type [com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure$$EnhancerBySpringCGLIB$$4a09c148] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:26:51.242  INFO 15968 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'spring.datasource.druid-com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceProperties' of type [com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceProperties] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:26:51.292  INFO 15968 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'dataSource' of type [com.alibaba.druid.pool.DruidDataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:26:51.344  INFO 15968 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'spring.datasource-org.springframework.boot.autoconfigure.jdbc.DataSourceProperties' of type [org.springframework.boot.autoconfigure.jdbc.DataSourceProperties] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:26:51.350  INFO 15968 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.boot.autoconfigure.jdbc.DataSourceInitializerInvoker' of type [org.springframework.boot.autoconfigure.jdbc.DataSourceInitializerInvoker] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:26:51.821  INFO 15968 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'sqlSessionFactory' of type [org.apache.ibatis.session.defaults.DefaultSqlSessionFactory] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:26:51.836  INFO 15968 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'sqlSessionTemplate' of type [org.mybatis.spring.SqlSessionTemplate] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:26:51.842  INFO 15968 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'permissionMapper' of type [org.mybatis.spring.mapper.MapperFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:26:51.847  INFO 15968 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'permissionMapper' of type [com.sun.proxy.$Proxy100] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:26:51.853  INFO 15968 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'shiroConfig' of type [com.vtmer.yisanbang.shiro.ShiroConfig$$EnhancerBySpringCGLIB$$f54cff2c] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:26:51.882  INFO 15968 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'rolePermiMapper' of type [org.mybatis.spring.mapper.MapperFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:26:51.884  INFO 15968 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'rolePermiMapper' of type [com.sun.proxy.$Proxy102] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:26:51.891  INFO 15968 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'permissionServiceImpl' of type [com.vtmer.yisanbang.service.impl.PermissionServiceImpl] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:26:51.899  INFO 15968 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'adminMapper' of type [org.mybatis.spring.mapper.MapperFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:26:51.900  INFO 15968 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'adminMapper' of type [com.sun.proxy.$Proxy104] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:26:51.911  INFO 15968 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'adminRoleMapper' of type [org.mybatis.spring.mapper.MapperFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:26:51.912  INFO 15968 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'adminRoleMapper' of type [com.sun.proxy.$Proxy106] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:26:51.914  INFO 15968 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'adminRoleServiceImpl' of type [com.vtmer.yisanbang.service.impl.AdminRoleServiceImpl] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:26:51.915  INFO 15968 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'loginRealm' of type [com.vtmer.yisanbang.shiro.LoginRealm] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:26:52.144  INFO 15968 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'securityManager' of type [org.apache.shiro.web.mgt.DefaultWebSecurityManager] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:26:52.158  INFO 15968 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'redisConfig' of type [com.vtmer.yisanbang.common.RedisConfig$$EnhancerBySpringCGLIB$$1bd2e99a] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:26:52.162  INFO 15968 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'spring.redis-org.springframework.boot.autoconfigure.data.redis.RedisProperties' of type [org.springframework.boot.autoconfigure.data.redis.RedisProperties] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:26:52.164  INFO 15968 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.boot.autoconfigure.data.redis.LettuceConnectionConfiguration' of type [org.springframework.boot.autoconfigure.data.redis.LettuceConnectionConfiguration] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:26:52.302  INFO 15968 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'lettuceClientResources' of type [io.lettuce.core.resource.DefaultClientResources] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:26:52.468  INFO 15968 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'redisConnectionFactory' of type [org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:26:52.541  INFO 15968 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'redisTemplate' of type [org.springframework.data.redis.core.RedisTemplate] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:26:52.564  INFO 15968 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'jwtUtil' of type [com.vtmer.yisanbang.common.util.JwtUtil] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:26:52.565  INFO 15968 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'jwtFilter' of type [com.vtmer.yisanbang.shiro.JwtFilter] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:26:52.843  INFO 15968 --- [restartedMain] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2020-03-01 18:26:53.270  INFO 15968 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8089 (http) 80 (http)
+2020-03-01 18:26:53.299  INFO 15968 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-03-01 18:26:53.299  INFO 15968 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.29]
+2020-03-01 18:26:53.379  INFO 15968 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-03-01 18:26:53.379  INFO 15968 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 4109 ms
+2020-03-01 18:26:53.447  INFO 15968 --- [restartedMain] o.s.boot.web.servlet.RegistrationBean    : Filter jwtFilter was not registered (disabled)
+2020-03-01 18:26:53.752  INFO 15968 --- [restartedMain] org.quartz.impl.StdSchedulerFactory      : Using default implementation for ThreadExecutor
+2020-03-01 18:26:53.756  INFO 15968 --- [restartedMain] org.quartz.simpl.SimpleThreadPool        : Job execution threads will use class loader of thread: restartedMain
+2020-03-01 18:26:53.771  INFO 15968 --- [restartedMain] org.quartz.core.SchedulerSignalerImpl    : Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+2020-03-01 18:26:53.772  INFO 15968 --- [restartedMain] org.quartz.core.QuartzScheduler          : Quartz Scheduler v.2.3.2 created.
+2020-03-01 18:26:53.773  INFO 15968 --- [restartedMain] org.quartz.simpl.RAMJobStore             : RAMJobStore initialized.
+2020-03-01 18:26:53.774  INFO 15968 --- [restartedMain] org.quartz.core.QuartzScheduler          : Scheduler meta-data: Quartz Scheduler (v2.3.2) 'DefaultQuartzScheduler' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'org.quartz.core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'org.quartz.simpl.SimpleThreadPool' - with 10 threads.
+  Using job-store 'org.quartz.simpl.RAMJobStore' - which does not support persistence. and is not clustered.
+
+2020-03-01 18:26:53.774  INFO 15968 --- [restartedMain] org.quartz.impl.StdSchedulerFactory      : Quartz scheduler 'DefaultQuartzScheduler' initialized from an externally provided properties instance.
+2020-03-01 18:26:53.775  INFO 15968 --- [restartedMain] org.quartz.impl.StdSchedulerFactory      : Quartz scheduler version: 2.3.2
+2020-03-01 18:26:53.775  INFO 15968 --- [restartedMain] org.quartz.core.QuartzScheduler          : JobFactory set to: org.springframework.scheduling.quartz.SpringBeanJobFactory@735d698e
+2020-03-01 18:26:54.616  INFO 15968 --- [restartedMain] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2020-03-01 18:26:54.643  INFO 15968 --- [restartedMain] org.quartz.core.QuartzScheduler          : Scheduler DefaultQuartzScheduler_$_NON_CLUSTERED started.
+2020-03-01 18:26:54.644  INFO 15968 --- [restartedMain] org.quartz.core.QuartzScheduler          : Scheduler DefaultQuartzScheduler_$_NON_CLUSTERED started.
+2020-03-01 18:26:54.700  INFO 15968 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2020-03-01 18:26:54.756  INFO 15968 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2020-03-01 18:26:55.143  INFO 15968 --- [restartedMain] o.s.s.c.ThreadPoolTaskScheduler          : Initializing ExecutorService 'taskScheduler'
+2020-03-01 18:26:55.213  INFO 15968 --- [restartedMain] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2020-03-01 18:26:55.239  INFO 15968 --- [restartedMain] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2020-03-01 18:26:55.493  INFO 15968 --- [restartedMain] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2020-03-01 18:26:55.698  INFO 15968 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteAdInfoUsingDELETE_1
+2020-03-01 18:26:55.699  INFO 15968 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: getAdInfoUsingGET_1
+2020-03-01 18:26:55.704  INFO 15968 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: updateAdIsShowedUsingPUT_1
+2020-03-01 18:26:55.712  INFO 15968 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: uploadPicUsingPOST_1
+2020-03-01 18:26:55.754  INFO 15968 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUsingDELETE_1
+2020-03-01 18:26:55.757  INFO 15968 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: insertUsingPOST_1
+2020-03-01 18:26:55.778  INFO 15968 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUsingDELETE_2
+2020-03-01 18:26:55.784  INFO 15968 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: insertUsingPOST_2
+2020-03-01 18:26:55.786  INFO 15968 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: updateUsingPUT_1
+2020-03-01 18:26:55.846  INFO 15968 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: getAllUsingGET_1
+2020-03-01 18:26:55.875  INFO 15968 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUsingDELETE_3
+2020-03-01 18:26:55.915  INFO 15968 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: selectAllSizeByIdUsingGET_1
+2020-03-01 18:26:55.936  INFO 15968 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUsingDELETE_4
+2020-03-01 18:26:55.942  INFO 15968 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: getUsingGET_1
+2020-03-01 18:26:55.947  INFO 15968 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: insertUsingPOST_3
+2020-03-01 18:26:55.948  INFO 15968 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: updateUsingPUT_2
+2020-03-01 18:26:55.959  INFO 15968 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUsingDELETE_5
+2020-03-01 18:26:56.010  INFO 15968 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addGoodsUsingPOST_1
+2020-03-01 18:26:56.014  INFO 15968 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteGoodsUsingDELETE_1
+2020-03-01 18:26:56.016  INFO 15968 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: selectAllGoodsOrderByPriceUsingGET_1
+2020-03-01 18:26:56.035  INFO 15968 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: uploadGoodsPicUsingPOST_1
+2020-03-01 18:26:56.090  INFO 15968 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8089 (http) 80 (http) with context path ''
+2020-03-01 18:26:56.093  INFO 15968 --- [restartedMain] c.vtmer.yisanbang.YisanbangApplication   : Started YisanbangApplication in 7.748 seconds (JVM running for 9.194)
+2020-03-01 18:26:56.246  INFO 15968 --- [restartedMain] io.lettuce.core.EpollProvider            : Starting without optional epoll library
+2020-03-01 18:26:56.247  INFO 15968 --- [restartedMain] io.lettuce.core.KqueueProvider           : Starting without optional kqueue library
+2020-03-01 18:27:18.615  INFO 15968 --- [SpringContextShutdownHook] org.quartz.core.QuartzScheduler          : Scheduler DefaultQuartzScheduler_$_NON_CLUSTERED paused.
+2020-03-01 18:27:18.616  INFO 15968 --- [SpringContextShutdownHook] o.s.s.c.ThreadPoolTaskScheduler          : Shutting down ExecutorService 'taskScheduler'
+2020-03-01 18:27:18.620  INFO 15968 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2020-03-01 18:27:18.622  INFO 15968 --- [SpringContextShutdownHook] o.s.s.quartz.SchedulerFactoryBean        : Shutting down Quartz Scheduler
+2020-03-01 18:27:18.622  INFO 15968 --- [SpringContextShutdownHook] org.quartz.core.QuartzScheduler          : Scheduler DefaultQuartzScheduler_$_NON_CLUSTERED shutting down.
+2020-03-01 18:27:18.622  INFO 15968 --- [SpringContextShutdownHook] org.quartz.core.QuartzScheduler          : Scheduler DefaultQuartzScheduler_$_NON_CLUSTERED paused.
+2020-03-01 18:27:18.623  INFO 15968 --- [SpringContextShutdownHook] org.quartz.core.QuartzScheduler          : Scheduler DefaultQuartzScheduler_$_NON_CLUSTERED shutdown complete.
+2020-03-01 18:27:18.746  INFO 15968 --- [SpringContextShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2020-03-01 18:27:23.645  INFO 15977 --- [restartedMain] c.vtmer.yisanbang.YisanbangApplication   : Starting YisanbangApplication on kVanzT-MBP.lan with PID 15977 (/Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/target/classes started by eeatem in /Users/eeatem/IdeaProjects/yisanbang_web/yisanbang)
+2020-03-01 18:27:23.649  INFO 15977 --- [restartedMain] c.vtmer.yisanbang.YisanbangApplication   : The following profiles are active: test
+2020-03-01 18:27:23.779  INFO 15977 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2020-03-01 18:27:23.779  INFO 15977 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2020-03-01 18:27:24.851  INFO 15977 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-03-01 18:27:24.852  INFO 15977 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2020-03-01 18:27:24.889  INFO 15977 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 34ms. Found 0 JDBC repository interfaces.
+2020-03-01 18:27:24.900  INFO 15977 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-03-01 18:27:24.902  INFO 15977 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-03-01 18:27:24.925  INFO 15977 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 18ms. Found 0 Redis repository interfaces.
+2020-03-01 18:27:25.280  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:27:25.433  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'mybatis-org.mybatis.spring.boot.autoconfigure.MybatisProperties' of type [org.mybatis.spring.boot.autoconfigure.MybatisProperties] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:27:25.445  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration' of type [org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration$$EnhancerBySpringCGLIB$$70472b01] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:27:25.450  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure' of type [com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure$$EnhancerBySpringCGLIB$$571ecf43] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:27:25.455  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'spring.datasource.druid-com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceProperties' of type [com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceProperties] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:27:25.489  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'dataSource' of type [com.alibaba.druid.pool.DruidDataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:27:25.573  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'spring.datasource-org.springframework.boot.autoconfigure.jdbc.DataSourceProperties' of type [org.springframework.boot.autoconfigure.jdbc.DataSourceProperties] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:27:25.606  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.boot.autoconfigure.jdbc.DataSourceInitializerInvoker' of type [org.springframework.boot.autoconfigure.jdbc.DataSourceInitializerInvoker] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:27:26.187  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'sqlSessionFactory' of type [org.apache.ibatis.session.defaults.DefaultSqlSessionFactory] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:27:26.198  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'sqlSessionTemplate' of type [org.mybatis.spring.SqlSessionTemplate] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:27:26.203  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'permissionMapper' of type [org.mybatis.spring.mapper.MapperFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:27:26.207  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'permissionMapper' of type [com.sun.proxy.$Proxy100] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:27:26.212  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'shiroConfig' of type [com.vtmer.yisanbang.shiro.ShiroConfig$$EnhancerBySpringCGLIB$$2620d27] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:27:26.232  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'rolePermiMapper' of type [org.mybatis.spring.mapper.MapperFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:27:26.233  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'rolePermiMapper' of type [com.sun.proxy.$Proxy102] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:27:26.236  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'permissionServiceImpl' of type [com.vtmer.yisanbang.service.impl.PermissionServiceImpl] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:27:26.240  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'adminMapper' of type [org.mybatis.spring.mapper.MapperFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:27:26.241  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'adminMapper' of type [com.sun.proxy.$Proxy104] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:27:26.245  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'adminRoleMapper' of type [org.mybatis.spring.mapper.MapperFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:27:26.246  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'adminRoleMapper' of type [com.sun.proxy.$Proxy106] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:27:26.247  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'adminRoleServiceImpl' of type [com.vtmer.yisanbang.service.impl.AdminRoleServiceImpl] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:27:26.249  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'loginRealm' of type [com.vtmer.yisanbang.shiro.LoginRealm] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:27:26.450  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'securityManager' of type [org.apache.shiro.web.mgt.DefaultWebSecurityManager] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:27:26.463  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'redisConfig' of type [com.vtmer.yisanbang.common.RedisConfig$$EnhancerBySpringCGLIB$$28e7f795] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:27:26.469  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'spring.redis-org.springframework.boot.autoconfigure.data.redis.RedisProperties' of type [org.springframework.boot.autoconfigure.data.redis.RedisProperties] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:27:26.472  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.boot.autoconfigure.data.redis.LettuceConnectionConfiguration' of type [org.springframework.boot.autoconfigure.data.redis.LettuceConnectionConfiguration] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:27:26.549  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'lettuceClientResources' of type [io.lettuce.core.resource.DefaultClientResources] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:27:26.635  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'redisConnectionFactory' of type [org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:27:26.698  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'redisTemplate' of type [org.springframework.data.redis.core.RedisTemplate] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:27:26.732  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'jwtUtil' of type [com.vtmer.yisanbang.common.util.JwtUtil] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:27:26.735  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'jwtFilter' of type [com.vtmer.yisanbang.shiro.JwtFilter] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:27:26.886  INFO 15977 --- [restartedMain] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2020-03-01 18:27:27.309  INFO 15977 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8089 (http)
+2020-03-01 18:27:27.316  INFO 15977 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-03-01 18:27:27.316  INFO 15977 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.29]
+2020-03-01 18:27:27.398  INFO 15977 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-03-01 18:27:27.398  INFO 15977 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 3619 ms
+2020-03-01 18:27:27.483  INFO 15977 --- [restartedMain] o.s.boot.web.servlet.RegistrationBean    : Filter jwtFilter was not registered (disabled)
+2020-03-01 18:27:27.730  INFO 15977 --- [restartedMain] org.quartz.impl.StdSchedulerFactory      : Using default implementation for ThreadExecutor
+2020-03-01 18:27:27.733  INFO 15977 --- [restartedMain] org.quartz.simpl.SimpleThreadPool        : Job execution threads will use class loader of thread: restartedMain
+2020-03-01 18:27:27.740  INFO 15977 --- [restartedMain] org.quartz.core.SchedulerSignalerImpl    : Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+2020-03-01 18:27:27.740  INFO 15977 --- [restartedMain] org.quartz.core.QuartzScheduler          : Quartz Scheduler v.2.3.2 created.
+2020-03-01 18:27:27.740  INFO 15977 --- [restartedMain] org.quartz.simpl.RAMJobStore             : RAMJobStore initialized.
+2020-03-01 18:27:27.741  INFO 15977 --- [restartedMain] org.quartz.core.QuartzScheduler          : Scheduler meta-data: Quartz Scheduler (v2.3.2) 'DefaultQuartzScheduler' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'org.quartz.core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'org.quartz.simpl.SimpleThreadPool' - with 10 threads.
+  Using job-store 'org.quartz.simpl.RAMJobStore' - which does not support persistence. and is not clustered.
+
+2020-03-01 18:27:27.741  INFO 15977 --- [restartedMain] org.quartz.impl.StdSchedulerFactory      : Quartz scheduler 'DefaultQuartzScheduler' initialized from an externally provided properties instance.
+2020-03-01 18:27:27.741  INFO 15977 --- [restartedMain] org.quartz.impl.StdSchedulerFactory      : Quartz scheduler version: 2.3.2
+2020-03-01 18:27:27.741  INFO 15977 --- [restartedMain] org.quartz.core.QuartzScheduler          : JobFactory set to: org.springframework.scheduling.quartz.SpringBeanJobFactory@58a8965b
+2020-03-01 18:27:28.452  INFO 15977 --- [restartedMain] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2020-03-01 18:27:28.472  INFO 15977 --- [restartedMain] org.quartz.core.QuartzScheduler          : Scheduler DefaultQuartzScheduler_$_NON_CLUSTERED started.
+2020-03-01 18:27:28.473  INFO 15977 --- [restartedMain] org.quartz.core.QuartzScheduler          : Scheduler DefaultQuartzScheduler_$_NON_CLUSTERED started.
+2020-03-01 18:27:28.522  INFO 15977 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2020-03-01 18:27:28.563  INFO 15977 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2020-03-01 18:27:28.900  INFO 15977 --- [restartedMain] o.s.s.c.ThreadPoolTaskScheduler          : Initializing ExecutorService 'taskScheduler'
+2020-03-01 18:27:28.954  INFO 15977 --- [restartedMain] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2020-03-01 18:27:28.966  INFO 15977 --- [restartedMain] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2020-03-01 18:27:28.995  INFO 15977 --- [restartedMain] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2020-03-01 18:27:29.354  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteAdInfoUsingDELETE_1
+2020-03-01 18:27:29.355  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: getAdInfoUsingGET_1
+2020-03-01 18:27:29.359  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: updateAdIsShowedUsingPUT_1
+2020-03-01 18:27:29.362  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: uploadPicUsingPOST_1
+2020-03-01 18:27:29.411  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUsingDELETE_1
+2020-03-01 18:27:29.415  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: insertUsingPOST_1
+2020-03-01 18:27:29.443  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUsingDELETE_2
+2020-03-01 18:27:29.452  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: insertUsingPOST_2
+2020-03-01 18:27:29.454  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: updateUsingPUT_1
+2020-03-01 18:27:29.510  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: getAllUsingGET_1
+2020-03-01 18:27:29.541  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUsingDELETE_3
+2020-03-01 18:27:29.581  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: selectAllSizeByIdUsingGET_1
+2020-03-01 18:27:29.599  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUsingDELETE_4
+2020-03-01 18:27:29.603  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: getUsingGET_1
+2020-03-01 18:27:29.606  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: insertUsingPOST_3
+2020-03-01 18:27:29.608  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: updateUsingPUT_2
+2020-03-01 18:27:29.622  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUsingDELETE_5
+2020-03-01 18:27:29.673  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addGoodsUsingPOST_1
+2020-03-01 18:27:29.675  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteGoodsUsingDELETE_1
+2020-03-01 18:27:29.678  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: selectAllGoodsOrderByPriceUsingGET_1
+2020-03-01 18:27:29.689  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: uploadGoodsPicUsingPOST_1
+2020-03-01 18:27:29.751  INFO 15977 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8089 (http) with context path ''
+2020-03-01 18:27:29.754  INFO 15977 --- [restartedMain] c.vtmer.yisanbang.YisanbangApplication   : Started YisanbangApplication in 6.833 seconds (JVM running for 7.666)
+2020-03-01 18:27:29.842  INFO 15977 --- [restartedMain] io.lettuce.core.EpollProvider            : Starting without optional epoll library
+2020-03-01 18:27:29.843  INFO 15977 --- [restartedMain] io.lettuce.core.KqueueProvider           : Starting without optional kqueue library
+2020-03-01 18:28:08.235  INFO 15977 --- [http-nio-8089-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-03-01 18:28:08.236  INFO 15977 --- [http-nio-8089-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-03-01 18:28:08.256  INFO 15977 --- [http-nio-8089-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 20 ms
+2020-03-01 18:28:08.344  INFO 15977 --- [http-nio-8089-exec-2] c.v.y.common.aop.SystemLogAspect         : 前置通知>>>>>>>>>>>>>>>操作模块：[商品分类],操作方法：[com.vtmer.yisanbang.controller.SortController.getAllSuitSortInfo()]，操作行为：[查询职业装分类]<<<<<<<<<<<<<<<<
+2020-03-01 18:28:08.344  INFO 15977 --- [http-nio-8089-exec-2] c.v.y.common.aop.SystemLogAspect         : RequestMapping:[/sort/get/suitSort/2]
+2020-03-01 18:28:08.344  INFO 15977 --- [http-nio-8089-exec-2] c.v.y.common.aop.SystemLogAspect         : RequestParam:[2, null, null]
+2020-03-01 18:29:15.603  INFO 15977 --- [http-nio-8089-exec-4] c.v.y.c.e.GlobalExceptionHandler         : 参数校验异常:用户名不能为空(adminName)
+2020-03-01 18:29:15.606  WARN 15977 --- [http-nio-8089-exec-4] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.web.bind.MethodArgumentNotValidException: Validation failed for argument [0] in public com.vtmer.yisanbang.common.ResponseMessage com.vtmer.yisanbang.controller.AdminController.login(com.vtmer.yisanbang.dto.LoginDTO): [Field error in object 'loginDTO' on field 'adminName': rejected value [null]; codes [NotBlank.loginDTO.adminName,NotBlank.adminName,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [loginDTO.adminName,adminName]; arguments []; default message [adminName]]; default message [用户名不能为空]] ]
+2020-03-01 18:29:23.181  INFO 15977 --- [http-nio-8089-exec-6] c.v.y.common.aop.SystemLogAspect         : 前置通知>>>>>>>>>>>>>>>操作模块：[后台管理],操作方法：[com.vtmer.yisanbang.controller.AdminController.login()]，操作行为：[管理员登录]<<<<<<<<<<<<<<<<
+2020-03-01 18:29:23.181  INFO 15977 --- [http-nio-8089-exec-6] c.v.y.common.aop.SystemLogAspect         : RequestMapping:[/admin/login]
+2020-03-01 18:29:23.182  INFO 15977 --- [http-nio-8089-exec-6] c.v.y.common.aop.SystemLogAspect         : RequestParam:[com.vtmer.yisanbang.dto.LoginDTO@7a265feb]
+2020-03-01 18:29:34.827  INFO 15977 --- [http-nio-8089-exec-7] c.v.y.common.aop.SystemLogAspect         : 前置通知>>>>>>>>>>>>>>>操作模块：[后台管理],操作方法：[com.vtmer.yisanbang.controller.AdminController.listGeneralAdmin()]，操作行为：[查询所有普通管理员]<<<<<<<<<<<<<<<<
+2020-03-01 18:29:34.830  INFO 15977 --- [http-nio-8089-exec-7] c.v.y.common.aop.SystemLogAspect         : RequestMapping:[/admin/generalAdmin]
+2020-03-01 18:29:34.830  INFO 15977 --- [http-nio-8089-exec-7] c.v.y.common.aop.SystemLogAspect         : RequestParam:[]
+2020-03-01 18:31:30.232  INFO 15977 --- [http-nio-8089-exec-1] c.v.y.common.aop.SystemLogAspect         : 前置通知>>>>>>>>>>>>>>>操作模块：[首页广告],操作方法：[com.vtmer.yisanbang.controller.AdController.deleteAdInfo()]，操作行为：[删除广告信息]<<<<<<<<<<<<<<<<
+2020-03-01 18:31:30.233  INFO 15977 --- [http-nio-8089-exec-1] c.v.y.common.aop.SystemLogAspect         : RequestMapping:[/ad/7]
+2020-03-01 18:31:30.233  INFO 15977 --- [http-nio-8089-exec-1] c.v.y.common.aop.SystemLogAspect         : RequestParam:[7]
+2020-03-01 18:31:30.407  INFO 15977 --- [http-nio-8089-exec-1] com.vtmer.yisanbang.common.RedisCache    : Clear all the cached query result from redis
+2020-03-01 18:32:43.428  WARN 15977 --- [http-nio-8089-exec-3] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.HttpRequestMethodNotSupportedException: Request method 'DELETE' not supported]
+2020-03-01 18:32:48.413  INFO 15977 --- [http-nio-8089-exec-4] c.v.y.common.aop.SystemLogAspect         : 前置通知>>>>>>>>>>>>>>>操作模块：[订单],操作方法：[com.vtmer.yisanbang.controller.OrderController.getUserOrderList()]，操作行为：[获取用户相关状态的所有订单]<<<<<<<<<<<<<<<<
+2020-03-01 18:32:48.413  INFO 15977 --- [http-nio-8089-exec-4] c.v.y.common.aop.SystemLogAspect         : RequestMapping:[/order/getUserOrderList/status/1]
+2020-03-01 18:32:48.413  INFO 15977 --- [http-nio-8089-exec-4] c.v.y.common.aop.SystemLogAspect         : RequestParam:[1]
+2020-03-01 18:32:48.464  WARN 15977 --- [http-nio-8089-exec-4] c.v.y.c.e.GlobalExceptionHandler         : api出现异常,异常信息为: java.lang.NullPointerException
+2020-03-01 18:32:48.474  WARN 15977 --- [http-nio-8089-exec-4] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [com.vtmer.yisanbang.common.exception.api.ApiException: java.lang.NullPointerException]
+2020-03-01 18:32:54.043  INFO 15977 --- [http-nio-8089-exec-6] c.v.y.common.aop.SystemLogAspect         : 前置通知>>>>>>>>>>>>>>>操作模块：[订单],操作方法：[com.vtmer.yisanbang.controller.OrderController.getUserOrderList()]，操作行为：[获取用户相关状态的所有订单]<<<<<<<<<<<<<<<<
+2020-03-01 18:32:54.043  INFO 15977 --- [http-nio-8089-exec-6] c.v.y.common.aop.SystemLogAspect         : RequestMapping:[/order/getUserOrderList/status/0]
+2020-03-01 18:32:54.043  INFO 15977 --- [http-nio-8089-exec-6] c.v.y.common.aop.SystemLogAspect         : RequestParam:[0]
+2020-03-01 18:32:54.045  WARN 15977 --- [http-nio-8089-exec-6] c.v.y.c.e.GlobalExceptionHandler         : api出现异常,异常信息为: java.lang.NullPointerException
+2020-03-01 18:32:54.047  WARN 15977 --- [http-nio-8089-exec-6] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [com.vtmer.yisanbang.common.exception.api.ApiException: java.lang.NullPointerException]
+2020-03-01 18:33:31.102  INFO 15977 --- [http-nio-8089-exec-7] c.v.y.common.aop.SystemLogAspect         : 前置通知>>>>>>>>>>>>>>>操作模块：[订单],操作方法：[com.vtmer.yisanbang.controller.OrderController.getOrderList()]，操作行为：[获取商城中相关状态的所有订单]<<<<<<<<<<<<<<<<
+2020-03-01 18:33:31.107  INFO 15977 --- [http-nio-8089-exec-7] c.v.y.common.aop.SystemLogAspect         : RequestMapping:[/order/getOrderList/status/1]
+2020-03-01 18:33:31.107  INFO 15977 --- [http-nio-8089-exec-7] c.v.y.common.aop.SystemLogAspect         : RequestParam:[1]
+2020-03-01 18:33:31.684  WARN 15977 --- [http-nio-8089-exec-7] c.v.y.c.e.GlobalExceptionHandler         : api出现异常,异常信息为: org.springframework.jdbc.BadSqlGrammarException: 
+### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: Unknown column 'is_remind' in 'field list'
+### The error may exist in file [/Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/target/classes/mapper/OrderMapper.xml]
+### The error may involve defaultParameterMap
+### The error occurred while setting parameters
+### SQL: select                   id, order_number, user_id, user_name, phone_number, total_price, address_name,      status,postage, courier_number, message, is_remind,is_delete,create_time,update_time               from `order`         where 1 = 1                   and is_delete = 0                                                                and status = ?                                       order by update_time DESC
+### Cause: java.sql.SQLSyntaxErrorException: Unknown column 'is_remind' in 'field list'
+; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: Unknown column 'is_remind' in 'field list'
+2020-03-01 18:33:31.688  WARN 15977 --- [http-nio-8089-exec-7] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [com.vtmer.yisanbang.common.exception.api.ApiException: org.springframework.jdbc.BadSqlGrammarException: 
+### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: Unknown column 'is_remind' in 'field list'
+### The error may exist in file [/Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/target/classes/mapper/OrderMapper.xml]
+### The error may involve defaultParameterMap
+### The error occurred while setting parameters
+### SQL: select                   id, order_number, user_id, user_name, phone_number, total_price, address_name,      status,postage, courier_number, message, is_remind,is_delete,create_time,update_time               from `order`         where 1 = 1                   and is_delete = 0                                                                and status = ?                                       order by update_time DESC
+### Cause: java.sql.SQLSyntaxErrorException: Unknown column 'is_remind' in 'field list'
+; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: Unknown column 'is_remind' in 'field list']
+2020-03-01 18:34:03.408  INFO 15977 --- [http-nio-8089-exec-8] c.v.y.common.aop.SystemLogAspect         : 前置通知>>>>>>>>>>>>>>>操作模块：[订单],操作方法：[com.vtmer.yisanbang.controller.OrderController.getOrderList()]，操作行为：[获取商城中相关状态的所有订单]<<<<<<<<<<<<<<<<
+2020-03-01 18:34:03.408  INFO 15977 --- [http-nio-8089-exec-8] c.v.y.common.aop.SystemLogAspect         : RequestMapping:[/order/getOrderList/status/0]
+2020-03-01 18:34:03.409  INFO 15977 --- [http-nio-8089-exec-8] c.v.y.common.aop.SystemLogAspect         : RequestParam:[0]
+2020-03-01 18:34:03.420  WARN 15977 --- [http-nio-8089-exec-8] c.v.y.c.e.GlobalExceptionHandler         : api出现异常,异常信息为: org.springframework.jdbc.BadSqlGrammarException: 
+### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: Unknown column 'is_remind' in 'field list'
+### The error may exist in file [/Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/target/classes/mapper/OrderMapper.xml]
+### The error may involve defaultParameterMap
+### The error occurred while setting parameters
+### SQL: select                   id, order_number, user_id, user_name, phone_number, total_price, address_name,      status,postage, courier_number, message, is_remind,is_delete,create_time,update_time               from `order`         where 1 = 1                   and is_delete = 0                                                                and status = ?                                       order by update_time DESC
+### Cause: java.sql.SQLSyntaxErrorException: Unknown column 'is_remind' in 'field list'
+; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: Unknown column 'is_remind' in 'field list'
+2020-03-01 18:34:03.423  WARN 15977 --- [http-nio-8089-exec-8] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [com.vtmer.yisanbang.common.exception.api.ApiException: org.springframework.jdbc.BadSqlGrammarException: 
+### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: Unknown column 'is_remind' in 'field list'
+### The error may exist in file [/Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/target/classes/mapper/OrderMapper.xml]
+### The error may involve defaultParameterMap
+### The error occurred while setting parameters
+### SQL: select                   id, order_number, user_id, user_name, phone_number, total_price, address_name,      status,postage, courier_number, message, is_remind,is_delete,create_time,update_time               from `order`         where 1 = 1                   and is_delete = 0                                                                and status = ?                                       order by update_time DESC
+### Cause: java.sql.SQLSyntaxErrorException: Unknown column 'is_remind' in 'field list'
+; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: Unknown column 'is_remind' in 'field list']
+2020-03-01 18:41:42.532  INFO 15977 --- [http-nio-8089-exec-1] c.v.y.common.aop.SystemLogAspect         : 前置通知>>>>>>>>>>>>>>>操作模块：[优惠规则设置],操作方法：[com.vtmer.yisanbang.controller.DiscountController.get()]，操作行为：[获取打折优惠信息设置]<<<<<<<<<<<<<<<<
+2020-03-01 18:41:42.536  INFO 15977 --- [http-nio-8089-exec-1] c.v.y.common.aop.SystemLogAspect         : RequestMapping:[/discount/get]
+2020-03-01 18:41:42.536  INFO 15977 --- [http-nio-8089-exec-1] c.v.y.common.aop.SystemLogAspect         : RequestParam:[]
+2020-03-01 18:50:15.342  INFO 15977 --- [Thread-16] org.quartz.core.QuartzScheduler          : Scheduler DefaultQuartzScheduler_$_NON_CLUSTERED paused.
+2020-03-01 18:50:15.366  INFO 15977 --- [Thread-16] o.s.s.c.ThreadPoolTaskScheduler          : Shutting down ExecutorService 'taskScheduler'
+2020-03-01 18:50:15.381  INFO 15977 --- [Thread-16] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2020-03-01 18:50:15.402  INFO 15977 --- [Thread-16] o.s.s.quartz.SchedulerFactoryBean        : Shutting down Quartz Scheduler
+2020-03-01 18:50:15.402  INFO 15977 --- [Thread-16] org.quartz.core.QuartzScheduler          : Scheduler DefaultQuartzScheduler_$_NON_CLUSTERED shutting down.
+2020-03-01 18:50:15.402  INFO 15977 --- [Thread-16] org.quartz.core.QuartzScheduler          : Scheduler DefaultQuartzScheduler_$_NON_CLUSTERED paused.
+2020-03-01 18:50:15.403  INFO 15977 --- [Thread-16] org.quartz.core.QuartzScheduler          : Scheduler DefaultQuartzScheduler_$_NON_CLUSTERED shutdown complete.
+2020-03-01 18:50:15.669  INFO 15977 --- [Thread-16] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2020-03-01 18:50:16.506  INFO 15977 --- [restartedMain] ConditionEvaluationReportLoggingListener : 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+2020-03-01 18:50:16.577  INFO 15977 --- [restartedMain] c.vtmer.yisanbang.YisanbangApplication   : Starting YisanbangApplication on kVanzT-MBP.lan with PID 15977 (/Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/target/classes started by eeatem in /Users/eeatem/IdeaProjects/yisanbang_web/yisanbang)
+2020-03-01 18:50:16.577  INFO 15977 --- [restartedMain] c.vtmer.yisanbang.YisanbangApplication   : The following profiles are active: test
+2020-03-01 18:50:16.950  INFO 15977 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-03-01 18:50:16.951  INFO 15977 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2020-03-01 18:50:17.004  INFO 15977 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 53ms. Found 0 JDBC repository interfaces.
+2020-03-01 18:50:17.011  INFO 15977 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-03-01 18:50:17.011  INFO 15977 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-03-01 18:50:17.037  INFO 15977 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 25ms. Found 0 Redis repository interfaces.
+2020-03-01 18:50:17.194  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:50:17.253  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'mybatis-org.mybatis.spring.boot.autoconfigure.MybatisProperties' of type [org.mybatis.spring.boot.autoconfigure.MybatisProperties] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:50:17.289  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration' of type [org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration$$EnhancerBySpringCGLIB$$70472b01] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:50:17.298  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure' of type [com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure$$EnhancerBySpringCGLIB$$571ecf43] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:50:17.309  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'spring.datasource.druid-com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceProperties' of type [com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceProperties] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:50:17.322  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'dataSource' of type [com.alibaba.druid.pool.DruidDataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:50:17.394  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'spring.datasource-org.springframework.boot.autoconfigure.jdbc.DataSourceProperties' of type [org.springframework.boot.autoconfigure.jdbc.DataSourceProperties] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:50:17.414  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.boot.autoconfigure.jdbc.DataSourceInitializerInvoker' of type [org.springframework.boot.autoconfigure.jdbc.DataSourceInitializerInvoker] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:50:18.487  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'sqlSessionFactory' of type [org.apache.ibatis.session.defaults.DefaultSqlSessionFactory] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:50:18.490  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'sqlSessionTemplate' of type [org.mybatis.spring.SqlSessionTemplate] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:50:18.495  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'permissionMapper' of type [org.mybatis.spring.mapper.MapperFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:50:18.496  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'permissionMapper' of type [com.sun.proxy.$Proxy257] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:50:18.498  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'shiroConfig' of type [com.vtmer.yisanbang.shiro.ShiroConfig$$EnhancerBySpringCGLIB$$2620d27] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:50:18.507  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'rolePermiMapper' of type [org.mybatis.spring.mapper.MapperFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:50:18.507  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'rolePermiMapper' of type [com.sun.proxy.$Proxy259] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:50:18.512  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'permissionServiceImpl' of type [com.vtmer.yisanbang.service.impl.PermissionServiceImpl] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:50:18.516  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'adminMapper' of type [org.mybatis.spring.mapper.MapperFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:50:18.517  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'adminMapper' of type [com.sun.proxy.$Proxy261] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:50:18.523  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'adminRoleMapper' of type [org.mybatis.spring.mapper.MapperFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:50:18.524  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'adminRoleMapper' of type [com.sun.proxy.$Proxy263] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:50:18.527  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'adminRoleServiceImpl' of type [com.vtmer.yisanbang.service.impl.AdminRoleServiceImpl] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:50:18.529  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'loginRealm' of type [com.vtmer.yisanbang.shiro.LoginRealm] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:50:18.536  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'securityManager' of type [org.apache.shiro.web.mgt.DefaultWebSecurityManager] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:50:18.547  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'redisConfig' of type [com.vtmer.yisanbang.common.RedisConfig$$EnhancerBySpringCGLIB$$28e7f795] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:50:18.551  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'spring.redis-org.springframework.boot.autoconfigure.data.redis.RedisProperties' of type [org.springframework.boot.autoconfigure.data.redis.RedisProperties] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:50:18.553  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.boot.autoconfigure.data.redis.LettuceConnectionConfiguration' of type [org.springframework.boot.autoconfigure.data.redis.LettuceConnectionConfiguration] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:50:18.556  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'lettuceClientResources' of type [io.lettuce.core.resource.DefaultClientResources] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:50:18.560  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'redisConnectionFactory' of type [org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:50:18.573  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'redisTemplate' of type [org.springframework.data.redis.core.RedisTemplate] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:50:18.589  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'jwtUtil' of type [com.vtmer.yisanbang.common.util.JwtUtil] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:50:18.590  INFO 15977 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'jwtFilter' of type [com.vtmer.yisanbang.shiro.JwtFilter] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-03-01 18:50:18.622  INFO 15977 --- [restartedMain] com.alibaba.druid.pool.DruidDataSource   : {dataSource-2} inited
+2020-03-01 18:50:18.742  WARN 15977 --- [restartedMain] org.apache.tomcat.util.modeler.Registry  : The MBean registry cannot be disabled because it has already been initialised
+2020-03-01 18:50:18.794  INFO 15977 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8089 (http)
+2020-03-01 18:50:18.794  INFO 15977 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-03-01 18:50:18.794  INFO 15977 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.29]
+2020-03-01 18:50:18.805  INFO 15977 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-03-01 18:50:18.805  INFO 15977 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 2224 ms
+2020-03-01 18:50:18.840  INFO 15977 --- [restartedMain] o.s.boot.web.servlet.RegistrationBean    : Filter jwtFilter was not registered (disabled)
+2020-03-01 18:50:18.968  INFO 15977 --- [restartedMain] org.quartz.impl.StdSchedulerFactory      : Using default implementation for ThreadExecutor
+2020-03-01 18:50:18.969  INFO 15977 --- [restartedMain] org.quartz.simpl.SimpleThreadPool        : Job execution threads will use class loader of thread: restartedMain
+2020-03-01 18:50:18.970  INFO 15977 --- [restartedMain] org.quartz.core.SchedulerSignalerImpl    : Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+2020-03-01 18:50:18.970  INFO 15977 --- [restartedMain] org.quartz.core.QuartzScheduler          : Quartz Scheduler v.2.3.2 created.
+2020-03-01 18:50:18.970  INFO 15977 --- [restartedMain] org.quartz.simpl.RAMJobStore             : RAMJobStore initialized.
+2020-03-01 18:50:18.970  INFO 15977 --- [restartedMain] org.quartz.core.QuartzScheduler          : Scheduler meta-data: Quartz Scheduler (v2.3.2) 'DefaultQuartzScheduler' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'org.quartz.core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'org.quartz.simpl.SimpleThreadPool' - with 10 threads.
+  Using job-store 'org.quartz.simpl.RAMJobStore' - which does not support persistence. and is not clustered.
+
+2020-03-01 18:50:18.970  INFO 15977 --- [restartedMain] org.quartz.impl.StdSchedulerFactory      : Quartz scheduler 'DefaultQuartzScheduler' initialized from an externally provided properties instance.
+2020-03-01 18:50:18.970  INFO 15977 --- [restartedMain] org.quartz.impl.StdSchedulerFactory      : Quartz scheduler version: 2.3.2
+2020-03-01 18:50:18.970  INFO 15977 --- [restartedMain] org.quartz.core.QuartzScheduler          : JobFactory set to: org.springframework.scheduling.quartz.SpringBeanJobFactory@2e2862d3
+2020-03-01 18:50:19.395  INFO 15977 --- [restartedMain] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2020-03-01 18:50:19.403  INFO 15977 --- [restartedMain] org.quartz.core.QuartzScheduler          : Scheduler DefaultQuartzScheduler_$_NON_CLUSTERED started.
+2020-03-01 18:50:19.403  INFO 15977 --- [restartedMain] org.quartz.core.QuartzScheduler          : Scheduler DefaultQuartzScheduler_$_NON_CLUSTERED started.
+2020-03-01 18:50:19.443  INFO 15977 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2020-03-01 18:50:19.460  INFO 15977 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2020-03-01 18:50:19.639  INFO 15977 --- [restartedMain] o.s.s.c.ThreadPoolTaskScheduler          : Initializing ExecutorService 'taskScheduler'
+2020-03-01 18:50:19.687  INFO 15977 --- [restartedMain] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2020-03-01 18:50:19.688  INFO 15977 --- [restartedMain] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2020-03-01 18:50:19.700  INFO 15977 --- [restartedMain] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2020-03-01 18:50:19.751  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteAdInfoUsingDELETE_1
+2020-03-01 18:50:19.752  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: getAdInfoUsingGET_1
+2020-03-01 18:50:19.754  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: updateAdIsShowedUsingPUT_1
+2020-03-01 18:50:19.758  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: uploadPicUsingPOST_1
+2020-03-01 18:50:19.783  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUsingDELETE_1
+2020-03-01 18:50:19.785  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: insertUsingPOST_1
+2020-03-01 18:50:19.796  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUsingDELETE_2
+2020-03-01 18:50:19.801  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: insertUsingPOST_2
+2020-03-01 18:50:19.802  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: updateUsingPUT_1
+2020-03-01 18:50:19.849  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: getAllUsingGET_1
+2020-03-01 18:50:19.869  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUsingDELETE_3
+2020-03-01 18:50:19.896  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: selectAllSizeByIdUsingGET_1
+2020-03-01 18:50:19.904  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUsingDELETE_4
+2020-03-01 18:50:19.907  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: getUsingGET_1
+2020-03-01 18:50:19.908  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: insertUsingPOST_3
+2020-03-01 18:50:19.909  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: updateUsingPUT_2
+2020-03-01 18:50:19.916  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUsingDELETE_5
+2020-03-01 18:50:19.944  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addGoodsUsingPOST_1
+2020-03-01 18:50:19.945  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteGoodsUsingDELETE_1
+2020-03-01 18:50:19.947  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: selectAllGoodsOrderByPriceUsingGET_1
+2020-03-01 18:50:19.957  INFO 15977 --- [restartedMain] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: uploadGoodsPicUsingPOST_1
+2020-03-01 18:50:19.980  INFO 15977 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8089 (http) with context path ''
+2020-03-01 18:50:19.981  INFO 15977 --- [restartedMain] c.vtmer.yisanbang.YisanbangApplication   : Started YisanbangApplication in 3.481 seconds (JVM running for 1377.893)
+2020-03-01 19:25:12.503  INFO 15977 --- [SpringContextShutdownHook] org.quartz.core.QuartzScheduler          : Scheduler DefaultQuartzScheduler_$_NON_CLUSTERED paused.
+2020-03-01 19:25:12.535  INFO 15977 --- [SpringContextShutdownHook] o.s.s.c.ThreadPoolTaskScheduler          : Shutting down ExecutorService 'taskScheduler'
+2020-03-01 19:25:12.541  INFO 15977 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2020-03-01 19:25:12.546  INFO 15977 --- [SpringContextShutdownHook] o.s.s.quartz.SchedulerFactoryBean        : Shutting down Quartz Scheduler
+2020-03-01 19:25:12.547  INFO 15977 --- [SpringContextShutdownHook] org.quartz.core.QuartzScheduler          : Scheduler DefaultQuartzScheduler_$_NON_CLUSTERED shutting down.
+2020-03-01 19:25:12.547  INFO 15977 --- [SpringContextShutdownHook] org.quartz.core.QuartzScheduler          : Scheduler DefaultQuartzScheduler_$_NON_CLUSTERED paused.
+2020-03-01 19:25:12.548  INFO 15977 --- [SpringContextShutdownHook] org.quartz.core.QuartzScheduler          : Scheduler DefaultQuartzScheduler_$_NON_CLUSTERED shutdown complete.
+2020-03-01 19:25:12.772  INFO 15977 --- [SpringContextShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-2} closed

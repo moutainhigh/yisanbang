@@ -57,6 +57,7 @@
 /Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/src/main/java/com/vtmer/yisanbang/controller/UserAddressController.java
 /Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/src/main/java/com/vtmer/yisanbang/vo/IncomeVO.java
 /Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/src/main/java/com/vtmer/yisanbang/service/impl/GoodsServiceImpl.java
+/Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/src/main/java/com/vtmer/yisanbang/common/exception/service/order/OrderAlreadyRemindException.java
 /Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/src/main/java/com/vtmer/yisanbang/service/impl/PostageServiceImpl.java
 /Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/src/main/java/com/vtmer/yisanbang/vo/RefundVo.java
 /Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/src/main/java/com/vtmer/yisanbang/domain/Sort.java
@@ -257,6 +258,7 @@
 /Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/src/main/java/com/vtmer/yisanbang/common/exception/service/cart/OrderGoodsCartGoodsNotMatchException.java
 /Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/src/main/java/com/vtmer/yisanbang/dto/SortDTO.java
 /Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/src/main/java/com/vtmer/yisanbang/service/CartService.java
+/Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/src/main/java/com/vtmer/yisanbang/common/exception/api/order/ApiOrderAlreadyRemindException.java
 /Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/src/main/java/com/vtmer/yisanbang/vo/CartVO.java
 /Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/src/main/java/com/vtmer/yisanbang/mapper/CarouselMapper.java
 /Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/src/main/java/com/vtmer/yisanbang/common/PageResponseMessage.java
