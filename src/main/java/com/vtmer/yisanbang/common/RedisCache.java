@@ -39,7 +39,7 @@ public class RedisCache implements Cache {
             RedisTemplate redisTemplate = getRedisTemplate();
             ValueOperations opsForValue = redisTemplate.opsForValue();
             opsForValue.set(key, value, EXPIRE_TIME_IN_MINUTES, TimeUnit.MINUTES);
-            logger.info("Put query result to redis");
+            //logger.info("Put query result to redis");
         } catch (Throwable t) {
             logger.error("Redis put failed", t);
         }
@@ -50,7 +50,7 @@ public class RedisCache implements Cache {
         try {
             RedisTemplate redisTemplate = getRedisTemplate();
             ValueOperations opsForValue = redisTemplate.opsForValue();
-            logger.info("Get cached query result from redis");
+            //logger.info("Get cached query result from redis");
             // System.out.println("****" + opsForValue.get(key).toString());
             return opsForValue.get(key);
         } catch (Throwable t) {
