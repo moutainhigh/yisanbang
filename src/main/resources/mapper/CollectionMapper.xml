@@ -8,8 +8,8 @@
     <if test="goodsId!=null">
       and goods_id = #{goodsId}
     </if>
-    <if test="isGoods!=null">
-      and is_goods = #{isGoods}
+    <if test="whetherGoods!=null">
+      and is_goods = #{whetherGoods}
     </if>
   </sql>
   <resultMap id="BaseResultMap" type="com.vtmer.yisanbang.domain.Collection">
@@ -26,7 +26,7 @@
   </delete>
   <insert id="insert" parameterType="com.vtmer.yisanbang.domain.Collection">
     insert into collection ( user_id, goods_id, is_goods )
-    values (#{userId,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, #{whetherGoods,jdbcType=TINYINT} } )
+    values (#{userId,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, #{whetherGoods,jdbcType=TINYINT} )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.vtmer.yisanbang.domain.Collection">
     update collection
