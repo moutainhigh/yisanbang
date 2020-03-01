@@ -78,8 +78,8 @@ public class GoodsSuitController {
                                                         @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
                                                         @ApiParam("单页数量")
                                                         @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
-        List<GoodsDTO> goodsDTOS = goodsService.selectAllShow();
-        List<SuitDTO> suitDTOS = suitService.selectAllShow();
+        List<GoodsDTO> goodsDTOS = goodsService.selectAllDtoOrderByPrice();
+        List<SuitDTO> suitDTOS = suitService.selectSuitOrderByPrice();
         List<Object> list = null;
         if ((goodsDTOS != null && !goodsDTOS.isEmpty()) || (suitDTOS != null && !suitDTOS.isEmpty())) {
             if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty()) {
@@ -117,8 +117,8 @@ public class GoodsSuitController {
                                                     @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
                                                     @ApiParam("单页数量")
                                                     @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
-        List<GoodsDTO> goodsDTOS = goodsService.selectAllShow();
-        List<SuitDTO> suitDTOS = suitService.selectAllShow();
+        List<GoodsDTO> goodsDTOS = goodsService.selectAllDtoOrderByTime();
+        List<SuitDTO> suitDTOS = suitService.selectSuitOrderByTime();
         List<Object> list = null;
         if ((goodsDTOS != null && !goodsDTOS.isEmpty()) || (suitDTOS != null && !suitDTOS.isEmpty())) {
             if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty()) {
