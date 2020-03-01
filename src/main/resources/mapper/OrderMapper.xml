@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.vtmer.yisanbang.mapper.OrderMapper">
+    <cache type="com.vtmer.yisanbang.common.RedisCache"/>
     <sql id="BaseColumnList">
         id, order_number, user_id, user_name, phone_number, total_price, address_name,
     status,postage,  courier_number, message, is_delete,create_time,update_time
