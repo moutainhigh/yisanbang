@@ -1,6 +1,7 @@
 package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
+import com.vtmer.yisanbang.common.annotation.RequestLog;
 import com.vtmer.yisanbang.domain.Admin;
 import com.vtmer.yisanbang.domain.Role;
 import com.vtmer.yisanbang.dto.AddAdminDTO;
@@ -39,6 +40,7 @@ public class AdminController {
      * @param addAdminDto
      * @return
      */
+    @RequestLog(module = "后台管理", operationDesc = "添加普通管理员")
     @ApiOperation("添加普通管理员")
     @PostMapping("/addAdmin")
     public ResponseMessage addAdmin(@Validated @RequestBody AddAdminDTO addAdminDto) {
@@ -64,6 +66,7 @@ public class AdminController {
      * @param loginDto
      * @return
      */
+    @RequestLog(module = "后台管理", operationDesc = "管理员登录")
     @ApiOperation("管理员登录")
     @PostMapping("/login")
     public ResponseMessage login(@Validated @RequestBody LoginDTO loginDto) {
@@ -98,6 +101,7 @@ public class AdminController {
      * @param adminId
      * @return
      */
+    @RequestLog(module = "后台管理", operationDesc = "删除管理员")
     @ApiOperation("根据id删除管理员")
     @DeleteMapping("/deleteAdmin/{id}")
     public ResponseMessage deleteAdmin(@PathVariable("id") Integer adminId) {
@@ -115,6 +119,7 @@ public class AdminController {
      * @param updatePwdDto
      * @return
      */
+    @RequestLog(module = "后台管理", operationDesc = "管理员修改密码")
     @ApiOperation("根据id修改管理员密码")
     @PutMapping("/updatePwd/{id}")
     public ResponseMessage updatePwd(@PathVariable("id") Integer adminId,@Validated @RequestBody UpdatePwdDTO updatePwdDto) {
@@ -138,6 +143,7 @@ public class AdminController {
      *
      * @return
      */
+    @RequestLog(module = "后台管理", operationDesc = "查询所有普通管理员")
     @ApiOperation("查找所有普通管理员")
     @GetMapping("/generalAdmin")
     public ResponseMessage listGeneralAdmin() {

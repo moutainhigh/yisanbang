@@ -1,6 +1,7 @@
 package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
+import com.vtmer.yisanbang.common.annotation.RequestLog;
 import com.vtmer.yisanbang.common.exception.api.ApiException;
 import com.vtmer.yisanbang.common.exception.api.third.ApiCode2SessionException;
 import com.vtmer.yisanbang.common.exception.service.third.Code2SessionException;
@@ -13,7 +14,10 @@ import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
@@ -30,6 +34,7 @@ public class UserController {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @RequestLog(module = "微信用户登录", operationDesc = "微信用户登录获取token")
     @ApiOperation(value = "微信用户登录", notes = "执行成功后返回用户对应的token")
     @PostMapping("/login")
     public ResponseMessage wxAppletLogin(@ApiParam(name = "code", value = "微信登录接口返回的code", required = true) @RequestBody Map<String, String> request) {

@@ -3,6 +3,7 @@ package com.vtmer.yisanbang.controller;
 import com.github.pagehelper.PageHelper;
 import com.vtmer.yisanbang.common.PageResponseMessage;
 import com.vtmer.yisanbang.common.ResponseMessage;
+import com.vtmer.yisanbang.common.annotation.RequestLog;
 import com.vtmer.yisanbang.common.qiniu.QiniuUpload;
 import com.vtmer.yisanbang.domain.Carousel;
 import com.vtmer.yisanbang.dto.CarouselDTO;
@@ -27,6 +28,7 @@ public class CarouselController {
     @Autowired
     private CarouselService carouselService;
 
+    @RequestLog(module = "首页轮播图", operationDesc = "上传首页轮播图图片")
     @ApiOperation(value = "上传轮播图图片", notes = "执行成功后返回图片路径(img.yisanbang.com/carousel/图片名称)")
     @PostMapping("/upload")
     public ResponseMessage uploadPic(@ApiParam("选择上传图片") MultipartFile pic) {
@@ -46,6 +48,7 @@ public class CarouselController {
         }
     }
 
+    @RequestLog(module = "首页轮播图", operationDesc = "添加首页轮播图信息")
     @ApiOperation("添加轮播图信息")
     @PostMapping("/add")
     public ResponseMessage addCarouselInfo(@Validated @RequestBody CarouselDTO carouselDto) {
@@ -59,6 +62,7 @@ public class CarouselController {
         return ResponseMessage.newErrorInstance("轮播图信息添加失败");
     }
 
+    @RequestLog(module = "首页轮播图", operationDesc = "修改首页轮播图信息")
     @ApiOperation("根据id修改轮播图信息")
     @PutMapping("/{carouselId}")
     public ResponseMessage updateCarouselInfo(@PathVariable("carouselId") Integer carouselId,@Validated @RequestBody CarouselDTO carouselDto) {
@@ -72,6 +76,7 @@ public class CarouselController {
         return ResponseMessage.newErrorInstance("轮播图信息修改失败");
     }
 
+    @RequestLog(module = "首页轮播图", operationDesc = "查询所有首页轮播图信息")
     @ApiOperation(value = "查询轮播图信息", notes = "(默认不分页，传入分页相关参数则返回分页信息)")
     @GetMapping("/get/list")
     public ResponseMessage getAllCarouselInfo(@ApiParam("查询页数(第几页)") @Param(value = "pageNum") Integer pageNum,
@@ -92,6 +97,7 @@ public class CarouselController {
         }
     }
 
+    @RequestLog(module = "首页轮播图", operationDesc = "查询指定首页轮播图信息")
     @ApiOperation("根据id查询轮播图信息")
     @GetMapping("/get/{carouselId}")
     public ResponseMessage getAdInfo(@PathVariable("carouselId") Integer carouselId) {
@@ -102,6 +108,7 @@ public class CarouselController {
         return ResponseMessage.newErrorInstance("获取指定轮播图信息失败");
     }
 
+    @RequestLog(module = "首页轮播图", operationDesc = "删除首页轮播图信息")
     @ApiOperation("根据id删除轮播图信息")
     @DeleteMapping("/{carouselId}")
     public ResponseMessage deleteAdInfo(@PathVariable("carouselId") Integer carouselId) {
@@ -111,6 +118,7 @@ public class CarouselController {
         return ResponseMessage.newErrorInstance("删除指定轮播图信息失败");
     }
 
+    @RequestLog(module = "首页轮播图", operationDesc = "修改首页轮播图显示状态")
     @ApiOperation("根据id修改轮播图是否显示")
     @PutMapping("/isShowed/{carouselId}")
     public ResponseMessage updateAdIsShowed(@PathVariable("carouselId") Integer carouselId) {

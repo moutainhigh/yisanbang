@@ -3,6 +3,7 @@ package com.vtmer.yisanbang.controller;
 import com.github.pagehelper.PageHelper;
 import com.vtmer.yisanbang.common.PageResponseMessage;
 import com.vtmer.yisanbang.common.ResponseMessage;
+import com.vtmer.yisanbang.common.annotation.RequestLog;
 import com.vtmer.yisanbang.common.qiniu.QiniuUpload;
 import com.vtmer.yisanbang.domain.Ad;
 import com.vtmer.yisanbang.dto.AdDTO;
@@ -28,6 +29,7 @@ public class AdController {
     @Autowired
     private AdService adService;
 
+    @RequestLog(module = "首页广告", operationDesc = "查询所有广告信息")
     @ApiOperation(value = "查询所有广告信息", notes = "(默认不分页，传入分页相关参数则返回分页信息)")
     @GetMapping("/get/list")
     public ResponseMessage getAllAdInfo(@ApiParam("查询页数(第几页)") @Param(value = "pageNum") Integer pageNum,
@@ -48,6 +50,7 @@ public class AdController {
         }
     }
 
+    @RequestLog(module = "首页广告", operationDesc = "查询指定广告信息")
     @ApiOperation("根据id查询广告信息")
     @GetMapping("/get/{adId}")
     public ResponseMessage getAdInfo(@PathVariable("adId") Integer adId) {
@@ -58,6 +61,7 @@ public class AdController {
         return ResponseMessage.newErrorInstance("查询指定广告信息失败");
     }
 
+    @RequestLog(module = "首页广告", operationDesc = "上传广告图片")
     @ApiOperation(value = "上传广告图片", notes = "执行成功后返回图片路径(img.yisanbang.com/ad/图片名称)")
     @PostMapping("/upload")
     public ResponseMessage uploadPic(@ApiParam("选择上传图片") MultipartFile pic) {
@@ -78,6 +82,7 @@ public class AdController {
 
     }
 
+    @RequestLog(module = "首页广告", operationDesc = "添加广告信息")
     @ApiOperation("添加广告信息")
     @PostMapping("/add")
     public ResponseMessage addAdInfo(@Validated @RequestBody AdDTO adDto) {
@@ -91,6 +96,7 @@ public class AdController {
         return ResponseMessage.newErrorInstance("广告信息添加失败");
     }
 
+    @RequestLog(module = "首页广告", operationDesc = "修改广告信息")
     @ApiOperation("根据id修改广告信息")
     @PutMapping("/{adId}")
     public ResponseMessage updateAdInfo(@PathVariable("adId") Integer adId, @Validated @RequestBody AdDTO adDto) {
@@ -104,6 +110,7 @@ public class AdController {
         return ResponseMessage.newErrorInstance("广告信息修改失败");
     }
 
+    @RequestLog(module = "首页广告", operationDesc = "修改广告显示状态")
     @ApiOperation("根据id修改广告是否显示")
     @PutMapping("/isShowed/{adId}")
     public ResponseMessage updateAdIsShowed(@PathVariable("adId") Integer adId) {
@@ -113,6 +120,7 @@ public class AdController {
         return ResponseMessage.newErrorInstance("广告显示状态修改失败");
     }
 
+    @RequestLog(module = "首页广告", operationDesc = "删除广告信息")
     @ApiOperation("根据id删除广告信息")
     @DeleteMapping("/{adId}")
     public ResponseMessage deleteAdInfo(@PathVariable("adId") Integer adId) {
@@ -165,6 +173,5 @@ public class AdController {
         return ResponseMessage.newErrorInstance("广告图片修改失败");
     }
      */
-
 
 }
