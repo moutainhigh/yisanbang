@@ -101,4 +101,7 @@ public class ColorSizeDTO {
                 ", model='" + model + '\'' +
                 '}';
     }
+
+    public ColorSizeDTO() {
+    }
 }

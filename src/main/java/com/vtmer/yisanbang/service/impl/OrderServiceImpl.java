@@ -26,7 +26,6 @@ import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -112,6 +111,16 @@ public class OrderServiceImpl implements OrderService {
             discountAmount = 0;
             discountRate = 1.0;
         }
+    }
+
+    @Override
+    public OrderVO getOrderVOByOrderNumber(String orderNumber) {
+        Order order = orderMapper.selectByOrderNumber(orderNumber);
+        if (order == null) {
+            throw new OrderNotFoundException();
+        }
+        return getOrderVOByOrder(order);
+
     }
 
     /**
@@ -781,7 +790,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void orderTimeOutLogic() {
         BoundZSetOperations<String, String> zSetOps = redisTemplate.boundZSetOps("OrderNumber");
         Cursor<ZSetOperations.TypedTuple<String>> cursor;
@@ -805,7 +814,10 @@ public class OrderServiceImpl implements OrderService {
                         String orderNumber = String.valueOf(value == null ? "" : value.toString());
                         logger.info("开始消费redis订单[{}]", orderNumber);
                         Order order = orderMapper.selectByOrderNumber(orderNumber);
-                        if (order.getStatus() != 0) {
+                        if (order == null) {
+                            // 说明该订单被用户删除了,继续循环即可
+                            continue;
+                        }else if (order.getStatus() != 0) {
                             // 如果该订单状态不为0，即不是未付款，说明已经付款了，不需要取消订单
                             continue;
                         }

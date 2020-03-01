@@ -92,22 +92,24 @@ public class CollectionServiceImpl implements CollectionService {
             List<CollectionVO> collectionVOList = new ArrayList<>();
             for (Collection collection : collectionList) {
                 int goodsId = collection.getGoodsId();
-                Boolean isGoods = collection.getWhetherGoods();
+                Boolean whetherGoods = collection.getWhetherGoods();
                 CollectionVO collectionVo = new CollectionVO();
                 collectionVo.setGoodsId(goodsId);
-                collectionVo.setIsGoods(isGoods);
+                collectionVo.setWhetherGoods(whetherGoods);
                 // 如果是普通商品
-                if (isGoods) {
+                if (whetherGoods) {
                     Goods goods = goodsMapper.selectByPrimaryKey(goodsId);
                     System.out.println(goods);
                     collectionVo.setName(goods.getName());
                     collectionVo.setPicture(goods.getPicture());
                     collectionVo.setPrice(goods.getPrice());
+                    collectionVo.setIntroduce(goods.getIntroduce());
                 } else { // 如果是套装散件
                     Suit suit = suitMapper.selectByPrimaryKey(goodsId);
                     collectionVo.setName(suit.getName());
                     collectionVo.setPicture(suit.getPicture());
                     collectionVo.setPrice(suit.getLowestPrice());
+                    collectionVo.setIntroduce(suit.getIntroduce());
                 }
                 collectionVOList.add(collectionVo);
             } //end for

@@ -74,4 +74,7 @@ public class SuitDetailDTO {
         this.pirtucePath = pirtucePath;
         this.showOrder = showOrder;
     }
+
+    public SuitDetailDTO() {
+    }
 }

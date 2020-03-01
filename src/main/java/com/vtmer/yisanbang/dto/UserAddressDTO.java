@@ -106,4 +106,7 @@ public class UserAddressDTO {
                 ", isDefault=" + isDefault +
                 '}';
     }
+
+    public UserAddressDTO() {
+    }
 }
