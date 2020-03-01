@@ -35,4 +35,6 @@ public interface OrderMapper {
     List<Order> getPayOrder();
 
     void deleteOrderById(Integer orderId);
+
+    void updateRemind(String orderNumber);
 }

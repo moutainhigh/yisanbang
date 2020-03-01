@@ -37,4 +37,7 @@ public class OrderVO extends OrderDTO {
     @ApiModelProperty(example = "2",value = "订单状态",notes = "订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单")
     private Integer orderStatus;
 
+    @ApiModelProperty(example = "1",value = "订单是否提醒发货",notes = "1代表用户提醒发货，0正常")
+    private Boolean whetherRemind;
+
 }

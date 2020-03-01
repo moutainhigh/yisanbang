@@ -37,5 +37,7 @@ public class Order {
 
     private Boolean whetherDelete;
 
+    private Boolean whetherRemind;
+
 
 }
