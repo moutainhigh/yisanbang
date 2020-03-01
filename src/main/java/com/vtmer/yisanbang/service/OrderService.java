@@ -20,6 +20,8 @@ public interface OrderService {
 
     String createDirectOrder(OrderDTO orderDTO);
 
+    void remindOrder(String orderNumber);
+
     /**
      * 判断订单中商品是否是否存在
      * @param orderGoodsDTOList

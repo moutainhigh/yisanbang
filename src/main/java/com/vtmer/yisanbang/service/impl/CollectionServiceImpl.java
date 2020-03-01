@@ -94,6 +94,7 @@ public class CollectionServiceImpl implements CollectionService {
                 int goodsId = collection.getGoodsId();
                 Boolean whetherGoods = collection.getWhetherGoods();
                 CollectionVO collectionVo = new CollectionVO();
+                collectionVo.setCollectionId(collection.getId());
                 collectionVo.setGoodsId(goodsId);
                 collectionVo.setWhetherGoods(whetherGoods);
                 // 如果是普通商品

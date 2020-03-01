@@ -55,6 +55,29 @@ public class OrderController {
     @Value("${wx.pay.spbillCreateIp}")
     private String spbillCreateIp;
 
+
+    @RequestLog(module = "订单", operationDesc = "提醒发货")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
+    })
+    @ApiOperation(value = "用户点击[提交发货]")
+    @PutMapping("/remind/{orderNumber}")
+    public ResponseMessage remindOrder(@ApiParam(name = "orderNumber", value = "订单编号", required = true)
+                                       @NotBlank(message = "订单号传入为空") @PathVariable String orderNumber) {
+        try {
+            orderService.remindOrder(orderNumber);
+        } catch (OrderNotFoundException e) {
+            throw new ApiOrderNotFoundException(e.getMessage());
+        } catch (OrderAndUserNotMatchException e) {
+            throw new ApiOrderAndUserNotMatchException(e.getMessage());
+        } catch (OrderAlreadyRemindException e) {
+            throw new ApiOrderAlreadyRemindException(e.getMessage());
+        } catch (Exception e) {
+            throw new ApiException(e);
+        }
+        return ResponseMessage.newSuccessInstance("提醒发货成功");
+    }
+
     /**
      * 点击去结算，显示确认订单页面
      *
@@ -515,13 +538,13 @@ public class OrderController {
     public ResponseMessage<OrderVO> getOrder(@ApiParam(name = "orderNumber", value = "订单编号", required = true)
                                              @NotBlank(message = "订单编号为空") @PathVariable String orderNumber) {
         OrderVO orderVO;
-        try{
+        try {
             orderVO = orderService.getOrderVOByOrderNumber(orderNumber);
         } catch (OrderNotFoundException e) {
             throw new ApiOrderNotFoundException(e.getMessage());
         } catch (Exception e) {
             throw new ApiException(e);
         }
-        return ResponseMessage.newSuccessInstance(orderVO,"获取订单详情成功");
+        return ResponseMessage.newSuccessInstance(orderVO, "获取订单详情成功");
     }
 }

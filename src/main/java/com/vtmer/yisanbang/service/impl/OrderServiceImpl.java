@@ -331,6 +331,23 @@ public class OrderServiceImpl implements OrderService {
         return createOrder(orderDTO);
     }
 
+    @Override
+    public void remindOrder(String orderNumber) {
+        int userId = JwtFilter.getLoginUser().getId();
+        Order order = orderMapper.selectByOrderNumber(orderNumber);
+        if (order == null) {
+            throw new OrderNotFoundException();
+        } else if (!order.getUserId().equals(userId)) {
+            // 如果不是该用户的订单
+            throw new OrderAndUserNotMatchException();
+        } else if (order.getWhetherRemind()) {
+            // 如果已经提醒过发货了
+            throw new OrderAlreadyRemindException();
+        }
+        // 更新订单提醒状态
+        orderMapper.updateRemind(orderNumber);
+    }
+
     private String createOrder(OrderDTO orderDTO) {
         UserAddress userAddress = orderDTO.getUserAddress();
         double postage = orderDTO.getPostage();
