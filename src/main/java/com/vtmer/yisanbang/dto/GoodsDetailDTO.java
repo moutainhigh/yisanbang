@@ -74,4 +74,7 @@ public class GoodsDetailDTO {
                 ", showOrder=" + showOrder +
                 '}';
     }
+
+    public GoodsDetailDTO() {
+    }
 }
