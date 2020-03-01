@@ -116,4 +116,7 @@ public class PartSizeDTO {
     public void setModel(String model) {
         this.model = model;
     }
+
+    public PartSizeDTO() {
+    }
 }

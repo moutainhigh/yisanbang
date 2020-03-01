@@ -148,4 +148,7 @@ public class GoodsDTO {
                 ", isShow=" + isShow +
                 '}';
     }
+
+    public GoodsDTO() {
+    }
 }
