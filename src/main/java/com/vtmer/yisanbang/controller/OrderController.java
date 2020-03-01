@@ -70,6 +70,8 @@ public class OrderController {
             throw new ApiOrderNotFoundException(e.getMessage());
         } catch (OrderAndUserNotMatchException e) {
             throw new ApiOrderAndUserNotMatchException(e.getMessage());
+        } catch (OrderAlreadyRemindException e) {
+            throw new ApiOrderAlreadyRemindException(e.getMessage());
         } catch (Exception e) {
             throw new ApiException(e);
         }

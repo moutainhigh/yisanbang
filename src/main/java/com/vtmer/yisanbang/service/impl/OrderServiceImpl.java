@@ -340,6 +340,9 @@ public class OrderServiceImpl implements OrderService {
         } else if (!order.getUserId().equals(userId)) {
             // 如果不是该用户的订单
             throw new OrderAndUserNotMatchException();
+        } else if (order.getWhetherRemind()) {
+            // 如果已经提醒过发货了
+            throw new OrderAlreadyRemindException();
         }
         // 更新订单提醒状态
         orderMapper.updateRemind(orderNumber);
