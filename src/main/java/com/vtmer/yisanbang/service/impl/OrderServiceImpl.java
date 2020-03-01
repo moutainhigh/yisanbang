@@ -26,7 +26,6 @@ import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -112,6 +111,16 @@ public class OrderServiceImpl implements OrderService {
             discountAmount = 0;
             discountRate = 1.0;
         }
+    }
+
+    @Override
+    public OrderVO getOrderVOByOrderNumber(String orderNumber) {
+        Order order = orderMapper.selectByOrderNumber(orderNumber);
+        if (order == null) {
+            throw new OrderNotFoundException();
+        }
+        return getOrderVOByOrder(order);
+
     }
 
     /**

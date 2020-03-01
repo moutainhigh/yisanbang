@@ -10,6 +10,8 @@ import java.util.Map;
 
 public interface OrderService {
 
+    OrderVO getOrderVOByOrderNumber(String orderNumber);
+
     OrderVO confirmCartOrder();
 
     OrderVO confirmDirectOrder(List<OrderGoodsDTO> orderGoodsDTOList);

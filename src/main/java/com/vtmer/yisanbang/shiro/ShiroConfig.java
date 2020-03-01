@@ -77,6 +77,8 @@ public class ShiroConfig {
         filterRuleMap.put("/colorSize/get/**","anon");
         // 订单模块放权
         filterRuleMap.put("/order/wxNotify","anon");
+        // 查询订单详情放行
+        filterRuleMap.put("/order/getOrder/**","anon");
         //swagger接口权限 开放
         filterRuleMap.put("/swagger-ui.html", "anon");
         filterRuleMap.put("/doc.html", "anon");

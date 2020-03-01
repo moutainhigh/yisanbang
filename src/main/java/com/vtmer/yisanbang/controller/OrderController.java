@@ -2,14 +2,12 @@ package com.vtmer.yisanbang.controller;
 
 import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
 import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
-import com.github.binarywang.wxpay.bean.order.WxPayAppOrderResult;
 import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.github.binarywang.wxpay.bean.request.BaseWxPayRequest;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.bean.result.BaseWxPayResult;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
-import com.github.binarywang.wxpay.util.SignUtils;
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.common.annotation.RequestLog;
 import com.vtmer.yisanbang.common.exception.api.ApiException;
@@ -154,6 +152,7 @@ public class OrderController {
 
     /**
      * 通过订单号进行微信支付
+     *
      * @param orderNumber：orderNumber订单号
      * @return 返回前端调起微信支付所需的支付参数（5个参数和sign）
      */
@@ -346,6 +345,7 @@ public class OrderController {
      * 订单状态自增修改，适用于待付款、待发货、待收货类订单
      * 订单状态定义：status 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 0--待付款 1--待发货 2--待收货 状态订单 更新订单状态
+     *
      * @param orderNumber:订单编号
      * @return
      */
@@ -402,7 +402,7 @@ public class OrderController {
     }
 
     /**
-     * 删除订单，暂时无用，用户没有删除订单按钮emm
+     * 删除订单，暂时无用
      *
      * @param orderId：订单id
      * @return
@@ -494,7 +494,7 @@ public class OrderController {
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
     @ApiOperation(value = "取消订单", notes = "在未支付的情况下用户可以取消订单")
-    @PutMapping("/cancelOrder/{orderId}")
+    @PutMapping("/cancelOrder/{orderNumber}")
     public ResponseMessage cancelOrder(@ApiParam(name = "orderNumber", value = "订单编号", required = true)
                                        @NotBlank(message = "订单编号为空") @PathVariable String orderNumber) {
         try {
@@ -509,5 +509,19 @@ public class OrderController {
             throw new ApiException(e);
         }
         return ResponseMessage.newSuccessInstance("取消订单成功");
+    }
+
+    @GetMapping("/getOrder/{orderNumber}")
+    public ResponseMessage<OrderVO> getOrder(@ApiParam(name = "orderNumber", value = "订单编号", required = true)
+                                             @NotBlank(message = "订单编号为空") @PathVariable String orderNumber) {
+        OrderVO orderVO;
+        try{
+            orderVO = orderService.getOrderVOByOrderNumber(orderNumber);
+        } catch (OrderNotFoundException e) {
+            throw new ApiOrderNotFoundException(e.getMessage());
+        } catch (Exception e) {
+            throw new ApiException(e);
+        }
+        return ResponseMessage.newSuccessInstance(orderVO,"获取订单详情成功");
     }
 }
