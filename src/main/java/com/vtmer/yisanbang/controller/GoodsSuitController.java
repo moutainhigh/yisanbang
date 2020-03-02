@@ -45,21 +45,22 @@ public class GoodsSuitController {
         List<GoodsDTO> goodsDTOS = goodsService.selectAllShow();
         List<SuitDTO> suitDTOS = suitService.selectAllShow();
         List<Object> list = null;
-        if ((goodsDTOS != null && !goodsDTOS.isEmpty()) || (suitDTOS != null && !suitDTOS.isEmpty())) {
-            if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty()) {
+        if (judgeGoodsList(goodsDTOS) || judgeSuitList(suitDTOS)) {
+            if (judgeGoodsList(goodsDTOS) && judgeSuitList(suitDTOS)) {
                 list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, suitDTOS);
-            } else if ((goodsDTOS != null && !goodsDTOS.isEmpty()) && !(suitDTOS != null && !suitDTOS.isEmpty())) {
+            } else if (judgeGoodsList(goodsDTOS) && !judgeSuitList(suitDTOS)) {
                 list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, goodsDTOS);
-            } else if (!(goodsDTOS != null && !goodsDTOS.isEmpty()) && (suitDTOS != null && !suitDTOS.isEmpty())) {
+            } else if (!judgeGoodsList(goodsDTOS) && judgeSuitList(suitDTOS)) {
                 list = goodsAndSuitService.selectGoodsAndSuit(suitDTOS, suitDTOS);
             }
             if (list != null && !list.isEmpty()) {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
                 List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
                 if (pager != null && !pager.isEmpty()) {
-                    return ResponseMessage.newSuccessInstance(GoodsPageResponseMessage.restPage(pageNum,pageSize,pager), "查找成功");
-                }else{
-                    return ResponseMessage.newErrorInstance("所选页码超出最大页码");
+                    return ResponseMessage.newSuccessInstance
+                            (GoodsPageResponseMessage.restPage(pageNum, pageSize, pager), "查找成功");
+                } else {
+                    return ResponseMessage.newSuccessInstance("所选页码超出最大页码");
                 }
             } else {
                 return ResponseMessage.newErrorInstance("查找失败");
@@ -78,16 +79,16 @@ public class GoodsSuitController {
                                                         @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
                                                         @ApiParam("单页数量")
                                                         @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
-        List<GoodsDTO> goodsDTOS = goodsService.selectAllDtoOrderByPrice();
-        List<SuitDTO> suitDTOS = suitService.selectSuitOrderByPrice();
+        List<GoodsDTO> goodsDTOS = goodsService.selectAllShow();
+        List<SuitDTO> suitDTOS = suitService.selectAllShow();
         List<Object> list = null;
-        if ((goodsDTOS != null && !goodsDTOS.isEmpty()) || (suitDTOS != null && !suitDTOS.isEmpty())) {
-            if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty()) {
-                list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, suitDTOS);
-            } else if ((goodsDTOS != null && !goodsDTOS.isEmpty()) && !(suitDTOS != null && !suitDTOS.isEmpty())) {
-                list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, goodsDTOS);
-            } else if (!(goodsDTOS != null && !goodsDTOS.isEmpty()) && (suitDTOS != null && !suitDTOS.isEmpty())) {
-                list = goodsAndSuitService.selectGoodsAndSuit(suitDTOS, suitDTOS);
+        if (judgeGoodsList(goodsDTOS) || judgeSuitList(suitDTOS)) {
+            if (judgeGoodsList(goodsDTOS) && judgeSuitList(suitDTOS)) {
+                list = goodsAndSuitService.selectGoodsAndSuitByPrice(goodsDTOS, suitDTOS);
+            } else if (judgeGoodsList(goodsDTOS) && !judgeSuitList(suitDTOS)) {
+                list = goodsAndSuitService.selectGoodsAndSuitByPrice(goodsDTOS, goodsDTOS);
+            } else if (!judgeGoodsList(goodsDTOS) && judgeSuitList(suitDTOS)) {
+                list = goodsAndSuitService.selectGoodsAndSuitByPrice(suitDTOS, suitDTOS);
             }
             if (list != null && !list.isEmpty()) {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
@@ -96,9 +97,10 @@ public class GoodsSuitController {
                 }
                 List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
                 if (pager != null && !pager.isEmpty()) {
-                    return ResponseMessage.newSuccessInstance(GoodsPageResponseMessage.restPage(pageNum,pageSize,pager), "查找成功");
-                }else{
-                    return ResponseMessage.newErrorInstance("所选页码超出最大页码");
+                    return ResponseMessage.newSuccessInstance
+                            (GoodsPageResponseMessage.restPage(pageNum, pageSize, pager), "查找成功");
+                } else {
+                    return ResponseMessage.newSuccessInstance("所选页码超出最大页码");
                 }
             } else {
                 return ResponseMessage.newErrorInstance("查找失败");
@@ -117,16 +119,16 @@ public class GoodsSuitController {
                                                     @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
                                                     @ApiParam("单页数量")
                                                     @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
-        List<GoodsDTO> goodsDTOS = goodsService.selectAllDtoOrderByTime();
-        List<SuitDTO> suitDTOS = suitService.selectSuitOrderByTime();
+        List<GoodsDTO> goodsDTOS = goodsService.selectAllShow();
+        List<SuitDTO> suitDTOS = suitService.selectAllShow();
         List<Object> list = null;
-        if ((goodsDTOS != null && !goodsDTOS.isEmpty()) || (suitDTOS != null && !suitDTOS.isEmpty())) {
-            if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty()) {
-                list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, suitDTOS);
-            } else if ((goodsDTOS != null && !goodsDTOS.isEmpty()) && !(suitDTOS != null && !suitDTOS.isEmpty())) {
-                list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, goodsDTOS);
-            } else if (!(goodsDTOS != null && !goodsDTOS.isEmpty()) && (suitDTOS != null && !suitDTOS.isEmpty())) {
-                list = goodsAndSuitService.selectGoodsAndSuit(suitDTOS, suitDTOS);
+        if (judgeGoodsList(goodsDTOS) || judgeSuitList(suitDTOS)) {
+            if (judgeGoodsList(goodsDTOS) && judgeSuitList(suitDTOS)) {
+                list = goodsAndSuitService.selectGoodsAndSuitByTime(goodsDTOS, suitDTOS);
+            } else if (judgeGoodsList(goodsDTOS) && !judgeSuitList(suitDTOS)) {
+                list = goodsAndSuitService.selectGoodsAndSuitByTime(goodsDTOS, goodsDTOS);
+            } else if (!judgeGoodsList(goodsDTOS) && judgeSuitList(suitDTOS)) {
+                list = goodsAndSuitService.selectGoodsAndSuitByTime(suitDTOS, suitDTOS);
             }
             if (list != null && !list.isEmpty()) {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
@@ -135,9 +137,10 @@ public class GoodsSuitController {
                 }
                 List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
                 if (pager != null && !pager.isEmpty()) {
-                    return ResponseMessage.newSuccessInstance(GoodsPageResponseMessage.restPage(pageNum,pageSize,pager), "查找成功");
-                }else{
-                    return ResponseMessage.newErrorInstance("所选页码超出最大页码");
+                    return ResponseMessage.newSuccessInstance
+                            (GoodsPageResponseMessage.restPage(pageNum, pageSize, pager), "查找成功");
+                } else {
+                    return ResponseMessage.newSuccessInstance("所选页码超出最大页码");
                 }
             } else {
                 return ResponseMessage.newErrorInstance("查找失败");
@@ -159,21 +162,22 @@ public class GoodsSuitController {
         List<GoodsDTO> goodsDTOS = goodsService.selectAllDtoBySort(sortId);
         List<SuitDTO> suitDTOS = suitService.selectSuitBySort(sortId);
         List<Object> list = null;
-        if ((goodsDTOS != null && !goodsDTOS.isEmpty()) || (suitDTOS != null && !suitDTOS.isEmpty())) {
-            if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty()) {
+        if (judgeGoodsList(goodsDTOS) || judgeSuitList(suitDTOS)) {
+            if (judgeGoodsList(goodsDTOS) && judgeSuitList(suitDTOS)) {
                 list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, suitDTOS);
-            } else if ((goodsDTOS != null && !goodsDTOS.isEmpty()) && !(suitDTOS != null && !suitDTOS.isEmpty())) {
+            } else if (judgeGoodsList(goodsDTOS) && !judgeSuitList(suitDTOS)) {
                 list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, goodsDTOS);
-            } else if (!(goodsDTOS != null && !goodsDTOS.isEmpty()) && (suitDTOS != null && !suitDTOS.isEmpty())) {
+            } else if (!judgeGoodsList(goodsDTOS) && judgeSuitList(suitDTOS)) {
                 list = goodsAndSuitService.selectGoodsAndSuit(suitDTOS, suitDTOS);
             }
             if (list != null && !list.isEmpty()) {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
                 List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
                 if (pager != null && !pager.isEmpty()) {
-                    return ResponseMessage.newSuccessInstance(GoodsPageResponseMessage.restPage(pageNum,pageSize,pager), "查找成功");
-                }else{
-                    return ResponseMessage.newErrorInstance("所选页码超出最大页码");
+                    return ResponseMessage.newSuccessInstance
+                            (GoodsPageResponseMessage.restPage(pageNum, pageSize, pager), "查找成功");
+                } else {
+                    return ResponseMessage.newSuccessInstance("所选页码超出最大页码");
                 }
             } else {
                 return ResponseMessage.newErrorInstance("查找失败");
@@ -197,13 +201,13 @@ public class GoodsSuitController {
         List<GoodsDTO> goodsDTOS = goodsService.selectAllDtoBySortOrderByPrice(sortId);
         List<SuitDTO> suitDTOS = suitService.selectSuitBySortIdOrderByPrice(sortId);
         List<Object> list = null;
-        if ((goodsDTOS != null && !goodsDTOS.isEmpty()) || (suitDTOS != null && !suitDTOS.isEmpty())) {
-            if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty()) {
-                list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, suitDTOS);
-            } else if ((goodsDTOS != null && !goodsDTOS.isEmpty()) && !(suitDTOS != null && !suitDTOS.isEmpty())) {
-                list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, goodsDTOS);
-            } else if (!(goodsDTOS != null && !goodsDTOS.isEmpty()) && (suitDTOS != null && !suitDTOS.isEmpty())) {
-                list = goodsAndSuitService.selectGoodsAndSuit(suitDTOS, suitDTOS);
+        if (judgeGoodsList(goodsDTOS) || judgeSuitList(suitDTOS)) {
+            if (judgeGoodsList(goodsDTOS) && judgeSuitList(suitDTOS)) {
+                list = goodsAndSuitService.selectGoodsAndSuitByPrice(goodsDTOS, suitDTOS);
+            } else if (judgeGoodsList(goodsDTOS) && !judgeSuitList(suitDTOS)) {
+                list = goodsAndSuitService.selectGoodsAndSuitByPrice(goodsDTOS, goodsDTOS);
+            } else if (!judgeGoodsList(goodsDTOS) && judgeSuitList(suitDTOS)) {
+                list = goodsAndSuitService.selectGoodsAndSuitByPrice(suitDTOS, suitDTOS);
             }
             if (list != null && !list.isEmpty()) {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
@@ -212,9 +216,10 @@ public class GoodsSuitController {
                 }
                 List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
                 if (pager != null && !pager.isEmpty()) {
-                    return ResponseMessage.newSuccessInstance(GoodsPageResponseMessage.restPage(pageNum,pageSize,pager), "查找成功");
-                }else{
-                    return ResponseMessage.newErrorInstance("所选页码超出最大页码");
+                    return ResponseMessage.newSuccessInstance
+                            (GoodsPageResponseMessage.restPage(pageNum, pageSize, pager), "查找成功");
+                } else {
+                    return ResponseMessage.newSuccessInstance("所选页码超出最大页码");
                 }
             } else {
                 return ResponseMessage.newErrorInstance("查找失败");
@@ -238,13 +243,13 @@ public class GoodsSuitController {
         List<GoodsDTO> goodsDTOS = goodsService.selectAllDtoBySortOrderByTime(sortId);
         List<SuitDTO> suitDTOS = suitService.selectSuitBySortIdOrderByTime(sortId);
         List<Object> list = null;
-        if ((goodsDTOS != null && !goodsDTOS.isEmpty()) || (suitDTOS != null && !suitDTOS.isEmpty())) {
-            if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty()) {
-                list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, suitDTOS);
-            } else if ((goodsDTOS != null && !goodsDTOS.isEmpty()) && !(suitDTOS != null && !suitDTOS.isEmpty())) {
-                list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, goodsDTOS);
-            } else if (!(goodsDTOS != null && !goodsDTOS.isEmpty()) && (suitDTOS != null && !suitDTOS.isEmpty())) {
-                list = goodsAndSuitService.selectGoodsAndSuit(suitDTOS, suitDTOS);
+        if (judgeGoodsList(goodsDTOS) || judgeSuitList(suitDTOS)) {
+            if (judgeGoodsList(goodsDTOS) && judgeSuitList(suitDTOS)) {
+                list = goodsAndSuitService.selectGoodsAndSuitByTime(goodsDTOS, suitDTOS);
+            } else if (judgeGoodsList(goodsDTOS) && !judgeSuitList(suitDTOS)) {
+                list = goodsAndSuitService.selectGoodsAndSuitByTime(goodsDTOS, goodsDTOS);
+            } else if (!judgeGoodsList(goodsDTOS) && judgeSuitList(suitDTOS)) {
+                list = goodsAndSuitService.selectGoodsAndSuitByTime(suitDTOS, suitDTOS);
             }
             if (list != null && !list.isEmpty()) {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
@@ -253,9 +258,10 @@ public class GoodsSuitController {
                 }
                 List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
                 if (pager != null && !pager.isEmpty()) {
-                    return ResponseMessage.newSuccessInstance(GoodsPageResponseMessage.restPage(pageNum,pageSize,pager), "查找成功");
-                }else{
-                    return ResponseMessage.newErrorInstance("所选页码超出最大页码");
+                    return ResponseMessage.newSuccessInstance
+                            (GoodsPageResponseMessage.restPage(pageNum, pageSize, pager), "查找成功");
+                } else {
+                    return ResponseMessage.newSuccessInstance("所选页码超出最大页码");
                 }
             } else {
                 return ResponseMessage.newErrorInstance("查找失败");
@@ -280,21 +286,22 @@ public class GoodsSuitController {
         if (content == null) {
             return ResponseMessage.newErrorInstance("输入内容为空");
         }
-        if ((goodsDTOS != null && !goodsDTOS.isEmpty()) || (suitDTOS != null && !suitDTOS.isEmpty())) {
-            if (goodsDTOS != null && !goodsDTOS.isEmpty() && suitDTOS != null && !suitDTOS.isEmpty()) {
+        if (judgeGoodsList(goodsDTOS) || judgeSuitList(suitDTOS)) {
+            if (judgeGoodsList(goodsDTOS) && judgeSuitList(suitDTOS)) {
                 list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, suitDTOS);
-            } else if ((goodsDTOS != null && !goodsDTOS.isEmpty()) && !(suitDTOS != null && !suitDTOS.isEmpty())) {
+            } else if (judgeGoodsList(goodsDTOS) && !judgeSuitList(suitDTOS)) {
                 list = goodsAndSuitService.selectGoodsAndSuit(goodsDTOS, goodsDTOS);
-            } else if (!(goodsDTOS != null && !goodsDTOS.isEmpty()) && (suitDTOS != null && !suitDTOS.isEmpty())) {
+            } else if (!judgeGoodsList(goodsDTOS) && judgeSuitList(suitDTOS)) {
                 list = goodsAndSuitService.selectGoodsAndSuit(suitDTOS, suitDTOS);
             }
             if (list != null && !list.isEmpty()) {
                 List uniqueList = list.stream().distinct().collect(Collectors.toList());
                 List pager = PageUtil.Pager(pageSize, pageNum, uniqueList);
                 if (pager != null && !pager.isEmpty()) {
-                    return ResponseMessage.newSuccessInstance(GoodsPageResponseMessage.restPage(pageNum,pageSize,pager), "查找成功");
-                }else{
-                    return ResponseMessage.newErrorInstance("所选页码超出最大页码");
+                    return ResponseMessage.newSuccessInstance
+                            (GoodsPageResponseMessage.restPage(pageNum, pageSize, pager), "查找成功");
+                } else {
+                    return ResponseMessage.newSuccessInstance("所选页码超出最大页码");
                 }
             } else {
                 return ResponseMessage.newErrorInstance("查找失败");
@@ -304,4 +311,19 @@ public class GoodsSuitController {
         }
     }
 
+    public boolean judgeGoodsList(List<GoodsDTO> list) {
+        if (list != null && !(list.isEmpty())) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean judgeSuitList(List<SuitDTO> list) {
+        if (list != null && !(list.isEmpty())) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

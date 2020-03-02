@@ -3,6 +3,8 @@ package com.vtmer.yisanbang.common.exception;
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.common.exception.api.ApiException;
 import com.vtmer.yisanbang.dto.ErrorDTO;
+import org.apache.shiro.authz.AuthorizationException;
+import org.apache.shiro.authz.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.bind.BindException;
@@ -20,6 +22,16 @@ import javax.validation.ConstraintViolationException;
 public class GlobalExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseMessage handleShiroException(Exception ex) {
+        return ResponseMessage.newErrorInstance("无权访问该资源");
+    }
+
+    @ExceptionHandler(AuthorizationException.class)
+    public ResponseMessage AuthorizationException(Exception ex) {
+        return ResponseMessage.newErrorInstance("权限认证失败");
+    }
     /**
      * 默认统一异常处理方法
      * @ExceptionHandler 注解用来配置需要拦截的异常类型, 也可以是自定义异常
