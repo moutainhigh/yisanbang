@@ -60,7 +60,7 @@ public class GoodsSuitController {
                     return ResponseMessage.newSuccessInstance
                             (GoodsPageResponseMessage.restPage(pageNum, pageSize, pager), "查找成功");
                 } else {
-                    return ResponseMessage.newSuccessInstance("所选页码超出最大页码");
+                    return ResponseMessage.newErrorInstance("所选页码超出最大页码");
                 }
             } else {
                 return ResponseMessage.newErrorInstance("查找失败");
@@ -100,7 +100,7 @@ public class GoodsSuitController {
                     return ResponseMessage.newSuccessInstance
                             (GoodsPageResponseMessage.restPage(pageNum, pageSize, pager), "查找成功");
                 } else {
-                    return ResponseMessage.newSuccessInstance("所选页码超出最大页码");
+                    return ResponseMessage.newErrorInstance("所选页码超出最大页码");
                 }
             } else {
                 return ResponseMessage.newErrorInstance("查找失败");
@@ -140,7 +140,7 @@ public class GoodsSuitController {
                     return ResponseMessage.newSuccessInstance
                             (GoodsPageResponseMessage.restPage(pageNum, pageSize, pager), "查找成功");
                 } else {
-                    return ResponseMessage.newSuccessInstance("所选页码超出最大页码");
+                    return ResponseMessage.newErrorInstance("所选页码超出最大页码");
                 }
             } else {
                 return ResponseMessage.newErrorInstance("查找失败");
@@ -177,7 +177,7 @@ public class GoodsSuitController {
                     return ResponseMessage.newSuccessInstance
                             (GoodsPageResponseMessage.restPage(pageNum, pageSize, pager), "查找成功");
                 } else {
-                    return ResponseMessage.newSuccessInstance("所选页码超出最大页码");
+                    return ResponseMessage.newErrorInstance("所选页码超出最大页码");
                 }
             } else {
                 return ResponseMessage.newErrorInstance("查找失败");
@@ -219,7 +219,7 @@ public class GoodsSuitController {
                     return ResponseMessage.newSuccessInstance
                             (GoodsPageResponseMessage.restPage(pageNum, pageSize, pager), "查找成功");
                 } else {
-                    return ResponseMessage.newSuccessInstance("所选页码超出最大页码");
+                    return ResponseMessage.newErrorInstance("所选页码超出最大页码");
                 }
             } else {
                 return ResponseMessage.newErrorInstance("查找失败");
@@ -261,7 +261,7 @@ public class GoodsSuitController {
                     return ResponseMessage.newSuccessInstance
                             (GoodsPageResponseMessage.restPage(pageNum, pageSize, pager), "查找成功");
                 } else {
-                    return ResponseMessage.newSuccessInstance("所选页码超出最大页码");
+                    return ResponseMessage.newErrorInstance("所选页码超出最大页码");
                 }
             } else {
                 return ResponseMessage.newErrorInstance("查找失败");
@@ -301,7 +301,7 @@ public class GoodsSuitController {
                     return ResponseMessage.newSuccessInstance
                             (GoodsPageResponseMessage.restPage(pageNum, pageSize, pager), "查找成功");
                 } else {
-                    return ResponseMessage.newSuccessInstance("所选页码超出最大页码");
+                    return ResponseMessage.newErrorInstance("所选页码超出最大页码");
                 }
             } else {
                 return ResponseMessage.newErrorInstance("查找失败");
