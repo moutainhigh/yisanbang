@@ -473,14 +473,8 @@ public class OrderServiceImpl implements OrderService {
     private ArrayList<OrderVO> getOrderVOArrayList(Map<String, Integer> orderMap) {
         ArrayList<OrderVO> orderVOArrayList = new ArrayList<>();
         List<Order> orderList = orderMapper.selectAllByUserIdAndStatus(orderMap);
-        Refund refund;
         for (Order order : orderList) {
             OrderVO orderVO = getOrderVOByOrder(order);
-            refund = refundMapper.selectByOrderId(order.getId());
-            if (refund != null) { // 如果该订单有退款信息
-                // 设置退款状态
-                orderVO.setRefundStatus(refund.getStatus());
-            }
             orderVOArrayList.add(orderVO);
         }
         return orderVOArrayList;
@@ -496,6 +490,13 @@ public class OrderServiceImpl implements OrderService {
         OrderVO orderVO = new OrderVO();
         UserAddress userAddress = new UserAddress();
         List<OrderGoodsDTO> orderGoodsDTOList = new ArrayList<>();
+
+        // 订单退款状态
+        Refund refund = refundMapper.selectByOrderId(order.getId());
+        if (refund != null) { // 如果该订单有退款信息
+            // 设置退款状态
+            orderVO.setRefundStatus(refund.getStatus());
+        }
 
         // 订单id
         orderVO.setOrderId(order.getId());

@@ -314,7 +314,7 @@ public class RefundController {
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
     })
-    @DeleteMapping("/delete")
+    @DeleteMapping("/delete/{refundNumber}")
     public ResponseMessage delete(@ApiParam(name = "refundNumber", value = "退款编号", example = "12345678998765432110", required = true)
                                   @NotBlank(message = "退款编号为空") @PathVariable String refundNumber) {
         try {

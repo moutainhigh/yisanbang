@@ -306,8 +306,8 @@ public class RefundServiceImpl implements RefundService {
         Refund refund = refundMapper.selectByRefundNumber(refundNumber);
         if (refund == null) {
             throw new RefundNotFoundException();
-        } else if (refund.getStatus() != 0 || refund.getStatus() != 1) {
-            // 如果退款状态不为[待商家处理]、[待用户发货]，则不可撤销退款申请
+        } else if ( !(refund.getStatus() == 0 || refund.getStatus() == 1) ) {
+            // 如果退款状态不为[待商家处理]、[待用户发货]，则不可撤销退款申请1
             throw new RefundStatusNotFitException("退款状态不为[待商家处理]、[待用户发货]，不可撤销退款申请");
         } else if (!refund.getUserId().equals(userId)) {
             // 检验是否是该用户的退款单
