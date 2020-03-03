@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.vtmer.yisanbang.mapper.SuitDetailMapper">
-  <cache type="com.vtmer.yisanbang.common.RedisCache"/>
+<!--  <cache type="com.vtmer.yisanbang.common.RedisCache"/>-->
   <resultMap id="BaseResultMap" type="com.vtmer.yisanbang.domain.SuitDetail">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="suit_id" jdbcType="INTEGER" property="suitId" />

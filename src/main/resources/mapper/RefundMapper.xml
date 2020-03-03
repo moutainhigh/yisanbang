@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.vtmer.yisanbang.mapper.RefundMapper">
-  <cache type="com.vtmer.yisanbang.common.RedisCache"/>
+<!--  <cache type="com.vtmer.yisanbang.common.RedisCache"/>-->
   <sql id="BaseColumnList">
     id,refund_price,refund_number, user_id, order_id, reason, status,is_received, create_time, update_time
   </sql>
