@@ -47,4 +47,6 @@ public interface GoodsService {
     public List<GoodsDTO> selectAllDtoOrderByTime();
 
     public List<GoodsDTO> selectAllShow();
+
+    public boolean setGoodsAddress(String address);
 }

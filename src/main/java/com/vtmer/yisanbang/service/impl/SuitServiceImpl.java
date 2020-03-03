@@ -194,4 +194,17 @@ public class SuitServiceImpl implements SuitService {
         }
         return null;
     }
+
+    @Override
+    public boolean setSuitAddress(String address) {
+        List<SuitDTO> suitDTOS = suitMapper.selectAllDto();
+        if (suitDTOS != null && !suitDTOS.isEmpty()) {
+            for (SuitDTO suitDTO : suitDTOS) {
+                suitDTO.setAddress(address);
+                suitMapper.updateDtoByPrimaryKey(suitDTO);
+            }
+            return true;
+        }
+        return false;
+    }
 }

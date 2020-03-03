@@ -38,7 +38,6 @@ public class GoodsDTO {
     @ApiModelProperty(value = "显示标志", example = "true")
     private Boolean isShow;
 
-    @NotBlank(message = "商家发货地址不可为空")
     @ApiModelProperty(value = "发货地址", example = "广东东莞")
     private String address;
 
