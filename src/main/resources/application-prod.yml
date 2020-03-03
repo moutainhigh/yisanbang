@@ -1,5 +1,5 @@
 server:
-  port: 443
+  port: 8089
   ssl:
     key-store: classpath:www.yisabang.com.jks
     key-password: 4uu0r3ip5k70
