@@ -294,4 +294,18 @@ public class SuitController {
             return ResponseMessage.newErrorInstance("请选择.jpg/.JPG/.jpeg/.JPEG/.png/.PNG图片文件");
         }
     }
+
+    @PutMapping("/setSuitAddress")
+    @ApiOperation(value = "设置套装发货地址")
+    // 更新套装
+    public ResponseMessage setSuitAddress(@ApiParam(name = "发货地址", value = "传入Json格式", required = true)
+                                          @RequestBody
+                                          @Validated String address) {
+        boolean setFlag = suitService.setSuitAddress(address);
+        if (setFlag) {
+            return ResponseMessage.newSuccessInstance("设置成功");
+        } else {
+            return ResponseMessage.newErrorInstance("设置失败");
+        }
+    }
 }

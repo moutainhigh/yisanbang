@@ -199,4 +199,17 @@ public class GoodsServiceImpl implements GoodsService {
         }
         return null;
     }
+
+    @Override
+    public boolean setGoodsAddress(String address) {
+        List<GoodsDTO> goodsDTOS = goodsMapper.selectAllDto();
+        if (goodsDTOS != null && !goodsDTOS.isEmpty()) {
+            for (GoodsDTO goodsDTO : goodsDTOS) {
+                goodsDTO.setAddress(address);
+                goodsMapper.updateDtoByPrimaryKey(goodsDTO);
+            }
+            return true;
+        }
+        return false;
+    }
 }

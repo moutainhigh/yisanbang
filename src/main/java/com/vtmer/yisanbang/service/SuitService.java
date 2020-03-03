@@ -47,4 +47,6 @@ public interface SuitService {
     public boolean hideSuit(SuitDTO suitDto);
 
     public List<SuitDTO> selectAllShow();
+
+    public boolean setSuitAddress(String address);
 }
