@@ -19,10 +19,7 @@ public interface CollectionMapper {
 
     int updateByPrimaryKey(Collection record);
 
-    Boolean checkExist(Collection collection);
-
-    Boolean deleteOne(Collection collection);
-
     List<Collection> selectAllByUserId(Integer userId);
 
+    Collection selectByDTO(Collection collection);
 }

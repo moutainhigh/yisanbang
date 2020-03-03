@@ -1,23 +1,37 @@
 package com.vtmer.yisanbang.common.util;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
+import java.util.UUID;
 
 public class OrderNumberUtil {
 
+    private static Integer number = 100;//唯一数字,集群第一台=0，第二台=200000,第三台=400000
+    private static int maxNum=200000;//最大值,集群第一台=200000，第二台=400000,第三台=600000
+    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");//年月日格式
+
     private static final long maxLength = 17;
 
-    private static Random rand;
+    /**
+     * uuid生成没有 — 的编号
+     * @return
+     */
+    public static String createUUID(){
+        String uuid = UUID.randomUUID().toString();
+        return uuid.replaceAll("\\-", "");
+    }
 
-    static {
-        try {
-            rand = SecureRandom.getInstanceStrong();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+    /**
+     * 生成订单编号 17+ 位数
+     * @return
+     */
+    public static String getOrderNumber(){
+        number++;//唯一数字自增
+        if(number>=maxNum){ // 值的上限，超过就归零
+            number=maxNum-200000;
         }
+        return sdf.format(new Date())+number;//返回时间+一毫秒内唯一数字的编号，区分机器可以加字母ABC...
     }
 
 
@@ -55,27 +69,12 @@ public class OrderNumberUtil {
         userId = userId == null ? 10000 : userId;
         return toCode(userId);
     }
-
     /**
      * 生成退货单号编码
      * @param userId
      */
     public static String getRefundNumber(Integer userId){
         return "2" + getCode(userId);
-    }
-
-    private static String getTime() {
-        SimpleDateFormat sdfTime = new SimpleDateFormat("yyyyMMddHHmmss");
-
-        return sdfTime.format(new Date());
-    }
-
-    private static int getRandomNum(){
-        return rand.nextInt(900000)+100000;
-    }
-
-    public static String getOrderNumber() {
-        return getTime() + getRandomNum();
     }
 
 }

@@ -57,4 +57,9 @@
     where user_id = #{userId}
     order by create_time DESC
   </select>
+  <select id="selectByDTO" resultMap="BaseResultMap">
+    select id,goods_id,is_goods from collection
+    where goods_id = #{goodsId}
+    and is_goods = #{whetherGoods}
+  </select>
 </mapper>

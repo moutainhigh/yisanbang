@@ -228,12 +228,12 @@ public class OrderServiceImpl implements OrderService {
             // 如果二者不一致，抛出异常
             throw new OrderPriceNotMatchException();
         }
-
         // 第二步校验 —— 检查购物车商品列表和订单的商品列表是否一致
         if (orderGoodsDTOList.size() != cartGoodsList.size()) {
             // 如果购物车商品列表和订单的商品列表数量不一致
             throw new OrderGoodsCartGoodsNotMatchException();
         }
+
         // 遍历订单商品列表
         for (OrderGoodsDTO orderGoodsDTO : orderGoodsDTOList) {
             // 默认为false
@@ -318,7 +318,6 @@ public class OrderServiceImpl implements OrderService {
         }
         // 获取用户订单商品列表和优惠后的总价
         Double totalPrice = orderDTO.getTotalPrice();
-        logger.info("前端传递的订单总价为[{}]", totalPrice);
 
         // 前端传递的订单总价，在后台校验一遍
         double totalPriceCheck = calculateTotalPrice(orderGoodsDTOList);
@@ -357,6 +356,7 @@ public class OrderServiceImpl implements OrderService {
         String orderNumber = OrderNumberUtil.getOrderNumber();
         // 生成order
         Order order = new Order();
+        logger.info("生成order");
         order.setUserId(user.getId());
         order.setAddressName(userAddress.getAddressName());
         order.setUserName(userAddress.getUserName());
@@ -365,6 +365,7 @@ public class OrderServiceImpl implements OrderService {
         order.setTotalPrice(orderDTO.getTotalPrice());
         order.setPostage(postage);
         order.setMessage(message);
+        logger.info("开始创建订单");
         orderMapper.insert(order);
         logger.info("创建订单[{}]，订单状态[未支付]---用户id[{}]", orderNumber, user.getId());
         BoundZSetOperations<String, String> zSetOps = redisTemplate.boundZSetOps("OrderNumber");
@@ -402,6 +403,7 @@ public class OrderServiceImpl implements OrderService {
             orderGoods.setAmount(amount);
             orderGoods.setTotalPrice(orderGoodsDTO.getAfterTotalPrice());
             orderGoods.setSizeId(colorSizeId);
+            logger.info("开始插入订单商品详情");
             orderGoodsMapper.insert(orderGoods);
             // 减少相应商品的库存
             // 不调用updateInventory方法，省得插入又再查一次数据库

@@ -70,9 +70,9 @@ public class CollectionServiceImpl implements CollectionService {
             // 如果商品不存在
             throw new CommodityNotExistException("用户["+ userId + "]欲收藏的商品不存在--商品id："+goodsId + "，是否是普通商品"+whetherGoods);
         }
-        Boolean checkRes = collectionMapper.checkExist(collection);
+        Collection check = collectionMapper.selectByDTO(collection);
         // 如果记录存在
-        if (checkRes) {
+        if (check != null) {
             throw new CollectionExistException("用户["+ userId + "]该商品已在收藏夹--商品id："+ goodsId + "，是否是普通商品"+ whetherGoods);
         } else {
             // 正常执行插入操作
