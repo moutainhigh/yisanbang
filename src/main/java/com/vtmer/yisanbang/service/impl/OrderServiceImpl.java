@@ -204,7 +204,7 @@ public class OrderServiceImpl implements OrderService {
      * @throws DataIntegrityViolationException：库存不足抛出异常
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public String createCartOrder(OrderDTO orderDTO) {
         int userId = JwtFilter.getLoginUser().getId();
         List<OrderGoodsDTO> orderGoodsDTOList = orderDTO.getOrderGoodsDTOList();
@@ -306,7 +306,7 @@ public class OrderServiceImpl implements OrderService {
      * @param orderDTO
      * @return
      */
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public String createDirectOrder(OrderDTO orderDTO) {
         int userId = JwtFilter.getLoginUser().getId();
