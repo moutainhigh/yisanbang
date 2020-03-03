@@ -82,7 +82,7 @@ wx:
     appId: wx447bdd8f7d850c06
     mchId: 1577486831 #微信支付商户号
     mchKey: 0e796fe11c6bad89236bf1696a7353ee #微信支付商户密钥
-    payNotifyURL: https://132.232.42.204:8089/order/wxNotify
+    payNotifyURL: https://www.yisabang.com:8089/order/wxNotify
     refundNotifyURL:  #http://132.232.42.204:8089/refund/wxNotify
     tradeType: JSAPI
     keyPath: classpath:apiclient_cert.p12

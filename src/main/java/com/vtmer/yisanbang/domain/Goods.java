@@ -21,6 +21,8 @@ public class Goods {
 
     private Date updateTime;
 
+    private String address;
+
     public Integer getId() {
         return id;
     }
@@ -91,5 +93,13 @@ public class Goods {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

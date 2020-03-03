@@ -35,12 +35,15 @@ public class SuitDTO {
     private Boolean isShow;
 
     @NotNull(message = "套装名称不可为空")
-    @ApiModelProperty(value = "是否显示", example = "true")
+    @ApiModelProperty(value = "套装名称", example = "学生套装")
     private String name;
 
     @NotNull(message = "图片地址不可为空")
-    @ApiModelProperty(value = "是否显示", example = "true")
+    @ApiModelProperty(value = "套装图片", example = "suit/****")
     private String picture;
+
+    @ApiModelProperty(value = "发货地址", example = "广东东莞")
+    private String address;
 
     private Date updateTime;
 
@@ -52,6 +55,14 @@ public class SuitDTO {
 
     @ApiModelProperty(hidden = true)
     private String size;
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
     public Integer getId() {
         return id;
@@ -152,7 +163,7 @@ public class SuitDTO {
         this.updateTime = updateTime;
     }
 
-    public SuitDTO(Integer id, Integer sortId, String introduce, Double lowestPrice, Double highestPrice, Boolean isShow, Date updateTime) {
+    public SuitDTO(Integer id, Integer sortId, String introduce, Double lowestPrice, Double highestPrice, Boolean isShow, Date updateTime, String address) {
         this.id = id;
         this.sortId = sortId;
         this.introduce = introduce;
@@ -160,6 +171,7 @@ public class SuitDTO {
         this.highestPrice = highestPrice;
         this.isShow = isShow;
         this.updateTime = updateTime;
+        this.address = address;
     }
 
     public SuitDTO() {
