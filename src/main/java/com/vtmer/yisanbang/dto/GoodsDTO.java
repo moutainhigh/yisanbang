@@ -38,6 +38,10 @@ public class GoodsDTO {
     @ApiModelProperty(value = "显示标志", example = "true")
     private Boolean isShow;
 
+    @NotBlank(message = "商家发货地址不可为空")
+    @ApiModelProperty(value = "发货地址", example = "广东东莞")
+    private String address;
+
     private Date updateTime;
 
     public Date getUpdateTime() {
@@ -126,7 +130,15 @@ public class GoodsDTO {
         this.isShow = isShow;
     }
 
-    public GoodsDTO(Integer id, Integer sortId, String name, String introduce, String picture, Double price, Boolean isShow) {
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public GoodsDTO(Integer id, Integer sortId, String name, String introduce, String picture, Double price, Boolean isShow, String address) {
         this.id = id;
         this.sortId = sortId;
         this.name = name;
@@ -134,11 +146,12 @@ public class GoodsDTO {
         this.picture = picture;
         this.price = price;
         this.isShow = isShow;
+        this.address = address;
     }
 
     @Override
     public String toString() {
-        return "GoodsDto{" +
+        return "GoodsDTO{" +
                 "id=" + id +
                 ", sortId=" + sortId +
                 ", name='" + name + '\'' +
@@ -146,6 +159,10 @@ public class GoodsDTO {
                 ", picture='" + picture + '\'' +
                 ", price=" + price +
                 ", isShow=" + isShow +
+                ", address='" + address + '\'' +
+                ", updateTime=" + updateTime +
+                ", colorSizeId=" + colorSizeId +
+                ", isGoods=" + isGoods +
                 '}';
     }
 
