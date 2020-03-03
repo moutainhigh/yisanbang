@@ -260,7 +260,7 @@ public class OrderServiceImpl implements OrderService {
 
         // 校验完成，开始下单逻辑
         // 生成order
-        String orderNumber = createOrder(orderDTO);
+        String orderNumber = createOrder(orderDTO,userId);
         // 删除购物车勾选项
         cartService.deleteCartGoodsByIsChosen();
         // 返回订单编号和openid
@@ -309,6 +309,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     @Override
     public String createDirectOrder(OrderDTO orderDTO) {
+        int userId = JwtFilter.getLoginUser().getId();
         // 判断直接下单的商品是否存在
         List<OrderGoodsDTO> orderGoodsDTOList = orderDTO.getOrderGoodsDTOList();
         boolean check = judgeGoodsExist(orderGoodsDTOList);
@@ -327,7 +328,7 @@ public class OrderServiceImpl implements OrderService {
             throw new OrderPriceNotMatchException();
         }
         // 创建订单
-        return createOrder(orderDTO);
+        return createOrder(orderDTO,userId);
     }
 
     @Override
@@ -347,17 +348,16 @@ public class OrderServiceImpl implements OrderService {
         orderMapper.updateRemind(orderNumber);
     }
 
-    private String createOrder(OrderDTO orderDTO) {
+    private String createOrder(OrderDTO orderDTO,int userId) {
         UserAddress userAddress = orderDTO.getUserAddress();
         double postage = orderDTO.getPostage();
         String message = orderDTO.getMessage();
-        User user = JwtFilter.getLoginUser();
         // 生成订单编号
         String orderNumber = OrderNumberUtil.getOrderNumber();
         // 生成order
         Order order = new Order();
         logger.info("生成order");
-        order.setUserId(user.getId());
+        order.setUserId(userId);
         order.setAddressName(userAddress.getAddressName());
         order.setUserName(userAddress.getUserName());
         order.setPhoneNumber(userAddress.getPhoneNumber());
@@ -367,7 +367,7 @@ public class OrderServiceImpl implements OrderService {
         order.setMessage(message);
         logger.info("开始创建订单");
         orderMapper.insert(order);
-        logger.info("创建订单[{}]，订单状态[未支付]---用户id[{}]", orderNumber, user.getId());
+        logger.info("创建订单[{}]，订单状态[未支付]---用户id[{}]", orderNumber, userId);
         BoundZSetOperations<String, String> zSetOps = redisTemplate.boundZSetOps("OrderNumber");
         // 延迟30分钟
         Calendar cal = Calendar.getInstance();
