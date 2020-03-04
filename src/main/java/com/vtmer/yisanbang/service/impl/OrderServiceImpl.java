@@ -98,6 +98,7 @@ public class OrderServiceImpl implements OrderService {
     private double defaultPostage;
 
     private void setPostage() {
+        logger.info("设置邮费规则");
         Postage postage = postageMapper.select();
         if (postage != null) {
             standardPrice = postage.getPrice();
@@ -178,10 +179,12 @@ public class OrderServiceImpl implements OrderService {
         double totalPrice = orderVO.getTotalPrice();
         if (totalPrice < standardPrice) {
             // 不包邮
+            logger.info("不包邮");
             totalPrice += defaultPostage;
             orderVO.setTotalPrice(totalPrice);
             orderVO.setPostage(defaultPostage);
         } else {
+            logger.info("包邮");
             // 包邮
             orderVO.setPostage(0.0);
         }
@@ -883,11 +886,12 @@ public class OrderServiceImpl implements OrderService {
                         queue.poll();
                         // 取下一个元素
                         element = queue.peek();
-                    } else if ("ORDERNOTEXIST".equals(wxPayOrderQueryResult.getTradeState())) {
+                    }
+                } catch (WxPayException e) {
+                    if ("ORDERNOTEXIST".equals(e.getErrCode())) {
                         // 订单不存在,说明该订单未调用微信支付接口，直接删除吧
                         orderMapper.deleteByPrimaryKey(element.getId());
                     }
-                } catch (WxPayException e) {
                     logger.info("调用微信查询订单接口出错，异常信息为[{}]",e.getMessage());
                 }
             } else if (diff != null) {
