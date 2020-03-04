@@ -37,4 +37,6 @@ public interface OrderMapper {
     void deleteOrderById(Integer orderId);
 
     void updateRemind(String orderNumber);
+
+    List<Order> getNotPayOrder();
 }

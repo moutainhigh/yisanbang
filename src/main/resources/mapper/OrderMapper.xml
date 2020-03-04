@@ -116,6 +116,14 @@
         <include refid="BaseColumnList"/>
         from `order`
     </select>
+    <select id="getNotPayOrder" resultType="com.vtmer.yisanbang.domain.Order">
+        select
+        <include refid="BaseColumnList"/>
+        from `order`
+        where status = 0
+        and is_delete = 0
+        order by create_time
+    </select>
     <select id="selectAllByUserIdAndStatus" parameterType="Map" resultMap="BaseResultMap">
         select
         <include refid="BaseColumnList"/>
