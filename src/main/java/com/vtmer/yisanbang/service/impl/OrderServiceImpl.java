@@ -1,5 +1,7 @@
 package com.vtmer.yisanbang.service.impl;
 
+import com.github.binarywang.wxpay.bean.result.WxPayOrderQueryResult;
+import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.vtmer.yisanbang.common.exception.service.cart.CartGoodsNotExistException;
 import com.vtmer.yisanbang.common.exception.service.cart.OrderGoodsCartGoodsNotMatchException;
@@ -131,6 +133,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      * The user clicks the settlement button,and then confirm the order
      * used in cart
+     *
      * @param
      * @return
      */
@@ -142,12 +145,12 @@ public class OrderServiceImpl implements OrderService {
         // 获取用户购物车清单
         CartVO cartVo = cartService.selectCartVo(userId);
         if (cartVo == null) {
-            logger.info("用户[{}]确认购物车订单时购物车为空",userId);
+            logger.info("用户[{}]确认购物车订单时购物车为空", userId);
             throw new CartEmptyException();
         }
         List<CartGoodsDTO> cartGoodsList = cartVo.getCartGoodsList();
         if (cartGoodsList == null) {
-            logger.info("用户[{}]确认购物车订单时购物车勾选商品为空",userId);
+            logger.info("用户[{}]确认购物车订单时购物车勾选商品为空", userId);
             throw new CartGoodsNotExistException("购物车勾选商品为空！");
         }
         // IDEA推荐方式，删除为勾选的购物车商品
@@ -163,7 +166,7 @@ public class OrderServiceImpl implements OrderService {
         // 判断订单商品是否存在
         boolean check = judgeGoodsExist(orderGoodsDTOArrayList);
         if (!check) {
-            logger.info("用户[{}]确认购物车订单时订单商品找不到",userId);
+            logger.info("用户[{}]确认购物车订单时订单商品找不到", userId);
             throw new OrderGoodsNotExistException();
         }
         orderVO.setOrderGoodsDTOList(orderGoodsDTOArrayList);
@@ -277,7 +280,7 @@ public class OrderServiceImpl implements OrderService {
         } // end for
         // 校验完成，开始下单逻辑
         // 生成order
-        String orderNumber = createOrder(orderDTO,userId);
+        String orderNumber = createOrder(orderDTO, userId);
         // 删除购物车勾选项
         cartService.deleteCartGoodsByIsChosen(userId);
         // 返回订单编号
@@ -345,7 +348,7 @@ public class OrderServiceImpl implements OrderService {
             throw new OrderPriceNotMatchException();
         }
         // 创建订单
-        return createOrder(orderDTO,userId);
+        return createOrder(orderDTO, userId);
     }
 
     @Override
@@ -365,7 +368,7 @@ public class OrderServiceImpl implements OrderService {
         orderMapper.updateRemind(orderNumber);
     }
 
-    private String createOrder(OrderDTO orderDTO,int userId) {
+    private String createOrder(OrderDTO orderDTO, int userId) {
         UserAddress userAddress = orderDTO.getUserAddress();
         double postage = orderDTO.getPostage();
         String message = orderDTO.getMessage();
@@ -437,6 +440,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 根据前端传递过来的订单商品列表计算总价
+     *
      * @param orderGoodsDTOList：商品总价
      * @return：订单总价
      */
@@ -458,6 +462,7 @@ public class OrderServiceImpl implements OrderService {
      * 获取用户指定订单状态的订单
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败
+     *
      * @param status:status传入3时同时获取退款成功（3)的订单;status传入5查询所有订单
      * @return
      */
@@ -482,6 +487,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 根据标识获取相应订单列表
+     *
      * @param orderMap
      * @return
      */
@@ -607,6 +613,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 删除订单 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
+     *
      * @param orderId
      * @return
      */
@@ -755,6 +762,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 用户取消订单
+     *
      * @param orderNumber：订单编号
      * @return
      */
@@ -785,6 +793,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 更新订单商品库存
+     *
      * @param orderNumber：订单编号
      * @param flag：1代表增加库存，0代表减少库存
      * @return
@@ -823,6 +832,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 获取未付款订单
+     *
      * @return
      */
     private List<Order> getNotPayOrder() {
@@ -855,26 +865,43 @@ public class OrderServiceImpl implements OrderService {
             //时间差值
             Long diff = this.checkOrder(element);
             if (diff != null && diff >= EFFECTIVE_TIME) {
-                logger.info("开始关闭订单任务，订单编号{},下单时间{}",element.getId(),element.getCreateTime());
-                // 更待订单状态为交易关闭
-                HashMap<String, Integer> orderMap = new HashMap<>();
-                orderMap.put("orderId",element.getId());
-                orderMap.put("status",4);
-                setOrderStatus(orderMap);
-                logger.info("订单[{}]状态更变：[未付款]-->[交易关闭]",element.getOrderNumber());
-                // 库存归位,1代表增加库存
-                updateInventory(element.getOrderNumber(),1);
-                // 弹出队列
-                queue.poll();
-                // 取下一个元素
-                element = queue.peek();
+                try {
+                    String orderNumber = element.getOrderNumber();
+                    logger.info("开始关闭订单任务，订单编号{},下单时间{}", orderNumber, element.getCreateTime());
+                    // 调用微信查询订单接口，确认用户是否真的未付款
+                    WxPayOrderQueryResult wxPayOrderQueryResult = wxPayService.queryOrder(null, orderNumber);
+                    // 更待订单状态为交易关闭
+                    if ("SUCCESS".equals(wxPayOrderQueryResult.getTradeState())) {
+                        // 如果微信订单结果为已支付，说明程序错误，给予补偿,更新订单状态为待发货
+                        logger.info("微信订单查询结果为已支付，订单编号{},下单时间{}，给予补偿处理", orderNumber, element.getCreateTime());
+                        Map<String, Integer> orderMap = new HashMap<>();
+                        orderMap.put("orderId", element.getId());
+                        orderMap.put("status", 1);
+                        orderMapper.setOrderStatus(orderMap);
+                    } else if ("NOTPAY".equals(wxPayOrderQueryResult.getTradeState())) {
+                        // 关闭订单
+                        logger.info("开始关闭订单任务，订单编号{},下单时间{}", orderNumber, element.getCreateTime());
+                        HashMap<String, Integer> orderMap = new HashMap<>();
+                        orderMap.put("orderId", element.getId());
+                        orderMap.put("status", 4);
+                        setOrderStatus(orderMap);
+                        logger.info("订单[{}]状态更变：[未付款]-->[交易关闭]", element.getOrderNumber());
+                        // 库存归位,1代表增加库存
+                        updateInventory(element.getOrderNumber(), 1);
+                        // 弹出队列
+                        queue.poll();
+                        // 取下一个元素
+                        element = queue.peek();
+                    }
+                } catch (WxPayException e) {
+                    logger.info("调用微信查询订单接口出错，异常信息为[{}]",e.getMessage());
+                }
             } else if (diff != null) {
                 // 如果diff<EFFECTIVE_TIME
                 try {
-                    logger.info("等待检测订单,订单编号为{}，下单时间{},已下单{}秒",element.getId(),element.getCreateTime(),diff / 1000 );
+                    logger.info("等待检测订单,订单编号为{}，下单时间{},已下单{}秒", element.getId(), element.getCreateTime(), diff / 1000);
                     Thread.sleep(EFFECTIVE_TIME - diff);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
                     logger.info("OrderAutoCancelJob.checkOrder定时任务出现问题");
                 }
             } // end else if
@@ -884,6 +911,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 获取订单的下单时间和现在的时间差
+     *
      * @param order：订单实体类
      * @return
      */
