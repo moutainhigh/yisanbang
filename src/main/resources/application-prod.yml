@@ -25,7 +25,7 @@ spring:
     password: Yisabang123.Redis
 
 swagger:
-  host: 132.232.42.204:443
+  host: 132.232.42.204:8089
   show: true
 
 logging:

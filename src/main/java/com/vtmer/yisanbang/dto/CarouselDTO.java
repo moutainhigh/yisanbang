@@ -9,12 +9,16 @@ public class CarouselDTO {
 
     private Integer id;
 
-    @ApiModelProperty(value = "图片路径", required = true, example = "img.yisanbang.com/carousel/图片名称")
+    @ApiModelProperty(value = "图片路径", required = true, example = "img.yisabang.com/carousel/图片名称")
     @NotBlank(message = "图片路径不能为空")
     private String picturePath;
 
-    @ApiModelProperty(value = "点击轮播图后跳转的路径", example = "goods/selectGoodsById/1")
-    private String url;
+    @ApiModelProperty(value = "跳转商品类型，0：不跳转(静态轮播图)，1：单件商品，2：套装商品", required = true, example = "1")
+    @NotNull(message = "跳转商品类型不能为空(请选择单件/套装/不跳转)")
+    private Integer goodsType;
+
+    @ApiModelProperty(value = "单件商品id/套装商品id/0(若跳转商品类型为\"不跳转\"则goodsId应为0)", example = "5")
+    private Integer goodsId;
 
     @ApiModelProperty(value = "轮播图显示顺序", required = true, example = "1")
     @NotNull(message = "轮播图显示顺序不能为空")
@@ -31,12 +35,20 @@ public class CarouselDTO {
         this.picturePath = picturePath;
     }
 
-    public String getUrl() {
-        return url;
+    public Integer getGoodsType() {
+        return goodsType;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setGoodsType(Integer goodsType) {
+        this.goodsType = goodsType;
+    }
+
+    public Integer getGoodsId() {
+        return goodsId;
+    }
+
+    public void setGoodsId(Integer goodsId) {
+        this.goodsId = goodsId;
     }
 
     public Integer getId() {

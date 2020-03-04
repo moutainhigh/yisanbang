@@ -86,6 +86,9 @@ public class AdController {
     @ApiOperation("添加广告信息")
     @PostMapping("/add")
     public ResponseMessage addAdInfo(@Validated @RequestBody AdDTO adDto) {
+        if (adDto.getGoodsType() == 0) {
+            adDto.setGoodsId(0);
+        }
         if (adService.isShowOrderExisted(adDto.getShowOrder())) {
             return ResponseMessage.newErrorInstance("显示顺序已存在，广告信息添加失败");
         }
@@ -100,6 +103,9 @@ public class AdController {
     @ApiOperation("根据id修改广告信息")
     @PutMapping("/{adId}")
     public ResponseMessage updateAdInfo(@PathVariable("adId") Integer adId, @Validated @RequestBody AdDTO adDto) {
+        if (adDto.getGoodsType() == 0) {
+            adDto.setGoodsId(0);
+        }
         if (!adDto.getShowOrder().equals(adService.listAdInfoByAdId(adId).getShowOrder()) && adService.isShowOrderExisted(adDto.getShowOrder())) {
             return ResponseMessage.newErrorInstance("显示顺序已存在，广告信息修改失败");
         }

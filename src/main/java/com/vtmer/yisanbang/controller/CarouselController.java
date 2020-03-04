@@ -52,6 +52,9 @@ public class CarouselController {
     @ApiOperation("添加轮播图信息")
     @PostMapping("/add")
     public ResponseMessage addCarouselInfo(@Validated @RequestBody CarouselDTO carouselDto) {
+        if (carouselDto.getGoodsType() == 0) {
+            carouselDto.setGoodsId(0);
+        }
         if (carouselService.isShowOrderExisted(carouselDto.getShowOrder())) {
             return ResponseMessage.newErrorInstance("显示顺序已存在，轮播图信息添加失败");
         }
@@ -66,6 +69,9 @@ public class CarouselController {
     @ApiOperation("根据id修改轮播图信息")
     @PutMapping("/{carouselId}")
     public ResponseMessage updateCarouselInfo(@PathVariable("carouselId") Integer carouselId,@Validated @RequestBody CarouselDTO carouselDto) {
+        if (carouselDto.getGoodsType() == 0) {
+            carouselDto.setGoodsId(0);
+        }
         if (!carouselDto.getShowOrder().equals(carouselService.listInfoById(carouselId).getShowOrder()) && carouselService.isShowOrderExisted(carouselDto.getShowOrder())) {
             return ResponseMessage.newErrorInstance("显示顺序已存在，广告信息修改失败");
         }

@@ -1,7 +1,7 @@
 server:
   servlet:
     context-path: /
-  port: 8089
+  port: 8080
   max-http-header-size: 81920 # 修改请求头允许的最大值
 
 spring:

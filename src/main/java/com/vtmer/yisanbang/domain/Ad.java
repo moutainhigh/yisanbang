@@ -7,7 +7,9 @@ public class Ad {
 
     private String picturePath;
 
-    private String url;
+    private Integer goodsType;
+
+    private Integer goodsId;
 
     private Integer showOrder;
 
@@ -33,12 +35,20 @@ public class Ad {
         this.picturePath = picturePath == null ? null : picturePath.trim();
     }
 
-    public String getUrl() {
-        return url;
+    public Integer getGoodsType() {
+        return goodsType;
     }
 
-    public void setUrl(String url) {
-        this.url = url == null ? null : url.trim();
+    public void setGoodsType(Integer goodsType) {
+        this.goodsType = goodsType;
+    }
+
+    public Integer getGoodsId() {
+        return goodsId;
+    }
+
+    public void setGoodsId(Integer goodsId) {
+        this.goodsId = goodsId;
     }
 
     public Integer getShowOrder() {
