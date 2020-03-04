@@ -56,6 +56,7 @@ public class CollectionServiceImpl implements CollectionService {
     @Override
     public void insertOne(Collection collection) {
         int userId = JwtFilter.getLoginUser().getId();
+        collection.setUserId(userId);
         Integer goodsId = collection.getGoodsId();
         Boolean whetherGoods = collection.getWhetherGoods();
         Object checkExist;
@@ -76,7 +77,6 @@ public class CollectionServiceImpl implements CollectionService {
             throw new CollectionExistException("用户["+ userId + "]该商品已在收藏夹--商品id："+ goodsId + "，是否是普通商品"+ whetherGoods);
         } else {
             // 正常执行插入操作
-            collection.setUserId(userId);
             collectionMapper.insert(collection);
         }
     }
