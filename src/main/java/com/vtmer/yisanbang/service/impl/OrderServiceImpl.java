@@ -233,7 +233,6 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public String createCartOrder(OrderDTO orderDTO) {
-        logger.info("创建购物车订单");
         int userId = JwtFilter.getLoginUser().getId();
         List<OrderGoodsDTO> orderGoodsDTOList = orderDTO.getOrderGoodsDTOList();
         boolean check = judgeGoodsExist(orderGoodsDTOList);
@@ -258,6 +257,11 @@ public class OrderServiceImpl implements OrderService {
         Double totalPrice = orderDTO.getTotalPrice();
         // 后台从redis中取出的购物车总价
         Double totalPrice1 = cartVo.getTotalPrice();
+        setPostage();
+        if (totalPrice1 < standardPrice) {
+            // 购物车总价不包邮
+            totalPrice1 += defaultPostage;
+        }
         if (!totalPrice.equals(totalPrice1)) {
             // 如果二者不一致，抛出异常
             throw new OrderPriceNotMatchException();
@@ -555,8 +559,7 @@ public class OrderServiceImpl implements OrderService {
             orderGoodsDTOList.add(orderGoodsDTO);
         }
         orderVO.setOrderGoodsDTOList(orderGoodsDTOList);
-        double totalPrice = calculateTotalPrice(orderGoodsDTOList);
-        orderVO.setTotalPrice(totalPrice);
+        orderVO.setTotalPrice(order.getTotalPrice() + order.getPostage());
         return orderVO;
     }
 
