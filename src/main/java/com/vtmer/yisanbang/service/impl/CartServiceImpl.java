@@ -402,11 +402,6 @@ public class CartServiceImpl implements CartService {
         // 设置总价
         double totalPrice = priceMap.get("totalPrice");
         cartVo.setTotalPrice(totalPrice);
-        cartVo.setPostage(0.0);
-        if (totalPrice < standardPrice) {
-            // 不包邮
-            cartVo.setPostage(defaultPostage);
-        }
         cartVo.setBeforeTotalPrice(priceMap.get("beforeTotalPrice"));
         // 根据时间排序
         ListSort.listTimeSort(cartGoodsList);
