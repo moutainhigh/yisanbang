@@ -304,8 +304,9 @@ public class CartServiceImpl implements CartService {
 
     // 删除购物车中的勾选商品
     @Override
-    public boolean deleteCartGoodsByIsChosen() {
-        getUserIdAndSetKey();
+    public boolean deleteCartGoodsByIsChosen(int userId) {
+        key = REDIS_CART + ":" + userId;
+        hashOperations = stringRedisTemplate.boundHashOps(key);
         if (!stringRedisTemplate.hasKey(key)) {
             // 不存在直接返回
             return false;

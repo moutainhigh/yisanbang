@@ -212,6 +212,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public String createCartOrder(OrderDTO orderDTO) {
+        logger.info("创建购物车订单");
         int userId = JwtFilter.getLoginUser().getId();
         List<OrderGoodsDTO> orderGoodsDTOList = orderDTO.getOrderGoodsDTOList();
         boolean check = judgeGoodsExist(orderGoodsDTOList);
@@ -269,13 +270,12 @@ public class OrderServiceImpl implements OrderService {
                 throw new OrderGoodsCartGoodsNotMatchException();
             }
         } // end for
-
         // 校验完成，开始下单逻辑
         // 生成order
         String orderNumber = createOrder(orderDTO,userId);
         // 删除购物车勾选项
-        cartService.deleteCartGoodsByIsChosen();
-        // 返回订单编号和openid
+        cartService.deleteCartGoodsByIsChosen(userId);
+        // 返回订单编号
         return orderNumber;
     }
 
@@ -368,7 +368,6 @@ public class OrderServiceImpl implements OrderService {
         String orderNumber = OrderNumberUtil.getOrderNumber();
         // 生成order
         Order order = new Order();
-        logger.info("生成order");
         order.setUserId(userId);
         order.setAddressName(userAddress.getAddressName());
         order.setUserName(userAddress.getUserName());
@@ -377,7 +376,6 @@ public class OrderServiceImpl implements OrderService {
         order.setTotalPrice(orderDTO.getTotalPrice());
         order.setPostage(postage);
         order.setMessage(message);
-        logger.info("开始创建订单");
         orderMapper.insert(order);
         logger.info("创建订单[{}]，订单状态[未支付]---用户id[{}]", orderNumber, userId);
         BoundZSetOperations<String, String> zSetOps = redisTemplate.boundZSetOps("OrderNumber");
@@ -390,6 +388,7 @@ public class OrderServiceImpl implements OrderService {
 
         List<OrderGoodsDTO> orderGoodsDTOList = orderDTO.getOrderGoodsDTOList();
         for (OrderGoodsDTO orderGoodsDTO : orderGoodsDTOList) {
+            logger.info("开始遍历订单商品列表...");
             // 生成orderGoods
             OrderGoods orderGoods = new OrderGoods();
             boolean whetherGoods = orderGoodsDTO.getWhetherGoods();
@@ -415,10 +414,8 @@ public class OrderServiceImpl implements OrderService {
             orderGoods.setAmount(amount);
             orderGoods.setTotalPrice(orderGoodsDTO.getAfterTotalPrice());
             orderGoods.setSizeId(colorSizeId);
-            logger.info("开始插入订单商品详情");
             orderGoodsMapper.insert(orderGoods);
             // 减少相应商品的库存
-            // 不调用updateInventory方法，省得插入又再查一次数据库
             HashMap<String, Integer> inventoryMap = new HashMap<>();
             inventoryMap.put("amount", amount);
             inventoryMap.put("sizeId", colorSizeId);
@@ -435,7 +432,6 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 根据前端传递过来的订单商品列表计算总价
-     *
      * @param orderGoodsDTOList：商品总价
      * @return：订单总价
      */
