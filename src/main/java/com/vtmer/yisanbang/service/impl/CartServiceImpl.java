@@ -3,16 +3,10 @@ package com.vtmer.yisanbang.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.vtmer.yisanbang.common.exception.service.cart.CartGoodsNotExistException;
 import com.vtmer.yisanbang.common.util.ListSort;
-import com.vtmer.yisanbang.domain.Cart;
-import com.vtmer.yisanbang.domain.CartGoods;
-import com.vtmer.yisanbang.domain.Discount;
-import com.vtmer.yisanbang.domain.User;
+import com.vtmer.yisanbang.domain.*;
 import com.vtmer.yisanbang.dto.CartGoodsDTO;
 import com.vtmer.yisanbang.dto.GoodsSkuDTO;
-import com.vtmer.yisanbang.mapper.CartGoodsMapper;
-import com.vtmer.yisanbang.mapper.CartMapper;
-import com.vtmer.yisanbang.mapper.DiscountMapper;
-import com.vtmer.yisanbang.mapper.UserMapper;
+import com.vtmer.yisanbang.mapper.*;
 import com.vtmer.yisanbang.service.CartService;
 import com.vtmer.yisanbang.service.ColorSizeService;
 import com.vtmer.yisanbang.service.PartSizeService;
@@ -59,6 +53,26 @@ public class CartServiceImpl implements CartService {
 
     @Autowired
     private RedisTemplate<String, Object> stringRedisTemplate;
+
+    @Autowired
+    private PostageMapper postageMapper;
+
+    // Free the postage after standardPrice
+    private double standardPrice;
+
+    // postage
+    private double defaultPostage;
+
+    private void setPostage() {
+        Postage postage = postageMapper.select();
+        if (postage != null) {
+            standardPrice = postage.getPrice();
+            defaultPostage = postage.getDefaultPostage();
+        } else {  // 达标金额和邮费都默认为0
+            standardPrice = 0.0;
+            defaultPostage = 0.0;
+        }
+    }
 
     private static final String REDIS_CART = "cart";
 
@@ -378,6 +392,7 @@ public class CartServiceImpl implements CartService {
      * @return
      */
     private CartVO convertObjectListToCartVo(List<Object> ObjectList) {
+        setPostage();
         // 查询购物车数据
         List<CartGoodsDTO> cartGoodsList;
         cartGoodsList = ObjectList.stream().map(o -> JSON.parseObject(o.toString(), CartGoodsDTO.class)).collect(Collectors.toList());
@@ -385,7 +400,13 @@ public class CartServiceImpl implements CartService {
         Map<String, Double> priceMap = calculateTotalPrice(cartGoodsList);
         CartVO cartVo = new CartVO();
         // 设置总价
-        cartVo.setTotalPrice(priceMap.get("totalPrice"));
+        double totalPrice = priceMap.get("totalPrice");
+        cartVo.setTotalPrice(totalPrice);
+        cartVo.setPostage(0.0);
+        if (totalPrice < standardPrice) {
+            // 不包邮
+            cartVo.setPostage(defaultPostage);
+        }
         cartVo.setBeforeTotalPrice(priceMap.get("beforeTotalPrice"));
         // 根据时间排序
         ListSort.listTimeSort(cartGoodsList);

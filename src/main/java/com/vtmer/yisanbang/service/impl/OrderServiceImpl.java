@@ -103,8 +103,8 @@ public class OrderServiceImpl implements OrderService {
             standardPrice = postage.getPrice();
             defaultPostage = postage.getDefaultPostage();
         } else {  // 达标金额和邮费都默认为0
-            standardPrice = 0;
-            defaultPostage = 0;
+            standardPrice = 0.0;
+            defaultPostage = 0.0;
         }
     }
 
@@ -127,20 +127,17 @@ public class OrderServiceImpl implements OrderService {
             throw new OrderNotFoundException();
         }
         return getOrderVOByOrder(order);
-
     }
 
     /**
      * The user clicks the settlement button,and then confirm the order
      * used in cart
-     *
      * @param
      * @return
      */
     @Override
     public OrderVO confirmCartOrder() {
         Integer userId = JwtFilter.getLoginUser().getId();
-        setPostage();
         OrderVO orderVO = new OrderVO();
         // 获取用户购物车清单
         CartVO cartVo = cartService.selectCartVo(userId);
@@ -170,15 +167,24 @@ public class OrderServiceImpl implements OrderService {
             throw new OrderGoodsNotExistException();
         }
         orderVO.setOrderGoodsDTOList(orderGoodsDTOArrayList);
-        if (cartVo.getTotalPrice() >= standardPrice) {
-            // 包邮
-            orderVO.setPostage((double) 0);
-        } else {  // 不包邮
-            orderVO.setPostage(defaultPostage);
-        }
+        setOrderPostage(orderVO);
         UserAddress userAddress = userAddressMapper.selectDefaultByUserId(userId);
         orderVO.setUserAddress(userAddress);
         return orderVO;
+    }
+
+    private void setOrderPostage(OrderVO orderVO) {
+        setPostage();
+        double totalPrice = orderVO.getTotalPrice();
+        if (totalPrice < standardPrice) {
+            // 不包邮
+            totalPrice += defaultPostage;
+            orderVO.setTotalPrice(totalPrice);
+            orderVO.setPostage(defaultPostage);
+        } else {
+            // 包邮
+            orderVO.setPostage(0.0);
+        }
     }
 
     @Override
@@ -201,17 +207,19 @@ public class OrderServiceImpl implements OrderService {
             beforeTotalPrice += orderGoodsDTO.getAmount() * orderGoodsDTO.getPrice();
             totalPrice += orderGoodsDTO.getAfterTotalPrice();
         }
+        // 格式转换
         java.text.DecimalFormat df = new java.text.DecimalFormat("#.00");
         df.format(totalPrice);
         df.format(beforeTotalPrice);
         orderVO.setBeforeTotalPrice(beforeTotalPrice);
         orderVO.setTotalPrice(totalPrice);
+        // 设置订单邮费
+        setOrderPostage(orderVO);
         orderVO.setOrderGoodsDTOList(orderGoodsDTOList);
         UserAddress userAddress = userAddressMapper.selectDefaultByUserId(userId);
         orderVO.setUserAddress(userAddress);
         return orderVO;
     }
-
 
     /**
      * create shopping cart order after users submit order
@@ -256,7 +264,6 @@ public class OrderServiceImpl implements OrderService {
             // 如果购物车商品列表和订单的商品列表数量不一致
             throw new OrderGoodsCartGoodsNotMatchException();
         }
-
         // 遍历订单商品列表
         for (OrderGoodsDTO orderGoodsDTO : orderGoodsDTOList) {
             // 默认为false
@@ -324,13 +331,13 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 创建直接下单类订单
-     *
      * @param orderDTO
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
     public String createDirectOrder(OrderDTO orderDTO) {
+        setPostage();
         int userId = JwtFilter.getLoginUser().getId();
         // 判断直接下单的商品是否存在
         List<OrderGoodsDTO> orderGoodsDTOList = orderDTO.getOrderGoodsDTOList();
@@ -422,7 +429,6 @@ public class OrderServiceImpl implements OrderService {
             orderGoods.setSizeId(colorSizeId);
             orderGoodsMapper.insert(orderGoods);
             // 减少相应商品的库存
-            HashMap<String, Integer> inventoryMap = new HashMap<>();
             InventoryDTO inventoryDTO = new InventoryDTO();
             inventoryDTO.setSizeId(colorSizeId);
             inventoryDTO.setAmount(amount);
@@ -438,11 +444,11 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 根据前端传递过来的订单商品列表计算总价
-     *
      * @param orderGoodsDTOList：商品总价
      * @return：订单总价
      */
     private double calculateTotalPrice(List<OrderGoodsDTO> orderGoodsDTOList) {
+        setPostage();
         // 订单总价
         double totalPrice = 0;
         for (OrderGoodsDTO orderGoodsDTO : orderGoodsDTOList) {
@@ -452,6 +458,10 @@ public class OrderServiceImpl implements OrderService {
             logger.info("单项商品总价为[{}]", orderGoodsDTO.getAfterTotalPrice());
             totalPrice += orderGoodsDTO.getAfterTotalPrice();
         }
+        if (totalPrice < standardPrice) {
+            // 如果不满足包邮条件
+            totalPrice += defaultPostage;
+        }
         logger.info("后台计算的订单总价为[{}]", totalPrice);
         return totalPrice;
     }
@@ -460,7 +470,6 @@ public class OrderServiceImpl implements OrderService {
      * 获取用户指定订单状态的订单
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 退款状态定义：status 退款状态 0--等待商家处理  1--退款中（待买家发货） 2--退款中（待商家收货） 3--退款成功 4--退款失败
-     *
      * @param status:status传入3时同时获取退款成功（3)的订单;status传入5查询所有订单
      * @return
      */
@@ -485,7 +494,6 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 根据标识获取相应订单列表
-     *
      * @param orderMap
      * @return
      */
@@ -501,7 +509,6 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 通过订单表实体类获取订单详情VO对象
-     *
      * @param order:订单表实体类
      * @return OrderVo
      */
@@ -509,20 +516,16 @@ public class OrderServiceImpl implements OrderService {
         OrderVO orderVO = new OrderVO();
         UserAddress userAddress = new UserAddress();
         List<OrderGoodsDTO> orderGoodsDTOList = new ArrayList<>();
-
         // 订单退款状态
         Refund refund = refundMapper.selectByOrderId(order.getId());
         if (refund != null) { // 如果该订单有退款信息
             // 设置退款状态
             orderVO.setRefundStatus(refund.getStatus());
         }
-
         // 订单id
         orderVO.setOrderId(order.getId());
-
         // 订单状态
         orderVO.setOrderStatus(order.getStatus());
-
         // 用户地址封装
         userAddress.setUserId(order.getUserId());
         userAddress.setUserName(order.getUserName());
@@ -533,25 +536,24 @@ public class OrderServiceImpl implements OrderService {
         BeanUtils.copyProperties(order, orderVO);
         // 根据订单id查询该订单的所有商品
         List<OrderGoods> orderGoodsList = orderGoodsMapper.selectByOrderId(order.getId());
-
         for (OrderGoods orderGoods : orderGoodsList) {
             OrderGoodsDTO orderGoodsDTO = new OrderGoodsDTO();
             // 商品单价
             double price = orderGoods.getTotalPrice() / orderGoods.getAmount();
-
             // 设置商品价格
             orderGoodsDTO.setPrice(price);
             orderGoodsDTO.setAmount(orderGoods.getAmount());
             orderGoodsDTO.setAfterTotalPrice(orderGoods.getTotalPrice());
-
             // 设置商品基础信息
             Integer sizeId = orderGoods.getSizeId();
             Boolean isGoods = orderGoods.getWhetherGoods();
             setOrderGoodsDTO(orderGoodsDTO, sizeId, isGoods);
-
             orderGoodsDTOList.add(orderGoodsDTO);
         }
         orderVO.setOrderGoodsDTOList(orderGoodsDTOList);
+        double totalPrice = calculateTotalPrice(orderGoodsDTOList);
+        orderVO.setTotalPrice(totalPrice);
+        setOrderPostage(orderVO);
         return orderVO;
     }
 
@@ -559,7 +561,6 @@ public class OrderServiceImpl implements OrderService {
      * 订单状态自增修改
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 0--待付款 1--待发货 2--待收货 类型订单 更新订单状态
-     *
      * @param orderNumber:订单编号
      * @return -2 —— 订单状态不能自增修改
      * -1 —— 订单id不存在
@@ -589,7 +590,6 @@ public class OrderServiceImpl implements OrderService {
     /**
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
      * 非 0--待付款 1--待发货 2--待收货 状态订单 设置订单状态
-     *
      * @param orderMap—— orderId、status
      * @return -2 —— 订单id不存在
      * -1 —— 将要修改的订单状态与原状态相同
@@ -611,7 +611,6 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 删除订单 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
-     *
      * @param orderId
      * @return
      */
@@ -637,18 +636,16 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 通过订单号查询订单详情信息
-     *
      * @return 订单详情信息OrderDTO
      */
     @Override
     public OrderVO selectOrderVOByOrderNumber(String orderNumber) {
-        Order order = orderMapper.selectByOrderNumber(orderNumber);
+        Order order = selectOrderByOrderNumber(orderNumber);
         return getOrderVOByOrder(order);
     }
 
     /**
      * 通过订单号查询订单基础信息
-     *
      * @param orderNumber：订单号
      * @return order：订单基础信息
      */
@@ -659,7 +656,6 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 设置订单的快递编号
-     *
      * @param order：courierNumber、orderNumber
      * @return
      */
@@ -730,7 +726,6 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 订单状态定义：status 订单状态 0--待付款 1--待发货 2--待收货 3--已完成 4--交易关闭 5--所有订单
-     *
      * @param orderVO:userAddress、orderNumber
      * @return
      */
@@ -760,7 +755,6 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 用户取消订单
-     *
      * @param orderNumber：订单编号
      * @return
      */
@@ -791,7 +785,6 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 更新订单商品库存
-     *
      * @param orderNumber：订单编号
      * @param flag：1代表增加库存，0代表减少库存
      * @return
