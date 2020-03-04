@@ -76,7 +76,7 @@
         set status = status + 1
         where id = #{orderId}
     </update>
-    <update id="setOrderStatus">
+    <update id="setOrderStatus" parameterType="Map">
         update `order`
         set status = #{status}
         where id = #{orderId}
@@ -115,7 +115,7 @@
         <include refid="BaseColumnList"/>
         from `order`
     </select>
-    <select id="selectAllByUserIdAndStatus" resultMap="BaseResultMap">
+    <select id="selectAllByUserIdAndStatus" parameterType="Map" resultMap="BaseResultMap">
         select
         <include refid="BaseColumnList"/>
         from `order`

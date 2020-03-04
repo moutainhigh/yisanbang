@@ -206,6 +206,10 @@ public class OrderController {
     public ResponseMessage<WxMiniPayOrderResult> wxpay(@ApiParam(name = "orderNumber", value = "订单编号", required = true)
                                                        @NotBlank(message = "订单号传入为空") @PathVariable String orderNumber) {
         OrderVO orderVO = orderService.selectOrderVOByOrderNumber(orderNumber);
+        Integer orderStatus = orderVO.getOrderStatus();
+        if (orderStatus != 0) {
+            throw new ApiOrderStatusNotFitException("该订单状态不为待付款，不能进行支付操作");
+        }
         User user = JwtFilter.getLoginUser();
         if (orderVO == null) {
             throw new ApiOrderNotFoundException("找不到订单[" + orderNumber + "]");
