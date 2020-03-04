@@ -217,7 +217,7 @@ public class OrderServiceImpl implements OrderService {
         CartVO cartVo = cartService.selectCartVo(userId);
         if (cartVo == null) {
             // 说明购物车为空
-            throw new CartGoodsNotExistException("购物车商品为空");
+            throw new CartEmptyException("购物车为空");
         }
         // 获取用户购物车商品列表
         List<CartGoodsDTO> cartGoodsList = cartVo.getCartGoodsList();
