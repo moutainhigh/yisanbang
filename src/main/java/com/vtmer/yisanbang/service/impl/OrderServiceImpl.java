@@ -559,7 +559,7 @@ public class OrderServiceImpl implements OrderService {
             orderGoodsDTOList.add(orderGoodsDTO);
         }
         orderVO.setOrderGoodsDTOList(orderGoodsDTOList);
-        orderVO.setTotalPrice(order.getTotalPrice() + order.getPostage());
+        orderVO.setTotalPrice(order.getTotalPrice());
         return orderVO;
     }
 
