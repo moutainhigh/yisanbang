@@ -99,6 +99,8 @@ public class OrderController {
             throw new ApiCartEmptyException(e.getMessage());
         } catch (OrderGoodsNotExistException e) {
             throw new ApiOrderGoodsNotExistException(e.getMessage());
+        } catch (CartGoodsNotExistException e) {
+            throw new ApiCartGoodsNotExistException(e.getMessage());
         } catch (Exception e) {
             throw new ApiException(e);
         }

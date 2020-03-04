@@ -22,7 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -127,7 +126,6 @@ public class OrderServiceImpl implements OrderService {
     /**
      * The user clicks the settlement button,and then confirm the order
      * used in cart
-     *
      * @param
      * @return
      */
@@ -139,9 +137,14 @@ public class OrderServiceImpl implements OrderService {
         // 获取用户购物车清单
         CartVO cartVo = cartService.selectCartVo(userId);
         if (cartVo == null) {
+            logger.info("用户[{}]确认购物车订单时购物车为空",userId);
             throw new CartEmptyException();
         }
         List<CartGoodsDTO> cartGoodsList = cartVo.getCartGoodsList();
+        if (cartGoodsList == null) {
+            logger.info("用户[{}]确认购物车订单时购物车勾选商品为空",userId);
+            throw new CartGoodsNotExistException("购物车勾选商品为空！");
+        }
         // IDEA推荐方式，删除为勾选的购物车商品
         cartGoodsList.removeIf(cartGoodsDto -> cartGoodsDto.getWhetherChosen().equals(Boolean.FALSE));
         orderVO.setTotalPrice(cartVo.getTotalPrice());
@@ -152,8 +155,10 @@ public class OrderServiceImpl implements OrderService {
             BeanUtils.copyProperties(cartGoodsDTO, orderGoodsDTO);
             orderGoodsDTOArrayList.add(orderGoodsDTO);
         }
+        // 判断订单商品是否存在
         boolean check = judgeGoodsExist(orderGoodsDTOArrayList);
         if (!check) {
+            logger.info("用户[{}]确认购物车订单时订单商品找不到",userId);
             throw new OrderGoodsNotExistException();
         }
         orderVO.setOrderGoodsDTOList(orderGoodsDTOArrayList);
@@ -202,7 +207,7 @@ public class OrderServiceImpl implements OrderService {
      *
      * @param orderDTO:UserAddress(用户地址、联系人、手机号)、邮费、留言
      * @return openid、orderNumber
-     * @throws DataIntegrityViolationException：库存不足抛出异常
+     * @throws
      */
     @Override
     @Transactional(rollbackFor = Exception.class)

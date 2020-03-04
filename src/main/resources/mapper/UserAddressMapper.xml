@@ -7,7 +7,7 @@
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
     <result column="address_name" jdbcType="VARCHAR" property="addressName" />
     <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
-    <result column="is_default" jdbcType="BIT" property="isDefault" />
+    <result column="is_default" jdbcType="TINYINT" property="isDefault" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
@@ -53,7 +53,7 @@
     update_time
     from user_address
   </select>
-  <select id="selectDefaultByUserId" resultType="com.vtmer.yisanbang.domain.UserAddress">
+  <select id="selectDefaultByUserId" resultMap="BaseResultMap">
     select id,user_id, user_name, address_name, phone_number,is_default from user_address
     where user_id = #{userId}
     and is_default = 1
