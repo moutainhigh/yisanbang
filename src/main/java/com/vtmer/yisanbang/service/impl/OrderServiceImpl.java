@@ -351,7 +351,6 @@ public class OrderServiceImpl implements OrderService {
         }
         // 获取用户订单商品列表和优惠后的总价
         Double totalPrice = orderDTO.getTotalPrice();
-
         // 前端传递的订单总价，在后台校验一遍
         double totalPriceCheck = calculateTotalPrice(orderGoodsDTOList);
         if (!totalPrice.equals(totalPriceCheck)) {
@@ -525,6 +524,8 @@ public class OrderServiceImpl implements OrderService {
             // 设置退款状态
             orderVO.setRefundStatus(refund.getStatus());
         }
+        // 订单邮费
+        orderVO.setPostage(order.getPostage());
         // 订单id
         orderVO.setOrderId(order.getId());
         // 订单状态
@@ -556,7 +557,6 @@ public class OrderServiceImpl implements OrderService {
         orderVO.setOrderGoodsDTOList(orderGoodsDTOList);
         double totalPrice = calculateTotalPrice(orderGoodsDTOList);
         orderVO.setTotalPrice(totalPrice);
-        setOrderPostage(orderVO);
         return orderVO;
     }
 
