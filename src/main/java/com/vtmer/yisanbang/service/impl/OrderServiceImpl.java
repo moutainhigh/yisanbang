@@ -9,6 +9,7 @@ import com.vtmer.yisanbang.common.exception.service.order.*;
 import com.vtmer.yisanbang.common.util.OrderNumberUtil;
 import com.vtmer.yisanbang.domain.*;
 import com.vtmer.yisanbang.dto.CartGoodsDTO;
+import com.vtmer.yisanbang.dto.InventoryDTO;
 import com.vtmer.yisanbang.dto.OrderDTO;
 import com.vtmer.yisanbang.dto.OrderGoodsDTO;
 import com.vtmer.yisanbang.mapper.*;
@@ -417,14 +418,14 @@ public class OrderServiceImpl implements OrderService {
             orderGoodsMapper.insert(orderGoods);
             // 减少相应商品的库存
             HashMap<String, Integer> inventoryMap = new HashMap<>();
-            inventoryMap.put("amount", amount);
-            inventoryMap.put("sizeId", colorSizeId);
-            // 0代表减少库存
-            inventoryMap.put("flag", 0);
+            InventoryDTO inventoryDTO = new InventoryDTO();
+            inventoryDTO.setSizeId(colorSizeId);
+            inventoryDTO.setAmount(amount);
+            inventoryDTO.setFlag(0);
             if (Boolean.TRUE.equals(whetherGoods)) {
-                colorSizeMapper.updateInventoryByPrimaryKey(inventoryMap);
+                colorSizeMapper.updateInventoryByPrimaryKey(inventoryDTO);
             } else {
-                partSizeMapper.updateInventoryByPrimaryKey(inventoryMap);
+                partSizeMapper.updateInventoryByPrimaryKey(inventoryDTO);
             }
         } // end for
         return orderNumber;
@@ -780,29 +781,28 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 更新订单商品库存
-     *
      * @param orderNumber：订单编号
      * @param flag：1代表增加库存，0代表减少库存
-     * @return 返回成功失败状态
+     * @return
      */
     @Override
     public void updateInventory(String orderNumber, Integer flag) {
         Order order = orderMapper.selectByOrderNumber(orderNumber);
         // 库存归位
+        logger.info("用户取消订单，库存归位");
         List<OrderGoods> orderGoodsList = orderGoodsMapper.selectByOrderId(order.getId());
         for (OrderGoods orderGoods : orderGoodsList) {
             Boolean isGoods = orderGoods.getWhetherGoods();
             Integer sizeId = orderGoods.getSizeId();
             Integer amount = orderGoods.getAmount();
-            HashMap<String, Integer> inventoryMap = new HashMap<>();
-            inventoryMap.put("sizeId", sizeId);
-            inventoryMap.put("amount", amount);
-            // 1代表增加库存,0代表减少库存
-            inventoryMap.put("flag", flag);
+            InventoryDTO inventoryDTO = new InventoryDTO();
+            inventoryDTO.setAmount(amount);
+            inventoryDTO.setSizeId(sizeId);
+            inventoryDTO.setFlag(flag);
             if (Boolean.TRUE.equals(isGoods)) {
-                colorSizeMapper.updateInventoryByPrimaryKey(inventoryMap);
+                colorSizeMapper.updateInventoryByPrimaryKey(inventoryDTO);
             } else {
-                partSizeMapper.updateInventoryByPrimaryKey(inventoryMap);
+                partSizeMapper.updateInventoryByPrimaryKey(inventoryDTO);
             }
         } // end for
     }
