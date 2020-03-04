@@ -2,11 +2,11 @@ package com.vtmer.yisanbang.mapper;
 
 import com.vtmer.yisanbang.domain.ColorSize;
 import com.vtmer.yisanbang.dto.ColorSizeDTO;
+import com.vtmer.yisanbang.dto.InventoryDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 
 @Mapper
 @Repository
@@ -21,7 +21,7 @@ public interface ColorSizeMapper {
 
     int updateByPrimaryKey(ColorSize record);
 
-    int updateInventoryByPrimaryKey(Map<String,Integer> inventoryMap);
+    int updateInventoryByPrimaryKey(InventoryDTO inventoryDTO);
 
     // Dto
     int insertDto(ColorSizeDTO record);
