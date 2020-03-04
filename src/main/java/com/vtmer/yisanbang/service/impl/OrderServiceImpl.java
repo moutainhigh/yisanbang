@@ -3,6 +3,7 @@ package com.vtmer.yisanbang.service.impl;
 import com.github.binarywang.wxpay.bean.result.WxPayOrderQueryResult;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
+import com.vtmer.yisanbang.common.exception.service.cart.CartGoodsNotExistException;
 import com.vtmer.yisanbang.common.exception.service.cart.OrderGoodsCartGoodsNotMatchException;
 import com.vtmer.yisanbang.common.exception.service.order.*;
 import com.vtmer.yisanbang.common.util.OrderNumberUtil;
@@ -214,11 +215,17 @@ public class OrderServiceImpl implements OrderService {
         }
         // 获取用户购物车清单
         CartVO cartVo = cartService.selectCartVo(userId);
+        if (cartVo == null) {
+            // 说明购物车为空
+            throw new CartGoodsNotExistException("购物车商品为空");
+        }
         // 获取用户购物车商品列表
         List<CartGoodsDTO> cartGoodsList = cartVo.getCartGoodsList();
+        if (cartGoodsList == null) {
+            throw new CartGoodsNotExistException("购物车勾选商品为空");
+        }
         // 删除未勾选商品,得到购物车勾选商品列表
         cartGoodsList.removeIf(cartGoodsDto -> cartGoodsDto.getWhetherChosen().equals(Boolean.FALSE));
-
         // 第一步校验 —— 检查前端传递的订单总价和后台计算的订单总价是否一致
         // 前端传递的订单总价
         Double totalPrice = orderDTO.getTotalPrice();
