@@ -391,12 +391,6 @@ public class OrderServiceImpl implements OrderService {
         orderMapper.insert(order);
         logger.info("创建订单[{}]，订单状态[未支付]---用户id[{}]", orderNumber, userId);
         BoundZSetOperations<String, String> zSetOps = redisTemplate.boundZSetOps("OrderNumber");
-        // 延迟30分钟
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.MINUTE, EFFECTIVE_TIME);
-        int minute30Later = (int) (cal.getTimeInMillis() / 1000);
-        // score为超时时间戳，zset集合值orderId4的分数
-        zSetOps.add(order.getOrderNumber(), minute30Later);
 
         List<OrderGoodsDTO> orderGoodsDTOList = orderDTO.getOrderGoodsDTOList();
         for (OrderGoodsDTO orderGoodsDTO : orderGoodsDTOList) {
@@ -896,6 +890,9 @@ public class OrderServiceImpl implements OrderService {
                         queue.poll();
                         // 取下一个元素
                         element = queue.peek();
+                    } else if ("ORDERNOTEXIST".equals(wxPayOrderQueryResult.getTradeState())) {
+                        // 订单不存在,说明该订单未调用微信支付接口，直接删除吧
+                        orderMapper.deleteByPrimaryKey(element.getId());
                     }
                 } catch (WxPayException e) {
                     logger.info("调用微信查询订单接口出错，异常信息为[{}]",e.getMessage());
