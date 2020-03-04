@@ -201,6 +201,9 @@ public class OrderServiceImpl implements OrderService {
             beforeTotalPrice += orderGoodsDTO.getAmount() * orderGoodsDTO.getPrice();
             totalPrice += orderGoodsDTO.getAfterTotalPrice();
         }
+        java.text.DecimalFormat df = new java.text.DecimalFormat("#.00");
+        df.format(totalPrice);
+        df.format(beforeTotalPrice);
         orderVO.setBeforeTotalPrice(beforeTotalPrice);
         orderVO.setTotalPrice(totalPrice);
         orderVO.setOrderGoodsDTOList(orderGoodsDTOList);
@@ -212,7 +215,6 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * create shopping cart order after users submit order
-     *
      * @param orderDTO:UserAddress(用户地址、联系人、手机号)、邮费、留言
      * @return openid、orderNumber
      * @throws
@@ -381,6 +383,8 @@ public class OrderServiceImpl implements OrderService {
         order.setUserName(userAddress.getUserName());
         order.setPhoneNumber(userAddress.getPhoneNumber());
         order.setOrderNumber(orderNumber);
+        java.text.DecimalFormat df = new java.text.DecimalFormat("#.00");
+        df.format(orderDTO.getTotalPrice());
         order.setTotalPrice(orderDTO.getTotalPrice());
         order.setPostage(postage);
         order.setMessage(message);

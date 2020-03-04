@@ -63,7 +63,6 @@ public class CollectionController {
 
     /**
      * 删除收藏接口
-     *
      * @param paramMap：收藏id Map集合
      * @return
      */
