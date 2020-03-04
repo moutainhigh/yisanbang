@@ -105,12 +105,14 @@ public class CollectionServiceImpl implements CollectionService {
                     collectionVo.setPicture(goods.getPicture());
                     collectionVo.setPrice(goods.getPrice());
                     collectionVo.setIntroduce(goods.getIntroduce());
+                    collectionVo.setAddress(goods.getAddress());
                 } else { // 如果是套装散件
                     Suit suit = suitMapper.selectByPrimaryKey(goodsId);
                     collectionVo.setName(suit.getName());
                     collectionVo.setPicture(suit.getPicture());
                     collectionVo.setPrice(suit.getLowestPrice());
                     collectionVo.setIntroduce(suit.getIntroduce());
+                    collectionVo.setAddress(suit.getAddress());
                 }
                 collectionVOList.add(collectionVo);
             } //end for

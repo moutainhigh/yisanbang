@@ -29,4 +29,7 @@ public class CollectionVO {
     @ApiModelProperty(value = "商品简介",example = "KOREAN WOMAN‘S")
     private String introduce;
 
+    @ApiModelProperty(value = "商品发货地址",example = "广东省东莞市")
+    private String address;
+
 }
