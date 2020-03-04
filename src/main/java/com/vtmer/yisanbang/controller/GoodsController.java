@@ -300,8 +300,7 @@ public class GoodsController {
     @ApiOperation(value = "设置套装发货地址")
     // 更新套装
     public ResponseMessage setGoodsAddress(@ApiParam(name = "发货地址", value = "传入Json格式", required = true)
-                                           @RequestBody
-                                           @Validated String address) {
+                                           @RequestParam(value = "address", defaultValue = "广东东莞") String address) {
         boolean setFlag = goodsService.setGoodsAddress(address);
         if (setFlag) {
             return ResponseMessage.newSuccessInstance("设置成功");

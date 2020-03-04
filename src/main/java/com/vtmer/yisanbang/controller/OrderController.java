@@ -11,7 +11,9 @@ import com.github.binarywang.wxpay.service.WxPayService;
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.common.annotation.RequestLog;
 import com.vtmer.yisanbang.common.exception.api.ApiException;
+import com.vtmer.yisanbang.common.exception.api.cart.ApiCartGoodsNotExistException;
 import com.vtmer.yisanbang.common.exception.api.order.*;
+import com.vtmer.yisanbang.common.exception.service.cart.CartGoodsNotExistException;
 import com.vtmer.yisanbang.common.exception.service.cart.OrderGoodsCartGoodsNotMatchException;
 import com.vtmer.yisanbang.common.exception.service.order.*;
 import com.vtmer.yisanbang.common.valid.group.Insert;
@@ -97,6 +99,8 @@ public class OrderController {
             throw new ApiCartEmptyException(e.getMessage());
         } catch (OrderGoodsNotExistException e) {
             throw new ApiOrderGoodsNotExistException(e.getMessage());
+        } catch (CartGoodsNotExistException e) {
+            throw new ApiCartGoodsNotExistException(e.getMessage());
         } catch (Exception e) {
             throw new ApiException(e);
         }
@@ -167,6 +171,10 @@ public class OrderController {
             throw new ApiOrderPriceNotMatchException(e.getMessage());
         } catch (OrderGoodsNotExistException e) {
             throw new ApiOrderGoodsNotExistException(e.getMessage());
+        } catch (CartGoodsNotExistException e) {
+            throw new ApiCartGoodsNotExistException(e.getMessage());
+        } catch (CartEmptyException e) {
+            throw new ApiCartEmptyException(e.getMessage());
         } catch (Exception e) {
             throw new ApiException(e);
         }

@@ -32,7 +32,7 @@ public interface CartService {
      * 删除某用户的购物车商品
      * @return
      */
-    boolean deleteCartGoodsByIsChosen();
+    boolean deleteCartGoodsByIsChosen(int userId);
 
     /**
      * 购物车数据持久化到数据库
