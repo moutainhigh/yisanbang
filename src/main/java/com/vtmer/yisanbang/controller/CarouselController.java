@@ -5,6 +5,7 @@ import com.vtmer.yisanbang.common.PageResponseMessage;
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.common.annotation.RequestLog;
 import com.vtmer.yisanbang.common.qiniu.QiniuUpload;
+import com.vtmer.yisanbang.common.tencentcloud.COSClientUtil;
 import com.vtmer.yisanbang.domain.Carousel;
 import com.vtmer.yisanbang.dto.CarouselDTO;
 import com.vtmer.yisanbang.service.CarouselService;
@@ -35,10 +36,12 @@ public class CarouselController {
         String picType = pic.getOriginalFilename().substring(pic.getOriginalFilename().lastIndexOf(".") + 1);
         System.out.println(picType);
         if ("jpg".equals(picType) || "JPG".equals(picType) || "jpeg".equals(picType) || "JPEG".equals(picType) || "png".equals(picType) || "PNG".equals(picType)) {
-            String picName = UUID.randomUUID().toString();
+            // String picName = UUID.randomUUID().toString();
             try {
-                String picPath = QiniuUpload.updateFile(pic, "carousel/" + picName);
-                return ResponseMessage.newSuccessInstance(picPath, "轮播图图片上传成功");
+                // String picPath = QiniuUpload.updateFile(pic, "carousel/" + picName);
+                COSClientUtil cosClientUtil = new COSClientUtil();
+                String picPath = cosClientUtil.uploadFile(pic, "carousel/");
+                return ResponseMessage.newSuccessInstance(COSClientUtil.getObjectPath() + picPath, "轮播图图片上传成功");
             } catch (Exception e) {
                 e.printStackTrace();
                 return ResponseMessage.newErrorInstance("轮播图图片上传失败");

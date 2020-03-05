@@ -157,6 +157,7 @@
 /Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/src/main/java/com/vtmer/yisanbang/common/exception/api/postage/ApiPostageSettingsExistException.java
 /Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/src/main/java/com/vtmer/yisanbang/mapper/ColorSizeMapper.java
 /Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/src/main/java/com/vtmer/yisanbang/common/exception/service/discount/DiscountExistException.java
+/Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/src/main/java/com/vtmer/yisanbang/common/tencentcloud/COSClientUtil.java
 /Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/src/main/java/com/vtmer/yisanbang/domain/UniformSort.java
 /Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/src/main/java/com/vtmer/yisanbang/service/impl/SortServiceImpl.java
 /Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/src/main/java/com/vtmer/yisanbang/controller/RefundController.java
@@ -188,6 +189,7 @@
 /Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/src/main/java/com/vtmer/yisanbang/common/exception/api/refund/ApiRefundStatusNotFitException.java
 /Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/src/main/java/com/vtmer/yisanbang/common/exception/api/businessaddress/ApiDefaultAddressYetException.java
 /Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/src/main/java/com/vtmer/yisanbang/common/exception/service/collection/CollectionExistException.java
+/Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/src/main/java/com/vtmer/yisanbang/common/quarz/OrderAutoCancelJob.java
 /Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/src/main/java/com/vtmer/yisanbang/mapper/UserMapper.java
 /Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/src/main/java/com/vtmer/yisanbang/service/CollectionService.java
 /Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/src/main/java/com/vtmer/yisanbang/domain/Goods.java
@@ -246,6 +248,7 @@
 /Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/src/main/java/com/vtmer/yisanbang/common/config/CorsConfig.java
 /Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/src/main/java/com/vtmer/yisanbang/common/exception/api/postage/ApiPostageSettingsNotFoundException.java
 /Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/src/main/java/com/vtmer/yisanbang/dto/OrderDTO.java
+/Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/src/main/java/com/vtmer/yisanbang/dto/InventoryDTO.java
 /Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/src/main/java/com/vtmer/yisanbang/service/RoleService.java
 /Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/src/main/java/com/vtmer/yisanbang/dto/ErrorDTO.java
 /Users/eeatem/IdeaProjects/yisanbang_web/yisanbang/src/main/java/com/vtmer/yisanbang/common/exception/api/discount/ApiDiscountNotFoundException.java

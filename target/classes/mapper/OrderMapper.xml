@@ -77,7 +77,7 @@
         set status = status + 1
         where id = #{orderId}
     </update>
-    <update id="setOrderStatus">
+    <update id="setOrderStatus" parameterType="Map">
         update `order`
         set status = #{status}
         where id = #{orderId}
@@ -116,7 +116,15 @@
         <include refid="BaseColumnList"/>
         from `order`
     </select>
-    <select id="selectAllByUserIdAndStatus" resultMap="BaseResultMap">
+    <select id="getNotPayOrder" resultType="com.vtmer.yisanbang.domain.Order">
+        select
+        <include refid="BaseColumnList"/>
+        from `order`
+        where status = 0
+        and is_delete = 0
+        order by create_time
+    </select>
+    <select id="selectAllByUserIdAndStatus" parameterType="Map" resultMap="BaseResultMap">
         select
         <include refid="BaseColumnList"/>
         from `order`

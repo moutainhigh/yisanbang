@@ -61,5 +61,6 @@
     select id,goods_id,is_goods from collection
     where goods_id = #{goodsId}
     and is_goods = #{whetherGoods}
+    and user_id = #{userId}
   </select>
 </mapper>

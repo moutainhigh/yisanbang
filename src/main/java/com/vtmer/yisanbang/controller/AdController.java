@@ -5,6 +5,7 @@ import com.vtmer.yisanbang.common.PageResponseMessage;
 import com.vtmer.yisanbang.common.ResponseMessage;
 import com.vtmer.yisanbang.common.annotation.RequestLog;
 import com.vtmer.yisanbang.common.qiniu.QiniuUpload;
+import com.vtmer.yisanbang.common.tencentcloud.COSClientUtil;
 import com.vtmer.yisanbang.domain.Ad;
 import com.vtmer.yisanbang.dto.AdDTO;
 import com.vtmer.yisanbang.service.AdService;
@@ -68,10 +69,12 @@ public class AdController {
         String picType = pic.getOriginalFilename().substring(pic.getOriginalFilename().lastIndexOf(".") + 1);
         System.out.println(picType);
         if ("jpg".equals(picType) || "JPG".equals(picType) || "jpeg".equals(picType) || "JPEG".equals(picType) || "png".equals(picType) || "PNG".equals(picType)) {
-            String picName = UUID.randomUUID().toString();
+            // String picName = UUID.randomUUID().toString();
             try {
-                String picPath = QiniuUpload.updateFile(pic, "ad/" + picName);
-                return ResponseMessage.newSuccessInstance(picPath, "广告图片上传成功");
+                // String picPath = QiniuUpload.updateFile(pic, "ad/" + picName);
+                COSClientUtil cosClientUtil = new COSClientUtil();
+                String picPath = cosClientUtil.uploadFile(pic, "ad/");
+                return ResponseMessage.newSuccessInstance(COSClientUtil.getObjectPath() + picPath, "广告图片上传成功");
             } catch (Exception e) {
                 e.printStackTrace();
                 return ResponseMessage.newErrorInstance("广告图片上传失败");

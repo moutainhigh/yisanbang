@@ -24,7 +24,7 @@ public class QiniuUpload {
 
     // 密钥配置
     private static Auth auth = Auth.create(ACCESS_KEY, SECRET_KEY);
-    private static Configuration cfg = new Configuration(Zone.huanan());
+    private static Configuration cfg = new Configuration(Zone.zone2());
 
     // 创建上传对象
     private static UploadManager uploadManager = new UploadManager(cfg);
