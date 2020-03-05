@@ -54,25 +54,6 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private RedisTemplate<String, Object> stringRedisTemplate;
 
-    @Autowired
-    private PostageMapper postageMapper;
-
-    // Free the postage after standardPrice
-    private double standardPrice;
-
-    // postage
-    private double defaultPostage;
-
-    private void setPostage() {
-        Postage postage = postageMapper.select();
-        if (postage != null) {
-            standardPrice = postage.getPrice();
-            defaultPostage = postage.getDefaultPostage();
-        } else {  // 达标金额和邮费都默认为0
-            standardPrice = 0.0;
-            defaultPostage = 0.0;
-        }
-    }
 
     private static final String REDIS_CART = "cart";
 
@@ -392,7 +373,6 @@ public class CartServiceImpl implements CartService {
      * @return
      */
     private CartVO convertObjectListToCartVo(List<Object> ObjectList) {
-        setPostage();
         // 查询购物车数据
         List<CartGoodsDTO> cartGoodsList;
         cartGoodsList = ObjectList.stream().map(o -> JSON.parseObject(o.toString(), CartGoodsDTO.class)).collect(Collectors.toList());
@@ -400,13 +380,7 @@ public class CartServiceImpl implements CartService {
         Map<String, Double> priceMap = calculateTotalPrice(cartGoodsList);
         CartVO cartVo = new CartVO();
         // 设置总价
-        double totalPrice = priceMap.get("totalPrice");
-        cartVo.setTotalPrice(totalPrice);
-        cartVo.setPostage(0.0);
-        if (totalPrice < standardPrice) {
-            // 不包邮
-            cartVo.setPostage(defaultPostage);
-        }
+        cartVo.setTotalPrice(priceMap.get("totalPrice"));
         cartVo.setBeforeTotalPrice(priceMap.get("beforeTotalPrice"));
         // 根据时间排序
         ListSort.listTimeSort(cartGoodsList);

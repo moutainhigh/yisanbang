@@ -51,28 +51,6 @@ public class GoodsDTO {
         this.updateTime = updateTime;
     }
 
-    @ApiModelProperty(hidden = true)
-    private Integer colorSizeId;
-
-    @ApiModelProperty(hidden = true)
-    private Integer isGoods;
-
-    public Integer getColorSizeId() {
-        return colorSizeId;
-    }
-
-    public void setColorSizeId(Integer colorSizeId) {
-        this.colorSizeId = colorSizeId;
-    }
-
-    public Integer getIsGoods() {
-        return isGoods;
-    }
-
-    public void setIsGoods(Integer isGoods) {
-        this.isGoods = isGoods;
-    }
-
     public Integer getId() {
         return id;
     }
@@ -160,8 +138,6 @@ public class GoodsDTO {
                 ", isShow=" + isShow +
                 ", address='" + address + '\'' +
                 ", updateTime=" + updateTime +
-                ", colorSizeId=" + colorSizeId +
-                ", isGoods=" + isGoods +
                 '}';
     }
 

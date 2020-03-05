@@ -98,6 +98,7 @@ public class OrderServiceImpl implements OrderService {
     private double defaultPostage;
 
     private void setPostage() {
+        logger.info("设置邮费规则");
         Postage postage = postageMapper.select();
         if (postage != null) {
             standardPrice = postage.getPrice();
@@ -178,10 +179,12 @@ public class OrderServiceImpl implements OrderService {
         double totalPrice = orderVO.getTotalPrice();
         if (totalPrice < standardPrice) {
             // 不包邮
+            logger.info("不包邮");
             totalPrice += defaultPostage;
             orderVO.setTotalPrice(totalPrice);
             orderVO.setPostage(defaultPostage);
         } else {
+            logger.info("包邮");
             // 包邮
             orderVO.setPostage(0.0);
         }
@@ -230,7 +233,6 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public String createCartOrder(OrderDTO orderDTO) {
-        logger.info("创建购物车订单");
         int userId = JwtFilter.getLoginUser().getId();
         List<OrderGoodsDTO> orderGoodsDTOList = orderDTO.getOrderGoodsDTOList();
         boolean check = judgeGoodsExist(orderGoodsDTOList);
@@ -255,6 +257,11 @@ public class OrderServiceImpl implements OrderService {
         Double totalPrice = orderDTO.getTotalPrice();
         // 后台从redis中取出的购物车总价
         Double totalPrice1 = cartVo.getTotalPrice();
+        setPostage();
+        if (totalPrice1 < standardPrice) {
+            // 购物车总价不包邮
+            totalPrice1 += defaultPostage;
+        }
         if (!totalPrice.equals(totalPrice1)) {
             // 如果二者不一致，抛出异常
             throw new OrderPriceNotMatchException();
@@ -307,7 +314,7 @@ public class OrderServiceImpl implements OrderService {
                 ColorSize colorSize = colorSizeMapper.selectByPrimaryKey(sizeId);
                 if (colorSize == null) {
                     // 如果该颜色尺寸不存在
-                    check = false;
+                    return false;
                 }
                 Goods goods = goodsMapper.selectByPrimaryKey(colorSize.getGoodsId());
                 if (goods == null) {
@@ -318,7 +325,7 @@ public class OrderServiceImpl implements OrderService {
                 PartSize partSize = partSizeMapper.selectByPrimaryKey(sizeId);
                 if (partSize == null) {
                     // 该部件尺寸不存在
-                    check = false;
+                    return false;
                 }
                 Suit suit = suitMapper.selectByPrimaryKey(partSize.getSuitId());
                 if (suit == null) {
@@ -348,7 +355,6 @@ public class OrderServiceImpl implements OrderService {
         }
         // 获取用户订单商品列表和优惠后的总价
         Double totalPrice = orderDTO.getTotalPrice();
-
         // 前端传递的订单总价，在后台校验一遍
         double totalPriceCheck = calculateTotalPrice(orderGoodsDTOList);
         if (!totalPrice.equals(totalPriceCheck)) {
@@ -522,6 +528,8 @@ public class OrderServiceImpl implements OrderService {
             // 设置退款状态
             orderVO.setRefundStatus(refund.getStatus());
         }
+        // 订单邮费
+        orderVO.setPostage(order.getPostage());
         // 订单id
         orderVO.setOrderId(order.getId());
         // 订单状态
@@ -551,9 +559,7 @@ public class OrderServiceImpl implements OrderService {
             orderGoodsDTOList.add(orderGoodsDTO);
         }
         orderVO.setOrderGoodsDTOList(orderGoodsDTOList);
-        double totalPrice = calculateTotalPrice(orderGoodsDTOList);
-        orderVO.setTotalPrice(totalPrice);
-        setOrderPostage(orderVO);
+        orderVO.setTotalPrice(order.getTotalPrice());
         return orderVO;
     }
 
@@ -883,11 +889,12 @@ public class OrderServiceImpl implements OrderService {
                         queue.poll();
                         // 取下一个元素
                         element = queue.peek();
-                    } else if ("ORDERNOTEXIST".equals(wxPayOrderQueryResult.getTradeState())) {
+                    }
+                } catch (WxPayException e) {
+                    if ("ORDERNOTEXIST".equals(e.getErrCode())) {
                         // 订单不存在,说明该订单未调用微信支付接口，直接删除吧
                         orderMapper.deleteByPrimaryKey(element.getId());
                     }
-                } catch (WxPayException e) {
                     logger.info("调用微信查询订单接口出错，异常信息为[{}]",e.getMessage());
                 }
             } else if (diff != null) {
