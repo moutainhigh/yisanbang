@@ -314,7 +314,7 @@ public class OrderServiceImpl implements OrderService {
                 ColorSize colorSize = colorSizeMapper.selectByPrimaryKey(sizeId);
                 if (colorSize == null) {
                     // 如果该颜色尺寸不存在
-                    check = false;
+                    return false;
                 }
                 Goods goods = goodsMapper.selectByPrimaryKey(colorSize.getGoodsId());
                 if (goods == null) {
@@ -325,7 +325,7 @@ public class OrderServiceImpl implements OrderService {
                 PartSize partSize = partSizeMapper.selectByPrimaryKey(sizeId);
                 if (partSize == null) {
                     // 该部件尺寸不存在
-                    check = false;
+                    return false;
                 }
                 Suit suit = suitMapper.selectByPrimaryKey(partSize.getSuitId());
                 if (suit == null) {

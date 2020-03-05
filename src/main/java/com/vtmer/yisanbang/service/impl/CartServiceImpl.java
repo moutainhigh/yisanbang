@@ -54,8 +54,6 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private RedisTemplate<String, Object> stringRedisTemplate;
 
-    @Autowired
-    private PostageMapper postageMapper;
 
     private static final String REDIS_CART = "cart";
 
