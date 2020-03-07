@@ -2,49 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="97a24ba9-fa39-481b-a895-4392b50211e6" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_qcloud_cos_api_5_5_8.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_qiniu_sdk_6_1_9.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__joda_time_joda_time_2_10_5.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/vtmer/yisanbang/common/tencentcloud/COSClientUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_qiniu_sdk_6_1_0.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/yisanbang.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/yisanbang.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/vtmer/yisanbang/common/qiniu/QiniuUpload.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/vtmer/yisanbang/common/qiniu/QiniuUpload.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/vtmer/yisanbang/controller/AdController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/vtmer/yisanbang/controller/AdController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application-prod.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application-prod.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application-prod.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application-prod.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application-test.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application-test.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/MyApplicationRunner.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/MyApplicationRunner.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/common/qiniu/QiniuUpload.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/common/qiniu/QiniuUpload.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/common/quarz/InitializationJobManage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/common/quarz/InitializationJobManage.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/controller/AdController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/controller/AdController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/controller/CollectionController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/controller/CollectionController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/controller/GoodsController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/controller/GoodsController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/controller/OrderController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/controller/OrderController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/controller/RefundController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/controller/RefundController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/controller/SuitController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/controller/SuitController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/dto/GoodsDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/dto/GoodsDTO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/mapper/ColorSizeMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/mapper/ColorSizeMapper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/mapper/OrderMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/mapper/OrderMapper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/mapper/PartSizeMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/mapper/PartSizeMapper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/service/CartService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/service/CartService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/service/impl/CartServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/service/impl/CartServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/service/impl/CollectionServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/service/impl/CollectionServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/service/impl/OrderServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/service/impl/OrderServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/vo/CollectionVO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/vo/CollectionVO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/mapper/CollectionMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/mapper/CollectionMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/mapper/ColorSizeMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/mapper/ColorSizeMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/mapper/OrderMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/mapper/OrderMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/mapper/PartSizeMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/mapper/PartSizeMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/mapper/UserAddressMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/mapper/UserAddressMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/controller/CarouselController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/vtmer/yisanbang/controller/CarouselController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/yisanbang-0.0.1-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/yisanbang-0.0.1-SNAPSHOT.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/yisanbang-0.0.1-SNAPSHOT.jar.original" beforeDir="false" afterPath="$PROJECT_DIR$/target/yisanbang-0.0.1-SNAPSHOT.jar.original" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/yourlog.log" beforeDir="false" afterPath="$PROJECT_DIR$/target/yourlog.log" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -128,30 +91,19 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/vtmer/yisanbang/common/tencentcloud/COSClientUtil.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/vtmer/yisanbang/controller/AdController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="338">
-              <caret line="69" column="31" selection-start-line="69" selection-start-column="31" selection-end-line="69" selection-end-column="31" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#1170#1171#0" expanded="true" />
-                <element signature="e#1231#1232#0" expanded="true" />
-                <element signature="e#1286#1287#0" expanded="true" />
-                <element signature="e#1322#1323#0" expanded="true" />
-                <element signature="e#2624#2625#0" expanded="true" />
-                <element signature="e#2662#2663#0" expanded="true" />
-                <element signature="e#5921#5922#0" expanded="true" />
-                <element signature="e#5954#5955#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="248">
+              <caret line="77" column="35" selection-start-line="76" selection-start-column="90" selection-end-line="76" selection-end-column="97" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/vtmer/yisanbang/controller/AdController.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/vtmer/yisanbang/controller/CarouselController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
-              <caret line="75" column="66" selection-start-line="75" selection-start-column="66" selection-end-line="75" selection-end-column="66" />
+            <state relative-caret-position="105">
+              <caret line="46" column="69" lean-forward="true" selection-start-line="46" selection-start-column="69" selection-end-line="46" selection-end-column="69" />
             </state>
           </provider>
         </entry>
@@ -482,7 +434,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="29960000" />
+    <option name="totallyTimeSpent" value="33976000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -495,18 +447,17 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info id="Designer" />
-      <window_info id="Image Layers" />
-      <window_info id="UI Designer" />
-      <window_info id="Web" side_tool="true" />
-      <window_info id="Favorites" side_tool="true" />
-      <window_info id="Capture Tool" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24964234" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24964234" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Designer" order="2" />
+      <window_info id="UI Designer" order="3" />
+      <window_info id="Favorites" order="4" side_tool="true" />
+      <window_info id="Capture Tool" order="5" />
+      <window_info id="Web" order="6" side_tool="true" />
+      <window_info id="Image Layers" order="7" />
       <window_info anchor="bottom" id="Spring" order="0" weight="0.32891566" />
-      <window_info anchor="bottom" id="Terminal" order="1" sideWeight="0.49928468" weight="0.32891566" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="1" sideWeight="0.49928468" visible="true" weight="0.32891566" />
       <window_info anchor="bottom" id="Event Log" order="2" sideWeight="0.5007153" side_tool="true" weight="0.5325301" />
       <window_info anchor="bottom" id="Java Enterprise" order="3" />
       <window_info anchor="bottom" id="Database Changes" order="4" />
@@ -520,18 +471,18 @@
       <window_info anchor="bottom" id="Inspection" order="12" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="13" weight="0.32891566" />
       <window_info anchor="bottom" id="Run" order="14" sideWeight="0.49928468" weight="0.5325301" />
-      <window_info anchor="right" id="Maven" weight="0.3297568" />
-      <window_info anchor="right" id="Palette" />
-      <window_info anchor="right" id="Word Book" side_tool="true" />
-      <window_info anchor="right" id="Capture Analysis" />
-      <window_info anchor="right" id="Database" weight="0.3297568" />
-      <window_info anchor="right" id="Key Promoter X" />
-      <window_info anchor="right" id="Palette&#9;" />
-      <window_info anchor="right" id="Theme Preview" />
-      <window_info anchor="right" id="Bean Validation" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Maven" order="3" weight="0.3297568" />
+      <window_info anchor="right" id="Palette" order="4" />
+      <window_info anchor="right" id="Capture Analysis" order="5" />
+      <window_info anchor="right" id="Key Promoter X" order="6" />
+      <window_info anchor="right" id="Word Book" order="7" side_tool="true" />
+      <window_info anchor="right" id="Database" order="8" weight="0.3297568" />
+      <window_info anchor="right" id="Palette&#9;" order="9" />
+      <window_info anchor="right" id="Theme Preview" order="10" />
+      <window_info anchor="right" id="Bean Validation" order="11" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -803,8 +754,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/vtmer/yisanbang/controller/CarouselController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="214">
-          <caret line="72" column="23" selection-start-line="72" selection-start-column="23" selection-end-line="72" selection-end-column="23" />
+        <state relative-caret-position="105">
+          <caret line="46" column="69" lean-forward="true" selection-start-line="46" selection-start-column="69" selection-end-line="46" selection-end-column="69" />
         </state>
       </provider>
     </entry>
@@ -882,13 +833,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/application-prod.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="486">
-          <caret line="27" column="24" selection-start-line="27" selection-start-column="24" selection-end-line="27" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/vtmer/yisanbang/common/qiniu/QiniuUpload.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="304">
@@ -934,8 +878,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/vtmer/yisanbang/controller/AdController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="75" column="66" selection-start-line="75" selection-start-column="66" selection-end-line="75" selection-end-column="66" />
+        <state relative-caret-position="248">
+          <caret line="77" column="35" selection-start-line="76" selection-start-column="90" selection-end-line="76" selection-end-column="97" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/application-prod.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="486">
+          <caret line="27" column="24" selection-start-line="27" selection-start-column="24" selection-end-line="27" selection-end-column="24" />
         </state>
       </provider>
     </entry>

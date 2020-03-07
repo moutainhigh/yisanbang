@@ -628,7 +628,7 @@ public class OrderServiceImpl implements OrderService {
             if (!userId.equals(order.getUserId())) {
                 // 订单和用户不匹配
                 throw new OrderAndUserNotMatchException("订单和用户不匹配--订单编号：" + order.getOrderNumber() + ",用户id：" + userId);
-            } else if (order.getStatus() != 3 || order.getStatus() != 4) {
+            } else if (order.getStatus() != 3 && order.getStatus() != 4) {
                 // 如果订单不是已完成或者交易关闭
                 throw new OrderStatusNotFitException("该订单状态不能执行删除订单操作");
             }
