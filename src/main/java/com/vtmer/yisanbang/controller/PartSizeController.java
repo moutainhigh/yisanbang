@@ -3,6 +3,7 @@ package com.vtmer.yisanbang.controller;
 import com.github.pagehelper.PageHelper;
 import com.vtmer.yisanbang.common.PageResponseMessage;
 import com.vtmer.yisanbang.common.ResponseMessage;
+import com.vtmer.yisanbang.common.annotation.RequestLog;
 import com.vtmer.yisanbang.common.valid.group.Delete;
 import com.vtmer.yisanbang.common.valid.group.Update;
 import com.vtmer.yisanbang.dto.PartSizeDTO;
@@ -24,6 +25,7 @@ public class PartSizeController {
     @Autowired
     private PartSizeService partSizeService;
 
+    @RequestLog(module = "部件尺寸", operationDesc = "根据套装id查找所有该套装的部件尺寸")
     @GetMapping("/get/selectPartBySuitId")
     @ApiOperation(value = "根据套装id查找所有该套装的部件尺寸")
     // 根据套装id查找所有该套装的部件尺寸
@@ -42,6 +44,7 @@ public class PartSizeController {
         }
     }
 
+    @RequestLog(module = "部件尺寸", operationDesc = "根据部件尺寸id查找部件尺寸")
     @GetMapping("/get/selectPartById")
     @ApiOperation(value = "根据部件尺寸id查找部件尺寸")
     // 根据部件尺寸id查找部件尺寸
@@ -55,6 +58,7 @@ public class PartSizeController {
         }
     }
 
+    @RequestLog(module = "部件尺寸", operationDesc = "添加套装部件尺寸")
     @PostMapping("/addPartSize")
     @ApiOperation(value = "添加套装部件尺寸")
     // 添加套装部件尺寸
@@ -77,6 +81,7 @@ public class PartSizeController {
         }
     }
 
+    @RequestLog(module = "部件尺寸", operationDesc = "删除部件尺寸")
     @DeleteMapping("/deletePartSize")
     @ApiOperation(value = "删除部件尺寸")
     // 删除部件尺寸
@@ -96,6 +101,7 @@ public class PartSizeController {
         }
     }
 
+    @RequestLog(module = "部件尺寸", operationDesc = "更新部件尺寸")
     @PutMapping("/updatePartSize")
     @ApiOperation(value = "更新部件尺寸")
     // 更新部件尺寸
@@ -115,6 +121,7 @@ public class PartSizeController {
         }
     }
 
+    @RequestLog(module = "部件尺寸", operationDesc = "根据套装id查找该套装的所有部件")
     @GetMapping("/get/selectAllPartById")
     @ApiOperation(value = "根据套装id查找该套装的所有部件")
     // 根据套装id查找该套装的所有部件
@@ -134,6 +141,7 @@ public class PartSizeController {
         }
     }
 
+    @RequestLog(module = "部件尺寸", operationDesc = "根据套装id查找该套装的所有尺寸")
     @GetMapping("/get/selectAllSizeById")
     @ApiOperation(value = "根据套装id查找该套装的所有尺寸")
     // 根据套装id查找该套装的所有尺寸
@@ -153,6 +161,7 @@ public class PartSizeController {
         }
     }
 
+    @RequestLog(module = "部件尺寸", operationDesc = "根据部件尺寸返回该部件尺寸对应的库存")
     @GetMapping("/get/selectInventoryByPartSize")
     @ApiOperation(value = "根据部件尺寸返回该部件尺寸对应的库存")
     // 根据部件尺寸返回该部件尺寸对应的库存
@@ -175,6 +184,7 @@ public class PartSizeController {
         }
     }
 
+    @RequestLog(module = "部件尺寸", operationDesc = "根据部件尺寸返回该部件尺寸对应的价格")
     @GetMapping("/get/selectPriceByPartSize")
     @ApiOperation(value = "根据部件尺寸返回该部件尺寸对应的价格")
     // 根据部件尺寸返回该部件尺寸对应的价格
@@ -197,6 +207,7 @@ public class PartSizeController {
         }
     }
 
+    @RequestLog(module = "部件尺寸", operationDesc = "返回套装内部件的最低价")
     @GetMapping("/get/selectLowPriceById")
     @ApiOperation(value = "返回套装内部件的最低价")
     // 返回套装内部件的最低价
@@ -215,6 +226,7 @@ public class PartSizeController {
         }
     }
 
+    @RequestLog(module = "部件尺寸", operationDesc = "返回套装内部件的最高价")
     @GetMapping("/get/selectHighPriceById")
     @ApiOperation(value = "返回套装内部件的最高价")
     // 返回套装内部件的最高价

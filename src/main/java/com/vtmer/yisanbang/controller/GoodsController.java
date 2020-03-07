@@ -3,7 +3,9 @@ package com.vtmer.yisanbang.controller;
 import com.github.pagehelper.PageHelper;
 import com.vtmer.yisanbang.common.PageResponseMessage;
 import com.vtmer.yisanbang.common.ResponseMessage;
+import com.vtmer.yisanbang.common.annotation.RequestLog;
 import com.vtmer.yisanbang.common.qiniu.QiniuUpload;
+import com.vtmer.yisanbang.common.tencentcloud.COSClientUtil;
 import com.vtmer.yisanbang.common.valid.group.Delete;
 import com.vtmer.yisanbang.common.valid.group.Update;
 import com.vtmer.yisanbang.dto.GoodsDTO;
@@ -36,6 +38,7 @@ public class GoodsController {
     @Autowired
     private GoodsDetailService goodsDetailService;
 
+    @RequestLog(module = "单件商品", operationDesc = "查找所有商品")
     @GetMapping("/get/selectAllGoods")
     @ApiOperation(value = "查找所有商品")
     // 查找所有商品
@@ -52,6 +55,7 @@ public class GoodsController {
         }
     }
 
+    @RequestLog(module = "单件商品", operationDesc = "根据商品更新时间顺序显示商品")
     @GetMapping("/get/selectAllGoodsOrderByTime")
     @ApiOperation(value = "根据商品更新时间顺序显示商品")
     // 根据商品更新时间顺序显示商品
@@ -73,6 +77,7 @@ public class GoodsController {
         }
     }
 
+    @RequestLog(module = "单件商品", operationDesc = "根据商品价格顺序显示商品")
     @GetMapping("/get/selectAllGoodsOrderByPrice")
     @ApiOperation(value = "根据商品价格顺序显示商品")
     // 根据商品价格顺序显示商品
@@ -94,6 +99,7 @@ public class GoodsController {
         }
     }
 
+    @RequestLog(module = "单件商品", operationDesc = "根据分类id显示商品")
     @GetMapping("/get/selectAllGoodsBySortId")
     @ApiOperation(value = "根据分类id显示商品")
     // 根据商品分类显示商品
@@ -117,6 +123,7 @@ public class GoodsController {
         }
     }
 
+    @RequestLog(module = "单件商品", operationDesc = "根据分类id以及更新时间顺序显示商品")
     @GetMapping("/get/selectAllGoodsBySortIdOrderByTime")
     @ApiOperation(value = "根据分类id以及更新时间顺序显示商品")
     // 根据商品分类以及更新时间顺序显示商品
@@ -139,6 +146,7 @@ public class GoodsController {
         }
     }
 
+    @RequestLog(module = "单件商品", operationDesc = "根据分类id以及价格顺序显示商品")
     @GetMapping("/get/selectAllGoodsBySortIdOrderByPrice")
     @ApiOperation(value = "根据分类id以及价格顺序显示商品")
     // 根据商品分类以及价格顺序显示商品
@@ -162,6 +170,7 @@ public class GoodsController {
         }
     }
 
+    @RequestLog(module = "单件商品", operationDesc = "根据商品id查找商品")
     @GetMapping("/get/selectGoodsById")
     @ApiOperation(value = "根据商品id查找商品")
     // 根据商品id查找商品
@@ -175,6 +184,7 @@ public class GoodsController {
         }
     }
 
+    @RequestLog(module = "单件商品", operationDesc = "根据商品名称与简介查找商品")
     @GetMapping("/get/selectGoodsByContent")
     @ApiOperation(value = "根据商品名称与简介查找商品")
     // 根据商品名称与简介查找商品
@@ -196,6 +206,7 @@ public class GoodsController {
         }
     }
 
+    @RequestLog(module = "单件商品", operationDesc = "添加商品")
     @PostMapping("/addGoods")
     @ApiOperation(value = "添加商品")
     // 添加商品
@@ -217,6 +228,7 @@ public class GoodsController {
         }
     }
 
+    @RequestLog(module = "单件商品", operationDesc = "删除商品")
     @DeleteMapping("/deleteGoods")
     @ApiOperation(value = "删除商品")
     // 删除商品
@@ -239,6 +251,7 @@ public class GoodsController {
         }
     }
 
+    @RequestLog(module = "单件商品", operationDesc = "更新商品")
     @PutMapping("/updateGoods")
     @ApiOperation(value = "更新商品")
     // 更新商品
@@ -258,6 +271,7 @@ public class GoodsController {
         }
     }
 
+    @RequestLog(module = "单件商品", operationDesc = "隐藏商品，即下架商品")
     @PutMapping("/hideGoods")
     @ApiOperation(value = "隐藏商品，即下架商品")
     // 隐藏商品
@@ -277,25 +291,27 @@ public class GoodsController {
         }
     }
 
+    @RequestLog(module = "单件商品", operationDesc = "上传商品图片")
     @PostMapping("/uploadGoodsPic")
     @ApiOperation(value = "上传商品图片", notes = "执行成功后返回图片路径(img.yisanbang.com/goods/图片名称)")
     public ResponseMessage uploadGoodsPic(@ApiParam("选择上传图片") MultipartFile pic) {
         String picType = pic.getOriginalFilename().substring(pic.getOriginalFilename().lastIndexOf(".") + 1);
         System.out.println(picType);
         if ("jpg".equals(picType) || "JPG".equals(picType) || "jpeg".equals(picType) || "JPEG".equals(picType) || "png".equals(picType) || "PNG".equals(picType)) {
-            String picName = UUID.randomUUID().toString();
             try {
-                String picPath = QiniuUpload.updateFile(pic, "goods/" + picName);
-                return ResponseMessage.newSuccessInstance(picPath, "广告图片上传成功");
+                COSClientUtil cosClientUtil = new COSClientUtil();
+                String picPath = cosClientUtil.uploadFile(pic, "goods/");
+                return ResponseMessage.newSuccessInstance(COSClientUtil.getObjectPath() + picPath, "商品图片上传成功");
             } catch (Exception e) {
                 e.printStackTrace();
-                return ResponseMessage.newErrorInstance("广告图片上传失败");
+                return ResponseMessage.newErrorInstance("商品图片上传失败");
             }
         } else {
             return ResponseMessage.newErrorInstance("请选择.jpg/.JPG/.jpeg/.JPEG/.png/.PNG图片文件");
         }
     }
 
+    @RequestLog(module = "单件商品", operationDesc = "设置套装发货地址")
     @PutMapping("/setGoodsAddress")
     @ApiOperation(value = "设置套装发货地址")
     // 更新套装

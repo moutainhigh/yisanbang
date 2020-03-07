@@ -1,6 +1,7 @@
 package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
+import com.vtmer.yisanbang.common.annotation.RequestLog;
 import com.vtmer.yisanbang.common.valid.group.Delete;
 import com.vtmer.yisanbang.common.valid.group.Update;
 import com.vtmer.yisanbang.domain.User;
@@ -29,6 +30,7 @@ public class UserAddressController {
     /*
      * 根据用户id查看所有地址
      * */
+    @RequestLog(module = "用户地址", operationDesc = "获取该用户所有地址")
     @GetMapping("/get/listUserAddress")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
@@ -50,6 +52,7 @@ public class UserAddressController {
     /*
      * 添加用户地址
      * */
+    @RequestLog(module = "用户地址", operationDesc = "添加用户地址")
     @PostMapping("/addUserAddress")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
@@ -78,6 +81,7 @@ public class UserAddressController {
     /*
      * 根据用户地址id更新地址
      * */
+    @RequestLog(module = "用户地址", operationDesc = "更新用户地址")
     @PutMapping("/updateUserAddress")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
@@ -122,6 +126,7 @@ public class UserAddressController {
     /*
      * 根据用户地址id删除地址
      * */
+    @RequestLog(module = "用户地址", operationDesc = "删除地址")
     @DeleteMapping("/deleteUserAddress")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
@@ -163,6 +168,7 @@ public class UserAddressController {
     /*
      * 查找默认地址
      * */
+    @RequestLog(module = "用户地址", operationDesc = "获取用户默认地址")
     @GetMapping("/get/defaultUserAddress")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)
@@ -181,6 +187,7 @@ public class UserAddressController {
     /*
      * 改变默认地址
      * */
+    @RequestLog(module = "用户地址", operationDesc = "改变用户默认地址")
     @PutMapping("/changeDefaultUserAddress")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "校验token", name = "Authorization", paramType = "header", required = true)

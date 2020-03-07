@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.vtmer.yisanbang.common.PageResponseMessage;
 import com.vtmer.yisanbang.common.ResponseMessage;
+import com.vtmer.yisanbang.common.annotation.RequestLog;
 import com.vtmer.yisanbang.common.valid.group.Delete;
 import com.vtmer.yisanbang.common.valid.group.Update;
 import com.vtmer.yisanbang.dto.ColorSizeDTO;
@@ -25,6 +26,7 @@ public class ColorSizeController {
     @Autowired
     private ColorSizeService colorSizeService;
 
+    @RequestLog(module = "颜色尺寸", operationDesc = "根据商品id查找该商品的所有颜色尺寸")
     @GetMapping("/get/selectAllColorSizeByGoodsId")
     @ApiOperation(value = "根据商品id查找该商品的所有颜色尺寸")
     // 查找所有颜色尺寸通过商品id
@@ -43,6 +45,7 @@ public class ColorSizeController {
         }
     }
 
+    @RequestLog(module = "颜色尺寸", operationDesc = "添加商品颜色尺寸")
     @PostMapping("/addColorSize")
     @ApiOperation(value = "添加商品颜色尺寸")
     // 添加商品颜色尺寸
@@ -65,6 +68,7 @@ public class ColorSizeController {
         }
     }
 
+    @RequestLog(module = "颜色尺寸", operationDesc = "更新商品颜色尺寸")
     @PutMapping("/updateColorSize")
     @ApiOperation(value = "更新商品颜色尺寸")
     // 更新商品颜色尺寸
@@ -84,6 +88,7 @@ public class ColorSizeController {
         }
     }
 
+    @RequestLog(module = "颜色尺寸", operationDesc = "删除商品颜色尺寸")
     @DeleteMapping("/deleteColorSize")
     @ApiOperation(value = "删除商品颜色尺寸")
     // 删除商品颜色尺寸
@@ -103,6 +108,7 @@ public class ColorSizeController {
         }
     }
 
+    @RequestLog(module = "颜色尺寸", operationDesc = "根据商品id查找该商品的所有颜色")
     @GetMapping("/get/selectAllColorById")
     @ApiOperation(value = "根据商品id查找该商品的所有颜色")
     // 查找所有颜色
@@ -122,6 +128,7 @@ public class ColorSizeController {
         }
     }
 
+    @RequestLog(module = "颜色尺寸", operationDesc = "根据商品id查找该商品的所有尺寸")
     @GetMapping("/get/selectAllSizeById")
     @ApiOperation(value = "根据商品id查找该商品的所有尺寸")
     // 查找所有尺寸
@@ -141,6 +148,7 @@ public class ColorSizeController {
         }
     }
 
+    @RequestLog(module = "颜色尺寸", operationDesc = "根据颜色尺寸查找显示库存数量")
     @GetMapping("/get/selectInventoryByColorSize")
     @ApiOperation(value = "根据颜色尺寸查找显示库存数量")
     // 根据颜色尺寸查找显示库存

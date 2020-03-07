@@ -3,7 +3,9 @@ package com.vtmer.yisanbang.controller;
 import com.github.pagehelper.PageHelper;
 import com.vtmer.yisanbang.common.PageResponseMessage;
 import com.vtmer.yisanbang.common.ResponseMessage;
+import com.vtmer.yisanbang.common.annotation.RequestLog;
 import com.vtmer.yisanbang.common.qiniu.QiniuUpload;
+import com.vtmer.yisanbang.common.tencentcloud.COSClientUtil;
 import com.vtmer.yisanbang.dto.GoodsDetailDTO;
 import com.vtmer.yisanbang.service.GoodsDetailService;
 import io.swagger.annotations.Api;
@@ -23,6 +25,7 @@ public class GoodsDetailController {
     @Autowired
     private GoodsDetailService goodsDetailService;
 
+    @RequestLog(module = "商品详情", operationDesc = "查找所有商品详情信息")
     @GetMapping("/get/selectAllGoodsDetail")
     @ApiOperation(value = "查找所有商品详情信息")
     // 查找所有商品详情信息
@@ -39,6 +42,7 @@ public class GoodsDetailController {
         }
     }
 
+    @RequestLog(module = "商品详情", operationDesc = "根据商品id查找该商品的所有商品详情信息")
     @GetMapping("/get/selectAllGoodsDetailByGoodsId")
     @ApiOperation(value = "根据商品id查找该商品的所有商品详情信息")
     // 根据商品id查找该商品的所有商品详情信息
@@ -57,6 +61,7 @@ public class GoodsDetailController {
         }
     }
 
+    @RequestLog(module = "商品详情", operationDesc = "添加商品详情信息")
     @PostMapping("/addGoodsDetail")
     @ApiOperation(value = "添加商品详情信息")
     // 添加商品详情信息
@@ -69,6 +74,7 @@ public class GoodsDetailController {
         }
     }
 
+    @RequestLog(module = "商品详情", operationDesc = "更新商品详情信息")
     @PutMapping("/updateGoodsDetail")
     @ApiOperation(value = "更新商品详情信息")
     // 更新商品详情信息
@@ -86,6 +92,7 @@ public class GoodsDetailController {
         }
     }
 
+    @RequestLog(module = "商品详情", operationDesc = "删除商品详情信息")
     @DeleteMapping("/deleteGoodsDetail")
     @ApiOperation(value = "删除商品详情信息")
     // 删除商品详情信息
@@ -103,6 +110,7 @@ public class GoodsDetailController {
         }
     }
 
+    @RequestLog(module = "商品详情", operationDesc = "上传商品详情信息图片")
     @PostMapping("/uploadGoodsDetailPic")
     @ApiOperation(value = "上传商品详情信息图片", notes = "执行成功后返回图片路径(img.yisanbang.com/goodsDetail/图片名称)")
     // 上传商品详情信息图片
@@ -110,16 +118,15 @@ public class GoodsDetailController {
         String picType = pic.getOriginalFilename().substring(pic.getOriginalFilename().lastIndexOf(".") + 1);
         System.out.println(picType);
         if ("jpg".equals(picType) || "JPG".equals(picType) || "jpeg".equals(picType) || "JPEG".equals(picType) || "png".equals(picType) || "PNG".equals(picType)) {
-            String picName = UUID.randomUUID().toString();
             try {
-                String picPath = QiniuUpload.updateFile(pic, "goodsDetail/" + picName);
-                return ResponseMessage.newSuccessInstance(picPath, "广告图片上传成功");
+                COSClientUtil cosClientUtil = new COSClientUtil();
+                String picPath = cosClientUtil.uploadFile(pic, "goodsDetail/");
+                return ResponseMessage.newSuccessInstance(COSClientUtil.getObjectPath() + picPath, "商品详情图片上传成功");
             } catch (Exception e) {
                 e.printStackTrace();
-                return ResponseMessage.newErrorInstance("广告图片上传失败");
+                return ResponseMessage.newErrorInstance("商品详情图片上传失败");
             }
         } else {
             return ResponseMessage.newErrorInstance("请选择.jpg/.JPG/.jpeg/.JPEG/.png/.PNG图片文件");
         }
-    }
 }

@@ -3,7 +3,9 @@ package com.vtmer.yisanbang.controller;
 import com.github.pagehelper.PageHelper;
 import com.vtmer.yisanbang.common.PageResponseMessage;
 import com.vtmer.yisanbang.common.ResponseMessage;
+import com.vtmer.yisanbang.common.annotation.RequestLog;
 import com.vtmer.yisanbang.common.qiniu.QiniuUpload;
+import com.vtmer.yisanbang.common.tencentcloud.COSClientUtil;
 import com.vtmer.yisanbang.common.valid.group.Delete;
 import com.vtmer.yisanbang.common.valid.group.Insert;
 import com.vtmer.yisanbang.common.valid.group.Update;
@@ -27,8 +29,9 @@ public class SuitDetailController {
     @Autowired
     private SuitDetailService suitDetailService;
 
+    @RequestLog(module = "套装详情", operationDesc = "查找所有套装详情")
     @GetMapping("/get/selectAllSuitDetail")
-    @ApiOperation(value = "查找显示所有商品详情")
+    @ApiOperation(value = "查找显示所有套装详情")
     // 查找显示所有套装详情
     public ResponseMessage selectAll(@ApiParam("查询页数(第几页)")
                                      @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
@@ -43,6 +46,7 @@ public class SuitDetailController {
         }
     }
 
+    @RequestLog(module = "套装详情", operationDesc = "查找套装的所有套装详情")
     @GetMapping("/get/selectSuitDetailBySuitId")
     @ApiOperation(value = "根据套装id查找显示该套装的所有套装详情")
     // 根据套装id查找显示该套装的所有套装详情
@@ -61,6 +65,7 @@ public class SuitDetailController {
         }
     }
 
+    @RequestLog(module = "套装详情", operationDesc = "查找套装详情")
     @GetMapping("/get/selectSuitDetailById")
     @ApiOperation(value = "根据套装详情id查找套装详情")
     // 根据套装详情id查找套装详情
@@ -74,6 +79,7 @@ public class SuitDetailController {
         }
     }
 
+    @RequestLog(module = "套装详情", operationDesc = "添加套装详情")
     @PostMapping("/addSuitDetail")
     @ApiOperation(value = "添加套装详情")
     // 添加套装详情
@@ -88,6 +94,7 @@ public class SuitDetailController {
         }
     }
 
+    @RequestLog(module = "套装详情", operationDesc = "更新套装详情")
     @PutMapping("/updateSuitDetail")
     @ApiOperation(value = "更新套装详情")
     // 更新套装详情
@@ -107,6 +114,7 @@ public class SuitDetailController {
         }
     }
 
+    @RequestLog(module = "套装详情", operationDesc = "删除套装详情")
     @DeleteMapping("/deleteSuitDetail")
     @ApiOperation(value = "删除套装详情")
     // 删除套装详情
@@ -126,6 +134,7 @@ public class SuitDetailController {
         }
     }
 
+    @RequestLog(module = "套装详情", operationDesc = "上传套装详情图片")
     @PostMapping("/uploadSuitDetailPic")
     @ApiOperation(value = "上传套装详情图片至服务器", notes = "执行成功后返回图片路径(img.yisanbang.com/suitDetail/图片名称)")
     // 上传套装详情图片至服务器
@@ -133,16 +142,15 @@ public class SuitDetailController {
         String picType = pic.getOriginalFilename().substring(pic.getOriginalFilename().lastIndexOf(".") + 1);
         System.out.println(picType);
         if ("jpg".equals(picType) || "JPG".equals(picType) || "jpeg".equals(picType) || "JPEG".equals(picType) || "png".equals(picType) || "PNG".equals(picType)) {
-            String picName = UUID.randomUUID().toString();
             try {
-                String picPath = QiniuUpload.updateFile(pic, "suitDetail/" + picName);
-                return ResponseMessage.newSuccessInstance(picPath, "广告图片上传成功");
+                COSClientUtil cosClientUtil = new COSClientUtil();
+                String picPath = cosClientUtil.uploadFile(pic, "suitDetail/");
+                return ResponseMessage.newSuccessInstance(COSClientUtil.getObjectPath() + picPath, "套装详情图片上传成功");
             } catch (Exception e) {
                 e.printStackTrace();
-                return ResponseMessage.newErrorInstance("广告图片上传失败");
+                return ResponseMessage.newErrorInstance("套装详情图片上传失败");
             }
         } else {
             return ResponseMessage.newErrorInstance("请选择.jpg/.JPG/.jpeg/.JPEG/.png/.PNG图片文件");
         }
-    }
 }

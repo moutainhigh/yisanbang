@@ -3,6 +3,7 @@ package com.vtmer.yisanbang.controller;
 import com.vtmer.yisanbang.common.GoodsPageResponseMessage;
 import com.vtmer.yisanbang.common.PageResponseMessage;
 import com.vtmer.yisanbang.common.ResponseMessage;
+import com.vtmer.yisanbang.common.annotation.RequestLog;
 import com.vtmer.yisanbang.common.util.PageUtil;
 import com.vtmer.yisanbang.dto.GoodsDTO;
 import com.vtmer.yisanbang.dto.SuitDTO;
@@ -35,6 +36,7 @@ public class GoodsSuitController {
     @Autowired
     private SuitService suitService;
 
+    @RequestLog(module = "单件商品与套装商品", operationDesc = "查找所有单件商品与套装商品信息")
     @GetMapping("/get/selectGoodsAndSuit")
     @ApiOperation(value = "查找所有单件商品与套装商品信息")
     // 查找所有单件商品与套装商品信息
@@ -70,6 +72,7 @@ public class GoodsSuitController {
         }
     }
 
+    @RequestLog(module = "单件商品与套装商品", operationDesc = "根据价格显示单件商品与套装商品")
     @GetMapping("/get/selectGoodsAndSuitByPrice")
     @ApiOperation(value = "根据价格显示单件商品与套装商品")
     // 根据价格显示单件商品与套装商品
@@ -110,6 +113,7 @@ public class GoodsSuitController {
         }
     }
 
+    @RequestLog(module = "单件商品与套装商品", operationDesc = "根据时间显示单件商品与套装商品")
     @GetMapping("/get/selectGoodsAndSuitByTime")
     @ApiOperation(value = "根据时间显示单件商品与套装商品")
     // 根据时间显示单件商品与套装商品
@@ -150,6 +154,7 @@ public class GoodsSuitController {
         }
     }
 
+    @RequestLog(module = "单件商品与套装商品", operationDesc = "根据分类id查找所有单件商品与套装商品信息")
     @GetMapping("/get/selectGoodsAndSuitBySortId")
     @ApiOperation(value = "根据分类id查找所有单件商品与套装商品信息")
     // 根据分类id查找所有单件商品与套装商品信息
@@ -187,6 +192,7 @@ public class GoodsSuitController {
         }
     }
 
+    @RequestLog(module = "单件商品与套装商品", operationDesc = "根据分类id与价格显示单件商品与套装商品")
     @GetMapping("/get/selectGoodsAndSuitBySortIdAndPrice")
     @ApiOperation(value = "根据分类id与价格显示单件商品与套装商品")
     // 根据分类id与价格显示单件商品与套装商品
@@ -229,6 +235,7 @@ public class GoodsSuitController {
         }
     }
 
+    @RequestLog(module = "单件商品与套装商品", operationDesc = "根据分类id与时间显示单件商品与套装商品")
     @GetMapping("/get/selectGoodsAndSuitBySortIdAndTime")
     @ApiOperation(value = "根据分类id与时间显示单件商品与套装商品")
     // 根据分类id与时间显示单件商品与套装商品
@@ -271,6 +278,7 @@ public class GoodsSuitController {
         }
     }
 
+    @RequestLog(module = "单件商品与套装商品", operationDesc = "根据名称与简介查找并显示单件商品与套装商品")
     @GetMapping("/get/selectGoodsAndSuitByContent")
     @ApiOperation(value = "根据名称与简介查找并显示单件商品与套装商品")
     // 根据名称与简介查找并显示单件商品与套装商品
