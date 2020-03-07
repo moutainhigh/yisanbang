@@ -235,7 +235,7 @@ public class RefundServiceImpl implements RefundService {
         Refund refund = selectByRefundNumber(refundNumber);
         if (refund == null) {
             throw new RefundNotFoundException();
-        } else if (refund.getStatus() != 2 && refund.getWhetherReceived().equals(true)) {
+        } else if (refund.getStatus() == 1 || refund.getStatus() == 3 || refund.getStatus() == 4) {
             throw new RefundStatusNotFitException();
         }
         //订单id

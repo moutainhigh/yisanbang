@@ -129,4 +129,5 @@ public class GoodsDetailController {
         } else {
             return ResponseMessage.newErrorInstance("请选择.jpg/.JPG/.jpeg/.JPEG/.png/.PNG图片文件");
         }
+    }
 }
