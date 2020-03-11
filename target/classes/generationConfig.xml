@@ -80,7 +80,7 @@
 <!--        <table tableName="refund_goods" domainObjectName="RefundGoods"/>-->
 <!--        <table tableName="refund_express" domainObjectName="RefundExpress"/>-->
 <!--        <table tableName="remind_deliver" domainObjectName="RemindDeliver"/>-->
-        <table tableName="company" delimitAllColumns="Company"/>
+<!--        <table tableName="company" delimitAllColumns="Company"/>-->
     </context>
 
 </generatorConfiguration>

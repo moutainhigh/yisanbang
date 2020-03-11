@@ -46,7 +46,7 @@ public class CompanyController {
 
     @RequestLog(module = "公司介绍", operationDesc = "获取公司介绍图片")
     @ApiOperation(value = "获取公司介绍图片")
-    @GetMapping("getPicture")
+    @GetMapping("/get/getPicture")
     public ResponseMessage getPicture() {
         List<Company> company = companyService.listPicture();
         if (company != null) {

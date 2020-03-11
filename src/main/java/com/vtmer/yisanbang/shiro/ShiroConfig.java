@@ -67,6 +67,8 @@ public class ShiroConfig {
         filterRuleMap.put("/suit/get/**","anon");
         // 套装详情接口放行
         filterRuleMap.put("/suitDetail/get/**","anon");
+        // 公司简介接口放行
+        filterRuleMap.put("/company/get/**","anon");
         // 广告接口放行
         filterRuleMap.put("/ad/get/**","anon");
         // 轮播图接口放行
