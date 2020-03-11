@@ -63,7 +63,7 @@ public class AdController {
     }
 
     @RequestLog(module = "首页广告", operationDesc = "上传广告图片")
-    @ApiOperation(value = "上传广告图片", notes = "执行成功后返回图片路径(img.yisanbang.com/ad/图片名称)")
+    @ApiOperation(value = "上传广告图片", notes = "执行成功后返回图片路径")
     @PostMapping("/upload")
     public ResponseMessage uploadPic(@ApiParam("选择上传图片") MultipartFile pic) {
         String picType = pic.getOriginalFilename().substring(pic.getOriginalFilename().lastIndexOf(".") + 1);

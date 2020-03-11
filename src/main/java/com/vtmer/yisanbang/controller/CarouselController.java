@@ -30,7 +30,7 @@ public class CarouselController {
     private CarouselService carouselService;
 
     @RequestLog(module = "首页轮播图", operationDesc = "上传首页轮播图图片")
-    @ApiOperation(value = "上传轮播图图片", notes = "执行成功后返回图片路径(img.yisanbang.com/carousel/图片名称)")
+    @ApiOperation(value = "上传轮播图图片", notes = "执行成功后返回图片路径")
     @PostMapping("/upload")
     public ResponseMessage uploadPic(@ApiParam("选择上传图片") MultipartFile pic) {
         String picType = pic.getOriginalFilename().substring(pic.getOriginalFilename().lastIndexOf(".") + 1);
