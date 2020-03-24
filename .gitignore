@@ -2,3 +2,5 @@ workspace
 .project
 .classpath
 target/
+
+.idea
