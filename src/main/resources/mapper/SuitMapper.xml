@@ -81,7 +81,7 @@
       picture = #{picture,jdbcType=VARCHAR},
       lowest_price = #{lowestPrice,jdbcType=DOUBLE},
       highest_price = #{highestPrice,jdbcType=DOUBLE},
-      is_show = #{isShow,jdbcType=BIT}.
+      is_show = #{isShow,jdbcType=BIT},
       address = #{address,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
