@@ -7,6 +7,10 @@ public class Ad {
 
     private String picturePath;
 
+    private Integer goodsType;
+
+    private Integer goodsId;
+
     private Integer showOrder;
 
     private Boolean isShow;
@@ -29,6 +33,22 @@ public class Ad {
 
     public void setPicturePath(String picturePath) {
         this.picturePath = picturePath == null ? null : picturePath.trim();
+    }
+
+    public Integer getGoodsType() {
+        return goodsType;
+    }
+
+    public void setGoodsType(Integer goodsType) {
+        this.goodsType = goodsType;
+    }
+
+    public Integer getGoodsId() {
+        return goodsId;
+    }
+
+    public void setGoodsId(Integer goodsId) {
+        this.goodsId = goodsId;
     }
 
     public Integer getShowOrder() {

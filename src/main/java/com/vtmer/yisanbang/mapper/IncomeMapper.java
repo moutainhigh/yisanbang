@@ -1,8 +1,14 @@
 package com.vtmer.yisanbang.mapper;
 
 import com.vtmer.yisanbang.domain.Income;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
+
+import java.util.Date;
 import java.util.List;
 
+@Repository
+@Mapper
 public interface IncomeMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -13,4 +19,6 @@ public interface IncomeMapper {
     List<Income> selectAll();
 
     int updateByPrimaryKey(Income record);
+
+    Income getByTime(Date time);
 }

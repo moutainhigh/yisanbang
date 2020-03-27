@@ -1,13 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.vtmer.yisanbang.mapper.ColorSizeMapper">
+<!--  <cache type="com.vtmer.yisanbang.common.RedisCache"/>-->
   <resultMap id="BaseResultMap" type="com.vtmer.yisanbang.domain.ColorSize">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="goods_id" jdbcType="INTEGER" property="goodsId" />
     <result column="color" jdbcType="VARCHAR" property="color" />
-    <result column="size" jdbcType="INTEGER" property="size" />
+    <result column="size" jdbcType="VARCHAR" property="size" />
+    <result column="inventory" jdbcType="INTEGER" property="inventory" />
+    <result column="model" jdbcType="VARCHAR" property="model" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <resultMap id="ColorSizeMap" type="com.vtmer.yisanbang.dto.ColorSizeDTO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="goods_id" jdbcType="INTEGER" property="goodsId" />
+    <result column="color" jdbcType="VARCHAR" property="color" />
+    <result column="size" jdbcType="VARCHAR" property="size" />
+    <result column="inventory" jdbcType="INTEGER" property="inventory" />
+    <result column="model" jdbcType="VARCHAR" property="model" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from color_size
@@ -15,28 +26,71 @@
   </delete>
   <insert id="insert" parameterType="com.vtmer.yisanbang.domain.ColorSize">
     insert into color_size (id, goods_id, color, 
-      size, create_time, update_time
-      )
+      size, inventory, model, 
+      create_time, update_time)
     values (#{id,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, #{color,jdbcType=VARCHAR}, 
-      #{size,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
-      )
+      #{size,jdbcType=VARCHAR}, #{inventory,jdbcType=INTEGER}, #{model,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.vtmer.yisanbang.domain.ColorSize">
     update color_size
     set goods_id = #{goodsId,jdbcType=INTEGER},
       color = #{color,jdbcType=VARCHAR},
-      size = #{size,jdbcType=INTEGER},
+      size = #{size,jdbcType=VARCHAR},
+      inventory = #{inventory,jdbcType=INTEGER},
+      model = #{model,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <update id="updateInventoryByPrimaryKey" parameterType="com.vtmer.yisanbang.dto.InventoryDTO">
+    update color_size
+    set inventory =
+    <if test="flag==0">
+      inventory - #{amount,jdbcType=INTEGER}
+    </if>
+    <if test="flag==1">
+      inventory + #{amount,jdbcType=INTEGER}
+    </if>
+    where id = #{sizeId,jdbcType=INTEGER}
+  </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select id, goods_id, color, size, create_time, update_time
+    select id, goods_id, color, size, inventory, model, create_time, update_time
     from color_size
     where id = #{id,jdbcType=INTEGER}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select id, goods_id, color, size, create_time, update_time
+    select id, goods_id, color, size, inventory, model, create_time, update_time
     from color_size
+  </select>
+  <!--Dto-->
+  <insert id="insertDto" parameterType="com.vtmer.yisanbang.dto.ColorSizeDTO">
+    insert into color_size (id, goods_id, color,
+      size, inventory, model)
+    values (#{id,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, #{color,jdbcType=VARCHAR},
+      #{size,jdbcType=VARCHAR}, #{inventory,jdbcType=INTEGER}, #{model,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateDtoByPrimaryKey" parameterType="com.vtmer.yisanbang.dto.ColorSizeDTO">
+    update color_size
+    set goods_id = #{goodsId,jdbcType=INTEGER},
+      color = #{color,jdbcType=VARCHAR},
+      size = #{size,jdbcType=VARCHAR},
+      inventory = #{inventory,jdbcType=INTEGER},
+      model = #{model,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectDtoByPrimaryKey" parameterType="java.lang.Integer" resultMap="ColorSizeMap">
+    select id, goods_id, color, size, inventory, model
+    from color_size
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAllDto" resultMap="ColorSizeMap">
+    select id, goods_id, color, size, inventory, model
+    from color_size
+  </select>
+  <select id="selectAllDtoByGoodsId" parameterType="java.lang.Integer" resultMap="ColorSizeMap">
+    select id, goods_id, color, size, inventory, model
+    from color_size
+    where goods_id = #{goods_id,jdbcType=INTEGER}
   </select>
 </mapper>

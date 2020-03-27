@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.vtmer.yisanbang.mapper.AdminMapper">
+    <!--    <cache type="com.vtmer.yisanbang.common.RedisCache"/>-->
     <resultMap id="BaseResultMap" type="com.vtmer.yisanbang.domain.Admin">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
@@ -59,6 +60,6 @@
     <select id="selectGeneralAdmin" resultMap="BaseResultMap">
         select id, name, create_time, update_time
         from admin
-        where id not in (select admin_id from admin_role where role_id = 2)
+        where id in (select admin_id from admin_role where role_id = 2)
     </select>
 </mapper>

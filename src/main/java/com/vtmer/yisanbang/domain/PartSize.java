@@ -11,7 +11,11 @@ public class PartSize {
 
     private String part;
 
-    private Integer size;
+    private String size;
+
+    private Integer inventory;
+
+    private String model;
 
     private Date createTime;
 
@@ -49,12 +53,28 @@ public class PartSize {
         this.part = part == null ? null : part.trim();
     }
 
-    public Integer getSize() {
+    public String getSize() {
         return size;
     }
 
-    public void setSize(Integer size) {
-        this.size = size;
+    public void setSize(String size) {
+        this.size = size == null ? null : size.trim();
+    }
+
+    public Integer getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(Integer inventory) {
+        this.inventory = inventory;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model == null ? null : model.trim();
     }
 
     public Date getCreateTime() {

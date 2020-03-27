@@ -1,15 +1,22 @@
 package com.vtmer.yisanbang.domain;
 
+import lombok.Data;
+
 import java.util.Date;
 
+@Data
 public class OrderGoods {
     private Integer id;
 
+    private Integer orderId;
+
     private Integer sizeId;
 
-    private Byte isGoods;
+    private Boolean whetherGoods;
 
-    private Integer goodsNum;
+    private Integer amount;
+
+    private Double totalPrice;
 
     private Date createTime;
 
@@ -23,6 +30,14 @@ public class OrderGoods {
         this.id = id;
     }
 
+    public Integer getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
+    }
+
     public Integer getSizeId() {
         return sizeId;
     }
@@ -31,20 +46,28 @@ public class OrderGoods {
         this.sizeId = sizeId;
     }
 
-    public Byte getIsGoods() {
-        return isGoods;
+    public Boolean getWhetherGoods() {
+        return whetherGoods;
     }
 
-    public void setIsGoods(Byte isGoods) {
-        this.isGoods = isGoods;
+    public void setWhetherGoods(Boolean whetherGoods) {
+        this.whetherGoods = whetherGoods;
     }
 
-    public Integer getGoodsNum() {
-        return goodsNum;
+    public Integer getAmount() {
+        return amount;
     }
 
-    public void setGoodsNum(Integer goodsNum) {
-        this.goodsNum = goodsNum;
+    public void setAmount(Integer amount) {
+        this.amount = amount;
+    }
+
+    public Double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(Double totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     public Date getCreateTime() {

@@ -1,0 +1,44 @@
+server:
+  servlet:
+    context-path: /
+  port: 8080
+  max-http-header-size: 81920 # 修改请求头允许的最大值
+
+spring:
+  profiles: test
+  datasource:
+    # 如果存在多个数据源，监控的时候可以通过名字来区分开来
+    name: mysql
+    # 连接数据库的url
+    url: jdbc:mysql://localhost:3306/yisanbang?characterEncoding=utf-8&serverTimezone=GMT%2B8
+    # 连接数据库的账号
+    username: root
+    # 连接数据库的密码
+    password: 123456
+    # 使用druid数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    # redis密码，默认为空
+    password:
+  devtools:
+    restart:
+      enabled: true  #设置开启热部署
+
+swagger:
+  host: localhost:8080
+  show: true
+
+logging:
+  level:
+    ROOT: info
+    com.example: trace
+  wx:
+    pay:
+      appId: wx92f1fb1b509237f7
+    applet:
+      appid: wx92f1fb1b509237f7
+      appsecret: 126cb564c95dd5d4c0a80f8302ccc80b
+

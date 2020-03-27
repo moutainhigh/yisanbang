@@ -1,52 +1,29 @@
 package com.vtmer.yisanbang.common;
 
-public class ResponseMessage {
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+
+@Data
+@ApiModel
+public class ResponseMessage<T> {
     public static final int STATUS_SUCCESS = 200; // 成功
     public static final int STATUS_ERROR = 400; // 失败
 
+    @ApiModelProperty(value = "状态码")
     private int status;
-    private Object data;
+    @ApiModelProperty(value = "数据对象")
+    private T data;
+    @ApiModelProperty(value = "描述")
     private String message;
+
     private Long timestamp;
 
-
-    public ResponseMessage(int status, Object data, String message) {
+    public ResponseMessage(int status, T data, String message) {
         this.status = status;
         this.data = data;
         this.message = message;
         this.timestamp = System.currentTimeMillis();
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public Object getData() {
-        return data;
-    }
-
-    public void setData(Object data) {
-        this.data = data;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public Long getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(Long timestamp) {
-        this.timestamp = timestamp;
     }
 
     public static ResponseMessage newSuccessInstance(Object data, String message) {
@@ -63,5 +40,9 @@ public class ResponseMessage {
 
     public static ResponseMessage newErrorInstance(String message) {
         return new ResponseMessage(ResponseMessage.STATUS_ERROR, null, message);
+    }
+
+    public static ResponseMessage newErrorInstance(Object data,int status) {
+        return new ResponseMessage(status, data, null);
     }
 }

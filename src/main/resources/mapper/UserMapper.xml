@@ -1,44 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.vtmer.yisanbang.mapper.UserMapper">
-  <resultMap id="BaseResultMap" type="com.vtmer.yisanbang.domain.User">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="head_protrait" jdbcType="VARCHAR" property="headProtrait" />
-    <result column="address" jdbcType="VARCHAR" property="address" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-  </resultMap>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--  <cache type="com.vtmer.yisanbang.common.RedisCache"/>-->
+    <resultMap id="BaseResultMap" type="com.vtmer.yisanbang.domain.User">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="open_id" jdbcType="VARCHAR" property="openId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from user
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.vtmer.yisanbang.domain.User">
-    insert into user (id, phone_number, name, 
-      head_protrait, address, create_time, 
+    <insert id="insert" parameterType="com.vtmer.yisanbang.domain.User">
+    insert into user (id, open_id, create_time, 
       update_time)
-    values (#{id,jdbcType=INTEGER}, #{phoneNumber,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
-      #{headProtrait,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+    values (#{id,jdbcType=INTEGER}, #{openId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP})
   </insert>
-  <update id="updateByPrimaryKey" parameterType="com.vtmer.yisanbang.domain.User">
+    <update id="updateByPrimaryKey" parameterType="com.vtmer.yisanbang.domain.User">
     update user
-    set phone_number = #{phoneNumber,jdbcType=VARCHAR},
-      name = #{name,jdbcType=VARCHAR},
-      head_protrait = #{headProtrait,jdbcType=VARCHAR},
-      address = #{address,jdbcType=VARCHAR},
+    set open_id = #{openId,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select id, phone_number, name, head_protrait, address, create_time, update_time
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, open_id, create_time, update_time
     from user
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <select id="selectAll" resultMap="BaseResultMap">
-    select id, phone_number, name, head_protrait, address, create_time, update_time
+    <select id="selectAll" resultMap="BaseResultMap">
+    select id, open_id, create_time, update_time
     from user
+  </select>
+    <insert id="addUser" parameterType="com.vtmer.yisanbang.domain.User" useGeneratedKeys="true" keyProperty="id">
+    insert into user (
+    open_id)
+    values (#{openId})
+  </insert>
+    <select id="selectUserByOpenId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select id, open_id, create_time, update_time
+    from user
+    where open_id = #{openId}
+  </select>
+    <select id="selectOpenIdByUserId" parameterType="java.lang.Integer" resultType="java.lang.String">
+    select open_id
+    from user
+    where id = #{userId}
   </select>
 </mapper>

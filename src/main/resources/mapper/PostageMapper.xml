@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.vtmer.yisanbang.mapper.PostageMapper">
+<!--  <cache type="com.vtmer.yisanbang.common.RedisCache"/>-->
   <resultMap id="BaseResultMap" type="com.vtmer.yisanbang.domain.Postage">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="price" jdbcType="DOUBLE" property="price" />
@@ -12,11 +13,12 @@
     delete from postage
     where id = #{id,jdbcType=INTEGER}
   </delete>
+  <delete id="delete">
+    delete from postage
+  </delete>
   <insert id="insert" parameterType="com.vtmer.yisanbang.domain.Postage">
-    insert into postage (id, price, default_postage, 
-      create_time, update_time)
-    values (#{id,jdbcType=INTEGER}, #{price,jdbcType=DOUBLE}, #{defaultPostage,jdbcType=DOUBLE}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+    insert into postage (price, default_postage)
+    values (#{price,jdbcType=DOUBLE}, #{defaultPostage,jdbcType=DOUBLE})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.vtmer.yisanbang.domain.Postage">
     update postage
@@ -26,6 +28,11 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <update id="update">
+    update postage
+    set price = #{price,jdbcType=DOUBLE},
+      default_postage = #{defaultPostage,jdbcType=DOUBLE}
+  </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select id, price, default_postage, create_time, update_time
     from postage
@@ -34,5 +41,8 @@
   <select id="selectAll" resultMap="BaseResultMap">
     select id, price, default_postage, create_time, update_time
     from postage
+  </select>
+  <select id="select" resultType="com.vtmer.yisanbang.domain.Postage">
+    select id, price, default_postage from postage
   </select>
 </mapper>

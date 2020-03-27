@@ -9,9 +9,13 @@ public class Sort {
 
     private Boolean isSuit;
 
-    private Integer firstSortid;
+    private Integer parentId;
 
-    private Integer secondSortid;
+    private Integer level;
+
+    private Integer showOrder;
+
+    private Boolean isShow;
 
     private Date createTime;
 
@@ -41,20 +45,36 @@ public class Sort {
         this.isSuit = isSuit;
     }
 
-    public Integer getFirstSortid() {
-        return firstSortid;
+    public Integer getParentId() {
+        return parentId;
     }
 
-    public void setFirstSortid(Integer firstSortid) {
-        this.firstSortid = firstSortid;
+    public void setParentId(Integer parentId) {
+        this.parentId = parentId;
     }
 
-    public Integer getSecondSortid() {
-        return secondSortid;
+    public Integer getLevel() {
+        return level;
     }
 
-    public void setSecondSortid(Integer secondSortid) {
-        this.secondSortid = secondSortid;
+    public void setLevel(Integer level) {
+        this.level = level;
+    }
+
+    public Integer getShowOrder() {
+        return showOrder;
+    }
+
+    public void setShowOrder(Integer showOrder) {
+        this.showOrder = showOrder;
+    }
+
+    public Boolean getIsShow() {
+        return isShow;
+    }
+
+    public void setIsShow(Boolean isShow) {
+        this.isShow = isShow;
     }
 
     public Date getCreateTime() {

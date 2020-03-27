@@ -1,0 +1,38 @@
+businessAddress:
+  notFindBusinessAddressErrorCode: 10001L # 找不到此收货地址
+  defaultAddressYetErrorCode: 10002L # 已是默认收货地址
+cart:
+  cartGoodsNotExistErrorCode: 10001L # 购物车商品不存在
+collection:
+  collectionExistErrorCode: 10001L # 商品已在收藏夹
+  commodityNotExistErrorCode: 10002L # 添加到收藏夹的商品不存在
+  collectionNotFoundErrorCode: 10003L # 收藏夹id不存在
+  userIdAndCollectionIdNotMatchErrorCode: 10004L # 用户和收藏夹商品不匹对
+discount:
+  discountExistErrorCode: 10001L # 打折优惠信息已设置，不可再插入
+  discountNotFoundErrorCode: 10002L # 打折优惠信息未设置，不可更新或删除
+order:
+  cartEmptyErrorCode: 10001L # 购物车勾选商品为空
+  inventoryNotEnoughErrorCode: 10002L # 下单商品库存不足
+  orderNotFoundErrorCode: 10003L # 订单未找到
+  orderAndUserNotMatchErrorCode: 10004L # 订单和用户不匹配
+  orderStatusNotFitErrorCode: 10005L # 该订单不适合修改对应状态
+  orderPriceNotMatchErrorCode: 10006L # 前后端的订单总价不一致
+  orderGoodsCartGoodsNotMatchErrorCode: 10007L # 下购物车订单的商品列表和购物车勾选商品列表不一致
+  orderGoodsNotExisErrorCode: 10008L # 订单商品不存在
+  orderPaidErrorCode: 10009L # 订单已支付,无需重复支付
+  orderAlreadyRemindErrorCode: 10010L # 订单已提醒发货，请勿重复提交
+postage:
+  postageSettingsExistErrorCode: 10001L # 邮费设置已经存在
+  postageSettingsNotFoundErrorCode: 10002L # 找不到邮费设置信息
+refund:
+  refundNotFoundErrorCode: 10001L # 找不到退款单
+  refundStatusNotFitErrorCode: 10002L # 退款订单状态不适配接口
+  RefundNotMatchUserErrorCode: 10003L # 该退款单不属于目前的用户
+  DuplicateApplyRefundErrorCode: 10004L # 重复申请退款
+  refundGoodsNotFoundErrorCode: 10005L # 退款商品不存在
+shiro:
+  unknownAccountExceptionErrorCode: 10001L # shiro认证账号密码不正确
+third:
+  code2SessionExceptionErrorCode: 10001L # 调用微信第三方code2Session失败
+

@@ -1,115 +1,43 @@
 package com.vtmer.yisanbang.domain;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import java.util.Date;
 
+@EqualsAndHashCode
+@Data
 public class Order {
+
     private Integer id;
 
     private String orderNumber;
 
     private Double totalPrice;
 
-    private String phoneNumber;
-
-    private String userName;
-
     private String addressName;
 
-    private Boolean status;
+    private Integer status;
 
     private String courierNumber;
+
+    private String message;
 
     private Date createTime;
 
     private Date updateTime;
 
-    private byte[] userId;
+    private Integer userId;
 
-    public Integer getId() {
-        return id;
-    }
+    private String userName;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    private String phoneNumber;
 
-    public String getOrderNumber() {
-        return orderNumber;
-    }
+    private double postage;
 
-    public void setOrderNumber(String orderNumber) {
-        this.orderNumber = orderNumber == null ? null : orderNumber.trim();
-    }
+    private Boolean whetherDelete;
 
-    public Double getTotalPrice() {
-        return totalPrice;
-    }
+    private Boolean whetherRemind;
 
-    public void setTotalPrice(Double totalPrice) {
-        this.totalPrice = totalPrice;
-    }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber == null ? null : phoneNumber.trim();
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName == null ? null : userName.trim();
-    }
-
-    public String getAddressName() {
-        return addressName;
-    }
-
-    public void setAddressName(String addressName) {
-        this.addressName = addressName == null ? null : addressName.trim();
-    }
-
-    public Boolean getStatus() {
-        return status;
-    }
-
-    public void setStatus(Boolean status) {
-        this.status = status;
-    }
-
-    public String getCourierNumber() {
-        return courierNumber;
-    }
-
-    public void setCourierNumber(String courierNumber) {
-        this.courierNumber = courierNumber == null ? null : courierNumber.trim();
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public byte[] getUserId() {
-        return userId;
-    }
-
-    public void setUserId(byte[] userId) {
-        this.userId = userId;
-    }
 }

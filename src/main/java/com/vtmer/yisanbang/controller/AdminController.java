@@ -1,31 +1,38 @@
 package com.vtmer.yisanbang.controller;
 
 import com.vtmer.yisanbang.common.ResponseMessage;
+import com.vtmer.yisanbang.common.annotation.RequestLog;
 import com.vtmer.yisanbang.domain.Admin;
-import com.vtmer.yisanbang.dto.AddAdminDto;
-import com.vtmer.yisanbang.dto.LoginDto;
-import com.vtmer.yisanbang.dto.UpdatePwdDto;
+import com.vtmer.yisanbang.domain.Role;
+import com.vtmer.yisanbang.dto.AddAdminDTO;
+import com.vtmer.yisanbang.dto.LoginDTO;
+import com.vtmer.yisanbang.dto.UpdatePwdDTO;
 import com.vtmer.yisanbang.service.AdminRoleService;
 import com.vtmer.yisanbang.service.AdminService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
+@Api(tags = "后台管理接口")
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
 
     @Autowired
-    AdminService adminService;
+    private AdminService adminService;
 
     @Autowired
-    AdminRoleService adminRoleService;
+    private AdminRoleService adminRoleService;
 
     /**
      * 添加普通管理员
@@ -33,13 +40,15 @@ public class AdminController {
      * @param addAdminDto
      * @return
      */
+    @RequestLog(module = "后台管理", operationDesc = "添加普通管理员")
+    @ApiOperation("添加普通管理员")
     @PostMapping("/addAdmin")
-    public ResponseMessage addAdmin(@RequestBody AddAdminDto addAdminDto) {
-        if (adminService.isAdminNameExist(addAdminDto.getName())) {
-            return ResponseMessage.newErrorInstance("新增管理员失败，管理员名称已存在");
-        }
+    public ResponseMessage addAdmin(@Validated @RequestBody AddAdminDTO addAdminDto) {
         if (!addAdminDto.getPassword().equals(addAdminDto.getPasswordConfirm())) {
             return ResponseMessage.newErrorInstance("新增管理员失败，两次密码输入不一致");
+        }
+        if (adminService.isAdminNameExist(addAdminDto.getName())) {
+            return ResponseMessage.newErrorInstance("新增管理员失败，管理员名称已存在");
         }
         Admin admin = new Admin(addAdminDto.getName(), addAdminDto.getPassword());
         if (adminService.addAdmin(admin)) {
@@ -57,8 +66,10 @@ public class AdminController {
      * @param loginDto
      * @return
      */
+    @RequestLog(module = "后台管理", operationDesc = "管理员登录")
+    @ApiOperation("管理员登录")
     @PostMapping("/login")
-    public ResponseMessage login(@RequestBody LoginDto loginDto) {
+    public ResponseMessage login(@Validated @RequestBody LoginDTO loginDto) {
         /**
          * 使用Shiro编写认证操作
          */
@@ -71,12 +82,15 @@ public class AdminController {
             subject.login(token);
             // System.out.println("登陆");
             // 登陆成功
-            return ResponseMessage.newSuccessInstance("登陆成功");
+            int adminId = adminService.getAdminIdByName(loginDto.getAdminName());
+            List<Role> roleList = adminService.getRoleListByName(loginDto.getAdminName());
+            HashMap<String,Object> adminInfo = new HashMap<>();
+            adminInfo.put("adminId",adminId);
+            adminInfo.put("roleList",roleList);
+            return ResponseMessage.newSuccessInstance(adminInfo,"登陆成功");
         } catch (UnknownAccountException e) {
-            e.printStackTrace();
             return ResponseMessage.newErrorInstance("登陆失败，用户名不存在");
         } catch (IncorrectCredentialsException e) {
-            e.printStackTrace();
             return ResponseMessage.newErrorInstance("登陆失败，密码错误");
         }
     }
@@ -87,6 +101,8 @@ public class AdminController {
      * @param adminId
      * @return
      */
+    @RequestLog(module = "后台管理", operationDesc = "删除管理员")
+    @ApiOperation("根据id删除管理员")
     @DeleteMapping("/deleteAdmin/{id}")
     public ResponseMessage deleteAdmin(@PathVariable("id") Integer adminId) {
         if (adminService.deleteAdmin(adminId)) {
@@ -103,10 +119,12 @@ public class AdminController {
      * @param updatePwdDto
      * @return
      */
+    @RequestLog(module = "后台管理", operationDesc = "管理员修改密码")
+    @ApiOperation("根据id修改管理员密码")
     @PutMapping("/updatePwd/{id}")
-    public ResponseMessage updatePwd(@PathVariable("id") Integer adminId, @RequestBody UpdatePwdDto updatePwdDto) {
+    public ResponseMessage updatePwd(@PathVariable("id") Integer adminId,@Validated @RequestBody UpdatePwdDTO updatePwdDto) {
         if (!adminService.isPasswordCorrect(adminId, updatePwdDto.getOldPassword())) {
-            return ResponseMessage.newErrorInstance("原始密码输入错误");
+            return ResponseMessage.newErrorInstance("旧密码输入错误");
         } else {
             if (!updatePwdDto.getNewPasswordConfirm().equals(updatePwdDto.getNewPassword())) {
                 return ResponseMessage.newErrorInstance("两次新密码输入不一致");
@@ -125,6 +143,8 @@ public class AdminController {
      *
      * @return
      */
+    @RequestLog(module = "后台管理", operationDesc = "查询所有普通管理员")
+    @ApiOperation("查找所有普通管理员")
     @GetMapping("/generalAdmin")
     public ResponseMessage listGeneralAdmin() {
         List<Admin> generalAdmins = adminService.listAllGeneralAdmin();

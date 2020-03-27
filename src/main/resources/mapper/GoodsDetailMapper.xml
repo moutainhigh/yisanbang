@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.vtmer.yisanbang.mapper.GoodsDetailMapper">
+<!--  <cache type="com.vtmer.yisanbang.common.RedisCache"/>-->
   <resultMap id="BaseResultMap" type="com.vtmer.yisanbang.domain.GoodsDetail">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="goods_id" jdbcType="INTEGER" property="goodsId" />
@@ -8,6 +9,12 @@
     <result column="show_order" jdbcType="INTEGER" property="showOrder" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <resultMap id="GoodsDetailMap" type="com.vtmer.yisanbang.dto.GoodsDetailDTO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="goods_id" jdbcType="INTEGER" property="goodsId" />
+    <result column="pirtuce_path" jdbcType="VARCHAR" property="pirtucePath" />
+    <result column="show_order" jdbcType="INTEGER" property="showOrder" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from goods_detail
@@ -38,5 +45,34 @@
   <select id="selectAll" resultMap="BaseResultMap">
     select id, goods_id, pirtuce_path, show_order, create_time, update_time
     from goods_detail
+  </select>
+  <insert id="insertDto" parameterType="com.vtmer.yisanbang.dto.GoodsDetailDTO">
+    insert into goods_detail (id, goods_id, pirtuce_path,
+      show_order
+      )
+    values (#{id,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, #{pirtucePath,jdbcType=VARCHAR},
+      #{showOrder,jdbcType=INTEGER}
+      )
+  </insert>
+  <update id="updateDtoByPrimaryKey" parameterType="com.vtmer.yisanbang.dto.GoodsDetailDTO">
+    update goods_detail
+    set goods_id = #{goodsId,jdbcType=INTEGER},
+      pirtuce_path = #{pirtucePath,jdbcType=VARCHAR},
+      show_order = #{showOrder,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectDtoByPrimaryKey" parameterType="java.lang.Integer" resultMap="GoodsDetailMap">
+    select id, goods_id, pirtuce_path, show_order
+    from goods_detail
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAllDto" resultMap="GoodsDetailMap">
+    select id, goods_id, pirtuce_path, show_order
+    from goods_detail
+  </select>
+  <select id="selectAllDtoByGoodsId" parameterType="java.lang.Integer" resultMap="GoodsDetailMap">
+    select id, goods_id, pirtuce_path, show_order
+    from goods_detail
+    where goods_id = #{id,jdbcType=INTEGER}
   </select>
 </mapper>
