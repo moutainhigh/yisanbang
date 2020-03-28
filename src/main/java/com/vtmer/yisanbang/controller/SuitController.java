@@ -323,4 +323,17 @@ public class SuitController {
             return ResponseMessage.newErrorInstance("设置失败");
         }
     }
+
+    @RequestLog(module = "套装商品", operationDesc = "设置套装默认不删除")
+    @PutMapping("/setSuitNoDelete")
+    @ApiOperation(value = "设置套装默认不删除")
+    // 设置商品默认不删除
+    public ResponseMessage setSuitNoDelete() {
+        boolean setFlag = suitService.setSuitNoDelete();
+        if (setFlag) {
+            return ResponseMessage.newSuccessInstance("设置成功");
+        } else {
+            return ResponseMessage.newErrorInstance("设置失败");
+        }
+    }
 }

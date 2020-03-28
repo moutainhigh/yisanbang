@@ -49,4 +49,6 @@ public interface SuitService {
     public List<SuitDTO> selectAllShow();
 
     public boolean setSuitAddress(String address);
+
+    public boolean setSuitNoDelete();
 }

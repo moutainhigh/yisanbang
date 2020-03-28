@@ -17,6 +17,8 @@ public class Goods {
 
     private Boolean isShow;
 
+    private Boolean whetherDelete;
+
     private Date createTime;
 
     private Date updateTime;
@@ -101,5 +103,13 @@ public class Goods {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public Boolean getWhetherDelete() {
+        return whetherDelete;
+    }
+
+    public void setWhetherDelete(Boolean whetherDelete) {
+        this.whetherDelete = whetherDelete;
     }
 }

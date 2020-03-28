@@ -34,6 +34,10 @@ public class SuitDTO {
     @ApiModelProperty(value = "是否显示", example = "true")
     private Boolean isShow;
 
+    @NotNull(message = "删除标志不可为空")
+    @ApiModelProperty(value = "删除标志", example = "false")
+    private Boolean whetherDelete;
+
     @NotNull(message = "套装名称不可为空")
     @ApiModelProperty(value = "套装名称", example = "学生套装")
     private String name;
@@ -134,6 +138,14 @@ public class SuitDTO {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Boolean getWhetherDelete() {
+        return whetherDelete;
+    }
+
+    public void setWhetherDelete(Boolean whetherDelete) {
+        this.whetherDelete = whetherDelete;
     }
 
     @Override

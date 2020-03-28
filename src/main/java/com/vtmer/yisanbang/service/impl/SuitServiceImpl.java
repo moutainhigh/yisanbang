@@ -40,8 +40,10 @@ public class SuitServiceImpl implements SuitService {
     @Override
     // 根据套装id删除套装
     public boolean deleteSuitById(Integer suitId) {
-        int deleteFlaf = suitMapper.deleteByPrimaryKey(suitId);
-        if (deleteFlaf > 0) {
+        SuitDTO suitDTO = suitMapper.selectDtoByPrimaryKey(suitId);
+        suitDTO.setWhetherDelete(true);
+        int deleteFlag = suitMapper.updateDtoByPrimaryKey(suitDTO);
+        if (deleteFlag > 0) {
             return true;
         }
         return false;
@@ -201,6 +203,19 @@ public class SuitServiceImpl implements SuitService {
         if (suitDTOS != null && !suitDTOS.isEmpty()) {
             for (SuitDTO suitDTO : suitDTOS) {
                 suitDTO.setAddress(address);
+                suitMapper.updateDtoByPrimaryKey(suitDTO);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean setSuitNoDelete() {
+        List<SuitDTO> suitDTOS = suitMapper.selectAllDtoToSetDelete();
+        if (suitDTOS != null && !suitDTOS.isEmpty()) {
+            for (SuitDTO suitDTO : suitDTOS) {
+                suitDTO.setWhetherDelete(false);
                 suitMapper.updateDtoByPrimaryKey(suitDTO);
             }
             return true;

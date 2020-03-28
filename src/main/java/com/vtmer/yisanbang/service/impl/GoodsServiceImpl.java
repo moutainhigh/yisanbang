@@ -42,7 +42,9 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     // 根据商品id删除商品
     public boolean deleteGoodsById(Integer goodsId) {
-        int deleteFlag = goodsMapper.deleteByPrimaryKey(goodsId);
+        GoodsDTO goodsDTO = goodsMapper.selectDtoByPrimaryKey(goodsId);
+        goodsDTO.setWhetherDelete(true);
+        int deleteFlag = goodsMapper.updateDtoByPrimaryKey(goodsDTO);
         if (deleteFlag > 0) {
             return true;
         }
@@ -206,6 +208,19 @@ public class GoodsServiceImpl implements GoodsService {
         if (goodsDTOS != null && !goodsDTOS.isEmpty()) {
             for (GoodsDTO goodsDTO : goodsDTOS) {
                 goodsDTO.setAddress(address);
+                goodsMapper.updateDtoByPrimaryKey(goodsDTO);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean setGoodsNoDelete() {
+        List<GoodsDTO> goodsDTOS = goodsMapper.selectAllDtoToSetDelete();
+        if (goodsDTOS != null && !goodsDTOS.isEmpty()) {
+            for (GoodsDTO goodsDTO : goodsDTOS) {
+                goodsDTO.setWhetherDelete(false);
                 goodsMapper.updateDtoByPrimaryKey(goodsDTO);
             }
             return true;

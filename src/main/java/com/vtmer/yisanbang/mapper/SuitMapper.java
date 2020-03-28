@@ -55,4 +55,6 @@ public interface SuitMapper {
     int showSuit(Integer suitId);
 
     List<SuitDTO> selectAllShowDto();
+
+    List<SuitDTO> selectAllDtoToSetDelete();
 }

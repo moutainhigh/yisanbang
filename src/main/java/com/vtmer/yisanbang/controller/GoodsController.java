@@ -314,10 +314,23 @@ public class GoodsController {
     @RequestLog(module = "单件商品", operationDesc = "设置套装发货地址")
     @PutMapping("/setGoodsAddress")
     @ApiOperation(value = "设置套装发货地址")
-    // 更新套装
+    // 设置套装发货地址
     public ResponseMessage setGoodsAddress(@ApiParam(name = "发货地址", value = "传入Json格式", required = true)
                                            @RequestParam(value = "address", defaultValue = "广东东莞") String address) {
         boolean setFlag = goodsService.setGoodsAddress(address);
+        if (setFlag) {
+            return ResponseMessage.newSuccessInstance("设置成功");
+        } else {
+            return ResponseMessage.newErrorInstance("设置失败");
+        }
+    }
+
+    @RequestLog(module = "单件商品", operationDesc = "设置商品默认不删除")
+    @PutMapping("/setGoodsNoDelete")
+    @ApiOperation(value = "设置商品默认不删除")
+    // 设置商品默认不删除
+    public ResponseMessage setGoodsNoDelete() {
+        boolean setFlag = goodsService.setGoodsNoDelete();
         if (setFlag) {
             return ResponseMessage.newSuccessInstance("设置成功");
         } else {

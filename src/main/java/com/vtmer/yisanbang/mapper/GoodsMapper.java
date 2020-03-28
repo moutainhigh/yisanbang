@@ -55,4 +55,6 @@ public interface GoodsMapper {
     int showGoods(Integer goodsId);
 
     List<GoodsDTO> selectAllShowDto();
+
+    List<GoodsDTO> selectAllDtoToSetDelete();
 }

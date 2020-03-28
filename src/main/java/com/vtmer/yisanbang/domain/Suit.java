@@ -19,6 +19,8 @@ public class Suit {
 
     private Boolean isShow;
 
+    private Boolean whetherDelete;
+
     private Date createTime;
 
     private Date updateTime;
@@ -111,5 +113,13 @@ public class Suit {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Boolean getWhetherDelete() {
+        return whetherDelete;
+    }
+
+    public void setWhetherDelete(Boolean whetherDelete) {
+        this.whetherDelete = whetherDelete;
     }
 }

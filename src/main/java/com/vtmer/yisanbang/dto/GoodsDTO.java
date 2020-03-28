@@ -38,6 +38,10 @@ public class GoodsDTO {
     @ApiModelProperty(value = "显示标志", example = "true")
     private Boolean isShow;
 
+    @NotNull(message = "删除标志不可为空")
+    @ApiModelProperty(value = "删除标志", example = "false")
+    private Boolean whetherDelete;
+
     @ApiModelProperty(value = "发货地址", example = "广东东莞")
     private String address;
 
@@ -113,6 +117,14 @@ public class GoodsDTO {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public Boolean getWhetherDelete() {
+        return whetherDelete;
+    }
+
+    public void setWhetherDelete(Boolean whetherDelete) {
+        this.whetherDelete = whetherDelete;
     }
 
     public GoodsDTO(Integer id, Integer sortId, String name, String introduce, String picture, Double price, Boolean isShow, String address) {
